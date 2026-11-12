@@ -12,7 +12,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls;
 [TemplatePart(Name = ImageDetailsButtonName, Type = typeof(Button))]
 [TemplatePart(Name = CloseDetailsButtonName, Type = typeof(Button))]
 [TemplatePart(Name = DismissTransientErrorButtonName, Type = typeof(Button))]
-public partial class OrientedImageryView : Control
+public partial class OrientedImageryViewer : Control
 {
 #region Accessibility
     private void DismissTransientErrorButton_Click(object sender, RoutedEventArgs e)
@@ -24,7 +24,7 @@ public partial class OrientedImageryView : Control
     }
 
     /// <inheritdoc/>
-    protected override AutomationPeer OnCreateAutomationPeer() => new OrientedImageryViewAutomationPeer(this);
+    protected override AutomationPeer OnCreateAutomationPeer() => new OrientedImageryViewerAutomationPeer(this);
 
     private void InitializeAccessibility_WinUI()
     {
@@ -40,13 +40,13 @@ public partial class OrientedImageryView : Control
         UpdateErrorMessages();
     }
 
-    private sealed partial class OrientedImageryViewAutomationPeer : FrameworkElementAutomationPeer
+    private sealed partial class OrientedImageryViewerAutomationPeer : FrameworkElementAutomationPeer
     {
-        public OrientedImageryViewAutomationPeer(OrientedImageryView owner) : base(owner)
+        public OrientedImageryViewerAutomationPeer(OrientedImageryViewer owner) : base(owner)
         {
         }
 
-        protected override string GetLocalizedControlTypeCore() => Properties.Resources.GetString("OrientedImageryViewAutomationTypeName")!;
+        protected override string GetLocalizedControlTypeCore() => Properties.Resources.GetString("OrientedImageryViewerAutomationTypeName")!;
     }
 
     private void UpdateDetailsFocus()
@@ -78,8 +78,8 @@ public partial class OrientedImageryView : Control
     }
 
     internal static readonly DependencyProperty ThemeDisplayBackgroundBrushProperty =
-        DependencyProperty.Register(nameof(ThemeDisplayBackgroundBrush), typeof(Microsoft.UI.Xaml.Media.SolidColorBrush), typeof(OrientedImageryView),
-            new PropertyMetadata(null, (sender, args) => ((OrientedImageryView)sender).OnThemeDisplayBackgroundBrushChanged(
+        DependencyProperty.Register(nameof(ThemeDisplayBackgroundBrush), typeof(Microsoft.UI.Xaml.Media.SolidColorBrush), typeof(OrientedImageryViewer),
+            new PropertyMetadata(null, (sender, args) => ((OrientedImageryViewer)sender).OnThemeDisplayBackgroundBrushChanged(
                 args.OldValue as Microsoft.UI.Xaml.Media.SolidColorBrush, args.NewValue as Microsoft.UI.Xaml.Media.SolidColorBrush)));
 
     private void OnThemeDisplayBackgroundBrushChanged(Microsoft.UI.Xaml.Media.SolidColorBrush? oldBrush, Microsoft.UI.Xaml.Media.SolidColorBrush? newBrush)
@@ -88,7 +88,7 @@ public partial class OrientedImageryView : Control
         if (newBrush != null)
         {
             // Theme resources can update a shared brush in place; do not let that brush retain the view.
-            var weakView = new WeakReference<OrientedImageryView>(this);
+            var weakView = new WeakReference<OrientedImageryViewer>(this);
             _backgroundColorCallbackToken = newBrush.RegisterPropertyChangedCallback(Microsoft.UI.Xaml.Media.SolidColorBrush.ColorProperty, (_, _) =>
             {
                 if (weakView.TryGetTarget(out var view))
@@ -108,7 +108,7 @@ public partial class OrientedImageryView : Control
     }
 
     internal static readonly DependencyProperty DefaultToolbarTemplatesProperty =
-        DependencyProperty.Register(nameof(DefaultToolbarTemplates), typeof(DefaultWinUIToolbarTemplates), typeof(OrientedImageryView), new PropertyMetadata(null));
+        DependencyProperty.Register(nameof(DefaultToolbarTemplates), typeof(DefaultWinUIToolbarTemplates), typeof(OrientedImageryViewer), new PropertyMetadata(null));
 
     private void WireToolbar_WinUI()
     {

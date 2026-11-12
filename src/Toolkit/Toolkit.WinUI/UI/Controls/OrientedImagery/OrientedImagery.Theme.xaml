@@ -400,8 +400,8 @@
                             IsTabStop="False"
                             Width="33"
                             Style="{StaticResource OrientedImageryPageButtonStyle}"
-                            ToolTipService.ToolTip="{internal:LocalizedString Key=OrientedImageryViewPreviousImage}"
-                            AutomationProperties.Name="{internal:LocalizedString Key=OrientedImageryViewPreviousImage}">
+                            ToolTipService.ToolTip="{internal:LocalizedString Key=OrientedImageryViewerPreviousImage}"
+                            AutomationProperties.Name="{internal:LocalizedString Key=OrientedImageryViewerPreviousImage}">
                             <FontIcon Glyph="&#xe79f;" FontFamily="{StaticResource toolkit-icons}" FontSize="16" />
                         </Button>
                         <ItemsControl x:Name="PART_PagesPresenter" Grid.Column="1" IsTabStop="False">
@@ -437,8 +437,8 @@
                             Grid.Column="2"
                             Width="33"
                             Style="{StaticResource OrientedImageryPageButtonStyle}"
-                            ToolTipService.ToolTip="{internal:LocalizedString Key=OrientedImageryViewNextImage}"
-                            AutomationProperties.Name="{internal:LocalizedString Key=OrientedImageryViewNextImage}">
+                            ToolTipService.ToolTip="{internal:LocalizedString Key=OrientedImageryViewerNextImage}"
+                            AutomationProperties.Name="{internal:LocalizedString Key=OrientedImageryViewerNextImage}">
                             <FontIcon Glyph="&#xe7a0;" FontFamily="{StaticResource toolkit-icons}" FontSize="16" />
                         </Button>
                     </Grid>
@@ -522,8 +522,8 @@
                 Style="{StaticResource ImageSearchModeComboBoxStyle}"
                 ItemsSource="{x:Bind ImageSearchModes}"
                 SelectedItem="{x:Bind SelectedInteractionState, Mode=TwoWay}"
-                AutomationProperties.Name="{internal:LocalizedString Key=OrientedImageryViewImageSearchMode}"
-                ToolTipService.ToolTip="{internal:LocalizedString Key=OrientedImageryViewImageSearchMode}">
+                AutomationProperties.Name="{internal:LocalizedString Key=OrientedImageryViewerImageSearchMode}"
+                ToolTipService.ToolTip="{internal:LocalizedString Key=OrientedImageryViewerImageSearchMode}">
                 <ComboBox.ItemContainerStyle>
                     <Style TargetType="ComboBoxItem">
                         <Setter Property="local:ImageSearchModeSelectionBehavior.RepeatSelection" Value="True" />
@@ -534,7 +534,7 @@
                     </Style>
                 </ComboBox.ItemContainerStyle>
                 <ComboBox.ItemTemplate>
-                    <DataTemplate x:DataType="controls:OrientedImageryViewInteractionState">
+                    <DataTemplate x:DataType="controls:OrientedImageryViewerInteractionState">
                         <StackPanel Orientation="Horizontal" Spacing="8" Loaded="ImageSearchModeOption_Loaded">
                             <Viewbox Width="24" Height="24" Stretch="Uniform">
                                 <ContentControl
@@ -557,13 +557,13 @@
             IsChecked="{x:Bind ViewModel.ShowSelectedFootprint, Mode=TwoWay}"
             IsEnabled="{x:Bind Enabled, Mode=OneWay}"
             Style="{StaticResource OrientedImageryToolbarLabeledToggleButtonStyle}"
-            ToolTipService.ToolTip="{internal:LocalizedString Key=OrientedImageryViewShowSelectedImageFootprint}"
-            AutomationProperties.Name="{internal:LocalizedString Key=OrientedImageryViewCurrentFootprintLabel}">
+            ToolTipService.ToolTip="{internal:LocalizedString Key=OrientedImageryViewerShowSelectedImageFootprint}"
+            AutomationProperties.Name="{internal:LocalizedString Key=OrientedImageryViewerCurrentFootprintLabel}">
             <StackPanel>
                 <Viewbox Width="32" Height="32" Stretch="Uniform">
                     <PathIcon Data="F1 M28.9874 20.3151L30.0344 26.5901C28.6644 26.3501 26.4444 26.0601 23.7144 26.0601C23.5454 26.0601 23.3904 26.0671 23.2284 26.0701L22.1884 27.1101C22.6654 27.0791 23.1704 27.0601 23.7144 27.0601C28.1644 27.0601 31.2544 27.8601 31.2544 27.8601L29.8564 19.4471L28.9874 20.3151ZM14.0534 27.9881C12.6334 28.3741 11.0464 28.6601 8.79441 28.6601C5.78441 28.6601 3.42441 27.7701 2.36441 27.2901L6.04441 5.08005C7.06441 5.38005 8.58441 5.73005 10.5944 5.73005C13.0944 5.73005 14.5944 5.30005 16.0344 4.88005C17.4844 4.46005 18.8544 4.07005 21.3244 4.07005C23.5144 4.07005 25.4344 4.40005 26.3744 4.59005L28.0724 14.7941L29.1324 15.1021L27.2544 3.76005C27.2544 3.76005 24.5844 3.07005 21.3244 3.07005C16.1844 3.07005 15.4044 4.73005 10.5944 4.73005C7.77441 4.73005 5.95441 3.99005 5.25441 3.76005L1.25441 27.8601C1.25441 27.8601 4.34441 29.6601 8.79441 29.6601C11.1674 29.6601 12.8534 29.3501 14.3314 28.9431L14.0534 27.9881ZM10.7544 9.86005C9.92441 9.86005 9.25441 10.5301 9.25441 11.3601C9.25441 12.1901 9.92441 12.8601 10.7544 12.8601C11.5844 12.8601 12.2544 12.1901 12.2544 11.3601C12.2544 10.5301 11.5844 9.86005 10.7544 9.86005ZM10.7544 11.8601C10.4744 11.8601 10.2544 11.6401 10.2544 11.3601C10.2544 11.0801 10.4744 10.8601 10.7544 10.8601C11.0344 10.8601 11.2544 11.0801 11.2544 11.3601C11.2544 11.6401 11.0344 11.8601 10.7544 11.8601ZM12.9704 12.4931C12.7414 12.9391 12.3836 13.306 11.9434 13.5461L13.0971 17.2201L15.3644 25.3401L16.6644 29.8001L29.2544 17.2201L12.9704 12.4931ZM14.0144 17.0701L12.9844 13.5301L27.3544 17.7001L17.1544 27.9001L14.0144 17.0701Z" />
                 </Viewbox>
-                <TextBlock Style="{StaticResource OrientedImageryToolbarLabelStyle}" Text="{internal:LocalizedString Key=OrientedImageryViewCurrentFootprintLabel}" />
+                <TextBlock Style="{StaticResource OrientedImageryToolbarLabelStyle}" Text="{internal:LocalizedString Key=OrientedImageryViewerCurrentFootprintLabel}" />
             </StackPanel>
         </ToggleButton>
     </DataTemplate>
@@ -573,8 +573,8 @@
             IsChecked="{x:Bind ViewModel.ShowUnselectedFootprints, Mode=TwoWay}"
             IsEnabled="{x:Bind local:OrientedImageryResources.IsGreaterThanOne(ViewModel.Images.Count), Mode=OneWay}"
             Style="{StaticResource OrientedImageryToolbarLabeledToggleButtonStyle}"
-            ToolTipService.ToolTip="{internal:LocalizedString Key=OrientedImageryViewShowUnselectedImageFootprints}"
-            AutomationProperties.Name="{internal:LocalizedString Key=OrientedImageryViewAdditionalFootprintsLabel}">
+            ToolTipService.ToolTip="{internal:LocalizedString Key=OrientedImageryViewerShowUnselectedImageFootprints}"
+            AutomationProperties.Name="{internal:LocalizedString Key=OrientedImageryViewerAdditionalFootprintsLabel}">
             <StackPanel>
                 <Viewbox Width="32" Height="32" Stretch="Uniform">
                     <ContentControl IsTabStop="False">
@@ -591,7 +591,7 @@
                         </ContentControl.Template>
                     </ContentControl>
                 </Viewbox>
-                <TextBlock Style="{StaticResource OrientedImageryToolbarLabelStyle}" Text="{internal:LocalizedString Key=OrientedImageryViewAdditionalFootprintsLabel}" />
+                <TextBlock Style="{StaticResource OrientedImageryToolbarLabelStyle}" Text="{internal:LocalizedString Key=OrientedImageryViewerAdditionalFootprintsLabel}" />
             </StackPanel>
         </ToggleButton>
     </DataTemplate>
@@ -601,8 +601,8 @@
             IsChecked="{x:Bind ViewModel.ShowCameraLocations, Mode=TwoWay}"
             IsEnabled="{x:Bind local:OrientedImageryResources.IsGreaterThanOne(ViewModel.Images.Count), Mode=OneWay}"
             Style="{StaticResource OrientedImageryToolbarLabeledToggleButtonStyle}"
-            ToolTipService.ToolTip="{internal:LocalizedString Key=OrientedImageryViewToggleCameraMarkers}"
-            AutomationProperties.Name="{internal:LocalizedString Key=OrientedImageryViewCameraLocationsLabel}">
+            ToolTipService.ToolTip="{internal:LocalizedString Key=OrientedImageryViewerToggleCameraMarkers}"
+            AutomationProperties.Name="{internal:LocalizedString Key=OrientedImageryViewerCameraLocationsLabel}">
             <StackPanel>
                 <Viewbox Width="32" Height="32" Stretch="Uniform">
                     <ContentControl IsTabStop="False">
@@ -625,7 +625,7 @@
                         </ContentControl.Template>
                     </ContentControl>
                 </Viewbox>
-                <TextBlock Style="{StaticResource OrientedImageryToolbarLabelStyle}" Text="{internal:LocalizedString Key=OrientedImageryViewCameraLocationsLabel}" />
+                <TextBlock Style="{StaticResource OrientedImageryToolbarLabelStyle}" Text="{internal:LocalizedString Key=OrientedImageryViewerCameraLocationsLabel}" />
             </StackPanel>
         </ToggleButton>
     </DataTemplate>
@@ -635,8 +635,8 @@
             IsChecked="{x:Bind IsAddingMarkersEnabled, Mode=TwoWay}"
             MinWidth="0" Padding="0,4"
             Style="{StaticResource OrientedImageryToolbarLabeledToggleButtonStyle}"
-            ToolTipService.ToolTip="{internal:LocalizedString Key=OrientedImageryViewToggleAddMarkers}"
-            AutomationProperties.Name="{internal:LocalizedString Key=OrientedImageryViewAddMarkersLabel}">
+            ToolTipService.ToolTip="{internal:LocalizedString Key=OrientedImageryViewerToggleAddMarkers}"
+            AutomationProperties.Name="{internal:LocalizedString Key=OrientedImageryViewerAddMarkersLabel}">
             <StackPanel>
                 <Viewbox Width="32" Height="32" Stretch="Uniform">
                     <FontIcon
@@ -644,7 +644,7 @@
                         FontSize="24"
                         FontFamily="{StaticResource toolkit-icons}" />
                 </Viewbox>
-                <TextBlock Width="48" Style="{StaticResource OrientedImageryToolbarLabelStyle}" Text="{internal:LocalizedString Key=OrientedImageryViewAddMarkersLabel}" />
+                <TextBlock Width="48" Style="{StaticResource OrientedImageryToolbarLabelStyle}" Text="{internal:LocalizedString Key=OrientedImageryViewerAddMarkersLabel}" />
             </StackPanel>
         </ToggleButton>
     </DataTemplate>
@@ -654,8 +654,8 @@
             ItemsSource="{x:Bind SymbolOptions, Mode=OneWay}"
             SelectedItem="{x:Bind SelectedSymbol, Mode=TwoWay}"
             Style="{StaticResource OrientedImageryToolbarComboBoxStyle}"
-            ToolTipService.ToolTip="{internal:LocalizedString Key=OrientedImageryViewSelectMarkerSymbol}"
-            AutomationProperties.Name="{internal:LocalizedString Key=OrientedImageryViewSelectMarkerSymbol}">
+            ToolTipService.ToolTip="{internal:LocalizedString Key=OrientedImageryViewerSelectMarkerSymbol}"
+            AutomationProperties.Name="{internal:LocalizedString Key=OrientedImageryViewerSelectMarkerSymbol}">
             <ComboBox.ItemContainerStyle>
                 <Style TargetType="ComboBoxItem">
                     <Setter Property="MinWidth" Value="40" />
@@ -677,8 +677,8 @@
         <Button
             Command="{x:Bind ViewModel.ClearMarkersCommand, Mode=OneWay}"
             Style="{StaticResource OrientedImageryToolbarLabeledButtonStyle}"
-            ToolTipService.ToolTip="{internal:LocalizedString Key=OrientedImageryViewClearMarkersLabel}"
-            AutomationProperties.Name="{internal:LocalizedString Key=OrientedImageryViewClearMarkersLabel}">
+            ToolTipService.ToolTip="{internal:LocalizedString Key=OrientedImageryViewerClearMarkersLabel}"
+            AutomationProperties.Name="{internal:LocalizedString Key=OrientedImageryViewerClearMarkersLabel}">
             <StackPanel>
                 <Viewbox Width="28" Height="28" Stretch="Uniform">
                     <FontIcon
@@ -686,7 +686,7 @@
                         FontSize="24"
                         FontFamily="{StaticResource toolkit-icons}" />
                 </Viewbox>
-                <TextBlock Style="{StaticResource OrientedImageryToolbarLabelStyle}" Text="{internal:LocalizedString Key=OrientedImageryViewClearMarkersLabel}" />
+                <TextBlock Style="{StaticResource OrientedImageryToolbarLabelStyle}" Text="{internal:LocalizedString Key=OrientedImageryViewerClearMarkersLabel}" />
             </StackPanel>
         </Button>
     </DataTemplate>
@@ -696,13 +696,13 @@
             IsChecked="{x:Bind ViewModel.IsSequentialNavigationEnabled, Mode=TwoWay}"
             IsEnabled="{x:Bind ViewModel.SupportsSequentialNavigation, Mode=OneWay}"
             Style="{StaticResource OrientedImageryToolbarLabeledToggleButtonStyle}"
-            ToolTipService.ToolTip="{internal:LocalizedString Key=OrientedImageryViewSequentialNavigationTooltip}"
-            AutomationProperties.Name="{internal:LocalizedString Key=OrientedImageryViewSequentialNavigationTooltip}">
+            ToolTipService.ToolTip="{internal:LocalizedString Key=OrientedImageryViewerSequentialNavigationTooltip}"
+            AutomationProperties.Name="{internal:LocalizedString Key=OrientedImageryViewerSequentialNavigationTooltip}">
             <StackPanel>
                 <Viewbox Width="28" Height="28" Stretch="Uniform">
                     <PathIcon Data="M6 4V8H2V28H25V24H29V4H6ZM24 27H3V9H24V27ZM28 23H25V8H7V5H28V23ZM16.0732 21L19.5859 17.5L16.0876 14H17.5016L21 17.5L17.4872 21H16.0732ZM6.00897 17.5L9.51568 14H10.9297L7.42303 17.5L10.9063 21H9.49225L6.00897 17.5Z" />
                 </Viewbox>
-                <TextBlock Style="{StaticResource OrientedImageryToolbarLabelStyle}" Text="{internal:LocalizedString Key=OrientedImageryViewSequentialNavigationLabel}" />
+                <TextBlock Style="{StaticResource OrientedImageryToolbarLabelStyle}" Text="{internal:LocalizedString Key=OrientedImageryViewerSequentialNavigationLabel}" />
             </StackPanel>
         </ToggleButton>
     </DataTemplate>
@@ -737,9 +737,9 @@
         </Setter>
     </Style>
 
-    <!-- OrientedImageryView Style -->
+    <!-- OrientedImageryViewer Style -->
 
-    <Style TargetType="controls:OrientedImageryView">
+    <Style TargetType="controls:OrientedImageryViewer">
         <Setter Property="IsTabStop" Value="False" />
         <Setter Property="ThemeDisplayBackgroundBrush" Value="{ThemeResource OrientedImageryDisplayBackgroundBrush}" />
 
@@ -762,7 +762,7 @@
 
         <Setter Property="Template">
             <Setter.Value>
-                <ControlTemplate TargetType="controls:OrientedImageryView">
+                <ControlTemplate TargetType="controls:OrientedImageryViewer">
                     <Border
                         Background="{TemplateBinding Background}"
                         BorderBrush="{TemplateBinding BorderBrush}"
@@ -807,7 +807,7 @@
                                             <TextBlock
                                                 HorizontalAlignment="Center"
                                                 VerticalAlignment="Center"
-                                                Text="{internal:LocalizedString Key=OrientedImageryViewImageLoading}" />
+                                                Text="{internal:LocalizedString Key=OrientedImageryViewerImageLoading}" />
                                 </Border>
 
                                 <ProgressBar
@@ -842,19 +842,19 @@
                                                 LineHeight="30"
                                                 Visibility="{x:Bind local:OrientedImageryResources.VisibleWhenImageSelectionDisabled(ViewModel.InteractionState), Mode=OneWay}">
                                                 <Paragraph>
-                                                    <Run Text="{internal:LocalizedString Key=OrientedImageryViewImageSelectionEnable}" />
+                                                    <Run Text="{internal:LocalizedString Key=OrientedImageryViewerImageSelectionEnable}" />
                                                     <InlineUIContainer>
                                                         <Viewbox Width="24" Height="24" Margin="4,0">
                                                             <ContentControl IsTabStop="False" ContentTemplate="{StaticResource FindImagesIconTemplate}" />
                                                         </Viewbox>
                                                     </InlineUIContainer>
-                                                    <Run Text="{internal:LocalizedString Key=OrientedImageryViewImageSelectionOr}" />
+                                                    <Run Text="{internal:LocalizedString Key=OrientedImageryViewerImageSelectionOr}" />
                                                     <InlineUIContainer>
                                                         <Viewbox Width="24" Height="24" Margin="4,0">
                                                             <ContentControl IsTabStop="False" ContentTemplate="{StaticResource DisplayImageIconTemplate}" />
                                                         </Viewbox>
                                                     </InlineUIContainer>
-                                                    <Run Text="{internal:LocalizedString Key=OrientedImageryViewImageSelectionSearchMode}" />
+                                                    <Run Text="{internal:LocalizedString Key=OrientedImageryViewerImageSelectionSearchMode}" />
                                                 </Paragraph>
                                             </RichTextBlock>
                                             <RichTextBlock
@@ -865,15 +865,15 @@
                                                 LineHeight="30"
                                                 Visibility="{x:Bind local:OrientedImageryResources.VisibleWhenFindingImages(ViewModel.InteractionState), Mode=OneWay}">
                                                 <Paragraph>
-                                                    <Run Text="{internal:LocalizedString Key=OrientedImageryViewImageSelectionFindImages}" />
+                                                    <Run Text="{internal:LocalizedString Key=OrientedImageryViewerImageSelectionFindImages}" />
                                                     <LineBreak />
-                                                    <Run Text="{internal:LocalizedString Key=OrientedImageryViewImageSelectionSwitchMode}" />
+                                                    <Run Text="{internal:LocalizedString Key=OrientedImageryViewerImageSelectionSwitchMode}" />
                                                     <InlineUIContainer>
                                                         <Viewbox Width="24" Height="24" Margin="4,0">
                                                             <ContentControl IsTabStop="False" ContentTemplate="{StaticResource DisplayImageIconTemplate}" />
                                                         </Viewbox>
                                                     </InlineUIContainer>
-                                                    <Run Text="{internal:LocalizedString Key=OrientedImageryViewImageSelectionMode}" />
+                                                    <Run Text="{internal:LocalizedString Key=OrientedImageryViewerImageSelectionMode}" />
                                                 </Paragraph>
                                             </RichTextBlock>
                                             <RichTextBlock
@@ -884,15 +884,15 @@
                                                 LineHeight="30"
                                                 Visibility="{x:Bind local:OrientedImageryResources.VisibleWhenDisplayingImage(ViewModel.InteractionState), Mode=OneWay}">
                                                 <Paragraph>
-                                                    <Run Text="{internal:LocalizedString Key=OrientedImageryViewImageSelectionDisplayImage}" />
+                                                    <Run Text="{internal:LocalizedString Key=OrientedImageryViewerImageSelectionDisplayImage}" />
                                                     <LineBreak />
-                                                    <Run Text="{internal:LocalizedString Key=OrientedImageryViewImageSelectionSwitchMode}" />
+                                                    <Run Text="{internal:LocalizedString Key=OrientedImageryViewerImageSelectionSwitchMode}" />
                                                     <InlineUIContainer>
                                                         <Viewbox Width="24" Height="24" Margin="4,0">
                                                             <ContentControl IsTabStop="False" ContentTemplate="{StaticResource FindImagesIconTemplate}" />
                                                         </Viewbox>
                                                     </InlineUIContainer>
-                                                    <Run Text="{internal:LocalizedString Key=OrientedImageryViewImageSelectionMode}" />
+                                                    <Run Text="{internal:LocalizedString Key=OrientedImageryViewerImageSelectionMode}" />
                                                 </Paragraph>
                                             </RichTextBlock>
                                         </Grid>
@@ -927,8 +927,8 @@
                                     Style="{StaticResource OrientedImageryToolbarButtonStyle}"
                                     Command="{x:Bind ViewModel.OpenImageDetailsPopupCommand, Mode=OneWay}"
                                     local:NullVisibility.WhenNotNull="{x:Bind ViewModel.SelectedImage, Mode=OneWay}"
-                                    AutomationProperties.Name="{internal:LocalizedString Key=OrientedImageryViewOpenSelectedImagePopup}"
-                                    ToolTipService.ToolTip="{internal:LocalizedString Key=OrientedImageryViewOpenSelectedImagePopup}">
+                                    AutomationProperties.Name="{internal:LocalizedString Key=OrientedImageryViewerOpenSelectedImagePopup}"
+                                    ToolTipService.ToolTip="{internal:LocalizedString Key=OrientedImageryViewerOpenSelectedImagePopup}">
                                     <PathIcon
                                         Width="31"
                                         Height="31"
@@ -943,8 +943,8 @@
                                     IsEnabled="{x:Bind ViewModel.CanNavigatePrevious, Mode=OneWay}"
                                     Style="{StaticResource OrientedImageryNavigationButtonStyle}"
                                     local:NullVisibility.WhenNotNull="{x:Bind ViewModel.SelectedImage, Mode=OneWay}"
-                                    AutomationProperties.Name="{internal:LocalizedString Key=OrientedImageryViewPreviousImage}"
-                                    ToolTipService.ToolTip="{internal:LocalizedString Key=OrientedImageryViewPreviousImage}">
+                                    AutomationProperties.Name="{internal:LocalizedString Key=OrientedImageryViewerPreviousImage}"
+                                    ToolTipService.ToolTip="{internal:LocalizedString Key=OrientedImageryViewerPreviousImage}">
                                     <Viewbox Width="20" Height="20" Stretch="Uniform">
                                         <PathIcon Data="M20 26.1 9.9 16 20 5.9z" />
                                     </Viewbox>
@@ -959,8 +959,8 @@
                                     IsEnabled="{x:Bind ViewModel.CanNavigateNext, Mode=OneWay}"
                                     Style="{StaticResource OrientedImageryNavigationButtonStyle}"
                                     local:NullVisibility.WhenNotNull="{x:Bind ViewModel.SelectedImage, Mode=OneWay}"
-                                    AutomationProperties.Name="{internal:LocalizedString Key=OrientedImageryViewNextImage}"
-                                    ToolTipService.ToolTip="{internal:LocalizedString Key=OrientedImageryViewNextImage}">
+                                    AutomationProperties.Name="{internal:LocalizedString Key=OrientedImageryViewerNextImage}"
+                                    ToolTipService.ToolTip="{internal:LocalizedString Key=OrientedImageryViewerNextImage}">
                                     <Viewbox Width="20" Height="20" Stretch="Uniform">
                                         <PathIcon Data="M12 5.9 22.1 16 12 26.1z" />
                                     </Viewbox>
@@ -1003,8 +1003,8 @@
                                             Grid.Column="1"
                                             VerticalAlignment="Center"
                                             Style="{StaticResource OrientedImageryToolbarButtonStyle}"
-                                            AutomationProperties.Name="{internal:LocalizedString Key=OrientedImageryViewDismissError}"
-                                            ToolTipService.ToolTip="{internal:LocalizedString Key=OrientedImageryViewDismissError}">
+                                            AutomationProperties.Name="{internal:LocalizedString Key=OrientedImageryViewerDismissError}"
+                                            ToolTipService.ToolTip="{internal:LocalizedString Key=OrientedImageryViewerDismissError}">
                                             <FontIcon Glyph="&#xeb49;" FontSize="16" FontFamily="{StaticResource toolkit-icons}" />
                                         </Button>
                                     </Grid>
@@ -1040,13 +1040,13 @@
                                             VerticalAlignment="Center"
                                             Command="{x:Bind ViewModel.CloseImageDetailsPopupCommand, Mode=OneWay}"
                                             Style="{StaticResource OrientedImageryToolbarButtonStyle}"
-                                            AutomationProperties.Name="{internal:LocalizedString Key=OrientedImageryViewCloseSelectedImagePopup}"
-                                            ToolTipService.ToolTip="{internal:LocalizedString Key=OrientedImageryViewCloseSelectedImagePopup}">
+                                            AutomationProperties.Name="{internal:LocalizedString Key=OrientedImageryViewerCloseSelectedImagePopup}"
+                                            ToolTipService.ToolTip="{internal:LocalizedString Key=OrientedImageryViewerCloseSelectedImagePopup}">
                                             <StackPanel Orientation="Horizontal" Spacing="8">
                                                 <TextBlock
                                                     VerticalAlignment="Center"
                                                     FontSize="16"
-                                                    Text="{internal:LocalizedString Key=OrientedImageryViewCloseSelectedImagePopup}" />
+                                                    Text="{internal:LocalizedString Key=OrientedImageryViewerCloseSelectedImagePopup}" />
                                                 <FontIcon Glyph="&#xeb49;" FontSize="20" FontFamily="{StaticResource toolkit-icons}" />
                                             </StackPanel>
                                         </Button>
@@ -1092,8 +1092,8 @@
                                         IsTabStop="False"
                                         Width="33"
                                         Command="{x:Bind ViewModel.SelectPreviousImageCommand, Mode=OneWay}"
-                                        ToolTipService.ToolTip="{internal:LocalizedString Key=OrientedImageryViewPreviousImage}"
-                                        AutomationProperties.Name="{internal:LocalizedString Key=OrientedImageryViewPreviousImage}">
+                                        ToolTipService.ToolTip="{internal:LocalizedString Key=OrientedImageryViewerPreviousImage}"
+                                        AutomationProperties.Name="{internal:LocalizedString Key=OrientedImageryViewerPreviousImage}">
                                         <Grid>
                                             <!-- We never truly disable the sequential pagination buttons to make them keep keyboard focus, instead we just style them differently when CanNavigateX is false -->
                                             <FontIcon
@@ -1107,16 +1107,16 @@
                                         </Grid>
                                     </Button>
                                     <Button
-                                        AutomationProperties.Name="{internal:LocalizedString Key=OrientedImageryViewPreviousImage}"
-                                        ToolTipService.ToolTip="{internal:LocalizedString Key=OrientedImageryViewPreviousImage}"
+                                        AutomationProperties.Name="{internal:LocalizedString Key=OrientedImageryViewerPreviousImage}"
+                                        ToolTipService.ToolTip="{internal:LocalizedString Key=OrientedImageryViewerPreviousImage}"
                                         Style="{StaticResource OrientedImageryPageButtonStyle}"
                                         Command="{x:Bind ViewModel.SelectPreviousImageCommand, Mode=OneWay}">
                                         <Grid>
                                             <TextBlock
-                                                Text="{internal:LocalizedString Key=OrientedImageryViewPreviousLabel}"
+                                                Text="{internal:LocalizedString Key=OrientedImageryViewerPreviousLabel}"
                                                 Visibility="{x:Bind local:OrientedImageryResources.VisibleWhen(ViewModel.CanNavigatePrevious), Mode=OneWay}" />
                                             <TextBlock
-                                                Text="{internal:LocalizedString Key=OrientedImageryViewPreviousLabel}"
+                                                Text="{internal:LocalizedString Key=OrientedImageryViewerPreviousLabel}"
                                                 Foreground="{ThemeResource OrientedImageryDisabledForegroundBrush}"
                                                 Opacity="{ThemeResource OrientedImageryDisabledContentOpacity}"
                                                 Visibility="{x:Bind local:OrientedImageryResources.VisibleWhenFalse(ViewModel.CanNavigatePrevious), Mode=OneWay}" />
@@ -1131,16 +1131,16 @@
                                             Background="{ThemeResource OrientedImageryPageSelectedBrush}" />
                                     </Grid>
                                     <Button
-                                        AutomationProperties.Name="{internal:LocalizedString Key=OrientedImageryViewNextImage}"
-                                        ToolTipService.ToolTip="{internal:LocalizedString Key=OrientedImageryViewNextImage}"
+                                        AutomationProperties.Name="{internal:LocalizedString Key=OrientedImageryViewerNextImage}"
+                                        ToolTipService.ToolTip="{internal:LocalizedString Key=OrientedImageryViewerNextImage}"
                                         Style="{StaticResource OrientedImageryPageButtonStyle}"
                                         Command="{x:Bind ViewModel.SelectNextImageCommand, Mode=OneWay}">
                                         <Grid>
                                             <TextBlock
-                                                Text="{internal:LocalizedString Key=OrientedImageryViewNextLabel}"
+                                                Text="{internal:LocalizedString Key=OrientedImageryViewerNextLabel}"
                                                 Visibility="{x:Bind local:OrientedImageryResources.VisibleWhen(ViewModel.CanNavigateNext), Mode=OneWay}" />
                                             <TextBlock
-                                                Text="{internal:LocalizedString Key=OrientedImageryViewNextLabel}"
+                                                Text="{internal:LocalizedString Key=OrientedImageryViewerNextLabel}"
                                                 Foreground="{ThemeResource OrientedImageryDisabledForegroundBrush}"
                                                 Opacity="{ThemeResource OrientedImageryDisabledContentOpacity}"
                                                 Visibility="{x:Bind local:OrientedImageryResources.VisibleWhenFalse(ViewModel.CanNavigateNext), Mode=OneWay}" />
@@ -1151,8 +1151,8 @@
                                         IsTabStop="False"
                                         Width="33"
                                         Command="{x:Bind ViewModel.SelectNextImageCommand, Mode=OneWay}"
-                                        ToolTipService.ToolTip="{internal:LocalizedString Key=OrientedImageryViewNextImage}"
-                                        AutomationProperties.Name="{internal:LocalizedString Key=OrientedImageryViewNextImage}">
+                                        ToolTipService.ToolTip="{internal:LocalizedString Key=OrientedImageryViewerNextImage}"
+                                        AutomationProperties.Name="{internal:LocalizedString Key=OrientedImageryViewerNextImage}">
                                         <Grid>
                                             <FontIcon
                                                 Glyph="&#xe7a0;" FontFamily="{StaticResource toolkit-icons}" FontSize="16"
