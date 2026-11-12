@@ -1,5 +1,5 @@
 <Page
-    x:Class="Esri.ArcGISRuntime.Toolkit.SampleApp.Samples.OrientedImagery.OrientedImageryViewSample"
+    x:Class="Esri.ArcGISRuntime.Toolkit.SampleApp.Samples.OrientedImagery.OrientedImageryViewerSample"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -14,7 +14,7 @@
         <DataTemplate x:Key="PopupToolbarItemTemplate" x:DataType="local:OrientedImageryPopupToolbarItem">
             <Button
                 Click="OpenSelectedImagePopupButton_Click"
-                IsEnabled="{x:Bind local:OrientedImageryViewSample.HasSelectedImage(ViewModel.SelectedImage), Mode=OneWay}"
+                IsEnabled="{x:Bind local:OrientedImageryViewerSample.HasSelectedImage(ViewModel.SelectedImage), Mode=OneWay}"
                 ToolTipService.ToolTip="Open popup for selected image"
                 AutomationProperties.Name="Open popup for selected image">
                 <Button.Style>
@@ -35,7 +35,7 @@
                             Stroke="{ThemeResource TextFillColorPrimaryBrush}"
                             StrokeThickness="1"
                             StrokeLineJoin="Round"
-                            Opacity="{x:Bind local:OrientedImageryViewSample.PopupIconOpacity(ViewModel.SelectedImage), Mode=OneWay}"
+                            Opacity="{x:Bind local:OrientedImageryViewerSample.PopupIconOpacity(ViewModel.SelectedImage), Mode=OneWay}"
                             Data="M4 4H28V24H20L16 29L12 24H4Z M7 10H25V20H7Z M7 7H16 M24 7H25" />
                     </Grid>
                 </Viewbox>
@@ -149,9 +149,9 @@
                 PlaceholderText="Select Layer"
                 SelectionChanged="SelectLayerDropdown_SelectionChanged"
                 AutomationProperties.Name="Select Layer" />
-            <toolkit:OrientedImageryView
+            <toolkit:OrientedImageryViewer
                 Grid.Row="1"
-                x:Name="MainOrientedImageryView" />
+                x:Name="MainOrientedImageryViewer" />
         </Grid>
 
         <Grid

@@ -217,7 +217,7 @@ internal sealed class OrientedImageryPage : INotifyPropertyChanged
         bool isSelected = number == selectedIndex + 1;
         bool isTabStop = number == Math.Clamp(selectedIndex, 0, totalPages - 1) + 1;
         var visibility = isSelected ? Visibility.Visible : Visibility.Collapsed;
-        string key = isSelected ? "OrientedImageryViewSelectedPageFormat" : "OrientedImageryViewGoToPageFormat";
+        string key = isSelected ? "OrientedImageryViewerSelectedPageFormat" : "OrientedImageryViewerGoToPageFormat";
         string name = string.Format(CultureInfo.CurrentCulture, Properties.Resources.GetString(key)!, number, totalPages);
         if (Number == number && Width == width && SelectedIndicatorVisibility == visibility &&
             IsTabStop == isTabStop && AutomationName == name)

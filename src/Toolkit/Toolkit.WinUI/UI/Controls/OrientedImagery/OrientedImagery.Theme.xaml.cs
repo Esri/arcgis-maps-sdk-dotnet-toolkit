@@ -12,7 +12,7 @@ internal sealed partial class OrientedImageryResources : ResourceDictionary
 
     private void ImageSearchModeOption_Loaded(object sender, RoutedEventArgs e)
     {
-        if (sender is FrameworkElement { DataContext: OrientedImageryViewInteractionState state } element)
+        if (sender is FrameworkElement { DataContext: OrientedImageryViewerInteractionState state } element)
         {
             var parent = VisualTreeHelper.GetParent(element);
             while (parent is not null && parent is not ComboBoxItem)
@@ -24,7 +24,7 @@ internal sealed partial class OrientedImageryResources : ResourceDictionary
     }
 
     /// <summary>
-    /// Inherits the OrientedImageryViewToolbarSelector from its parent ItemsControl.
+    /// Inherits the OrientedImageryViewerToolbarSelector from its parent ItemsControl.
     /// </summary>
     private void ToolbarCategory_Loaded(object sender, RoutedEventArgs e)
     {
@@ -53,20 +53,20 @@ internal sealed partial class OrientedImageryResources : ResourceDictionary
     public static bool IsGreaterThanOne(int imageCount) => imageCount > 1;
 
     public static string? NoImageMessage(bool hasSearched)
-        => Properties.Resources.GetString(hasSearched ? "OrientedImageryViewNoImagesFound" : "OrientedImageryViewNoImageToDisplay");
+        => Properties.Resources.GetString(hasSearched ? "OrientedImageryViewerNoImagesFound" : "OrientedImageryViewerNoImageToDisplay");
 
-    public static Visibility VisibleWhenImageSelectionDisabled(OrientedImageryViewInteractionState state)
-        => VisibleWhen(state is not (OrientedImageryViewInteractionState.FindImages or OrientedImageryViewInteractionState.DisplayImage));
+    public static Visibility VisibleWhenImageSelectionDisabled(OrientedImageryViewerInteractionState state)
+        => VisibleWhen(state is not (OrientedImageryViewerInteractionState.FindImages or OrientedImageryViewerInteractionState.DisplayImage));
 
-    public static Visibility VisibleWhenFindingImages(OrientedImageryViewInteractionState state)
-        => state == OrientedImageryViewInteractionState.FindImages ? Visibility.Visible : Visibility.Collapsed;
+    public static Visibility VisibleWhenFindingImages(OrientedImageryViewerInteractionState state)
+        => state == OrientedImageryViewerInteractionState.FindImages ? Visibility.Visible : Visibility.Collapsed;
 
-    public static Visibility VisibleWhenDisplayingImage(OrientedImageryViewInteractionState state)
-        => state == OrientedImageryViewInteractionState.DisplayImage ? Visibility.Visible : Visibility.Collapsed;
+    public static Visibility VisibleWhenDisplayingImage(OrientedImageryViewerInteractionState state)
+        => state == OrientedImageryViewerInteractionState.DisplayImage ? Visibility.Visible : Visibility.Collapsed;
 
-    public static string? ImageSearchModeLabel(OrientedImageryViewInteractionState state)
-        => Properties.Resources.GetString(state == OrientedImageryViewInteractionState.FindImages
-            ? "OrientedImageryViewImageSearchModeFind" : "OrientedImageryViewImageSearchModeDisplay");
+    public static string? ImageSearchModeLabel(OrientedImageryViewerInteractionState state)
+        => Properties.Resources.GetString(state == OrientedImageryViewerInteractionState.FindImages
+            ? "OrientedImageryViewerImageSearchModeFind" : "OrientedImageryViewerImageSearchModeDisplay");
 
     public static Visibility VisibleWhenFalse(bool value) => value ? Visibility.Collapsed : Visibility.Visible;
 
@@ -76,7 +76,7 @@ internal sealed partial class OrientedImageryResources : ResourceDictionary
 internal sealed partial class ImageSearchModeLabelConverter : IValueConverter
 {
     public object? Convert(object value, Type targetType, object parameter, string language)
-        => OrientedImageryResources.ImageSearchModeLabel((OrientedImageryViewInteractionState)value);
+        => OrientedImageryResources.ImageSearchModeLabel((OrientedImageryViewerInteractionState)value);
 
     public object ConvertBack(object value, Type targetType, object parameter, string language)
         => throw new NotSupportedException();
@@ -97,7 +97,7 @@ internal sealed partial class ImageSearchModeIconTemplateSelector : DataTemplate
     public DataTemplate? FindImagesTemplate { get; set; }
 
     protected override DataTemplate SelectTemplateCore(object item)
-        => (item is OrientedImageryViewInteractionState.FindImages ? FindImagesTemplate : DisplayImageTemplate)
+        => (item is OrientedImageryViewerInteractionState.FindImages ? FindImagesTemplate : DisplayImageTemplate)
             ?? base.SelectTemplateCore(item);
 
     protected override DataTemplate SelectTemplateCore(object item, DependencyObject container)
@@ -199,7 +199,7 @@ internal static class ImageSearchModeSelectionBehavior
 
     private static void RepeatSelection(object sender)
     {
-        if (sender is ComboBoxItem { IsSelected: true, Content: OrientedImageryViewInteractionState } item &&
+        if (sender is ComboBoxItem { IsSelected: true, Content: OrientedImageryViewerInteractionState } item &&
             ItemsControl.ItemsControlFromItemContainer(item) is ComboBox { DataContext: ImageSearchModeVM viewModel })
         {
             viewModel.IsImageSelectionEnabled = true;

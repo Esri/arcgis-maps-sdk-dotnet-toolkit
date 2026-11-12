@@ -22,10 +22,10 @@ namespace Esri.ArcGISRuntime.Toolkit.SampleApp.Samples.OrientedImagery;
 
 [SampleInfo(
     Category = "OrientedImagery",
-    DisplayName = "Oriented Imagery View",
+    DisplayName = "Oriented Imagery Viewer",
     Description = "Display and interact with oriented imagery.",
     ApiKeyRequired = true)]
-public sealed partial class OrientedImageryViewSample : Page
+public sealed partial class OrientedImageryViewerSample : Page
 {
     private const string BasemapUri = "https://runtime.maps.arcgis.com/home/item.html?id=d8c5e76fb2cc4bb6955a6783a5f577b7";
     private const string SceneBasemapUri = "https://runtime.maps.arcgis.com/home/item.html?id=0560e29930dc4d5ebeb58c635c0909c9";
@@ -38,32 +38,32 @@ public sealed partial class OrientedImageryViewSample : Page
         "https://services5.arcgis.com/N82JbI5EYtAkuUKU/ArcGIS/rest/services/EsriCampus_sequenceTest_attachment/FeatureServer/1"
     ];
 
-    private OrientedImageryViewModel _orientedImageryViewModel;
+    private OrientedImageryViewerModel _orientedImageryViewModel;
     private readonly SceneView _sceneView;
     private readonly ElevationSource _elevationSource;
     private bool _usingMapView = true;
     private GeoView CurrentGeoView => _usingMapView ? MainMapView : _sceneView;
     private bool _overrideTapEvents = false;
 
-    public OrientedImageryViewSample()
+    public OrientedImageryViewerSample()
     {
         InitializeComponent();
 
-        _orientedImageryViewModel = new OrientedImageryViewModel();
-        MainOrientedImageryView.ViewModel = _orientedImageryViewModel;
+        _orientedImageryViewModel = new OrientedImageryViewerModel();
+        MainOrientedImageryViewer.ViewModel = _orientedImageryViewModel;
 
-        MainOrientedImageryView.Loaded += (_, _) => ConfigureToolbarTemplates();
+        MainOrientedImageryViewer.Loaded += (_, _) => ConfigureToolbarTemplates();
 
         MainMapView.Map = new Map(new Uri(BasemapUri));
         _sceneView = new SceneView { Scene = new Scene(new Uri(SceneBasemapUri)) };
         _elevationSource = new ArcGISTiledElevationSource(new Uri(ElevationUrl));
-        MainOrientedImageryView.GeoView = CurrentGeoView;
+        MainOrientedImageryViewer.GeoView = CurrentGeoView;
         SelectLayerDropdown.ItemsSource = _exampleLayers;
     }
 
     private void ConfigureToolbarTemplates()
     {
-        if (MainOrientedImageryView.ToolbarItemTemplateSelector is not ToolbarSelector selector)
+        if (MainOrientedImageryViewer.ToolbarItemTemplateSelector is not ToolbarSelector selector)
             return;
 
         if (!selector.SelectionPairs.OfType<ToolbarItemSelectorPair>().Any(static pair => pair.ItemType == typeof(OrientedImageryPopupToolbarItem)) &&
@@ -160,7 +160,7 @@ public sealed partial class OrientedImageryViewSample : Page
     {
         GeoViewContainer.Children.Clear();
         _usingMapView = !_usingMapView;
-        MainOrientedImageryView.GeoView = CurrentGeoView;
+        MainOrientedImageryViewer.GeoView = CurrentGeoView;
         GeoViewContainer.Children.Add(CurrentGeoView);
         SelectLayerDropdown.SelectedItem = null;
         _orientedImageryViewModel.OrientedImageryLayer = null;
@@ -193,17 +193,17 @@ public sealed partial class OrientedImageryViewSample : Page
         _overrideTapEvents = !_overrideTapEvents;
         if (_overrideTapEvents)
         {
-            MainOrientedImageryView.GeoViewTapped += MainOrientedImageryView_GeoViewTapped;
-            MainOrientedImageryView.ImageTapped += MainOrientedImageryView_ImageTapped;
+            MainOrientedImageryViewer.GeoViewTapped += MainOrientedImageryViewer_GeoViewTapped;
+            MainOrientedImageryViewer.ImageTapped += MainOrientedImageryViewer_ImageTapped;
         }
         else
         {
-            MainOrientedImageryView.GeoViewTapped -= MainOrientedImageryView_GeoViewTapped;
-            MainOrientedImageryView.ImageTapped -= MainOrientedImageryView_ImageTapped;
+            MainOrientedImageryViewer.GeoViewTapped -= MainOrientedImageryViewer_GeoViewTapped;
+            MainOrientedImageryViewer.ImageTapped -= MainOrientedImageryViewer_ImageTapped;
         }
     }
 
-    private void MainOrientedImageryView_GeoViewTapped(object? sender, OrientedImageryViewGeoViewTappedArgs e)
+    private void MainOrientedImageryViewer_GeoViewTapped(object? sender, OrientedImageryViewerGeoViewTappedArgs e)
     {
         e.Handled = true;
 
@@ -214,7 +214,7 @@ public sealed partial class OrientedImageryViewSample : Page
         _orientedImageryViewModel.AddMarkerLocation(e.GeoViewInputEventArgs.Location, symbol);
     }
 
-    private async void MainOrientedImageryView_ImageTapped(object? sender, OrientedImageryViewImageTappedArgs e)
+    private async void MainOrientedImageryViewer_ImageTapped(object? sender, OrientedImageryViewerImageTappedArgs e)
     {
         e.Handled = true;
 
@@ -232,7 +232,7 @@ public sealed partial class OrientedImageryViewSample : Page
 
     private void DetachReattachGeoViewButton_Click(object sender, RoutedEventArgs e)
     {
-        MainOrientedImageryView.GeoView = MainOrientedImageryView.GeoView == null ? CurrentGeoView : null;
+        MainOrientedImageryViewer.GeoView = MainOrientedImageryViewer.GeoView == null ? CurrentGeoView : null;
     }
 
     private void PanelSplitter_DragDelta(object sender, DragDeltaEventArgs e)
