@@ -133,7 +133,7 @@ internal sealed class PanoramicSurfaceView : Microsoft.Maui.Controls.View
         }
         catch (Exception ex)
         {
-            if (path == _texturePath)
+            if (ReferenceEquals(platform, _platform) && path == _texturePath)
                 RenderFailed?.Invoke(ex);
         }
     }
