@@ -308,6 +308,12 @@ function Set-NugetSource {
     exit $LASTEXITCODE
   }
 
+  # Workaround for the build machine package mapping changes as applied in samples repo
+  $config = [xml](Get-Content -Path $configfile)
+  $mappings = $config.configuration.AppendChild($config.CreateElement('packageSourceMapping'))
+  $mappings.AppendChild($config.CreateElement('clear'))
+  $config.Save($configfile)
+
   $nuget_dir = Join-Path $workspace '.nuget'
   $env:NUGET_PACKAGES = Join-Path $nuget_dir 'packages'
   $env:NUGET_HTTP_CACHE_PATH = Join-Path $nuget_dir 'cache'
