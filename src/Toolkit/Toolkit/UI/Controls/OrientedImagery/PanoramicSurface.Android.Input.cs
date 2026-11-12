@@ -34,9 +34,11 @@ internal sealed partial class PanoramicSurface : Choreographer.IFrameCallback, V
     private bool _keyboardFramePosted;
     private long _keyboardFrameTime;
 
+    // Android delivers input to disabled views too. The handlers below check Enabled, set by MAUI from IsEnabled.
     public override bool OnTouchEvent(MotionEvent? e)
     {
-        if (e is null)
+        // Android passes the touch to the parent, as it does for any disabled view that isn't clickable.
+        if (e is null || !Enabled)
             return false;
 
         // Keyboard input goes to the panorama the user last touched.
@@ -60,7 +62,7 @@ internal sealed partial class PanoramicSurface : Choreographer.IFrameCallback, V
     {
         // A mouse wheel arrives as a generic scroll event, not a touch. Consuming it stops the fallback that turns an
         // unhandled wheel into a drag.
-        if (e?.Action == MotionEventActions.Scroll)
+        if (Enabled && e?.Action == MotionEventActions.Scroll)
         {
             float notches = e.GetAxisValue(Axis.Vscroll); // positive for wheel up
             if (notches != 0f)
@@ -83,7 +85,7 @@ internal sealed partial class PanoramicSurface : Choreographer.IFrameCallback, V
             return true;
         }
 
-        NavigationKeys key = GetNavigationKey(keyCode, e);
+        NavigationKeys key = Enabled ? GetNavigationKey(keyCode, e) : NavigationKeys.None;
         if (key == NavigationKeys.None)
             return base.OnKeyDown(keyCode, e);
 
@@ -182,7 +184,8 @@ internal sealed partial class PanoramicSurface : Choreographer.IFrameCallback, V
         foreach (NavigationKeys key in _heldKeys.Values)
             keys |= key;
 
-        if (keys == NavigationKeys.None)
+        // Navigation stops while the surface is disabled. OnKeyUp still runs and keeps _heldKeys current.
+        if (keys == NavigationKeys.None || !Enabled)
         {
             _keyboardFramePosted = false;
             return;
