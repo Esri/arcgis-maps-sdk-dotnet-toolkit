@@ -21,6 +21,7 @@ using Symbol = Esri.ArcGISRuntime.Symbology.Symbol;
 using Esri.ArcGISRuntime.Toolkit.UI.Controls.OrientedImagery;
 #elif MAUI
 using Esri.ArcGISRuntime.Toolkit.Maui.OrientedImagery;
+#endif
 
 #if MAUI
 namespace Esri.ArcGISRuntime.Toolkit.Maui;

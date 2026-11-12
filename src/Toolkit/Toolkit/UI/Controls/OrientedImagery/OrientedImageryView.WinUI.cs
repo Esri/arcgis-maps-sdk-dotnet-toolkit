@@ -1,12 +1,13 @@
 ﻿#if WINDOWS_XAML
 
 using Microsoft.UI.Xaml.Automation.Peers;
+using Esri.ArcGISRuntime.Toolkit.UI.Controls.OrientedImagery;
 
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls;
 
 [TemplatePart(Name = ImageViewportName, Type = typeof(OrientedImageViewport))]
 [TemplatePart(Name = ToolbarContainerName, Type = typeof(ItemsControl))]
-[TemplatePart(Name = PaginatorName, Type = typeof(OrientedImageryPaginator))]
+[TemplatePart(Name = PaginatorName, Type = typeof(Paginator))]
 [TemplatePart(Name = MainErrorMessagePresenterName, Type = typeof(TextBlock))]
 [TemplatePart(Name = ImageDetailsButtonName, Type = typeof(Button))]
 [TemplatePart(Name = CloseDetailsButtonName, Type = typeof(Button))]
@@ -120,9 +121,9 @@ public partial class OrientedImageryView : Control
             ToolbarItemTemplateSelector?.Merge(_defaultItemTemplateSelector);
     }
 
-    private OrientedImageryViewToolbarSelector CreateDefaultSelector_WinUI()
+    private ToolbarSelector CreateDefaultSelector_WinUI()
     {
-        var selector = new OrientedImageryViewToolbarSelector();
+        var selector = new ToolbarSelector();
         var pairs = selector.SelectionPairs;
 
         var templates = DefaultToolbarTemplates;
@@ -130,30 +131,30 @@ public partial class OrientedImageryView : Control
         {
             if (templates.CategoryTemplate is DataTemplate categoryTemplate)
             {
-                pairs.Add(new OrientedImageryToolbarCategorySelectorPair { CategoryName = OrientedImageryToolbarCategory.ModeCategoryName, Template = categoryTemplate });
-                pairs.Add(new OrientedImageryToolbarCategorySelectorPair { CategoryName = OrientedImageryToolbarCategory.OverlaysCategoryName, Template = categoryTemplate });
-                pairs.Add(new OrientedImageryToolbarCategorySelectorPair { CategoryName = OrientedImageryToolbarCategory.MarkersCategoryName, Template = categoryTemplate });
+                pairs.Add(new ToolbarCategorySelectorPair { CategoryName = ToolbarCategory.ModeCategoryName, Template = categoryTemplate });
+                pairs.Add(new ToolbarCategorySelectorPair { CategoryName = ToolbarCategory.OverlaysCategoryName, Template = categoryTemplate });
+                pairs.Add(new ToolbarCategorySelectorPair { CategoryName = ToolbarCategory.MarkersCategoryName, Template = categoryTemplate });
             }
             if (templates.MoreCategoryTemplate is DataTemplate moreCategoryTemplate)
-                pairs.Add(new OrientedImageryToolbarCategorySelectorPair { CategoryName = OrientedImageryToolbarCategory.MoreCategoryName, Template = moreCategoryTemplate });
+                pairs.Add(new ToolbarCategorySelectorPair { CategoryName = ToolbarCategory.MoreCategoryName, Template = moreCategoryTemplate });
             if (templates.ToolbarDividerVMTemplate is DataTemplate toolbarDividerTemplate)
-                pairs.Add(new OrientedImageryToolbarItemSelectorPair { ItemType = typeof(ToolbarDividerVM), Template = toolbarDividerTemplate });
+                pairs.Add(new ToolbarItemSelectorPair { ItemType = typeof(ToolbarDividerVM), Template = toolbarDividerTemplate });
             if (templates.ImageSearchModeVMTemplate is DataTemplate imageSearchModeTemplate)
-                pairs.Add(new OrientedImageryToolbarItemSelectorPair { ItemType = typeof(ImageSearchModeVM), Template = imageSearchModeTemplate });
+                pairs.Add(new ToolbarItemSelectorPair { ItemType = typeof(ImageSearchModeVM), Template = imageSearchModeTemplate });
             if (templates.SequentialNavigationVMTemplate is DataTemplate sequentialNavigationTemplate)
-                pairs.Add(new OrientedImageryToolbarItemSelectorPair { ItemType = typeof(SequentialNavigationVM), Template = sequentialNavigationTemplate });
+                pairs.Add(new ToolbarItemSelectorPair { ItemType = typeof(SequentialNavigationVM), Template = sequentialNavigationTemplate });
             if (templates.ShowSelectedFootprintVMTemplate is DataTemplate selectedFootprintTemplate)
-                pairs.Add(new OrientedImageryToolbarItemSelectorPair { ItemType = typeof(ShowSelectedFootprintVM), Template = selectedFootprintTemplate });
+                pairs.Add(new ToolbarItemSelectorPair { ItemType = typeof(ShowSelectedFootprintVM), Template = selectedFootprintTemplate });
             if (templates.ShowUnselectedFootprintsVMTemplate is DataTemplate unselectedFootprintsTemplate)
-                pairs.Add(new OrientedImageryToolbarItemSelectorPair { ItemType = typeof(ShowUnselectedFootprintsVM), Template = unselectedFootprintsTemplate });
+                pairs.Add(new ToolbarItemSelectorPair { ItemType = typeof(ShowUnselectedFootprintsVM), Template = unselectedFootprintsTemplate });
             if (templates.ShowCameraMarkersVMTemplate is DataTemplate cameraMarkersTemplate)
-                pairs.Add(new OrientedImageryToolbarItemSelectorPair { ItemType = typeof(ShowCameraMarkersVM), Template = cameraMarkersTemplate });
+                pairs.Add(new ToolbarItemSelectorPair { ItemType = typeof(ShowCameraMarkersVM), Template = cameraMarkersTemplate });
             if (templates.AllowAddingMarkersVMTemplate is DataTemplate addingMarkersTemplate)
-                pairs.Add(new OrientedImageryToolbarItemSelectorPair { ItemType = typeof(AllowAddingMarkersVM), Template = addingMarkersTemplate });
+                pairs.Add(new ToolbarItemSelectorPair { ItemType = typeof(AllowAddingMarkersVM), Template = addingMarkersTemplate });
             if (templates.MarkerPickerVMTemplate is DataTemplate markerPickerTemplate)
-                pairs.Add(new OrientedImageryToolbarItemSelectorPair { ItemType = typeof(SelectNewMarkerSymbolVM), Template = markerPickerTemplate });
+                pairs.Add(new ToolbarItemSelectorPair { ItemType = typeof(SelectNewMarkerSymbolVM), Template = markerPickerTemplate });
             if (templates.ClearMarkersVMTemplate is DataTemplate clearMarkersTemplate)
-                pairs.Add(new OrientedImageryToolbarItemSelectorPair { ItemType = typeof(ClearMarkersVM), Template = clearMarkersTemplate });
+                pairs.Add(new ToolbarItemSelectorPair { ItemType = typeof(ClearMarkersVM), Template = clearMarkersTemplate });
         }
 
         return selector;
