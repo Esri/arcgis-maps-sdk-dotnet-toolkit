@@ -13,7 +13,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls;
 [TemplatePart(Name = CloseDetailsButtonName, Type = typeof(Button))]
 [TemplatePart(Name = ImageDetailsButtonName, Type = typeof(Button))]
 [TemplatePart(Name = DismissTransientErrorButtonName, Type = typeof(Button))]
-public partial class OrientedImageryView : Control
+public partial class OrientedImageryViewer : Control
 {
     private const string CloseDetailsButtonName = "PART_CloseDetailsButton";
     private const string ImageDetailsButtonName = "PART_ImageDetailsButton";
@@ -27,7 +27,7 @@ public partial class OrientedImageryView : Control
     }
 
     /// <inheritdoc/>
-    protected override AutomationPeer OnCreateAutomationPeer() => new OrientedImageryViewAutomationPeer(this);
+    protected override AutomationPeer OnCreateAutomationPeer() => new OrientedImageryViewerAutomationPeer(this);
 
     private void UpdateDetailsFocus()
     {
@@ -46,13 +46,13 @@ public partial class OrientedImageryView : Control
         }));
     }
 
-    private sealed class OrientedImageryViewAutomationPeer : FrameworkElementAutomationPeer
+    private sealed class OrientedImageryViewerAutomationPeer : FrameworkElementAutomationPeer
     {
-        public OrientedImageryViewAutomationPeer(OrientedImageryView owner) : base(owner)
+        public OrientedImageryViewerAutomationPeer(OrientedImageryViewer owner) : base(owner)
         {
         }
 
-        protected override string GetLocalizedControlTypeCore() => Properties.Resources.GetString("OrientedImageryViewAutomationTypeName")!;
+        protected override string GetLocalizedControlTypeCore() => Properties.Resources.GetString("OrientedImageryViewerAutomationTypeName")!;
     }
 }
 
@@ -82,7 +82,7 @@ internal static class ImageSearchModeSelectionBehavior
 
     private static void Item_PreviewMouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
     {
-        if (sender is ComboBoxItem { IsSelected: true, DataContext: OrientedImageryViewInteractionState } item &&
+        if (sender is ComboBoxItem { IsSelected: true, DataContext: OrientedImageryViewerInteractionState } item &&
             ItemsControl.ItemsControlFromItemContainer(item) is ComboBox { DataContext: OrientedImagery.ImageSearchModeVM viewModel })
         {
             viewModel.IsImageSelectionEnabled = true;

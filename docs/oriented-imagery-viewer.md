@@ -1,12 +1,12 @@
-# OrientedImageryView
+# OrientedImageryViewer
 
-The `OrientedImageryView` displays oriented imagery with a built-in toolbar for image navigation, footprint visibility, camera location markers, and image markers. It takes a `GeoView`, and must be assigned an `OrientedImageryLayer` via its `ViewModel` property.
+The `OrientedImageryViewer` displays oriented imagery with a built-in toolbar for image navigation, footprint visibility, camera location markers, and image markers. It takes a `GeoView`, and must be assigned an `OrientedImageryLayer` via its `ViewModel` property.
 
 <img width="937" height="391" alt="oiview-screenshot" src="https://github.com/user-attachments/assets/638563c3-19f8-4d2f-88c6-26594aa24919" />
 
 ## Minimal implementation
 
-The following WPF example places a `MapView` next to an `OrientedImageryView`. Set `GeoView` so the control can display its managed marker overlay on the map, and set `ViewModel.OrientedImageryLayer` so the view model can manage footprints and image-to-map calculations.
+The following WPF example places a `MapView` next to an `OrientedImageryViewer`. Set `GeoView` so the control can display its managed marker overlay on the map, and set `ViewModel.OrientedImageryLayer` so the view model can manage footprints and image-to-map calculations.
 
 ```xml
 <Grid xmlns:esri="http://schemas.esri.com/arcgis/runtime/2013">
@@ -16,7 +16,7 @@ The following WPF example places a `MapView` next to an `OrientedImageryView`. S
     </Grid.ColumnDefinitions>
 
     <esri:MapView x:Name="MainMapView" />
-    <esri:OrientedImageryView x:Name="MainOrientedImageryView"
+    <esri:OrientedImageryViewer x:Name="MainOrientedImageryViewer"
                               Grid.Column="1"
                               GeoView="{Binding ElementName=MainMapView}" />
 </Grid>
@@ -36,7 +36,7 @@ private async Task InitializeAsync()
     _orientedImageryLayer = new OrientedImageryLayer(new Uri(OrientedImageryLayerUrl));
     MainMapView.Map.OperationalLayers.Add(_orientedImageryLayer);
 
-    MainOrientedImageryView.ViewModel.OrientedImageryLayer = _orientedImageryLayer;
+    MainOrientedImageryViewer.ViewModel.OrientedImageryLayer = _orientedImageryLayer;
 
     await _orientedImageryLayer.LoadAsync();
     if (_orientedImageryLayer.FullExtent is not null)
@@ -44,11 +44,11 @@ private async Task InitializeAsync()
 }
 ```
 
-See the `OrientedImageryView` sample for a full example implementation.
+See the `OrientedImageryViewer` sample for a full example implementation.
 
 ## Customizing the toolbar
 
-The `OrientedImageryView` toolbar is implemented as an `ItemsControl` whose individual buttons and dropdowns are defined by the `OrientedImageryViewModel.ToolbarCategories` collection. Each `ToolbarCategory` contains a collection of `ToolbarItemBase` objects. Data templates for each toolbar item and category are selected using `OrientedImageryView.ToolbarItemTemplateSelector`, a specialized `DataTemplateSelector` subclass containing configurable mappings from category names or item types to data templates. These toolbar customization types are in the `Esri.ArcGISRuntime.Toolkit.UI.Controls.OrientedImagery` namespace.
+The `OrientedImageryViewer` toolbar is implemented as an `ItemsControl` whose individual buttons and dropdowns are defined by the `OrientedImageryViewerModel.ToolbarCategories` collection. Each `ToolbarCategory` contains a collection of `ToolbarItemBase` objects. Data templates for each toolbar item and category are selected using `OrientedImageryViewer.ToolbarItemTemplateSelector`, a specialized `DataTemplateSelector` subclass containing configurable mappings from category names or item types to data templates. These toolbar customization types are in the `Esri.ArcGISRuntime.Toolkit.UI.Controls.OrientedImagery` namespace.
 
 ### Example
 
@@ -103,28 +103,28 @@ xmlns:oi="clr-namespace:Esri.ArcGISRuntime.Toolkit.UI.Controls.OrientedImagery;a
 Configure the toolbar when the control has loaded, so its default templates are available.
 
 ```xml
-<esri:OrientedImageryView x:Name="MainOrientedImageryView"
+<esri:OrientedImageryViewer x:Name="MainOrientedImageryViewer"
                           GeoView="{Binding ElementName=MainMapView}"
-                          Loaded="MainOrientedImageryView_Loaded" />
+                          Loaded="MainOrientedImageryViewer_Loaded" />
 ```
 
 Add the custom item to the existing overlays category and assign the custom selector. The other categories and toolbar items remain unchanged.
 
 ```cs
-private void MainOrientedImageryView_Loaded(object sender, RoutedEventArgs e)
+private void MainOrientedImageryViewer_Loaded(object sender, RoutedEventArgs e)
 {
-    MainOrientedImageryView.Loaded -= MainOrientedImageryView_Loaded;
+    MainOrientedImageryViewer.Loaded -= MainOrientedImageryViewer_Loaded;
 
-    var overlaysCategory = MainOrientedImageryView.ViewModel.ToolbarCategories
+    var overlaysCategory = MainOrientedImageryViewer.ViewModel.ToolbarCategories
         .First(category => category.Name == ToolbarCategory.OverlaysCategoryName);
     overlaysCategory.ToolbarItems.Add(new ShowImageDetailsToolbarItem());
-    MainOrientedImageryView.ToolbarItemTemplateSelector =
+    MainOrientedImageryViewer.ToolbarItemTemplateSelector =
         (ToolbarSelector)FindResource("CustomToolbarSelector");
 }
 
 private void ShowImageDetails_Click(object sender, RoutedEventArgs e)
 {
-    var selectedImage = MainOrientedImageryView.ViewModel.SelectedImage;
+    var selectedImage = MainOrientedImageryViewer.ViewModel.SelectedImage;
     if (selectedImage is null)
     {
         return;

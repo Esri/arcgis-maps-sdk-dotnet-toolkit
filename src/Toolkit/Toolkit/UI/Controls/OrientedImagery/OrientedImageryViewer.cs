@@ -14,7 +14,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls;
 /// <summary>
 /// Displays oriented imagery and provides controls for managing image selection, footprints, and markers.
 /// </summary>
-public partial class OrientedImageryView
+public partial class OrientedImageryViewer
 {
     private const string ImageViewportName = "PART_ImageViewport";
     private const string ToolbarContainerName = "PART_ToolbarContainer";
@@ -23,11 +23,11 @@ public partial class OrientedImageryView
     private const string DismissTransientErrorButtonName = "PART_DismissTransientErrorButton";
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="OrientedImageryView"/> class.
+    /// Initializes a new instance of the <see cref="OrientedImageryViewer"/> class.
     /// </summary>
-    public OrientedImageryView() : base()
+    public OrientedImageryViewer() : base()
     {
-        ViewModel = new OrientedImageryViewModel();
+        ViewModel = new OrientedImageryViewerModel();
 
         UpdateErrorMessages();
 
@@ -40,7 +40,7 @@ public partial class OrientedImageryView
         // MAUI layout containers are not tab stops by default, so no IsTabStop is needed here.
         ControlTemplate = DefaultControlTemplate;
 #else
-        DefaultStyleKey = typeof(OrientedImageryView);
+        DefaultStyleKey = typeof(OrientedImageryViewer);
 #endif
     }
 
@@ -82,15 +82,15 @@ public partial class OrientedImageryView
     }
 
 #region ViewModel
-    private WeakEventListener<OrientedImageryView, OrientedImageryViewModel, object?, PropertyChangedEventArgs>? _viewModelPropertyChangedListener;
-    private WeakEventListener<OrientedImageryView, OrientedImageryViewModel, object?, SequenceBoundaryReachedArgs>? _viewModelSequenceBoundaryListener;
+    private WeakEventListener<OrientedImageryViewer, OrientedImageryViewerModel, object?, PropertyChangedEventArgs>? _viewModelPropertyChangedListener;
+    private WeakEventListener<OrientedImageryViewer, OrientedImageryViewerModel, object?, SequenceBoundaryReachedArgs>? _viewModelSequenceBoundaryListener;
 
     /// <summary>
     /// Gets or sets the view model for the oriented imagery view.
     /// </summary>
-    public OrientedImageryViewModel ViewModel
+    public OrientedImageryViewerModel ViewModel
     {
-        get => (OrientedImageryViewModel)GetValue(ViewModelProperty);
+        get => (OrientedImageryViewerModel)GetValue(ViewModelProperty);
         set => SetValue(ViewModelProperty, value);
     }
 
@@ -98,9 +98,9 @@ public partial class OrientedImageryView
     /// Identifies the <see cref="ViewModel" /> dependency property.
     /// </summary>
     public static readonly DependencyProperty ViewModelProperty =
-        PropertyHelper.CreateProperty<OrientedImageryViewModel?, OrientedImageryView>(nameof(ViewModel), null, (s, oldValue, newValue) => s.OnViewModelChanged(oldValue, newValue));
+        PropertyHelper.CreateProperty<OrientedImageryViewerModel?, OrientedImageryViewer>(nameof(ViewModel), null, (s, oldValue, newValue) => s.OnViewModelChanged(oldValue, newValue));
 
-    private void OnViewModelChanged(OrientedImageryViewModel? oldValue, OrientedImageryViewModel? newValue)
+    private void OnViewModelChanged(OrientedImageryViewerModel? oldValue, OrientedImageryViewerModel? newValue)
     {
         HasSearchedForImages = false;
         if (oldValue != null)
@@ -118,7 +118,7 @@ public partial class OrientedImageryView
 
         if (newValue == null)
         {
-            ViewModel = new OrientedImageryViewModel();
+            ViewModel = new OrientedImageryViewerModel();
             return;
         }
 
@@ -165,33 +165,33 @@ public partial class OrientedImageryView
     {
         switch (e.PropertyName)
         {
-            case nameof(OrientedImageryViewModel.SearchPoint):
-            case nameof(OrientedImageryViewModel.SelectedImage):
+            case nameof(OrientedImageryViewerModel.SearchPoint):
+            case nameof(OrientedImageryViewerModel.SelectedImage):
                 UpdateViewportImage();
-                goto case nameof(OrientedImageryViewModel.Images);
-            case nameof(OrientedImageryViewModel.Images):
+                goto case nameof(OrientedImageryViewerModel.Images);
+            case nameof(OrientedImageryViewerModel.Images):
                 UpdatePaginatorSelection();
                 UpdateImageStateMessages();
                 break;
-            case nameof(OrientedImageryViewModel.InteractionState):
+            case nameof(OrientedImageryViewerModel.InteractionState):
                 UpdateImageStateMessages();
                 break;
-            case nameof(OrientedImageryViewModel.AutoUpdateFootprint):
+            case nameof(OrientedImageryViewerModel.AutoUpdateFootprint):
                 if (_viewport != null)
                     _viewport.AutoUpdateFootprint = ViewModel.AutoUpdateFootprint;
                 break;
-            case nameof(OrientedImageryViewModel.OrientedImageryLayer):
+            case nameof(OrientedImageryViewerModel.OrientedImageryLayer):
                 CancelGeoViewTappedHandler();
                 HasSearchedForImages = false;
                 TransientErrorMessage = null;
                 UpdateErrorMessages();
                 break;
-            case nameof(OrientedImageryViewModel.SequentialNavigationError):
+            case nameof(OrientedImageryViewerModel.SequentialNavigationError):
                 if (ViewModel.SequentialNavigationError?.Message != null)
                     TransientErrorMessage = ViewModel.SequentialNavigationError?.Message;
                 break;
 #if WPF
-            case nameof(OrientedImageryViewModel.ImageDetailsPopup):
+            case nameof(OrientedImageryViewerModel.ImageDetailsPopup):
                 UpdateDetailsFocus();
                 break;
 #endif
@@ -205,9 +205,9 @@ public partial class OrientedImageryView
 
         string? resourceKey = (e.HasReachedStart, e.HasReachedEnd) switch
         {
-            (true, true) => "OrientedImageryViewSequenceStartAndEndReached",
-            (true, false) => "OrientedImageryViewSequenceStartReached",
-            (false, true) => "OrientedImageryViewSequenceEndReached",
+            (true, true) => "OrientedImageryViewerSequenceStartAndEndReached",
+            (true, false) => "OrientedImageryViewerSequenceStartReached",
+            (false, true) => "OrientedImageryViewerSequenceEndReached",
             _ => null,
         };
 
@@ -216,7 +216,7 @@ public partial class OrientedImageryView
             ScreenReaderHelpers.RaiseNotificationAnnouncement(
                 this,
                 announcement,
-                "OrientedImageryViewSequenceBoundary");
+                "OrientedImageryViewerSequenceBoundary");
         }
     }
 #endregion ViewModel
@@ -232,7 +232,7 @@ public partial class OrientedImageryView
     }
 
     private static readonly DependencyPropertyKey HasSearchedForImagesPropertyKey =
-        PropertyHelper.CreateReadOnlyProperty<bool, OrientedImageryView>(nameof(HasSearchedForImages));
+        PropertyHelper.CreateReadOnlyProperty<bool, OrientedImageryViewer>(nameof(HasSearchedForImages));
 
     /// <summary>
     /// Identifies the <see cref="HasSearchedForImages" /> dependency property.
@@ -245,10 +245,10 @@ public partial class OrientedImageryView
     /// Raised when a tap is registered on the displayed image.
     /// </summary>
     /// <remarks>
-    /// Set <see cref="OrientedImageryViewImageTappedArgs.Handled"/> to <c>true</c> before awaiting asynchronous work to override the default tap behavior.
+    /// Set <see cref="OrientedImageryViewerImageTappedArgs.Handled"/> to <c>true</c> before awaiting asynchronous work to override the default tap behavior.
     /// Internally-managed marker hits (such as on the search point marker) are not registered on this event.
     /// </remarks>
-    public event EventHandler<OrientedImageryViewImageTappedArgs>? ImageTapped;
+    public event EventHandler<OrientedImageryViewerImageTappedArgs>? ImageTapped;
 
     /// <summary>
     /// Gets or sets the background color shown where the image does not fill the display.
@@ -263,7 +263,7 @@ public partial class OrientedImageryView
     /// Identifies the <see cref="DisplayBackgroundColor" /> dependency property.
     /// </summary>
     public static readonly DependencyProperty DisplayBackgroundColorProperty =
-        PropertyHelper.CreateProperty<System.Drawing.Color, OrientedImageryView>(nameof(DisplayBackgroundColor), System.Drawing.Color.White, (s, oldValue, newValue) => s.UpdateDisplayBackgroundColor(newValue));
+        PropertyHelper.CreateProperty<System.Drawing.Color, OrientedImageryViewer>(nameof(DisplayBackgroundColor), System.Drawing.Color.White, (s, oldValue, newValue) => s.UpdateDisplayBackgroundColor(newValue));
 
     private void WireViewport(OrientedImageViewport viewport)
     {
@@ -291,11 +291,11 @@ public partial class OrientedImageryView
 
     private async void Viewport_ImageTapped(object? _, OrientedImageTappedEventArgs e)
     {
-        var eventArgs = new OrientedImageryViewImageTappedArgs(ViewModel.GetPublicImageTappedEventArgs(e));
+        var eventArgs = new OrientedImageryViewerImageTappedArgs(ViewModel.GetPublicImageTappedEventArgs(e));
         ImageTapped?.Invoke(this, eventArgs);
 
         // Only adds a marker if sketch mode is enabled and there is not already a marker nearby
-        if (eventArgs.Handled || ViewModel.InteractionState != OrientedImageryViewInteractionState.AddMarkers || e.Marker != null)
+        if (eventArgs.Handled || ViewModel.InteractionState != OrientedImageryViewerInteractionState.AddMarkers || e.Marker != null)
             return;
 
         TransientErrorMessage = null;
@@ -363,16 +363,16 @@ public partial class OrientedImageryView
     /// Raised when a tap is registered on the connected <see cref="GeoView"/>.
     /// </summary>
     /// <remarks>
-    /// Set <see cref="OrientedImageryViewGeoViewTappedArgs.Handled"/> to <c>true</c> before awaiting asynchronous work to override the default tap behavior.
+    /// Set <see cref="OrientedImageryViewerGeoViewTappedArgs.Handled"/> to <c>true</c> before awaiting asynchronous work to override the default tap behavior.
     /// </remarks>
-    public event EventHandler<OrientedImageryViewGeoViewTappedArgs>? GeoViewTapped;
+    public event EventHandler<OrientedImageryViewerGeoViewTappedArgs>? GeoViewTapped;
 
     /// <summary>
     /// Gets or sets the <see cref="Esri.ArcGISRuntime.UI.Controls.GeoView"/> on which marker graphics are displayed.
     /// </summary>
     /// <remarks>
     /// Setting <see cref="GeoView"/> to <c>null</c> will clear all markers and footprints from the geo view and set
-    /// <see cref="OrientedImageryViewModel.OrientedImageryLayer"/> to <c>null</c>.
+    /// <see cref="OrientedImageryViewerModel.OrientedImageryLayer"/> to <c>null</c>.
     /// </remarks>
     public GeoView? GeoView
     {
@@ -384,7 +384,7 @@ public partial class OrientedImageryView
     /// Identifies the <see cref="GeoView"/> dependency property.
     /// </summary>
     public static readonly DependencyProperty GeoViewProperty =
-        PropertyHelper.CreateProperty<GeoView?, OrientedImageryView>(nameof(GeoView), null, (s, oldValue, newValue) => s.UpdateGeoView(oldValue, newValue));
+        PropertyHelper.CreateProperty<GeoView?, OrientedImageryViewer>(nameof(GeoView), null, (s, oldValue, newValue) => s.UpdateGeoView(oldValue, newValue));
 
     private void UpdateGeoView(GeoView? oldGeoView, GeoView? newGeoView)
     {
@@ -415,7 +415,7 @@ public partial class OrientedImageryView
 
     private async void GeoView_GeoViewTapped(object? _, GeoViewInputEventArgs e)
     {
-        var eventArgs = new OrientedImageryViewGeoViewTappedArgs(e);
+        var eventArgs = new OrientedImageryViewerGeoViewTappedArgs(e);
         GeoViewTapped?.Invoke(this, eventArgs);
 
         if (eventArgs.Handled || e.Location == null || GeoView == null || ViewModel.OrientedImageryLayer == null)
@@ -440,11 +440,11 @@ public partial class OrientedImageryView
         {
             switch (ViewModel.InteractionState)
             {
-                case OrientedImageryViewInteractionState.AddMarkers:
+                case OrientedImageryViewerInteractionState.AddMarkers:
                     ViewModel.AddMarkerLocation(e.Location);
                     break;
 
-                case OrientedImageryViewInteractionState.FindImages:
+                case OrientedImageryViewerInteractionState.FindImages:
                     var parameters = new OrientedImageSearchParameters() { MaxResults = -1 };
                     var images = await ViewModel.OrientedImageryLayer.SearchImagesAsync(e.Location, parameters, token) ?? new List<OrientedImage>();
                     if (token.IsCancellationRequested) return;
@@ -457,7 +457,7 @@ public partial class OrientedImageryView
                     ViewModel.IsSequentialNavigationEnabled = false;
                     break;
 
-                case OrientedImageryViewInteractionState.DisplayImage:
+                case OrientedImageryViewerInteractionState.DisplayImage:
                     var identifyResult = await GeoView.IdentifyLayerAsync(ViewModel.OrientedImageryLayer, e.Position, 0, false, token);
                     if (token.IsCancellationRequested) return;
 
@@ -517,7 +517,7 @@ public partial class OrientedImageryView
 
     /// <summary>
     /// Gets or sets the <see cref="ToolbarSelector"/> used by the toolbar <see cref="ItemsControl"/> to display the toolbar categories and
-    /// items in <see cref="OrientedImageryViewModel.ToolbarCategories"/>.
+    /// items in <see cref="OrientedImageryViewerModel.ToolbarCategories"/>.
     /// </summary>
     public ToolbarSelector? ToolbarItemTemplateSelector
     {
@@ -529,7 +529,7 @@ public partial class OrientedImageryView
     /// Identifies the <see cref="ToolbarItemTemplateSelector" /> dependency property.
     /// </summary>
     public static readonly DependencyProperty ToolbarItemTemplateSelectorProperty =
-        PropertyHelper.CreateProperty<ToolbarSelector?, OrientedImageryView>(nameof(ToolbarItemTemplateSelector), null, (s, oldValue, newValue) => s.OnItemTemplateSelectorChanged(oldValue, newValue));
+        PropertyHelper.CreateProperty<ToolbarSelector?, OrientedImageryViewer>(nameof(ToolbarItemTemplateSelector), null, (s, oldValue, newValue) => s.OnItemTemplateSelectorChanged(oldValue, newValue));
 
     private void OnItemTemplateSelectorChanged(ToolbarSelector? oldSelector, ToolbarSelector? newSelector)
     {
@@ -586,16 +586,16 @@ public partial class OrientedImageryView
 #endregion Pagination
 
 #region Errors
-    private const string NoGeoViewMessageKey = "OrientedImageryViewNoGeoView";
-    private const string NoLayerSelectedKey = "OrientedImageryViewNoLayerSelected";
-    private const string NoImagesNoneKey = "OrientedImageryViewImageSelectionNoImagesNone";
-    private const string NoImagesFindKey = "OrientedImageryViewImageSelectionNoImagesFind";
-    private const string NoImagesDisplayKey = "OrientedImageryViewImageSelectionNoImagesDisplay";
-    private const string NoImagesForLocationKey = "OrientedImageryViewNoImagesFound";
-    private const string ImageLoadingKey = "OrientedImageryViewImageLoading";
-    private const string ImageLoadedKey = "OrientedImageryViewImageLoaded";
-    private const string OrientedImageryViewAnnounceTransientErrorKey = "OrientedImageryViewAnnounceTransientError";
-    private const string ImageStateActivityId = "OrientedImageryViewImageState";
+    private const string NoGeoViewMessageKey = "OrientedImageryViewerNoGeoView";
+    private const string NoLayerSelectedKey = "OrientedImageryViewerNoLayerSelected";
+    private const string NoImagesNoneKey = "OrientedImageryViewerImageSelectionNoImagesNone";
+    private const string NoImagesFindKey = "OrientedImageryViewerImageSelectionNoImagesFind";
+    private const string NoImagesDisplayKey = "OrientedImageryViewerImageSelectionNoImagesDisplay";
+    private const string NoImagesForLocationKey = "OrientedImageryViewerNoImagesFound";
+    private const string ImageLoadingKey = "OrientedImageryViewerImageLoading";
+    private const string ImageLoadedKey = "OrientedImageryViewerImageLoaded";
+    private const string OrientedImageryViewerAnnounceTransientErrorKey = "OrientedImageryViewerAnnounceTransientError";
+    private const string ImageStateActivityId = "OrientedImageryViewerImageState";
     private bool _noImagesAnnouncementCanRepeat;
     private string? _lastNoImagesAnnouncement;
     private string? _lastImageErrorAnnouncement;
@@ -605,7 +605,7 @@ public partial class OrientedImageryView
     private Button? _dismissTransientErrorButton;
 
     /// <summary>
-    /// The message shown when the <see cref="OrientedImageryView"/> is in a state that prevents all use of the control.
+    /// The message shown when the <see cref="OrientedImageryViewer"/> is in a state that prevents all use of the control.
     /// This property does not cover image load errors or user prompts when no image is selected.
     /// </summary>
     public string? ErrorMessage
@@ -615,7 +615,7 @@ public partial class OrientedImageryView
     }
 
     private static readonly DependencyPropertyKey ErrorMessagePropertyKey =
-        PropertyHelper.CreateReadOnlyProperty<string?, OrientedImageryView>(nameof(ErrorMessage));
+        PropertyHelper.CreateReadOnlyProperty<string?, OrientedImageryViewer>(nameof(ErrorMessage));
 
     /// <summary>
     /// Identifies the <see cref="ErrorMessage" /> dependency property.
@@ -632,7 +632,7 @@ public partial class OrientedImageryView
     }
 
     private static readonly DependencyPropertyKey TransientErrorMessagePropertyKey =
-        PropertyHelper.CreateReadOnlyProperty<string?, OrientedImageryView>(nameof(TransientErrorMessage), null, OnTransientErrorMessageChanged);
+        PropertyHelper.CreateReadOnlyProperty<string?, OrientedImageryViewer>(nameof(TransientErrorMessage), null, OnTransientErrorMessageChanged);
 
     /// <summary>
     /// Identifies the <see cref="TransientErrorMessage" /> dependency property.
@@ -641,8 +641,8 @@ public partial class OrientedImageryView
 
     private static void OnTransientErrorMessageChanged(object? sender, string? _, string? newValue)
     {
-        if (sender is OrientedImageryView oiView && newValue != null &&
-            Properties.Resources.GetString(OrientedImageryViewAnnounceTransientErrorKey) is string announcement)
+        if (sender is OrientedImageryViewer oiView && newValue != null &&
+            Properties.Resources.GetString(OrientedImageryViewerAnnounceTransientErrorKey) is string announcement)
         {
             oiView.RaiseImageStateNotification(announcement);
         }
@@ -748,9 +748,9 @@ public partial class OrientedImageryView
         string resourceKey;
         if (HasSearchedForImages)
             resourceKey = NoImagesForLocationKey;
-        else if (ViewModel.InteractionState == OrientedImageryViewInteractionState.FindImages)
+        else if (ViewModel.InteractionState == OrientedImageryViewerInteractionState.FindImages)
             resourceKey = NoImagesFindKey;
-        else if (ViewModel.InteractionState == OrientedImageryViewInteractionState.DisplayImage)
+        else if (ViewModel.InteractionState == OrientedImageryViewerInteractionState.DisplayImage)
             resourceKey = NoImagesDisplayKey;
         else
             resourceKey = NoImagesNoneKey;
@@ -783,36 +783,36 @@ public partial class OrientedImageryView
 }
 
 /// <summary>
-/// Provides event data and an option to intercept default behavior for taps on the viewport of an <see cref="OrientedImageryView"/>.
+/// Provides event data and an option to intercept default behavior for taps on the viewport of an <see cref="OrientedImageryViewer"/>.
 /// </summary>
-public sealed class OrientedImageryViewImageTappedArgs : OrientedImageTappedEventArgs
+public sealed class OrientedImageryViewerImageTappedArgs : OrientedImageTappedEventArgs
 {
     /// <summary>
-    /// Initializes a new instance of the <see cref="OrientedImageryViewImageTappedArgs"/> class.
+    /// Initializes a new instance of the <see cref="OrientedImageryViewerImageTappedArgs"/> class.
     /// </summary>
     /// <param name="orientedImageTappedEventArgs">The event arguments supplied by the original <see cref="OrientedImageViewport.ImageTapped"/> event.</param>
-    public OrientedImageryViewImageTappedArgs(OrientedImageTappedEventArgs orientedImageTappedEventArgs) :
+    public OrientedImageryViewerImageTappedArgs(OrientedImageTappedEventArgs orientedImageTappedEventArgs) :
         base(orientedImageTappedEventArgs.ImagePoint, orientedImageTappedEventArgs.Image, orientedImageTappedEventArgs.Marker)
     {
         Handled = false;
     }
 
     /// <summary>
-    /// Gets or sets a value indicating whether the default <see cref="OrientedImageryView"/> image tap logic should be skipped for the current tap event.
+    /// Gets or sets a value indicating whether the default <see cref="OrientedImageryViewer"/> image tap logic should be skipped for the current tap event.
     /// </summary>
     public bool Handled { get; set; }
 }
 
 /// <summary>
-/// Provides event data and an option to intercept default behavior for taps on the <see cref="GeoView"/> connected to an <see cref="OrientedImageryView"/>.
+/// Provides event data and an option to intercept default behavior for taps on the <see cref="GeoView"/> connected to an <see cref="OrientedImageryViewer"/>.
 /// </summary>
-public sealed class OrientedImageryViewGeoViewTappedArgs : EventArgs
+public sealed class OrientedImageryViewerGeoViewTappedArgs : EventArgs
 {
     /// <summary>
-    /// Initializes a new instance of the <see cref="OrientedImageryViewGeoViewTappedArgs"/> class.
+    /// Initializes a new instance of the <see cref="OrientedImageryViewerGeoViewTappedArgs"/> class.
     /// </summary>
     /// <param name="geoViewInputEventArgs">The event arguments supplied by the original <see cref="GeoView.GeoViewTapped"/> event.</param>
-    public OrientedImageryViewGeoViewTappedArgs(GeoViewInputEventArgs geoViewInputEventArgs)
+    public OrientedImageryViewerGeoViewTappedArgs(GeoViewInputEventArgs geoViewInputEventArgs)
     {
         GeoViewInputEventArgs = geoViewInputEventArgs;
     }
@@ -823,7 +823,7 @@ public sealed class OrientedImageryViewGeoViewTappedArgs : EventArgs
     public GeoViewInputEventArgs GeoViewInputEventArgs { get; }
 
     /// <summary>
-    /// Gets or sets a value indicating whether the default <see cref="OrientedImageryView"/> GeoView tap logic should be skipped for the current tap event.
+    /// Gets or sets a value indicating whether the default <see cref="OrientedImageryViewer"/> GeoView tap logic should be skipped for the current tap event.
     /// </summary>
     public bool Handled { get; set; }
 }

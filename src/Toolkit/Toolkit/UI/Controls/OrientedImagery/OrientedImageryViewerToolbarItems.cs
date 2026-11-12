@@ -21,7 +21,7 @@ public class ToolbarCategory
     /// <summary>The default <see cref="Name"/> of the More category.</summary>
     public const string MoreCategoryName = "More";
 
-    private OrientedImageryViewModel? _mainViewModel;
+    private OrientedImageryViewerModel? _mainViewModel;
     private HashSet<ToolbarItemBase> _attachedToolbarItems;
 
     /// <summary>
@@ -42,10 +42,10 @@ public class ToolbarCategory
     public string Name { get; private set; }
 
     /// <summary>
-    /// Gets or sets the linked <see cref="OrientedImageryViewModel"/>. This property will be set automatically when the category item
-    /// is added to <see cref="OrientedImageryViewModel.ToolbarCategories"/>.
+    /// Gets or sets the linked <see cref="OrientedImageryViewerModel"/>. This property will be set automatically when the category item
+    /// is added to <see cref="OrientedImageryViewerModel.ToolbarCategories"/>.
     /// </summary>
-    public OrientedImageryViewModel? ViewModel
+    public OrientedImageryViewerModel? ViewModel
     {
         get => _mainViewModel;
         set
@@ -58,8 +58,8 @@ public class ToolbarCategory
     }
 
     /// <summary>
-    /// The collection of toolbar items to be displayed in the <see cref="OrientedImageryView"/> connected to the containing
-    /// <see cref="OrientedImageryViewModel"/>.
+    /// The collection of toolbar items to be displayed in the <see cref="OrientedImageryViewer"/> connected to the containing
+    /// <see cref="OrientedImageryViewerModel"/>.
     /// </summary>
     /// <remarks>
     /// Each toolbar item is an <see cref="ToolbarItemBase"/> object with a reference to the containing category's
@@ -88,28 +88,28 @@ public class ToolbarCategory
 }
 
 /// <summary>
-/// Base class for view models backing the toolbar controls of an <see cref="OrientedImageryView"/>.
+/// Base class for view models backing the toolbar controls of an <see cref="OrientedImageryViewer"/>.
 /// </summary>
 /// <remarks>
 /// <para>
 ///   <see cref="ToolbarItemBase"/> objects are meant to be held in <see cref="ToolbarCategory.ToolbarItems"/>.
-///   They supply a <see cref="ViewModel"/> property for convenient access to the containing <see cref="OrientedImageryViewModel"/>, and implement
+///   They supply a <see cref="ViewModel"/> property for convenient access to the containing <see cref="OrientedImageryViewerModel"/>, and implement
 ///   <see cref="INotifyPropertyChanged"/>.
 /// </para>
 /// <para>
 ///   <see cref="ViewModel"/> is populated when an <see cref="ToolbarItemBase"/> instance is added to <see cref="ToolbarCategory.ToolbarItems"/>.
-///   The same <see cref="ToolbarItemBase"/> instance should not be shared between multiple <see cref="OrientedImageryViewModel"/> instances, as only
+///   The same <see cref="ToolbarItemBase"/> instance should not be shared between multiple <see cref="OrientedImageryViewerModel"/> instances, as only
 ///   one view model can be referenced by the <see cref="ViewModel"/> property at a time.
 /// </para>
 /// </remarks>
 public abstract class ToolbarItemBase : INotifyPropertyChanged
 {
-    private OrientedImageryViewModel? _mainViewModel;
+    private OrientedImageryViewerModel? _mainViewModel;
 
     /// <summary>
-    /// Gets or sets the linked <see cref="OrientedImageryViewModel"/>. This property will be set automatically when the toolbar item is added to <see cref="ToolbarCategory.ToolbarItems"/>.
+    /// Gets or sets the linked <see cref="OrientedImageryViewerModel"/>. This property will be set automatically when the toolbar item is added to <see cref="ToolbarCategory.ToolbarItems"/>.
     /// </summary>
-    public OrientedImageryViewModel? ViewModel
+    public OrientedImageryViewerModel? ViewModel
     {
         get => _mainViewModel;
         set
@@ -125,7 +125,7 @@ public abstract class ToolbarItemBase : INotifyPropertyChanged
     /// <summary>
     /// Called when the <see cref="ViewModel"/> property changes. Override this method to handle changes to the main view model.
     /// </summary>
-    protected virtual void OnViewModelChanged(OrientedImageryViewModel? oldValue, OrientedImageryViewModel? newValue) { }
+    protected virtual void OnViewModelChanged(OrientedImageryViewerModel? oldValue, OrientedImageryViewerModel? newValue) { }
 
     /// <inheritdoc/>
     public event PropertyChangedEventHandler? PropertyChanged;
@@ -152,17 +152,17 @@ public abstract class ToolbarItemBase : INotifyPropertyChanged
 }
 
 /// <summary>
-/// View model for the "Allow Adding Markers" toolbar control in the <see cref="OrientedImageryView"/>.
+/// View model for the "Allow Adding Markers" toolbar control in the <see cref="OrientedImageryViewer"/>.
 /// </summary>
 internal class AllowAddingMarkersVM : ToolbarItemBase
 {
     /// <summary>
     /// Gets or sets a value indicating whether adding markers is enabled. If set to <see langword="false"/>, the 
-    /// view model's interaction state will be set to <see cref="OrientedImageryViewInteractionState.None"/>.
+    /// view model's interaction state will be set to <see cref="OrientedImageryViewerInteractionState.None"/>.
     /// </summary>
     public bool IsAddingMarkersEnabled
     {
-        get => ViewModel == null ? false : ViewModel.InteractionState == OrientedImageryViewInteractionState.AddMarkers;
+        get => ViewModel == null ? false : ViewModel.InteractionState == OrientedImageryViewerInteractionState.AddMarkers;
         set
         {
             if (IsAddingMarkersEnabled == value)
@@ -175,16 +175,16 @@ internal class AllowAddingMarkersVM : ToolbarItemBase
             }
 
             if (value)
-                ViewModel.InteractionState = OrientedImageryViewInteractionState.AddMarkers;
+                ViewModel.InteractionState = OrientedImageryViewerInteractionState.AddMarkers;
             else
-                ViewModel.InteractionState = OrientedImageryViewInteractionState.None;
+                ViewModel.InteractionState = OrientedImageryViewerInteractionState.None;
 
             OnPropertyChanged();
         }
     }
 
     /// <inheritdoc/>
-    protected override void OnViewModelChanged(OrientedImageryViewModel? oldValue, OrientedImageryViewModel? newValue)
+    protected override void OnViewModelChanged(OrientedImageryViewerModel? oldValue, OrientedImageryViewerModel? newValue)
     {
         if (oldValue != null)
             oldValue.PropertyChanged -= ViewModel_PropertyChanged;
@@ -197,22 +197,22 @@ internal class AllowAddingMarkersVM : ToolbarItemBase
 
     private void ViewModel_PropertyChanged(object? sender, PropertyChangedEventArgs e)
     {
-        if (e.PropertyName == nameof(OrientedImageryViewModel.InteractionState))
+        if (e.PropertyName == nameof(OrientedImageryViewerModel.InteractionState))
             OnPropertyChanged(nameof(IsAddingMarkersEnabled));
     }
 }
 
 /// <summary>
-/// View model for the image search mode toolbar control in the <see cref="OrientedImageryView"/>.
+/// View model for the image search mode toolbar control in the <see cref="OrientedImageryViewer"/>.
 /// </summary>
 internal class ImageSearchModeVM : ToolbarItemBase
 {
-    private OrientedImageryViewInteractionState _selectedInteractionState = OrientedImageryViewInteractionState.FindImages;
+    private OrientedImageryViewerInteractionState _selectedInteractionState = OrientedImageryViewerInteractionState.FindImages;
 
     /// <summary>
-    /// True when <see cref="OrientedImageryViewModel.InteractionState"/> is either <see cref="OrientedImageryViewInteractionState.FindImages"/>
-    /// or <see cref="OrientedImageryViewInteractionState.DisplayImage"/>, <see langword="false"/> otherwise. When set to <see langword="false"/>,
-    /// the view model's interaction state will be set to <see cref="OrientedImageryViewInteractionState.None"/>.
+    /// True when <see cref="OrientedImageryViewerModel.InteractionState"/> is either <see cref="OrientedImageryViewerInteractionState.FindImages"/>
+    /// or <see cref="OrientedImageryViewerInteractionState.DisplayImage"/>, <see langword="false"/> otherwise. When set to <see langword="false"/>,
+    /// the view model's interaction state will be set to <see cref="OrientedImageryViewerInteractionState.None"/>.
     /// </summary>
     public bool IsImageSelectionEnabled
     {
@@ -221,8 +221,8 @@ internal class ImageSearchModeVM : ToolbarItemBase
             if (ViewModel == null)
                 return false;
 
-            return ViewModel.InteractionState == OrientedImageryViewInteractionState.FindImages ||
-                ViewModel.InteractionState == OrientedImageryViewInteractionState.DisplayImage;
+            return ViewModel.InteractionState == OrientedImageryViewerInteractionState.FindImages ||
+                ViewModel.InteractionState == OrientedImageryViewerInteractionState.DisplayImage;
         }
         set
         {
@@ -231,23 +231,23 @@ internal class ImageSearchModeVM : ToolbarItemBase
             else if (value)
                 ViewModel.InteractionState = _selectedInteractionState;
             else
-                ViewModel.InteractionState = OrientedImageryViewInteractionState.None;
+                ViewModel.InteractionState = OrientedImageryViewerInteractionState.None;
         }
     }
 
     /// <summary>
     /// Gets the available image search modes.
     /// </summary>
-    public IReadOnlyList<OrientedImageryViewInteractionState> ImageSearchModes { get; } = new[]
+    public IReadOnlyList<OrientedImageryViewerInteractionState> ImageSearchModes { get; } = new[]
     {
-        OrientedImageryViewInteractionState.FindImages,
-        OrientedImageryViewInteractionState.DisplayImage
+        OrientedImageryViewerInteractionState.FindImages,
+        OrientedImageryViewerInteractionState.DisplayImage
     };
 
     /// <summary>
-    /// Gets or sets the selected image search mode. If set to a new value, will update <see cref="OrientedImageryViewModel.InteractionState"/>.
+    /// Gets or sets the selected image search mode. If set to a new value, will update <see cref="OrientedImageryViewerModel.InteractionState"/>.
     /// </summary>
-    public OrientedImageryViewInteractionState SelectedInteractionState
+    public OrientedImageryViewerInteractionState SelectedInteractionState
     {
         get => _selectedInteractionState;
         set
@@ -264,7 +264,7 @@ internal class ImageSearchModeVM : ToolbarItemBase
     }
 
     /// <inheritdoc/>
-    protected override void OnViewModelChanged(OrientedImageryViewModel? oldValue, OrientedImageryViewModel? newValue)
+    protected override void OnViewModelChanged(OrientedImageryViewerModel? oldValue, OrientedImageryViewerModel? newValue)
     {
         if (oldValue != null)
             oldValue.PropertyChanged -= ViewModel_PropertyChanged;
@@ -281,7 +281,7 @@ internal class ImageSearchModeVM : ToolbarItemBase
 
     private void ViewModel_PropertyChanged(object? sender, PropertyChangedEventArgs e)
     {
-        if (e.PropertyName == nameof(OrientedImageryViewModel.InteractionState))
+        if (e.PropertyName == nameof(OrientedImageryViewerModel.InteractionState))
         {
             if (ViewModel != null && ImageSearchModes.Contains(ViewModel.InteractionState))
                 SetProperty(ref _selectedInteractionState, ViewModel.InteractionState, nameof(SelectedInteractionState));
@@ -291,7 +291,7 @@ internal class ImageSearchModeVM : ToolbarItemBase
 }
 
 /// <summary>
-/// View model for the "Show Selected Footprint" toolbar control in the <see cref="OrientedImageryView"/>.
+/// View model for the "Show Selected Footprint" toolbar control in the <see cref="OrientedImageryViewer"/>.
 /// </summary>
 internal class ShowSelectedFootprintVM : ToolbarItemBase
 {
@@ -301,7 +301,7 @@ internal class ShowSelectedFootprintVM : ToolbarItemBase
     public bool Enabled => ViewModel?.SelectedImage != null && ViewModel.IsShowSelectedFootprintEnabled;
 
     /// <inheritdoc/>
-    protected override void OnViewModelChanged(OrientedImageryViewModel? oldValue, OrientedImageryViewModel? newValue)
+    protected override void OnViewModelChanged(OrientedImageryViewerModel? oldValue, OrientedImageryViewerModel? newValue)
     {
         if (oldValue != null)
             oldValue.PropertyChanged -= ViewModel_PropertyChanged;
@@ -314,23 +314,23 @@ internal class ShowSelectedFootprintVM : ToolbarItemBase
 
     private void ViewModel_PropertyChanged(object? sender, PropertyChangedEventArgs e)
     {
-        if (e.PropertyName == nameof(OrientedImageryViewModel.SelectedImage) || e.PropertyName == nameof(OrientedImageryViewModel.IsShowSelectedFootprintEnabled))
+        if (e.PropertyName == nameof(OrientedImageryViewerModel.SelectedImage) || e.PropertyName == nameof(OrientedImageryViewerModel.IsShowSelectedFootprintEnabled))
             OnPropertyChanged(nameof(Enabled));
     }
 }
 
 /// <summary>
-/// View model for the "Show Unselected Footprints" toolbar control in the <see cref="OrientedImageryView"/>.
+/// View model for the "Show Unselected Footprints" toolbar control in the <see cref="OrientedImageryViewer"/>.
 /// </summary>
 internal class ShowUnselectedFootprintsVM : ToolbarItemBase { }
 
 /// <summary>
-/// View model for the "Show Camera Markers" toolbar control in the <see cref="OrientedImageryView"/>.
+/// View model for the "Show Camera Markers" toolbar control in the <see cref="OrientedImageryViewer"/>.
 /// </summary>
 internal class ShowCameraMarkersVM : ToolbarItemBase { }
 
 /// <summary>
-/// View model for the "Clear Markers" toolbar control in the <see cref="OrientedImageryView"/>.
+/// View model for the "Clear Markers" toolbar control in the <see cref="OrientedImageryViewer"/>.
 /// </summary>
 internal class ClearMarkersVM : ToolbarItemBase { }
 
@@ -340,7 +340,7 @@ internal class ClearMarkersVM : ToolbarItemBase { }
 internal class ToolbarDividerVM : ToolbarItemBase { }
 
 /// <summary>
-/// View model for the sequential navigation toolbar control in the <see cref="OrientedImageryView"/>.
+/// View model for the sequential navigation toolbar control in the <see cref="OrientedImageryViewer"/>.
 /// </summary>
 internal class SequentialNavigationVM : ToolbarItemBase
 {
@@ -351,7 +351,7 @@ internal class SequentialNavigationVM : ToolbarItemBase
         ViewModel != null && (ViewModel.IsSequentialNavigationEnabled || (ViewModel.SupportsSequentialNavigation && ViewModel.SelectedImage != null));
 
     /// <inheritdoc/>
-    protected override void OnViewModelChanged(OrientedImageryViewModel? oldValue, OrientedImageryViewModel? newValue)
+    protected override void OnViewModelChanged(OrientedImageryViewerModel? oldValue, OrientedImageryViewerModel? newValue)
     {
         if (oldValue != null)
             oldValue.PropertyChanged -= ViewModel_PropertyChanged;
@@ -364,9 +364,9 @@ internal class SequentialNavigationVM : ToolbarItemBase
 
     private void ViewModel_PropertyChanged(object? sender, PropertyChangedEventArgs e)
     {
-        if (e.PropertyName == nameof(OrientedImageryViewModel.IsSequentialNavigationEnabled) ||
-            e.PropertyName == nameof(OrientedImageryViewModel.SupportsSequentialNavigation) ||
-            e.PropertyName == nameof(OrientedImageryViewModel.SelectedImage))
+        if (e.PropertyName == nameof(OrientedImageryViewerModel.IsSequentialNavigationEnabled) ||
+            e.PropertyName == nameof(OrientedImageryViewerModel.SupportsSequentialNavigation) ||
+            e.PropertyName == nameof(OrientedImageryViewerModel.SelectedImage))
         {
             OnPropertyChanged(nameof(CanEnterSequentialNavigation));
         }
@@ -374,14 +374,14 @@ internal class SequentialNavigationVM : ToolbarItemBase
 }
 
 /// <summary>
-/// View model for the "Select New Marker Symbol" toolbar control in the <see cref="OrientedImageryView"/>.
-/// This control allows the user to select a marker symbol to be used for new markers in the <see cref="OrientedImageryView"/>.
+/// View model for the "Select New Marker Symbol" toolbar control in the <see cref="OrientedImageryViewer"/>.
+/// This control allows the user to select a marker symbol to be used for new markers in the <see cref="OrientedImageryViewer"/>.
 /// </summary>
 internal class SelectNewMarkerSymbolVM : ToolbarItemBase
 {
     private static readonly LabeledSymbol DefaultSymbol = new LabeledSymbol(
         new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.X, System.Drawing.Color.Red, 10),
-        Properties.Resources.GetString("OrientedImageryViewMarkerX") ?? "Cross marker");
+        Properties.Resources.GetString("OrientedImageryViewerMarkerX") ?? "Cross marker");
 
     /// <summary>
     /// Gets the collection of marker symbol options that can be used for selecting a new marker symbol.
@@ -430,7 +430,7 @@ internal class SelectNewMarkerSymbolVM : ToolbarItemBase
     }
 
     /// <inheritdoc />
-    protected override void OnViewModelChanged(OrientedImageryViewModel? oldValue, OrientedImageryViewModel? newValue)
+    protected override void OnViewModelChanged(OrientedImageryViewerModel? oldValue, OrientedImageryViewerModel? newValue)
     {
         base.OnViewModelChanged(oldValue, newValue);
         if (ViewModel != null)

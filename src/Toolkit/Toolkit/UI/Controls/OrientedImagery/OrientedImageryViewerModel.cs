@@ -28,12 +28,12 @@ using Esri.ArcGISRuntime.Toolkit.UI.Controls.OrientedImagery;
 /// <summary>
 /// Manages oriented imagery selection, footprints, and map markers for an oriented imagery view.
 /// </summary>
-public class OrientedImageryViewModel : INotifyPropertyChanged
+public class OrientedImageryViewerModel : INotifyPropertyChanged
 {
     /// <summary>
-    /// Initializes a new instance of the <see cref="OrientedImageryViewModel"/> class.
+    /// Initializes a new instance of the <see cref="OrientedImageryViewerModel"/> class.
     /// </summary>
-    public OrientedImageryViewModel() : base()
+    public OrientedImageryViewerModel() : base()
     {
         _appMarkers = new ObservableCollection<OrientedImageMarker>();
         _managedMarkers = new List<OrientedImageMarker>();
@@ -41,7 +41,7 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
         _appMarkers.CollectionChanged += Markers_CollectionChanged;
 
         var symbolOutline = new SimpleLineSymbol(SimpleLineSymbolStyle.Solid, System.Drawing.Color.White, 1);
-        _markersOverlay = new GraphicsOverlay() { Id = "OrientedImageryView_Markers_Overlay" };
+        _markersOverlay = new GraphicsOverlay() { Id = "OrientedImageryViewer_Markers_Overlay" };
         NewMarkerSymbol = new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Diamond, System.Drawing.Color.Orange, 12);
         SearchPointMarkerSymbol = new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.X, System.Drawing.Color.Red, 15) { Outline = symbolOutline };
         AllCamerasMarkerSymbol = new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Circle, System.Drawing.Color.FromArgb(200,0,0,255), 15) { Outline = symbolOutline };
@@ -60,7 +60,7 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
         UnselectedFootprintFillColor = System.Drawing.Color.FromArgb(64, System.Drawing.Color.Blue);
         UnselectedFootprintOutlineColor = System.Drawing.Color.Blue;
 
-        _interactionState = OrientedImageryViewInteractionState.FindImages;
+        _interactionState = OrientedImageryViewerInteractionState.FindImages;
 
         ToolbarCategories = GetDefaultToolbarCategories();
         ToolbarCategories.CollectionChanged += ToolbarCategories_CollectionChanged;
@@ -108,7 +108,7 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
             SelectedImage = null;
             _managedMarkers.Clear();
             Markers.Clear();
-            InteractionState = OrientedImageryViewInteractionState.FindImages;
+            InteractionState = OrientedImageryViewerInteractionState.FindImages;
             SearchPoint = null;
 
             SetProperty(ref _oiLayer, value);
@@ -592,7 +592,7 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
     private bool _showUnselectedFootprints;
 
     /// <summary>
-    /// Internal flag so the OrientedImageryView can temporarily disable showing the current footprint without
+    /// Internal flag so the OrientedImageryViewer can temporarily disable showing the current footprint without
     /// touching <see cref="ShowSelectedFootprint"/>. While <c>true</c> does not render the selected footprint.
     /// </summary>
     internal bool IsShowSelectedFootprintEnabled
@@ -771,7 +771,7 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
     public Symbol SearchPointMarkerSymbol { get; set; }
 
     /// <summary>
-    /// Gets or sets the symbol to use when a location with no images is tapped while in <see cref="OrientedImageryViewInteractionState.DisplayImage"/>.
+    /// Gets or sets the symbol to use when a location with no images is tapped while in <see cref="OrientedImageryViewerInteractionState.DisplayImage"/>.
     /// </summary>
     public Symbol NoImageMarkerSymbol { get; set; }
 
@@ -884,7 +884,7 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
         {
             _managedMarkers.Add(new OrientedImageMarker(
                 OrientedImageMarkerPosition.FromLocation(location),
-                InteractionState != OrientedImageryViewInteractionState.DisplayImage ? SearchPointMarkerSymbol : NoImageMarkerSymbol
+                InteractionState != OrientedImageryViewerInteractionState.DisplayImage ? SearchPointMarkerSymbol : NoImageMarkerSymbol
                 ) { Tag = SearchPointMarkerTag });
         }
         SynchronizeMarkers();
@@ -924,17 +924,17 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
     private HashSet<ToolbarCategory> _attachedToolbarCategories = new(ReferenceEqualityComparer.Instance);
 
     /// <summary>
-    /// The collection of toolbar categories to be displayed on the containing <see cref="OrientedImageryView"/>.
+    /// The collection of toolbar categories to be displayed on the containing <see cref="OrientedImageryViewer"/>.
     /// </summary>
     /// <remarks>
     /// Each toolbar item is an <see cref="ToolbarCategory"/> object with a reference to the containing
-    /// <see cref="OrientedImageryViewModel"/>. The list is initially populated with a set of default toolbar items for
+    /// <see cref="OrientedImageryViewerModel"/>. The list is initially populated with a set of default toolbar items for
     /// the base control. Items are disconnected from the view model when they are removed from the collection.
     /// </remarks>
     public ObservableCollection<ToolbarCategory> ToolbarCategories { get; private set; }
 
     /// <summary>
-    /// Gets the default toolbar categories for a <see cref="OrientedImageryViewModel"/>.
+    /// Gets the default toolbar categories for a <see cref="OrientedImageryViewerModel"/>.
     /// </summary>
     private ObservableCollection<ToolbarCategory> GetDefaultToolbarCategories()
     {
@@ -943,15 +943,15 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
         {
             new LabeledSymbol(
                 new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Square, System.Drawing.Color.Violet, 12) { Outline =  symbolOutline },
-                Properties.Resources.GetString("OrientedImageryViewMarkerSquare") ?? "Square marker"
+                Properties.Resources.GetString("OrientedImageryViewerMarkerSquare") ?? "Square marker"
             ),
             new LabeledSymbol(
                 new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Triangle, System.Drawing.Color.Yellow, 12) { Outline =  symbolOutline },
-                Properties.Resources.GetString("OrientedImageryViewMarkerTriangle") ?? "Triangle marker"
+                Properties.Resources.GetString("OrientedImageryViewerMarkerTriangle") ?? "Triangle marker"
             ),
             new LabeledSymbol(
                 new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Diamond, System.Drawing.Color.Orange, 12) { Outline =  symbolOutline },
-                Properties.Resources.GetString("OrientedImageryViewMarkerDiamond") ?? "Diamond marker"
+                Properties.Resources.GetString("OrientedImageryViewerMarkerDiamond") ?? "Diamond marker"
             )
         });
 
@@ -1016,12 +1016,12 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
 
 #region InteractionStateFlags
     // These are only used by the View, but because of the toolbar setup binding is easiest if they are kept in the ViewModel
-    private OrientedImageryViewInteractionState _interactionState;
+    private OrientedImageryViewerInteractionState _interactionState;
 
     /// <summary>
     /// Gets or sets the current interaction state for the Viewport and connected <see cref="GeoView"/>.
     /// </summary>
-    public OrientedImageryViewInteractionState InteractionState
+    public OrientedImageryViewerInteractionState InteractionState
     {
         get => _interactionState;
         set => SetProperty(ref _interactionState, value);
@@ -1044,9 +1044,9 @@ public class OrientedImageryViewModel : INotifyPropertyChanged
 }
 
 /// <summary>
-/// Represents the current interaction state of an <see cref="OrientedImageryView"/>.
+/// Represents the current interaction state of an <see cref="OrientedImageryViewer"/>.
 /// </summary>
-public enum OrientedImageryViewInteractionState
+public enum OrientedImageryViewerInteractionState
 {
     /// <summary>No behavior when the GeoView or viewport is tapped.</summary>
     None,
@@ -1065,7 +1065,7 @@ public enum OrientedImageryViewInteractionState
 }
 
 /// <summary>
-/// Args passed by <see cref="OrientedImageryViewModel.SequenceBoundaryReached"/>.
+/// Args passed by <see cref="OrientedImageryViewerModel.SequenceBoundaryReached"/>.
 /// </summary>
 internal readonly struct SequenceBoundaryReachedArgs(bool hasReachedStart, bool hasReachedEnd)
 {

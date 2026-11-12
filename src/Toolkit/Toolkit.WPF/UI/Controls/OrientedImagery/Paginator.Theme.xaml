@@ -165,8 +165,8 @@
 
                         <Button x:Name="PART_LeftNavigate"
                                 IsTabStop="False"
-                                AutomationProperties.Name="{internal:LocalizedString Key=OrientedImageryViewPreviousImage}"
-                                ToolTip="{internal:LocalizedString Key=OrientedImageryViewPreviousImage}"
+                                AutomationProperties.Name="{internal:LocalizedString Key=OrientedImageryViewerPreviousImage}"
+                                ToolTip="{internal:LocalizedString Key=OrientedImageryViewerPreviousImage}"
                                 FontFamily="{StaticResource ToolkitIconsFontFamily}"
                                 FontSize="{internal:TextScaledFontSize FontSize=16}"
                                 Content="&#xe79f;"
@@ -201,8 +201,8 @@
 
                         <Button x:Name="PART_RightNavigate"
                                 IsTabStop="False"
-                                AutomationProperties.Name="{internal:LocalizedString Key=OrientedImageryViewNextImage}"
-                                ToolTip="{internal:LocalizedString Key=OrientedImageryViewNextImage}"
+                                AutomationProperties.Name="{internal:LocalizedString Key=OrientedImageryViewerNextImage}"
+                                ToolTip="{internal:LocalizedString Key=OrientedImageryViewerNextImage}"
                                 FontFamily="{StaticResource ToolkitIconsFontFamily}"
                                 FontSize="{internal:TextScaledFontSize FontSize=16}"
                                 Content="&#xe7a0;"

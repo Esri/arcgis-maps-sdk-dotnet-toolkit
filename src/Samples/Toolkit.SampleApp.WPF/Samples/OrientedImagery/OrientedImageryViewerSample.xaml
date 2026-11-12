@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="Esri.ArcGISRuntime.Toolkit.Samples.OrientedImagery.OrientedImageryView"
+﻿<UserControl x:Class="Esri.ArcGISRuntime.Toolkit.Samples.OrientedImagery.OrientedImageryViewer"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -11,7 +11,7 @@
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <!-- Import styles from the default OrientedImageryView theme -->
+                <!-- Import styles from the default OrientedImageryViewer theme -->
                 <ResourceDictionary Source="/Esri.ArcGISRuntime.Toolkit.WPF;component/UI/Controls/OrientedImagery/OrientedImagery.Theme.xaml" />
             </ResourceDictionary.MergedDictionaries>
 
@@ -87,7 +87,7 @@
             </Grid.RowDefinitions>
 
             <ComboBox x:Name="SelectLayerDropdown" Text="Select Layer" SelectionChanged="SelectLayerDropdown_SelectionChanged" />
-            <esri:OrientedImageryView x:Name="MainOrientedImageryView"  Grid.Row="1"/>
+            <esri:OrientedImageryViewer x:Name="MainOrientedImageryViewer"  Grid.Row="1"/>
         </Grid>
 
         <Grid x:Name="SelectedImagePopupBackground"

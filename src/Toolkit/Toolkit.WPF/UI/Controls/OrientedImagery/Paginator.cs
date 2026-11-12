@@ -228,7 +228,7 @@ internal sealed class PaginatorPageNameConverter : IMultiValueConverter
         if (values.Length != 3 || values[0] is not int page || values[1] is not int selectedIndex || values[2] is not int total)
             return DependencyProperty.UnsetValue;
 
-        string key = page == selectedIndex + 1 ? "OrientedImageryViewSelectedPageFormat" : "OrientedImageryViewGoToPageFormat";
+        string key = page == selectedIndex + 1 ? "OrientedImageryViewerSelectedPageFormat" : "OrientedImageryViewerGoToPageFormat";
         return string.Format(culture, Properties.Resources.GetString(key)!, page, total);
     }
 
