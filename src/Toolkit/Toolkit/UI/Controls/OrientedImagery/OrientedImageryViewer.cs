@@ -303,7 +303,6 @@ public partial class OrientedImageryViewer
 
         try
         {
-            throw new Exception("test");
             var location = await e.Image.ImageToLocationAsync(e.ImagePoint);
             ViewModel.AddMarkerLocation(location);
         }
