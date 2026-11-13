@@ -102,9 +102,11 @@ internal sealed partial class OrientedImageryControlsViewHandler : ViewHandler<O
         var xaml = new System.Text.StringBuilder(
             "<ResourceDictionary xmlns=\"http://schemas.microsoft.com/winfx/2006/xaml/presentation\" " +
             "xmlns:x=\"http://schemas.microsoft.com/winfx/2006/xaml\"><ResourceDictionary.ThemeDictionaries>");
-        foreach (bool highContrast in new[] { false, true })
+        // Separate brushes prevent a popup's theme lookup from recoloring another theme's controls.
+        foreach (string theme in new[] { "Light", "Dark", "HighContrast" })
         {
-            xaml.Append("<ResourceDictionary x:Key=\"").Append(highContrast ? "HighContrast" : "Default").Append("\">");
+            bool highContrast = theme == "HighContrast";
+            xaml.Append("<ResourceDictionary x:Key=\"").Append(theme).Append("\">");
             foreach (string control in new[] { "Button", "ToggleButton" })
             {
                 foreach (string state in new[] { "PointerOver", "Pressed", "Checked", "CheckedPointerOver", "CheckedPressed", "CheckedDisabled" })
