@@ -349,8 +349,16 @@ public partial class OrientedImageryViewer : TemplatedView
             case nameof(OrientedImageryViewerModel.SelectedImage):
                 DispatchUpdate(() =>
                 {
+                    TransientErrorMessage = null;
                     Refresh();
                     _ = LookAtSearchPointAsync();
+                });
+                break;
+            case nameof(OrientedImageryViewerModel.Images):
+                DispatchUpdate(() =>
+                {
+                    TransientErrorMessage = null;
+                    Refresh();
                 });
                 break;
             case nameof(OrientedImageryViewerModel.InteractionState):
