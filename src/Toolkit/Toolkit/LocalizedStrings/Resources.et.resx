@@ -123,11 +123,32 @@
   <data name="BasemapGalleryAutomationHelpText" xml:space="preserve">
     <value>Kuvatakse saadaolevate aluskaartide loend. Valige aluskaart, mida soovite praeguse kaardi või stseeni jaoks kasutada.</value>
   </data>
+  <data name="BookmarksViewAutomationName" xml:space="preserve">
+    <value>Š_Bookmarks___________________ä</value>
+  </data>
   <data name="FeatureFormAddAttachmentMenuFromFile" xml:space="preserve">
     <value>Lisa manus</value>
   </data>
   <data name="FeatureFormAddAttachmentMenuWithCamera" xml:space="preserve">
     <value>Pildista</value>
+  </data>
+  <data name="FeatureFormAttachmentTypeValidationError" xml:space="preserve">
+    <value>Seda failitüüpi ei toetata. Lubatud tüübid: {0}</value>
+  </data>
+  <data name="FeatureFormAttachmentSizeValidationError" xml:space="preserve">
+    <value>See fail on liiga suur. Suurim lubatud suurus on {0} MB.</value>
+  </data>
+  <data name="FeatureFormAttachmentSizeValidationErrorFallback" xml:space="preserve">
+    <value>See fail on liiga suur.</value>
+  </data>
+  <data name="FeatureFormAttachmentDurationValidationError" xml:space="preserve">
+    <value>See meediasisu on liiga pikk. Suurim lubatud kestus on {0} sekundit.</value>
+  </data>
+  <data name="FeatureFormAttachmentDurationValidationErrorFallback" xml:space="preserve">
+    <value>See meediasisu on liiga pikk.</value>
+  </data>
+  <data name="FeatureFormAttachmentValidationErrorTitle" xml:space="preserve">
+    <value>Manuse üleslaadimine ebaõnnestus</value>
   </data>
   <data name="FeatureFormExceedsMaximumDateTime" xml:space="preserve">
     <value>Kuupäev peab olema {0} või varasem</value>
@@ -174,6 +195,18 @@
   <data name="FeatureFormLessThanNumericMinimum" xml:space="preserve">
     <value>Miinimumväärtusest väiksem</value>
   </data>
+  <data name="FeatureFormMaximumAttachmentCountAllowed" xml:space="preserve">
+    <value>Suurim lubatud manuste arv on {0}.</value>
+  </data>
+  <data name="FeatureFormMaximumAttachmentCountLabel" xml:space="preserve">
+    <value>Max: {0}</value>
+  </data>
+  <data name="FeatureFormMinimumAttachmentCountLabel" xml:space="preserve">
+    <value>Min: {0}</value>
+  </data>
+  <data name="FeatureFormMinimumAttachmentCountRequired" xml:space="preserve">
+    <value>Vähemalt {0} manus(t) on nõutav(ad).</value>
+  </data>
   <data name="FeatureFormNoAttachments" xml:space="preserve">
     <value>Manused puuduvad</value>
   </data>
@@ -206,6 +239,147 @@
   </data>
   <data name="FeatureFormSpecificLength" xml:space="preserve">
     <value>Nõutav tähemärkide arv: {0}</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsRemoveAssociation" xml:space="preserve">
+    <value>Eemalda seos</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsShowOnMap" xml:space="preserve">
+    <value>Kuva kaardil</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsMoreInformation" xml:space="preserve">
+    <value>Lisateave</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsPercentAlong" xml:space="preserve">
+    <value>Protsent (joonest või marsruudist)</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationSettings" xml:space="preserve">
+    <value>Seose seaded</value>
+  </data>
+  <data name="FeatureFormDeleteAssociationConfirmationTitle" xml:space="preserve">
+    <value>Kas eemaldada seos?</value>
+  </data>
+  <data name="FeatureFormDeleteAssociationConfirmationMessage" xml:space="preserve">
+    <value>Eemaldatakse ainult seos. Objekt jääb.</value>
+  </data>
+  <data name="FeatureFormDeleteAssociationConfirmationAccept" xml:space="preserve">
+    <value>Eemalda</value>
+  </data>
+  <data name="FeatureFormDeleteAssociationConfirmationCancel" xml:space="preserve">
+    <value>Tühista</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsAddAssociation" xml:space="preserve">
+    <value>Lisa seos</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsAdd" xml:space="preserve">
+    <value>Lisa</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsChooseAddMethod" xml:space="preserve">
+    <value>Objekti lisamise viisi valik</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsChooseToAdd" xml:space="preserve">
+    <value>Vali, et lisada</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsFeaturesIdentified" xml:space="preserve">
+    <value>{0} objekti tuvastatud</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsAssociationType" xml:space="preserve">
+    <value>Seose tüüp</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsAttachmentType" xml:space="preserve">
+    <value>Manus</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsCannotAddAssociation" xml:space="preserve">
+    <value>Seda seost ei saa lisada.</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsConnectivityType" xml:space="preserve">
+    <value>Ühenduvus</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsContainmentType" xml:space="preserve">
+    <value>Sisaldavus</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsContentVisibility" xml:space="preserve">
+    <value>Sisu nähtavus</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsCurrentFeatureTerminal" xml:space="preserve">
+    <value>Praegune objekti terminal</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsFractionAlongEdgeError" xml:space="preserve">
+    <value>Sisestage protsent vahemikus 0 kuni 100.</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsFractionAlongEdgePercent" xml:space="preserve">
+    <value>Murdosa mööda serva (%)</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsFromElement" xml:space="preserve">
+    <value>Elemendist</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsNoCandidates" xml:space="preserve">
+    <value>Vasteid ei leitud.</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsNoFeatureSources" xml:space="preserve">
+    <value>Võrgu andmeallikaid pole saadaval.</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsNewAssociation" xml:space="preserve">
+    <value>Uue seos</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsNotEditable" xml:space="preserve">
+    <value>Selle objekti jaoks ei sa seoseid muuta.</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsOtherFeatureTerminal" xml:space="preserve">
+    <value>Muu objekti terminal</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsReviewAssociation" xml:space="preserve">
+    <value>Seose ülevaatamine</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsSearchFeatures" xml:space="preserve">
+    <value>Otsi objektidest</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsSearch" xml:space="preserve">
+    <value>Otsing</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsNetworkDataSource" xml:space="preserve">
+    <value>Võrgu andmeallikas</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsResultCount" xml:space="preserve">
+    <value>{0} tulemust</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsAvailableAssetTypes" xml:space="preserve">
+    <value>Saadaolevad varatüübid</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsAvailableFeatures" xml:space="preserve">
+    <value>Saadaolevad objektid ({0})</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsLoading" xml:space="preserve">
+    <value>Laadimine...</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsNoAssetTypes" xml:space="preserve">
+    <value>Varatüüpe pole saadaval.</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsLoadMore" xml:space="preserve">
+    <value>Laadi rohkem</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsSelectFeatureSource" xml:space="preserve">
+    <value>Võrgu andmeallika valimine</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsSelectFromNetworkDataSource" xml:space="preserve">
+    <value>Võrgu andmeallikast</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsSelectOnMap" xml:space="preserve">
+    <value>Kaardil</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsSelectFeaturesOnMap" xml:space="preserve">
+    <value>Valige objektid, puudutades kaarti.</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsSelectTerminalError" xml:space="preserve">
+    <value>Valige terminal.</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsStructureAttachmentType" xml:space="preserve">
+    <value>Tarindi manus</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsTapSelection" xml:space="preserve">
+    <value>Puudutage valikut</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsToElement" xml:space="preserve">
+    <value>Elemendini</value>
   </data>
   <data name="FloorFilterAllFacilities" xml:space="preserve">
     <value>Kõik saidid</value>
@@ -245,6 +419,18 @@
   </data>
   <data name="PopupViewerViewHyperlinkText" xml:space="preserve">
     <value>Kuva</value>
+  </data>
+  <data name="PopupViewerAttachmentDownloading" xml:space="preserve">
+    <value>Š_Downloading attachment_______________________ä</value>
+  </data>
+  <data name="PopupViewerPreviousMediaButtonText" xml:space="preserve">
+    <value>Š_Previous media_______________ä</value>
+  </data>
+  <data name="PopupViewerNextMediaButtonText" xml:space="preserve">
+    <value>Š_Next media_____________________ä</value>
+  </data>
+  <data name="PopupViewerMediaPosition" xml:space="preserve">
+    <value>Š_Media item {0} of {1}______________________ä</value>
   </data>
   <data name="PopupViewerUtilityAssociationsDefaultTitle" xml:space="preserve">
     <value>Seosed</value>
@@ -300,6 +486,9 @@
   <data name="SearchViewNoResults" xml:space="preserve">
     <value>Tulemusi pole</value>
   </data>
+  <data name="SearchViewResultsAvailable" xml:space="preserve">
+    <value>Š_Results available__________________ä</value>
+  </data>
   <data name="SearchViewRepeatSearch" xml:space="preserve">
     <value>Korda otsingut siin</value>
   </data>
@@ -309,6 +498,36 @@
   <data name="SearchViewSearchTooltip" xml:space="preserve">
     <value>Otsing</value>
   </data>
+  <data name="SearchViewSelectSearchSource" xml:space="preserve">
+    <value>Otsinguallika valimine</value>
+  </data>
+  <data name="SearchViewCollapsedAutomationState" xml:space="preserve">
+    <value>Š_collapsed___________________ä</value>
+  </data>
+  <data name="SearchViewExpandedAutomationState" xml:space="preserve">
+    <value>Š_expanded_________________ä</value>
+  </data>
+  <data name="SearchViewSelectedAutomationName" xml:space="preserve">
+    <value>Š_{0}, selected______________ä</value>
+  </data>
+  <data name="SearchViewSearchSources" xml:space="preserve">
+    <value>Otsinguallikad</value>
+  </data>
+  <data name="SearchViewSourcesAvailable" xml:space="preserve">
+    <value>Š_Sources available__________________ä</value>
+  </data>
+  <data name="SearchViewSearchSuggestions" xml:space="preserve">
+    <value>Otsingusoovitused</value>
+  </data>
+  <data name="SearchViewSuggestionsAvailable" xml:space="preserve">
+    <value>Š_Suggestions available______________________ä</value>
+  </data>
+  <data name="SearchViewSearchResults" xml:space="preserve">
+    <value>Otsingutulemused</value>
+  </data>
+  <data name="UtilityNetworkTraceToolAddBarrier" xml:space="preserve">
+    <value>Š_Add barrier____________ä</value>
+  </data>
   <data name="UtilityNetworkTraceToolAddStartingPoint" xml:space="preserve">
     <value>Lisa alguspunkt</value>
   </data>
@@ -317,6 +536,9 @@
   </data>
   <data name="UtilityNetworkTraceToolAssetDetails" xml:space="preserve">
     <value>Vara üksikasjad</value>
+  </data>
+  <data name="UtilityNetworkTraceToolBarriers" xml:space="preserve">
+    <value>Š_Barriers_________________ä</value>
   </data>
   <data name="UtilityNetworkTraceToolCancel" xml:space="preserve">
     <value>Tühista</value>
@@ -341,6 +563,9 @@
   </data>
   <data name="UtilityNetworkTraceToolFunctionResults" xml:space="preserve">
     <value>Funktsiooni tulemid</value>
+  </data>
+  <data name="UtilityNetworkTraceToolIdentifyingBarriers" xml:space="preserve">
+    <value>Š_Identifying barriers________________________ä...</value>
   </data>
   <data name="UtilityNetworkTraceToolIdentifyingStartingPoints" xml:space="preserve">
     <value>Alguspunktide tuvastamine...</value>
@@ -384,6 +609,9 @@
   <data name="UtilityNetworkTraceToolPrevious" xml:space="preserve">
     <value>Eelmine</value>
   </data>
+  <data name="UtilityNetworkTraceToolRemoveAllBarriers" xml:space="preserve">
+    <value>Š_Remove all_____________________ä</value>
+  </data>
   <data name="UtilityNetworkTraceToolRemoveAllStartingPoints" xml:space="preserve">
     <value>Eemalda kõik</value>
   </data>
@@ -414,6 +642,9 @@
   <data name="UtilityNetworkTraceToolStartingPoints" xml:space="preserve">
     <value>Alguspunktid</value>
   </data>
+  <data name="UtilityNetworkTraceToolTapToIdentifyBarriers" xml:space="preserve">
+    <value>Š_Tap on the map to identify barriers___________________ä.</value>
+  </data>
   <data name="UtilityNetworkTraceToolTapToIdentifyStartingPoints" xml:space="preserve">
     <value>Puudutage alguspunktide tuvastamiseks kaarti.</value>
   </data>
@@ -437,6 +668,9 @@
   </data>
   <data name="UtilityNetworkTraceToolUtilityNetworks" xml:space="preserve">
     <value>Kommunaalvõrgud</value>
+  </data>
+  <data name="UtilityNetworkTraceToolUseAsFilterBarrier" xml:space="preserve">
+    <value>Š_Use as filter barrier______________________ä</value>
   </data>
   <data name="UtilityNetworkTraceToolVisualizationOptions" xml:space="preserve">
     <value>Visualiseerimisvalikud</value>
@@ -482,5 +716,427 @@
   </data>
   <data name="Locator_DefaultName" xml:space="preserve">
     <value>Lokaator</value>
+  </data>
+  <data name="OfflineMapAreasAdd" xml:space="preserve">
+    <value>Lisa</value>
+  </data>
+  <data name="OfflineMapAreasAddMapArea" xml:space="preserve">
+    <value>Lisa kaardiala</value>
+  </data>
+  <data name="OfflineMapAreasAreaNamePlaceholder" xml:space="preserve">
+    <value>Nimi</value>
+  </data>
+  <data name="OfflineMapAreasCancel" xml:space="preserve">
+    <value>Tühista</value>
+  </data>
+  <data name="OfflineMapAreasDownload" xml:space="preserve">
+    <value>Allalaadimine</value>
+  </data>
+  <data name="OfflineMapAreasDownloadSize" xml:space="preserve">
+    <value>Suurus: {0}</value>
+  </data>
+  <data name="OfflineMapAreasDefaultAreaTitle" xml:space="preserve">
+    <value>Ala {0}</value>
+  </data>
+  <data name="OfflineMapAreasDownloaded" xml:space="preserve">
+    <value>Allalaaditud</value>
+  </data>
+  <data name="OfflineMapAreasNoInternetConnectionMessage" xml:space="preserve">
+    <value>Selle kaardi kaardialasid ei saanud välja võtta</value>
+  </data>
+  <data name="OfflineMapAreasNoInternetConnectionTitle" xml:space="preserve">
+    <value>Internetiühendus puudub</value>
+  </data>
+  <data name="OfflineMapAreasNoMapAreasOnDemandMessage" xml:space="preserve">
+    <value>Sellel kaardil ei ole kaardialasid. Alustamiseks puudutage allolevat nuppu.</value>
+  </data>
+  <data name="OfflineMapAreasNoMapAreasPreplannedMessage" xml:space="preserve">
+    <value>Sellel kaardil ei ole kaardialasid.</value>
+  </data>
+  <data name="OfflineMapAreasNoMapAreasTitle" xml:space="preserve">
+    <value>Kaardialad puuduvad</value>
+  </data>
+  <data name="OfflineMapAreasOfflineDisabledMessage" xml:space="preserve">
+    <value>Kaart ei ole ilma võrguühenduseta kasutamiseks aktiveeritud</value>
+  </data>
+  <data name="OfflineMapAreasOfflineDisabledTitle" xml:space="preserve">
+    <value>Võrguühenduseta olek keelatud</value>
+  </data>
+  <data name="OfflineMapAreasOpen" xml:space="preserve">
+    <value>Ava</value>
+  </data>
+  <data name="OfflineMapAreasRefresh" xml:space="preserve">
+    <value>Värskenda</value>
+  </data>
+  <data name="OfflineMapAreasRemove" xml:space="preserve">
+    <value>Eemalda</value>
+  </data>
+  <data name="OfflineMapAreasSelectArea" xml:space="preserve">
+    <value>Valige ala</value>
+  </data>
+  <data name="OfflineMapAreasScaleLabel" xml:space="preserve">
+    <value>Mõõtkava</value>
+  </data>
+  <data name="OfflineMapAreasScaleRoom" xml:space="preserve">
+    <value>Tuba</value>
+  </data>
+  <data name="OfflineMapAreasScaleRooms" xml:space="preserve">
+    <value>Toad</value>
+  </data>
+  <data name="OfflineMapAreasScaleHouseProperty" xml:space="preserve">
+    <value>Maja atribuut</value>
+  </data>
+  <data name="OfflineMapAreasScaleHouses" xml:space="preserve">
+    <value>Majad</value>
+  </data>
+  <data name="OfflineMapAreasScaleSmallBuilding" xml:space="preserve">
+    <value>Väike ehitis</value>
+  </data>
+  <data name="OfflineMapAreasScaleBuilding" xml:space="preserve">
+    <value>Hoone</value>
+  </data>
+  <data name="OfflineMapAreasScaleBuildings" xml:space="preserve">
+    <value>Hooned</value>
+  </data>
+  <data name="OfflineMapAreasScaleStreet" xml:space="preserve">
+    <value>Tänav</value>
+  </data>
+  <data name="OfflineMapAreasScaleStreets" xml:space="preserve">
+    <value>Tänavad</value>
+  </data>
+  <data name="OfflineMapAreasScaleNeighborhood" xml:space="preserve">
+    <value>Naabruskond</value>
+  </data>
+  <data name="OfflineMapAreasScaleTown" xml:space="preserve">
+    <value>Asula</value>
+  </data>
+  <data name="OfflineMapAreasScaleCity" xml:space="preserve">
+    <value>Linn</value>
+  </data>
+  <data name="OfflineMapAreasScaleCities" xml:space="preserve">
+    <value>Linnad</value>
+  </data>
+  <data name="OfflineMapAreasScaleMetropolitanArea" xml:space="preserve">
+    <value>Suurlinna piirkond</value>
+  </data>
+  <data name="OfflineMapAreasScaleCounty" xml:space="preserve">
+    <value>Maakond</value>
+  </data>
+  <data name="OfflineMapAreasScaleCounties" xml:space="preserve">
+    <value>Maakonnad</value>
+  </data>
+  <data name="OfflineMapAreasScaleStateProvince" xml:space="preserve">
+    <value>Osariik/provints</value>
+  </data>
+  <data name="OfflineMapAreasScaleStatesProvinces" xml:space="preserve">
+    <value>Osariigid/provintsid</value>
+  </data>
+  <data name="OfflineMapAreasScaleCountriesSmall" xml:space="preserve">
+    <value>Riigid (väike)</value>
+  </data>
+  <data name="OfflineMapAreasScaleCountriesBig" xml:space="preserve">
+    <value>Riigid (suur)</value>
+  </data>
+  <data name="OfflineMapAreasScaleContinent" xml:space="preserve">
+    <value>Maailmajagu</value>
+  </data>
+  <data name="OfflineMapAreasScaleWorldSmall" xml:space="preserve">
+    <value>Maailm (väike)</value>
+  </data>
+  <data name="OfflineMapAreasScaleWorldBig" xml:space="preserve">
+    <value>Maailm (suur)</value>
+  </data>
+  <data name="OfflineMapAreasScaleWorld" xml:space="preserve">
+    <value>Maailm</value>
+  </data>
+  <data name="OfflineMapAreasStop" xml:space="preserve">
+    <value>Peata</value>
+  </data>
+  <data name="OfflineMapAreasBackgroundTaskTitle" xml:space="preserve">
+    <value>Võrguühenduseta kaart</value>
+  </data>
+  <data name="OfflineMapAreasRemoveOnError" xml:space="preserve">
+    <value>Ilmnes tõrge. Eemaldamiseks puudutage.</value>
+  </data>
+  <data name="OrientedImageViewportAutomationName" xml:space="preserve">
+    <value>Š_Oriented image_______________ä</value>
+  </data>
+  <data name="OrientedImageryViewAutomationTypeName" xml:space="preserve">
+    <value>Š_Oriented imagery view______________________ä</value>
+  </data>
+  <data name="OrientedImageryViewSelectMarkerSymbol" xml:space="preserve">
+    <value>Š_Select marker symbol_____________________ä</value>
+  </data>
+  <data name="OrientedImageryViewToggleAddMarkers" xml:space="preserve">
+    <value>Š_Toggle add markers___________________ä</value>
+  </data>
+  <data name="OrientedImageryViewShowSelectedImageFootprint" xml:space="preserve">
+    <value>Š_Show current footprint_______________________ä</value>
+  </data>
+  <data name="OrientedImageryViewShowUnselectedImageFootprints" xml:space="preserve">
+    <value>Š_Show additional footprints___________________________ä</value>
+  </data>
+  <data name="OrientedImageryViewImageSearchMode" xml:space="preserve">
+    <value>Š_Image search mode__________________ä</value>
+  </data>
+  <data name="OrientedImageryViewCurrentFootprintLabel" xml:space="preserve">
+    <value>Š_Current Footprint__________________ä</value>
+  </data>
+  <data name="OrientedImageryViewCurrentFootprintStackedLabel" xml:space="preserve">
+    <value>Š_Current_______________ä
+Š_Footprint___________________ä</value>
+  </data>
+  <data name="OrientedImageryViewAdditionalFootprintsLabel" xml:space="preserve">
+    <value>Š_Additional Footprints______________________ä</value>
+  </data>
+  <data name="OrientedImageryViewAdditionalFootprintsStackedLabel" xml:space="preserve">
+    <value>Š_Additional_____________________ä
+Š_Footprints_____________________ä</value>
+  </data>
+  <data name="OrientedImageryViewCameraLocationsLabel" xml:space="preserve">
+    <value>Š_Camera Locations_________________ä</value>
+  </data>
+  <data name="OrientedImageryViewCameraLocationsStackedLabel" xml:space="preserve">
+    <value>Š_Camera_____________ä
+Š_Locations___________________ä</value>
+  </data>
+  <data name="OrientedImageryViewAddMarkersLabel" xml:space="preserve">
+    <value>Š_Add Markers____________ä</value>
+  </data>
+  <data name="OrientedImageryViewAddMarkersStackedLabel" xml:space="preserve">
+    <value>Š_Add_______ä
+Š_Markers_______________ä</value>
+  </data>
+  <data name="OrientedImageryViewClearMarkersLabel" xml:space="preserve">
+    <value>Š_Clear Markers______________ä</value>
+  </data>
+  <data name="OrientedImageryViewClearMarkersTooltip" xml:space="preserve">
+    <value>Š_Clear markers______________ä</value>
+  </data>
+  <data name="OrientedImageryViewClearMarkersStackedLabel" xml:space="preserve">
+    <value>Š_Clear___________ä
+Š_Markers_______________ä</value>
+  </data>
+  <data name="OrientedImageryViewImageSearchModeFind" xml:space="preserve">
+    <value>Š_Find Images____________ä</value>
+  </data>
+  <data name="OrientedImageryViewImageSearchModeFindStackedLabel" xml:space="preserve">
+    <value>Š_Find_________ä
+Š_Images_____________ä</value>
+  </data>
+  <data name="OrientedImageryViewImageSearchModeDisplay" xml:space="preserve">
+    <value>Š_Display Image______________ä</value>
+  </data>
+  <data name="OrientedImageryViewImageSearchModeDisplayStackedLabel" xml:space="preserve">
+    <value>Š_Display_______________ä
+Š_Image___________ä</value>
+  </data>
+  <data name="OrientedImageryViewOpenSelectedImagePopup" xml:space="preserve">
+    <value>Š_Open details for selected image_________________ä</value>
+  </data>
+  <data name="OrientedImageryViewImageDetails" xml:space="preserve">
+    <value>Š_Image details______________ä</value>
+  </data>
+  <data name="OrientedImageryViewCloseSelectedImagePopup" xml:space="preserve">
+    <value>Š_Close details______________ä</value>
+  </data>
+  <data name="OrientedImageryViewGoToPageFormat" xml:space="preserve">
+    <value>Š_Go to image {0} of {1}_______________________ä</value>
+  </data>
+  <data name="OrientedImageryViewSelectedPageFormat" xml:space="preserve">
+    <value>Š_Image {0} of {1}, selected___________________________ä</value>
+  </data>
+  <data name="OrientedImageryViewToggleCameraMarkers" xml:space="preserve">
+    <value>Š_Show camera locations______________________ä</value>
+  </data>
+  <data name="OrientedImageryViewSequentialNavigationTooltip" xml:space="preserve">
+    <value>Š_Sequential navigation______________________ä</value>
+  </data>
+  <data name="OrientedImageryViewSequentialNavigationLabel" xml:space="preserve">
+    <value>Š_Sequential Navigation______________________ä</value>
+  </data>
+  <data name="OrientedImageryViewSequentialNavigationStackedLabel" xml:space="preserve">
+    <value>Š_Sequential_____________________ä
+Š_Navigation_____________________ä</value>
+  </data>
+  <data name="OrientedImageryViewPreviousImage" xml:space="preserve">
+    <value>Š_Previous image_______________ä</value>
+  </data>
+  <data name="OrientedImageryViewNextImage" xml:space="preserve">
+    <value>Š_Next image_____________________ä</value>
+  </data>
+  <data name="OrientedImageryViewImageLoading" xml:space="preserve">
+    <value>Š_Image loading_________________ä...</value>
+  </data>
+  <data name="OrientedImageryViewImageLoaded" xml:space="preserve">
+    <value>Š_Image loaded_____________ä</value>
+  </data>
+  <data name="OrientedImageryViewNoImageToDisplay" xml:space="preserve">
+    <value>Š_No image to display____________________ä</value>
+  </data>
+  <data name="OrientedImageryViewNoImagesFound" xml:space="preserve">
+    <value>Š_No images found for the tapped location_____________________ä</value>
+  </data>
+  <data name="OrientedImageryViewImageSelectionNoImagesNone" xml:space="preserve">
+    <value>Š_No image to display. Enable find images or display image mode to search for images__________________________________________ä</value>
+  </data>
+  <data name="OrientedImageryViewImageSelectionNoImagesFind" xml:space="preserve">
+    <value>Š_No image to display. Tap on the map to search for images or switch to display image mode______________________________________________ä.</value>
+  </data>
+  <data name="OrientedImageryViewImageSelectionNoImagesDisplay" xml:space="preserve">
+    <value>Š_No image to display. Tap on a feature to view its image or switch to find images mode____________________________________________ä.</value>
+  </data>
+  <data name="OrientedImageryViewImageSelectionEnable" xml:space="preserve">
+    <value>Š_Enable_____________ä</value>
+  </data>
+  <data name="OrientedImageryViewImageSelectionOr" xml:space="preserve">
+    <value>Š_or_____ä</value>
+  </data>
+  <data name="OrientedImageryViewImageSelectionSearchMode" xml:space="preserve">
+    <value>Š_mode to search for images__________________________ä</value>
+  </data>
+  <data name="OrientedImageryViewImageSelectionFindImages" xml:space="preserve">
+    <value>Š_Tap on the map to search for images___________________ä</value>
+  </data>
+  <data name="OrientedImageryViewImageSelectionDisplayImage" xml:space="preserve">
+    <value>Š_Tap on a feature to view its image__________________ä</value>
+  </data>
+  <data name="OrientedImageryViewImageSelectionSwitchMode" xml:space="preserve">
+    <value>Š_or switch to_____________ä</value>
+  </data>
+  <data name="OrientedImageryViewImageSelectionMode" xml:space="preserve">
+    <value>Š_mode_________ä</value>
+  </data>
+  <data name="OrientedImageryViewNoGeoView" xml:space="preserve">
+    <value>Š_Connect a GeoView to view oriented imagery_______________________ä.</value>
+  </data>
+  <data name="OrientedImageryViewNoLayerSelected" xml:space="preserve">
+    <value>Š_No layer selected___________________ä.</value>
+  </data>
+  <data name="OrientedImageryViewPreviousLabel" xml:space="preserve">
+    <value>Š_Prev_________ä</value>
+  </data>
+  <data name="OrientedImageryViewNextLabel" xml:space="preserve">
+    <value>Š_Next_________ä</value>
+  </data>
+  <data name="OrientedImageryViewSequenceStartReached" xml:space="preserve">
+    <value>Š_Start of image sequence reached_________________ä</value>
+  </data>
+  <data name="OrientedImageryViewSequenceEndReached" xml:space="preserve">
+    <value>Š_End of image sequence reached______________________________ä</value>
+  </data>
+  <data name="OrientedImageryViewSequenceStartAndEndReached" xml:space="preserve">
+    <value>Š_Start and end of image sequence reached_____________________ä</value>
+  </data>
+  <data name="OrientedImageryViewClose" xml:space="preserve">
+    <value>Š_Close oriented imagery_______________________ä</value>
+  </data>
+  <data name="OrientedImageryViewClosePanel" xml:space="preserve">
+    <value>Š_Close panel____________ä</value>
+  </data>
+  <data name="OrientedImageryViewOverlays" xml:space="preserve">
+    <value>Š_Overlays_________________ä</value>
+  </data>
+  <data name="OrientedImageryViewMarkers" xml:space="preserve">
+    <value>Š_Markers_______________ä</value>
+  </data>
+  <data name="OrientedImageryViewMode" xml:space="preserve">
+    <value>Š_Mode_________ä</value>
+  </data>
+  <data name="OrientedImageryViewShowPreviousImageInSequence" xml:space="preserve">
+    <value>Š_Show previous image in sequence_________________ä</value>
+  </data>
+  <data name="OrientedImageryViewShowNextImageInSequence" xml:space="preserve">
+    <value>Š_Show next image in sequence____________________________ä</value>
+  </data>
+  <data name="OrientedImageryViewMore" xml:space="preserve">
+    <value>Š_More_________ä</value>
+  </data>
+  <data name="OrientedImageryViewPage" xml:space="preserve">
+    <value>Š_Image {0} of {1}_________________ä</value>
+  </data>
+  <data name="OrientedImageryViewSelectLayer" xml:space="preserve">
+    <value>Š_Select layer_____________ä</value>
+  </data>
+  <data name="OrientedImagerySampleToggleView" xml:space="preserve">
+    <value>Š_2D/3D___________ä</value>
+  </data>
+  <data name="OrientedImagerySampleToggleViewDescription" xml:space="preserve">
+    <value>Š_Switch between 2D map and 3D scene__________________ä</value>
+  </data>
+  <data name="OrientedImageryViewMarkerSelection" xml:space="preserve">
+    <value>Š_Marker selection_________________ä</value>
+  </data>
+  <data name="OrientedImageryViewMarkerOption" xml:space="preserve">
+    <value>Š_Marker {0}_____________________ä</value>
+  </data>
+  <data name="OrientedImageryViewMarkerCircle" xml:space="preserve">
+    <value>Š_Circle marker______________ä</value>
+  </data>
+  <data name="OrientedImageryViewMarkerSquare" xml:space="preserve">
+    <value>Š_Square marker______________ä</value>
+  </data>
+  <data name="OrientedImageryViewMarkerTriangle" xml:space="preserve">
+    <value>Š_Triangle marker________________ä</value>
+  </data>
+  <data name="OrientedImageryViewMarkerDiamond" xml:space="preserve">
+    <value>Š_Diamond marker_______________ä</value>
+  </data>
+  <data name="OrientedImageryViewMarkerX" xml:space="preserve">
+    <value>Š_Cross marker_____________ä</value>
+  </data>
+  <data name="OrientedImageryViewMobileSequentialMode" xml:space="preserve">
+    <value>Š_Sequential_____________________ä</value>
+  </data>
+  <data name="OrientedImageryViewNavigation" xml:space="preserve">
+    <value>Š_Explore_______________ä</value>
+  </data>
+  <data name="OrientedImageryViewModeSelection" xml:space="preserve">
+    <value>Š_Mode Selection_______________ä</value>
+  </data>
+  <data name="OrientedImageryViewOverlaysSelection" xml:space="preserve">
+    <value>Š_Overlays Selection___________________ä</value>
+  </data>
+  <data name="OrientedImageryViewMarkerTools" xml:space="preserve">
+    <value>Š_Marker Tools_____________ä</value>
+  </data>
+  <data name="OrientedImageryViewOpen" xml:space="preserve">
+    <value>Š_Open oriented imagery______________________ä</value>
+  </data>
+  <data name="OrientedImageryViewOn" xml:space="preserve">
+    <value>Š_On_____ä</value>
+  </data>
+  <data name="OrientedImageryViewOff" xml:space="preserve">
+    <value>Š_Off_______ä</value>
+  </data>
+  <data name="OrientedImageryViewSelected" xml:space="preserve">
+    <value>Š_Selected_________________ä</value>
+  </data>
+  <data name="OrientedImageryViewNotSelected" xml:space="preserve">
+    <value>Š_Not selected_____________ä</value>
+  </data>
+  <data name="OrientedImageryViewMobileBackToMarkers" xml:space="preserve">
+    <value>Š_Back to Marker Tools_____________________ä</value>
+  </data>
+  <data name="OrientedImageryViewMobileSelectMarkerSymbol" xml:space="preserve">
+    <value>Š_Select Symbol______________ä</value>
+  </data>
+  <data name="OrientedImageryViewMobileCurrentFootprint" xml:space="preserve">
+    <value>Š_Show Current Footprint_______________________ä</value>
+  </data>
+  <data name="OrientedImageryViewMobileAdditionalFootprints" xml:space="preserve">
+    <value>Š_Show Additional Footprints___________________________ä</value>
+  </data>
+  <data name="OrientedImageryViewMobileCameraLocations" xml:space="preserve">
+    <value>Š_Show Camera Locations______________________ä</value>
+  </data>
+  <data name="OrientedImageryViewImageNavigation" xml:space="preserve">
+    <value>Š_Image navigation_________________ä</value>
+  </data>
+  <data name="OrientedImageryViewImageNavigationHint" xml:space="preserve">
+    <value>Š_Use Left Arrow for the previous image or Right Arrow for the next image_____________________________________ä.</value>
+  </data>
+  <data name="OrientedImageryViewSequenceNavigation" xml:space="preserve">
+    <value>Š_Sequential image navigation____________________________ä</value>
   </data>
 </root>

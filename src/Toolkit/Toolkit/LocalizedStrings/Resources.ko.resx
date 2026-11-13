@@ -123,11 +123,32 @@
   <data name="BasemapGalleryAutomationHelpText" xml:space="preserve">
     <value>사용 가능한 베이스맵 목록을 표시합니다. 현재 맵 또는 씬에 사용할 베이스맵을 선택하세요.</value>
   </data>
+  <data name="BookmarksViewAutomationName" xml:space="preserve">
+    <value>한_Bookmarks___________________빠</value>
+  </data>
   <data name="FeatureFormAddAttachmentMenuFromFile" xml:space="preserve">
     <value>첨부 파일 추가</value>
   </data>
   <data name="FeatureFormAddAttachmentMenuWithCamera" xml:space="preserve">
     <value>사진 촬영</value>
+  </data>
+  <data name="FeatureFormAttachmentTypeValidationError" xml:space="preserve">
+    <value>이 파일 유형은 지원되지 않습니다. 허용되는 유형: {0}</value>
+  </data>
+  <data name="FeatureFormAttachmentSizeValidationError" xml:space="preserve">
+    <value>파일이 너무 큽니다. 허용되는 최대 크기는 {0}MB입니다.</value>
+  </data>
+  <data name="FeatureFormAttachmentSizeValidationErrorFallback" xml:space="preserve">
+    <value>파일이 너무 큽니다.</value>
+  </data>
+  <data name="FeatureFormAttachmentDurationValidationError" xml:space="preserve">
+    <value>미디어가 너무 깁니다. 허용되는 최대 재생 시간은 {0}초입니다.</value>
+  </data>
+  <data name="FeatureFormAttachmentDurationValidationErrorFallback" xml:space="preserve">
+    <value>미디어가 너무 깁니다.</value>
+  </data>
+  <data name="FeatureFormAttachmentValidationErrorTitle" xml:space="preserve">
+    <value>첨부 파일 업로드 실패</value>
   </data>
   <data name="FeatureFormExceedsMaximumDateTime" xml:space="preserve">
     <value>날짜는 {0} 또는 그 이전이어야 함</value>
@@ -174,6 +195,18 @@
   <data name="FeatureFormLessThanNumericMinimum" xml:space="preserve">
     <value>최소값보다 작음</value>
   </data>
+  <data name="FeatureFormMaximumAttachmentCountAllowed" xml:space="preserve">
+    <value>허용되는 최대 첨부 파일 수는 {0}개입니다.</value>
+  </data>
+  <data name="FeatureFormMaximumAttachmentCountLabel" xml:space="preserve">
+    <value>최대: {0}</value>
+  </data>
+  <data name="FeatureFormMinimumAttachmentCountLabel" xml:space="preserve">
+    <value>최소: {0}</value>
+  </data>
+  <data name="FeatureFormMinimumAttachmentCountRequired" xml:space="preserve">
+    <value>{0}개 이상의 첨부 파일이 필요합니다.</value>
+  </data>
   <data name="FeatureFormNoAttachments" xml:space="preserve">
     <value>첨부 파일 없음</value>
   </data>
@@ -206,6 +239,147 @@
   </data>
   <data name="FeatureFormSpecificLength" xml:space="preserve">
     <value>필요한 문자 수: {0}</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsRemoveAssociation" xml:space="preserve">
+    <value>연관 제거</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsShowOnMap" xml:space="preserve">
+    <value>맵에 표시</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsMoreInformation" xml:space="preserve">
+    <value>추가 정보</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsPercentAlong" xml:space="preserve">
+    <value>다음에 따른 퍼센트</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationSettings" xml:space="preserve">
+    <value>연관 설정</value>
+  </data>
+  <data name="FeatureFormDeleteAssociationConfirmationTitle" xml:space="preserve">
+    <value>연관을 제거하시겠습니까?</value>
+  </data>
+  <data name="FeatureFormDeleteAssociationConfirmationMessage" xml:space="preserve">
+    <value>이 작업은 연관만 제거합니다. 피처는 남아 있습니다.</value>
+  </data>
+  <data name="FeatureFormDeleteAssociationConfirmationAccept" xml:space="preserve">
+    <value>제거</value>
+  </data>
+  <data name="FeatureFormDeleteAssociationConfirmationCancel" xml:space="preserve">
+    <value>취소</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsAddAssociation" xml:space="preserve">
+    <value>연관 추가</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsAdd" xml:space="preserve">
+    <value>추가</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsChooseAddMethod" xml:space="preserve">
+    <value>피처 추가 방법 선택</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsChooseToAdd" xml:space="preserve">
+    <value>추가하려면 선택</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsFeaturesIdentified" xml:space="preserve">
+    <value>{0}개 피처가 식별됨</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsAssociationType" xml:space="preserve">
+    <value>연관 유형</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsAttachmentType" xml:space="preserve">
+    <value>첨부 파일</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsCannotAddAssociation" xml:space="preserve">
+    <value>이 연관을 추가할 수 없습니다.</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsConnectivityType" xml:space="preserve">
+    <value>연결성</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsContainmentType" xml:space="preserve">
+    <value>포함성</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsContentVisibility" xml:space="preserve">
+    <value>콘텐츠 가시성</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsCurrentFeatureTerminal" xml:space="preserve">
+    <value>현재 피처 터미널</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsFractionAlongEdgeError" xml:space="preserve">
+    <value>0에서 100 사이의 백분율을 입력하세요.</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsFractionAlongEdgePercent" xml:space="preserve">
+    <value>엣지상의 분수 지점(%)</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsFromElement" xml:space="preserve">
+    <value>From 요소</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsNoCandidates" xml:space="preserve">
+    <value>일치하는 항목이 없습니다.</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsNoFeatureSources" xml:space="preserve">
+    <value>사용할 수 있는 네트워크 데이터 소스가 없습니다.</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsNewAssociation" xml:space="preserve">
+    <value>새 연관</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsNotEditable" xml:space="preserve">
+    <value>이 피처의 연관을 편집할 수 없습니다.</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsOtherFeatureTerminal" xml:space="preserve">
+    <value>기타 피처 터미널</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsReviewAssociation" xml:space="preserve">
+    <value>연관 검토</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsSearchFeatures" xml:space="preserve">
+    <value>피처 검색</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsSearch" xml:space="preserve">
+    <value>검색</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsNetworkDataSource" xml:space="preserve">
+    <value>네트워크 데이터 소스</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsResultCount" xml:space="preserve">
+    <value>{0}개 결과</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsAvailableAssetTypes" xml:space="preserve">
+    <value>사용할 수 있는 자산 유형</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsAvailableFeatures" xml:space="preserve">
+    <value>사용할 수 있는 피처({0})</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsLoading" xml:space="preserve">
+    <value>불러오는 중...</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsNoAssetTypes" xml:space="preserve">
+    <value>사용할 수 있는 자산 유형이 없습니다.</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsLoadMore" xml:space="preserve">
+    <value>추가로 불러오기</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsSelectFeatureSource" xml:space="preserve">
+    <value>네트워크 데이터 소스 선택</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsSelectFromNetworkDataSource" xml:space="preserve">
+    <value>시작 네트워크 데이터 소스</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsSelectOnMap" xml:space="preserve">
+    <value>On Map</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsSelectFeaturesOnMap" xml:space="preserve">
+    <value>맵에서 피처를 탭하여 선택하세요.</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsSelectTerminalError" xml:space="preserve">
+    <value>터미널을 선택하세요.</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsStructureAttachmentType" xml:space="preserve">
+    <value>구조 첨부 파일</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsTapSelection" xml:space="preserve">
+    <value>탭 선택</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsToElement" xml:space="preserve">
+    <value>To 요소</value>
   </data>
   <data name="FloorFilterAllFacilities" xml:space="preserve">
     <value>모든 사이트</value>
@@ -245,6 +419,18 @@
   </data>
   <data name="PopupViewerViewHyperlinkText" xml:space="preserve">
     <value>보기</value>
+  </data>
+  <data name="PopupViewerAttachmentDownloading" xml:space="preserve">
+    <value>한_Downloading attachment_______________________빠</value>
+  </data>
+  <data name="PopupViewerPreviousMediaButtonText" xml:space="preserve">
+    <value>한_Previous media_______________빠</value>
+  </data>
+  <data name="PopupViewerNextMediaButtonText" xml:space="preserve">
+    <value>한_Next media_____________________빠</value>
+  </data>
+  <data name="PopupViewerMediaPosition" xml:space="preserve">
+    <value>한_Media item {0} of {1}______________________빠</value>
   </data>
   <data name="PopupViewerUtilityAssociationsDefaultTitle" xml:space="preserve">
     <value>연관</value>
@@ -300,6 +486,9 @@
   <data name="SearchViewNoResults" xml:space="preserve">
     <value>결과 없음</value>
   </data>
+  <data name="SearchViewResultsAvailable" xml:space="preserve">
+    <value>한_Results available__________________빠</value>
+  </data>
   <data name="SearchViewRepeatSearch" xml:space="preserve">
     <value>여기서 반복 검색</value>
   </data>
@@ -309,6 +498,36 @@
   <data name="SearchViewSearchTooltip" xml:space="preserve">
     <value>검색</value>
   </data>
+  <data name="SearchViewSelectSearchSource" xml:space="preserve">
+    <value>검색 원본 선택</value>
+  </data>
+  <data name="SearchViewCollapsedAutomationState" xml:space="preserve">
+    <value>한_collapsed___________________빠</value>
+  </data>
+  <data name="SearchViewExpandedAutomationState" xml:space="preserve">
+    <value>한_expanded_________________빠</value>
+  </data>
+  <data name="SearchViewSelectedAutomationName" xml:space="preserve">
+    <value>한_{0}, selected______________빠</value>
+  </data>
+  <data name="SearchViewSearchSources" xml:space="preserve">
+    <value>검색 원본</value>
+  </data>
+  <data name="SearchViewSourcesAvailable" xml:space="preserve">
+    <value>한_Sources available__________________빠</value>
+  </data>
+  <data name="SearchViewSearchSuggestions" xml:space="preserve">
+    <value>검색 제안</value>
+  </data>
+  <data name="SearchViewSuggestionsAvailable" xml:space="preserve">
+    <value>한_Suggestions available______________________빠</value>
+  </data>
+  <data name="SearchViewSearchResults" xml:space="preserve">
+    <value>검색 결과</value>
+  </data>
+  <data name="UtilityNetworkTraceToolAddBarrier" xml:space="preserve">
+    <value>한_Add barrier____________빠</value>
+  </data>
   <data name="UtilityNetworkTraceToolAddStartingPoint" xml:space="preserve">
     <value>시작점 추가</value>
   </data>
@@ -317,6 +536,9 @@
   </data>
   <data name="UtilityNetworkTraceToolAssetDetails" xml:space="preserve">
     <value>자산 세부정보</value>
+  </data>
+  <data name="UtilityNetworkTraceToolBarriers" xml:space="preserve">
+    <value>한_Barriers_________________빠</value>
   </data>
   <data name="UtilityNetworkTraceToolCancel" xml:space="preserve">
     <value>취소</value>
@@ -341,6 +563,9 @@
   </data>
   <data name="UtilityNetworkTraceToolFunctionResults" xml:space="preserve">
     <value>함수 결과</value>
+  </data>
+  <data name="UtilityNetworkTraceToolIdentifyingBarriers" xml:space="preserve">
+    <value>한_Identifying barriers________________________빠...</value>
   </data>
   <data name="UtilityNetworkTraceToolIdentifyingStartingPoints" xml:space="preserve">
     <value>시작점 식별 중...</value>
@@ -384,6 +609,9 @@
   <data name="UtilityNetworkTraceToolPrevious" xml:space="preserve">
     <value>이전</value>
   </data>
+  <data name="UtilityNetworkTraceToolRemoveAllBarriers" xml:space="preserve">
+    <value>한_Remove all_____________________빠</value>
+  </data>
   <data name="UtilityNetworkTraceToolRemoveAllStartingPoints" xml:space="preserve">
     <value>모두 제거</value>
   </data>
@@ -414,6 +642,9 @@
   <data name="UtilityNetworkTraceToolStartingPoints" xml:space="preserve">
     <value>시작점</value>
   </data>
+  <data name="UtilityNetworkTraceToolTapToIdentifyBarriers" xml:space="preserve">
+    <value>한_Tap on the map to identify barriers___________________빠.</value>
+  </data>
   <data name="UtilityNetworkTraceToolTapToIdentifyStartingPoints" xml:space="preserve">
     <value>맵을 눌러 시작점을 식별합니다.</value>
   </data>
@@ -437,6 +668,9 @@
   </data>
   <data name="UtilityNetworkTraceToolUtilityNetworks" xml:space="preserve">
     <value>유틸리티 네트워크</value>
+  </data>
+  <data name="UtilityNetworkTraceToolUseAsFilterBarrier" xml:space="preserve">
+    <value>한_Use as filter barrier______________________빠</value>
   </data>
   <data name="UtilityNetworkTraceToolVisualizationOptions" xml:space="preserve">
     <value>시각화 옵션</value>
@@ -482,5 +716,427 @@
   </data>
   <data name="Locator_DefaultName" xml:space="preserve">
     <value>로케이터</value>
+  </data>
+  <data name="OfflineMapAreasAdd" xml:space="preserve">
+    <value>추가</value>
+  </data>
+  <data name="OfflineMapAreasAddMapArea" xml:space="preserve">
+    <value>맵 영역 추가</value>
+  </data>
+  <data name="OfflineMapAreasAreaNamePlaceholder" xml:space="preserve">
+    <value>이름</value>
+  </data>
+  <data name="OfflineMapAreasCancel" xml:space="preserve">
+    <value>취소</value>
+  </data>
+  <data name="OfflineMapAreasDownload" xml:space="preserve">
+    <value>다운로드</value>
+  </data>
+  <data name="OfflineMapAreasDownloadSize" xml:space="preserve">
+    <value>크기: {0}</value>
+  </data>
+  <data name="OfflineMapAreasDefaultAreaTitle" xml:space="preserve">
+    <value>영역 {0}</value>
+  </data>
+  <data name="OfflineMapAreasDownloaded" xml:space="preserve">
+    <value>다운로드됨</value>
+  </data>
+  <data name="OfflineMapAreasNoInternetConnectionMessage" xml:space="preserve">
+    <value>이 맵에 대한 맵 영역을 검색할 수 없음</value>
+  </data>
+  <data name="OfflineMapAreasNoInternetConnectionTitle" xml:space="preserve">
+    <value>인터넷 연결 없음</value>
+  </data>
+  <data name="OfflineMapAreasNoMapAreasOnDemandMessage" xml:space="preserve">
+    <value>이 맵에 대한 맵 영역이 없습니다. 시작하려면 아래 버튼을 누르세요.</value>
+  </data>
+  <data name="OfflineMapAreasNoMapAreasPreplannedMessage" xml:space="preserve">
+    <value>이 맵에 대한 맵 영역이 없습니다.</value>
+  </data>
+  <data name="OfflineMapAreasNoMapAreasTitle" xml:space="preserve">
+    <value>맵 영역 없음</value>
+  </data>
+  <data name="OfflineMapAreasOfflineDisabledMessage" xml:space="preserve">
+    <value>이 맵은 오프라인용으로 활성화되지 않음</value>
+  </data>
+  <data name="OfflineMapAreasOfflineDisabledTitle" xml:space="preserve">
+    <value>오프라인이 비활성화됨</value>
+  </data>
+  <data name="OfflineMapAreasOpen" xml:space="preserve">
+    <value>열기</value>
+  </data>
+  <data name="OfflineMapAreasRefresh" xml:space="preserve">
+    <value>새로 고침</value>
+  </data>
+  <data name="OfflineMapAreasRemove" xml:space="preserve">
+    <value>제거</value>
+  </data>
+  <data name="OfflineMapAreasSelectArea" xml:space="preserve">
+    <value>영역 선택</value>
+  </data>
+  <data name="OfflineMapAreasScaleLabel" xml:space="preserve">
+    <value>축척</value>
+  </data>
+  <data name="OfflineMapAreasScaleRoom" xml:space="preserve">
+    <value>방</value>
+  </data>
+  <data name="OfflineMapAreasScaleRooms" xml:space="preserve">
+    <value>방</value>
+  </data>
+  <data name="OfflineMapAreasScaleHouseProperty" xml:space="preserve">
+    <value>주택 자산</value>
+  </data>
+  <data name="OfflineMapAreasScaleHouses" xml:space="preserve">
+    <value>주택</value>
+  </data>
+  <data name="OfflineMapAreasScaleSmallBuilding" xml:space="preserve">
+    <value>소형 건물</value>
+  </data>
+  <data name="OfflineMapAreasScaleBuilding" xml:space="preserve">
+    <value>건물</value>
+  </data>
+  <data name="OfflineMapAreasScaleBuildings" xml:space="preserve">
+    <value>건물</value>
+  </data>
+  <data name="OfflineMapAreasScaleStreet" xml:space="preserve">
+    <value>도로</value>
+  </data>
+  <data name="OfflineMapAreasScaleStreets" xml:space="preserve">
+    <value>도로</value>
+  </data>
+  <data name="OfflineMapAreasScaleNeighborhood" xml:space="preserve">
+    <value>인접 영역</value>
+  </data>
+  <data name="OfflineMapAreasScaleTown" xml:space="preserve">
+    <value>동</value>
+  </data>
+  <data name="OfflineMapAreasScaleCity" xml:space="preserve">
+    <value>도시</value>
+  </data>
+  <data name="OfflineMapAreasScaleCities" xml:space="preserve">
+    <value>도시</value>
+  </data>
+  <data name="OfflineMapAreasScaleMetropolitanArea" xml:space="preserve">
+    <value>대도시권</value>
+  </data>
+  <data name="OfflineMapAreasScaleCounty" xml:space="preserve">
+    <value>구/군</value>
+  </data>
+  <data name="OfflineMapAreasScaleCounties" xml:space="preserve">
+    <value>구/군</value>
+  </data>
+  <data name="OfflineMapAreasScaleStateProvince" xml:space="preserve">
+    <value>시/도</value>
+  </data>
+  <data name="OfflineMapAreasScaleStatesProvinces" xml:space="preserve">
+    <value>시/도</value>
+  </data>
+  <data name="OfflineMapAreasScaleCountriesSmall" xml:space="preserve">
+    <value>국가(소)</value>
+  </data>
+  <data name="OfflineMapAreasScaleCountriesBig" xml:space="preserve">
+    <value>국가(대)</value>
+  </data>
+  <data name="OfflineMapAreasScaleContinent" xml:space="preserve">
+    <value>대륙</value>
+  </data>
+  <data name="OfflineMapAreasScaleWorldSmall" xml:space="preserve">
+    <value>전 세계(소)</value>
+  </data>
+  <data name="OfflineMapAreasScaleWorldBig" xml:space="preserve">
+    <value>전 세계(대)</value>
+  </data>
+  <data name="OfflineMapAreasScaleWorld" xml:space="preserve">
+    <value>전 세계</value>
+  </data>
+  <data name="OfflineMapAreasStop" xml:space="preserve">
+    <value>중지</value>
+  </data>
+  <data name="OfflineMapAreasBackgroundTaskTitle" xml:space="preserve">
+    <value>오프라인 맵</value>
+  </data>
+  <data name="OfflineMapAreasRemoveOnError" xml:space="preserve">
+    <value>오류가 발생했습니다. 제거하려면 탭하세요.</value>
+  </data>
+  <data name="OrientedImageViewportAutomationName" xml:space="preserve">
+    <value>한_Oriented image_______________빠</value>
+  </data>
+  <data name="OrientedImageryViewAutomationTypeName" xml:space="preserve">
+    <value>한_Oriented imagery view______________________빠</value>
+  </data>
+  <data name="OrientedImageryViewSelectMarkerSymbol" xml:space="preserve">
+    <value>한_Select marker symbol_____________________빠</value>
+  </data>
+  <data name="OrientedImageryViewToggleAddMarkers" xml:space="preserve">
+    <value>한_Toggle add markers___________________빠</value>
+  </data>
+  <data name="OrientedImageryViewShowSelectedImageFootprint" xml:space="preserve">
+    <value>한_Show current footprint_______________________빠</value>
+  </data>
+  <data name="OrientedImageryViewShowUnselectedImageFootprints" xml:space="preserve">
+    <value>한_Show additional footprints___________________________빠</value>
+  </data>
+  <data name="OrientedImageryViewImageSearchMode" xml:space="preserve">
+    <value>한_Image search mode__________________빠</value>
+  </data>
+  <data name="OrientedImageryViewCurrentFootprintLabel" xml:space="preserve">
+    <value>한_Current Footprint__________________빠</value>
+  </data>
+  <data name="OrientedImageryViewCurrentFootprintStackedLabel" xml:space="preserve">
+    <value>한_Current_______________빠
+한_Footprint___________________빠</value>
+  </data>
+  <data name="OrientedImageryViewAdditionalFootprintsLabel" xml:space="preserve">
+    <value>한_Additional Footprints______________________빠</value>
+  </data>
+  <data name="OrientedImageryViewAdditionalFootprintsStackedLabel" xml:space="preserve">
+    <value>한_Additional_____________________빠
+한_Footprints_____________________빠</value>
+  </data>
+  <data name="OrientedImageryViewCameraLocationsLabel" xml:space="preserve">
+    <value>한_Camera Locations_________________빠</value>
+  </data>
+  <data name="OrientedImageryViewCameraLocationsStackedLabel" xml:space="preserve">
+    <value>한_Camera_____________빠
+한_Locations___________________빠</value>
+  </data>
+  <data name="OrientedImageryViewAddMarkersLabel" xml:space="preserve">
+    <value>한_Add Markers____________빠</value>
+  </data>
+  <data name="OrientedImageryViewAddMarkersStackedLabel" xml:space="preserve">
+    <value>한_Add_______빠
+한_Markers_______________빠</value>
+  </data>
+  <data name="OrientedImageryViewClearMarkersLabel" xml:space="preserve">
+    <value>한_Clear Markers______________빠</value>
+  </data>
+  <data name="OrientedImageryViewClearMarkersTooltip" xml:space="preserve">
+    <value>한_Clear markers______________빠</value>
+  </data>
+  <data name="OrientedImageryViewClearMarkersStackedLabel" xml:space="preserve">
+    <value>한_Clear___________빠
+한_Markers_______________빠</value>
+  </data>
+  <data name="OrientedImageryViewImageSearchModeFind" xml:space="preserve">
+    <value>한_Find Images____________빠</value>
+  </data>
+  <data name="OrientedImageryViewImageSearchModeFindStackedLabel" xml:space="preserve">
+    <value>한_Find_________빠
+한_Images_____________빠</value>
+  </data>
+  <data name="OrientedImageryViewImageSearchModeDisplay" xml:space="preserve">
+    <value>한_Display Image______________빠</value>
+  </data>
+  <data name="OrientedImageryViewImageSearchModeDisplayStackedLabel" xml:space="preserve">
+    <value>한_Display_______________빠
+한_Image___________빠</value>
+  </data>
+  <data name="OrientedImageryViewOpenSelectedImagePopup" xml:space="preserve">
+    <value>한_Open details for selected image_________________빠</value>
+  </data>
+  <data name="OrientedImageryViewImageDetails" xml:space="preserve">
+    <value>한_Image details______________빠</value>
+  </data>
+  <data name="OrientedImageryViewCloseSelectedImagePopup" xml:space="preserve">
+    <value>한_Close details______________빠</value>
+  </data>
+  <data name="OrientedImageryViewGoToPageFormat" xml:space="preserve">
+    <value>한_Go to image {0} of {1}_______________________빠</value>
+  </data>
+  <data name="OrientedImageryViewSelectedPageFormat" xml:space="preserve">
+    <value>한_Image {0} of {1}, selected___________________________빠</value>
+  </data>
+  <data name="OrientedImageryViewToggleCameraMarkers" xml:space="preserve">
+    <value>한_Show camera locations______________________빠</value>
+  </data>
+  <data name="OrientedImageryViewSequentialNavigationTooltip" xml:space="preserve">
+    <value>한_Sequential navigation______________________빠</value>
+  </data>
+  <data name="OrientedImageryViewSequentialNavigationLabel" xml:space="preserve">
+    <value>한_Sequential Navigation______________________빠</value>
+  </data>
+  <data name="OrientedImageryViewSequentialNavigationStackedLabel" xml:space="preserve">
+    <value>한_Sequential_____________________빠
+한_Navigation_____________________빠</value>
+  </data>
+  <data name="OrientedImageryViewPreviousImage" xml:space="preserve">
+    <value>한_Previous image_______________빠</value>
+  </data>
+  <data name="OrientedImageryViewNextImage" xml:space="preserve">
+    <value>한_Next image_____________________빠</value>
+  </data>
+  <data name="OrientedImageryViewImageLoading" xml:space="preserve">
+    <value>한_Image loading_________________빠...</value>
+  </data>
+  <data name="OrientedImageryViewImageLoaded" xml:space="preserve">
+    <value>한_Image loaded_____________빠</value>
+  </data>
+  <data name="OrientedImageryViewNoImageToDisplay" xml:space="preserve">
+    <value>한_No image to display____________________빠</value>
+  </data>
+  <data name="OrientedImageryViewNoImagesFound" xml:space="preserve">
+    <value>한_No images found for the tapped location_____________________빠</value>
+  </data>
+  <data name="OrientedImageryViewImageSelectionNoImagesNone" xml:space="preserve">
+    <value>한_No image to display. Enable find images or display image mode to search for images__________________________________________빠</value>
+  </data>
+  <data name="OrientedImageryViewImageSelectionNoImagesFind" xml:space="preserve">
+    <value>한_No image to display. Tap on the map to search for images or switch to display image mode______________________________________________빠.</value>
+  </data>
+  <data name="OrientedImageryViewImageSelectionNoImagesDisplay" xml:space="preserve">
+    <value>한_No image to display. Tap on a feature to view its image or switch to find images mode____________________________________________빠.</value>
+  </data>
+  <data name="OrientedImageryViewImageSelectionEnable" xml:space="preserve">
+    <value>한_Enable_____________빠</value>
+  </data>
+  <data name="OrientedImageryViewImageSelectionOr" xml:space="preserve">
+    <value>한_or_____빠</value>
+  </data>
+  <data name="OrientedImageryViewImageSelectionSearchMode" xml:space="preserve">
+    <value>한_mode to search for images__________________________빠</value>
+  </data>
+  <data name="OrientedImageryViewImageSelectionFindImages" xml:space="preserve">
+    <value>한_Tap on the map to search for images___________________빠</value>
+  </data>
+  <data name="OrientedImageryViewImageSelectionDisplayImage" xml:space="preserve">
+    <value>한_Tap on a feature to view its image__________________빠</value>
+  </data>
+  <data name="OrientedImageryViewImageSelectionSwitchMode" xml:space="preserve">
+    <value>한_or switch to_____________빠</value>
+  </data>
+  <data name="OrientedImageryViewImageSelectionMode" xml:space="preserve">
+    <value>한_mode_________빠</value>
+  </data>
+  <data name="OrientedImageryViewNoGeoView" xml:space="preserve">
+    <value>한_Connect a GeoView to view oriented imagery_______________________빠.</value>
+  </data>
+  <data name="OrientedImageryViewNoLayerSelected" xml:space="preserve">
+    <value>한_No layer selected___________________빠.</value>
+  </data>
+  <data name="OrientedImageryViewPreviousLabel" xml:space="preserve">
+    <value>한_Prev_________빠</value>
+  </data>
+  <data name="OrientedImageryViewNextLabel" xml:space="preserve">
+    <value>한_Next_________빠</value>
+  </data>
+  <data name="OrientedImageryViewSequenceStartReached" xml:space="preserve">
+    <value>한_Start of image sequence reached_________________빠</value>
+  </data>
+  <data name="OrientedImageryViewSequenceEndReached" xml:space="preserve">
+    <value>한_End of image sequence reached______________________________빠</value>
+  </data>
+  <data name="OrientedImageryViewSequenceStartAndEndReached" xml:space="preserve">
+    <value>한_Start and end of image sequence reached_____________________빠</value>
+  </data>
+  <data name="OrientedImageryViewClose" xml:space="preserve">
+    <value>한_Close oriented imagery_______________________빠</value>
+  </data>
+  <data name="OrientedImageryViewClosePanel" xml:space="preserve">
+    <value>한_Close panel____________빠</value>
+  </data>
+  <data name="OrientedImageryViewOverlays" xml:space="preserve">
+    <value>한_Overlays_________________빠</value>
+  </data>
+  <data name="OrientedImageryViewMarkers" xml:space="preserve">
+    <value>한_Markers_______________빠</value>
+  </data>
+  <data name="OrientedImageryViewMode" xml:space="preserve">
+    <value>한_Mode_________빠</value>
+  </data>
+  <data name="OrientedImageryViewShowPreviousImageInSequence" xml:space="preserve">
+    <value>한_Show previous image in sequence_________________빠</value>
+  </data>
+  <data name="OrientedImageryViewShowNextImageInSequence" xml:space="preserve">
+    <value>한_Show next image in sequence____________________________빠</value>
+  </data>
+  <data name="OrientedImageryViewMore" xml:space="preserve">
+    <value>한_More_________빠</value>
+  </data>
+  <data name="OrientedImageryViewPage" xml:space="preserve">
+    <value>한_Image {0} of {1}_________________빠</value>
+  </data>
+  <data name="OrientedImageryViewSelectLayer" xml:space="preserve">
+    <value>한_Select layer_____________빠</value>
+  </data>
+  <data name="OrientedImagerySampleToggleView" xml:space="preserve">
+    <value>한_2D/3D___________빠</value>
+  </data>
+  <data name="OrientedImagerySampleToggleViewDescription" xml:space="preserve">
+    <value>한_Switch between 2D map and 3D scene__________________빠</value>
+  </data>
+  <data name="OrientedImageryViewMarkerSelection" xml:space="preserve">
+    <value>한_Marker selection_________________빠</value>
+  </data>
+  <data name="OrientedImageryViewMarkerOption" xml:space="preserve">
+    <value>한_Marker {0}_____________________빠</value>
+  </data>
+  <data name="OrientedImageryViewMarkerCircle" xml:space="preserve">
+    <value>한_Circle marker______________빠</value>
+  </data>
+  <data name="OrientedImageryViewMarkerSquare" xml:space="preserve">
+    <value>한_Square marker______________빠</value>
+  </data>
+  <data name="OrientedImageryViewMarkerTriangle" xml:space="preserve">
+    <value>한_Triangle marker________________빠</value>
+  </data>
+  <data name="OrientedImageryViewMarkerDiamond" xml:space="preserve">
+    <value>한_Diamond marker_______________빠</value>
+  </data>
+  <data name="OrientedImageryViewMarkerX" xml:space="preserve">
+    <value>한_Cross marker_____________빠</value>
+  </data>
+  <data name="OrientedImageryViewMobileSequentialMode" xml:space="preserve">
+    <value>한_Sequential_____________________빠</value>
+  </data>
+  <data name="OrientedImageryViewNavigation" xml:space="preserve">
+    <value>한_Explore_______________빠</value>
+  </data>
+  <data name="OrientedImageryViewModeSelection" xml:space="preserve">
+    <value>한_Mode Selection_______________빠</value>
+  </data>
+  <data name="OrientedImageryViewOverlaysSelection" xml:space="preserve">
+    <value>한_Overlays Selection___________________빠</value>
+  </data>
+  <data name="OrientedImageryViewMarkerTools" xml:space="preserve">
+    <value>한_Marker Tools_____________빠</value>
+  </data>
+  <data name="OrientedImageryViewOpen" xml:space="preserve">
+    <value>한_Open oriented imagery______________________빠</value>
+  </data>
+  <data name="OrientedImageryViewOn" xml:space="preserve">
+    <value>한_On_____빠</value>
+  </data>
+  <data name="OrientedImageryViewOff" xml:space="preserve">
+    <value>한_Off_______빠</value>
+  </data>
+  <data name="OrientedImageryViewSelected" xml:space="preserve">
+    <value>한_Selected_________________빠</value>
+  </data>
+  <data name="OrientedImageryViewNotSelected" xml:space="preserve">
+    <value>한_Not selected_____________빠</value>
+  </data>
+  <data name="OrientedImageryViewMobileBackToMarkers" xml:space="preserve">
+    <value>한_Back to Marker Tools_____________________빠</value>
+  </data>
+  <data name="OrientedImageryViewMobileSelectMarkerSymbol" xml:space="preserve">
+    <value>한_Select Symbol______________빠</value>
+  </data>
+  <data name="OrientedImageryViewMobileCurrentFootprint" xml:space="preserve">
+    <value>한_Show Current Footprint_______________________빠</value>
+  </data>
+  <data name="OrientedImageryViewMobileAdditionalFootprints" xml:space="preserve">
+    <value>한_Show Additional Footprints___________________________빠</value>
+  </data>
+  <data name="OrientedImageryViewMobileCameraLocations" xml:space="preserve">
+    <value>한_Show Camera Locations______________________빠</value>
+  </data>
+  <data name="OrientedImageryViewImageNavigation" xml:space="preserve">
+    <value>한_Image navigation_________________빠</value>
+  </data>
+  <data name="OrientedImageryViewImageNavigationHint" xml:space="preserve">
+    <value>한_Use Left Arrow for the previous image or Right Arrow for the next image_____________________________________빠.</value>
+  </data>
+  <data name="OrientedImageryViewSequenceNavigation" xml:space="preserve">
+    <value>한_Sequential image navigation____________________________빠</value>
   </data>
 </root>
