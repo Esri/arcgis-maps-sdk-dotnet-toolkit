@@ -16,6 +16,7 @@ public partial class OrientedImageryViewer : TemplatedView
     private GeoView? _connectedGeoView;
     private OrientedImageryViewerModel? _connectedModel;
     private OrientedImageryLayer? _observedLayer;
+    private CancellationTokenSource? _searchCancellation;
     private int _operationVersion;
     private int _layerVersion;
     private bool _connected;
@@ -210,10 +211,12 @@ public partial class OrientedImageryViewer : TemplatedView
 
     private void CancelOperation()
     {
-        // In-flight searches may finish, but their results no longer apply.
         _operationVersion++;
         _searching = false;
         _operationError = null;
+        var cancellation = _searchCancellation;
+        _searchCancellation = null;
+        cancellation?.Cancel();
     }
 
     private void Disconnect()
@@ -446,22 +449,30 @@ public partial class OrientedImageryViewer : TemplatedView
 
         CancelOperation();
         int version = _operationVersion;
+        using var cancellation = new CancellationTokenSource();
+        _searchCancellation = cancellation;
+        var token = cancellation.Token;
         _searching = true;
-        Refresh();
         try
         {
+            Refresh();
             IReadOnlyList<OrientedImage> images;
             if (model.InteractionState == OrientedImageryViewerInteractionState.FindImages)
             {
-                images = await layer.SearchImagesAsync(e.Location, new OrientedImageSearchParameters { MaxResults = -1 });
+                images = await layer.SearchImagesAsync(e.Location, new OrientedImageSearchParameters { MaxResults = -1 }, token);
             }
             else
             {
-                var identified = await geoView.IdentifyLayerAsync(layer, e.Position, 10, false);
+#if WINDOWS || __MACCATALYST__
+                const double identifyTolerance = 0;
+#else
+                const double identifyTolerance = 10;
+#endif
+                var identified = await geoView.IdentifyLayerAsync(layer, e.Position, identifyTolerance, false, token);
                 if (version != _operationVersion)
                     return;
                 images = identified.GeoElements.FirstOrDefault() is Feature feature
-                    ? new[] { await layer.FetchImageForFeatureAsync(feature) }
+                    ? new[] { await layer.FetchImageForFeatureAsync(feature, token) }
                     : [];
             }
 
@@ -475,7 +486,7 @@ public partial class OrientedImageryViewer : TemplatedView
                 HasSearchedForImages = true;
             }
         }
-        catch (OperationCanceledException) when (version != _operationVersion)
+        catch (OperationCanceledException) when (token.IsCancellationRequested)
         {
         }
         catch (Exception ex)
@@ -485,6 +496,8 @@ public partial class OrientedImageryViewer : TemplatedView
         }
         finally
         {
+            if (_searchCancellation == cancellation)
+                _searchCancellation = null;
             if (version == _operationVersion)
             {
                 _searching = false;
