@@ -104,7 +104,13 @@ public partial class OrientedImageryView
             parent.Children.Add(view);
         }
 
-        var custom = new ToolbarRowLayout();
+        var custom = new ToolbarRowLayout
+        {
+#if WINDOWS
+            // WinUI draws the expanded horizontal scrollbar over the scroll content.
+            Padding = new Thickness(0, 0, 0, 16),
+#endif
+        };
         var toolbarScroll = new ScrollView
         {
             Orientation = ScrollOrientation.Horizontal, Content = custom,
