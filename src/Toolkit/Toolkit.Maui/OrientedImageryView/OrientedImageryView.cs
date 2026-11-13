@@ -168,11 +168,13 @@ public partial class OrientedImageryView : TemplatedView
         nameof(ToolbarItemTemplateSelector), typeof(DataTemplateSelector), typeof(OrientedImageryView), null,
         propertyChanged: (s, _, _) => ((OrientedImageryView)s).InvalidateToolbar());
 
+    private static readonly BindablePropertyKey ErrorMessagePropertyKey = BindableProperty.CreateReadOnly(
+        nameof(ErrorMessage), typeof(string), typeof(OrientedImageryView), null);
+
     /// <summary>
     /// Identifies the <see cref="ErrorMessage"/> bindable property.
     /// </summary>
-    public static readonly BindableProperty ErrorMessageProperty = BindableProperty.Create(
-        nameof(ErrorMessage), typeof(string), typeof(OrientedImageryView), null);
+    public static readonly BindableProperty ErrorMessageProperty = ErrorMessagePropertyKey.BindableProperty;
 
     /// <summary>
     /// Gets the current error or status message.
@@ -180,7 +182,7 @@ public partial class OrientedImageryView : TemplatedView
     public string? ErrorMessage
     {
         get => (string?)GetValue(ErrorMessageProperty);
-        private set => SetValue(ErrorMessageProperty, value);
+        private set => SetValue(ErrorMessagePropertyKey, value);
     }
 
     /// <summary>
