@@ -8,7 +8,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui;
 /// <summary>
 /// Displays oriented imagery and provides controls for managing image selection, footprints, and markers.
 /// </summary>
-public partial class OrientedImageryView : TemplatedView
+public partial class OrientedImageryViewer : TemplatedView
 {
     #region State
 
@@ -24,8 +24,8 @@ public partial class OrientedImageryView : TemplatedView
     private int _lookAtVersion;
     private bool HasLayer => GeoView != null && ViewModel.OrientedImageryLayer != null;
     private static readonly BindableProperty ThemeImageBackgroundProperty = BindableProperty.Create(
-        "ThemeImageBackground", typeof(Color), typeof(OrientedImageryView), Colors.White,
-        propertyChanged: (s, _, _) => ((OrientedImageryView)s).Refresh());
+        "ThemeImageBackground", typeof(Color), typeof(OrientedImageryViewer), Colors.White,
+        propertyChanged: (s, _, _) => ((OrientedImageryViewer)s).Refresh());
 
     #endregion
 
@@ -49,9 +49,9 @@ public partial class OrientedImageryView : TemplatedView
     public event EventHandler<OrientedImageryViewerGeoViewTappedArgs>? GeoViewTapped;
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="OrientedImageryView"/> class.
+    /// Initializes a new instance of the <see cref="OrientedImageryViewer"/> class.
     /// </summary>
-    public OrientedImageryView()
+    public OrientedImageryViewer()
     {
         ViewModel = new OrientedImageryViewerModel();
         this.SetAppThemeColor(ThemeImageBackgroundProperty, Colors.White, Color.FromArgb("#202020"));
@@ -83,10 +83,10 @@ public partial class OrientedImageryView : TemplatedView
     /// Identifies the <see cref="GeoView"/> bindable property.
     /// </summary>
     public static readonly BindableProperty GeoViewProperty = BindableProperty.Create(
-        nameof(GeoView), typeof(GeoView), typeof(OrientedImageryView), null,
+        nameof(GeoView), typeof(GeoView), typeof(OrientedImageryViewer), null,
         propertyChanged: (s, _, newValue) =>
         {
-            var view = (OrientedImageryView)s;
+            var view = (OrientedImageryViewer)s;
             view.Reconnect();
             if (newValue == null)
                 view.ViewModel.OrientedImageryLayer = null;
@@ -108,11 +108,11 @@ public partial class OrientedImageryView : TemplatedView
     /// Identifies the <see cref="ViewModel"/> bindable property.
     /// </summary>
     public static readonly BindableProperty ViewModelProperty = BindableProperty.Create(
-        nameof(ViewModel), typeof(OrientedImageryViewerModel), typeof(OrientedImageryView), null,
+        nameof(ViewModel), typeof(OrientedImageryViewerModel), typeof(OrientedImageryViewer), null,
         validateValue: (_, value) => value is OrientedImageryViewerModel,
         propertyChanged: (s, _, _) =>
         {
-            var view = (OrientedImageryView)s;
+            var view = (OrientedImageryViewer)s;
             view.HasSearchedForImages = false;
             view.Reconnect();
         });
@@ -127,7 +127,7 @@ public partial class OrientedImageryView : TemplatedView
     }
 
     private static readonly BindablePropertyKey HasSearchedForImagesPropertyKey = BindableProperty.CreateReadOnly(
-        nameof(HasSearchedForImages), typeof(bool), typeof(OrientedImageryView), false);
+        nameof(HasSearchedForImages), typeof(bool), typeof(OrientedImageryViewer), false);
 
     /// <summary>
     /// Identifies the <see cref="HasSearchedForImages"/> bindable property.
@@ -148,8 +148,8 @@ public partial class OrientedImageryView : TemplatedView
     /// Identifies the <see cref="DisplayBackgroundColor"/> bindable property.
     /// </summary>
     public static readonly BindableProperty DisplayBackgroundColorProperty = BindableProperty.Create(
-        nameof(DisplayBackgroundColor), typeof(System.Drawing.Color), typeof(OrientedImageryView), System.Drawing.Color.Empty,
-        propertyChanged: (s, _, _) => ((OrientedImageryView)s).Refresh());
+        nameof(DisplayBackgroundColor), typeof(System.Drawing.Color), typeof(OrientedImageryViewer), System.Drawing.Color.Empty,
+        propertyChanged: (s, _, _) => ((OrientedImageryViewer)s).Refresh());
 
     /// <summary>
     /// Gets or sets the template selector for toolbar categories and their items.
@@ -165,11 +165,11 @@ public partial class OrientedImageryView : TemplatedView
     /// Identifies the <see cref="ToolbarItemTemplateSelector"/> bindable property.
     /// </summary>
     public static readonly BindableProperty ToolbarItemTemplateSelectorProperty = BindableProperty.Create(
-        nameof(ToolbarItemTemplateSelector), typeof(DataTemplateSelector), typeof(OrientedImageryView), null,
-        propertyChanged: (s, _, _) => ((OrientedImageryView)s).InvalidateToolbar());
+        nameof(ToolbarItemTemplateSelector), typeof(DataTemplateSelector), typeof(OrientedImageryViewer), null,
+        propertyChanged: (s, _, _) => ((OrientedImageryViewer)s).InvalidateToolbar());
 
     private static readonly BindablePropertyKey ErrorMessagePropertyKey = BindableProperty.CreateReadOnly(
-        nameof(ErrorMessage), typeof(string), typeof(OrientedImageryView), null);
+        nameof(ErrorMessage), typeof(string), typeof(OrientedImageryViewer), null);
 
     /// <summary>
     /// Identifies the <see cref="ErrorMessage"/> bindable property.
@@ -195,8 +195,8 @@ public partial class OrientedImageryView : TemplatedView
     }
 
     private static readonly BindablePropertyKey TransientErrorMessagePropertyKey = BindableProperty.CreateReadOnly(
-        nameof(TransientErrorMessage), typeof(string), typeof(OrientedImageryView), null,
-        propertyChanged: (s, _, _) => ((OrientedImageryView)s).Refresh());
+        nameof(TransientErrorMessage), typeof(string), typeof(OrientedImageryViewer), null,
+        propertyChanged: (s, _, _) => ((OrientedImageryViewer)s).Refresh());
 
     /// <summary>
     /// Identifies the <see cref="TransientErrorMessage"/> bindable property.

@@ -67,7 +67,7 @@ public class ToolbarSelector : DataTemplateSelector
         }
 
 #if MAUI
-        return container is OrientedImageryView ? DefaultTemplate :
+        return container is OrientedImageryViewer ? DefaultTemplate :
             throw new InvalidOperationException($"No oriented imagery toolbar template is registered for '{item.GetType().Name}'.");
 #else
         return base.SelectTemplate(item, container);

@@ -11,7 +11,7 @@ using Microsoft.UI.Xaml.Input;
 
 namespace Esri.ArcGISRuntime.Toolkit.Maui;
 
-public partial class OrientedImageryView
+public partial class OrientedImageryViewer
 {
     #region Presentation state
 

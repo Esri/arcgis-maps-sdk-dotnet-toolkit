@@ -25,7 +25,7 @@ internal sealed partial class OrientedImageryControlsViewHandler
     private readonly record struct PaginationState(bool Sequential, int Selected, int Start, int Count, int Total,
         bool Previous, bool Next, bool Searching);
 
-    private void RefreshPagination(OrientedImageryView owner)
+    private void RefreshPagination(OrientedImageryViewer owner)
     {
         var model = owner.ViewModel;
         int selected = -1;
@@ -61,11 +61,11 @@ internal sealed partial class OrientedImageryControlsViewHandler
         }
     }
 
-    private bool CanUsePagination(OrientedImageryView owner, OrientedImageryViewerModel model) =>
+    private bool CanUsePagination(OrientedImageryViewer owner, OrientedImageryViewerModel model) =>
         ((IElementHandler)this).VirtualView is OrientedImageryControlsView view && view.Handler == this &&
         view.Owner == owner && owner.ViewModel == model && !owner.DesktopIsSearching && model.SelectedImage != null;
 
-    private PaginationRow CreatePaginationRow(OrientedImageryView owner, PaginationState state)
+    private PaginationRow CreatePaginationRow(OrientedImageryViewer owner, PaginationState state)
     {
         var model = owner.ViewModel;
         var row = new PaginationRow();

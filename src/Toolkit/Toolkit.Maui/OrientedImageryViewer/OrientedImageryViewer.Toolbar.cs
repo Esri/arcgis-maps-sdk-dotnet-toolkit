@@ -6,7 +6,7 @@ using Microsoft.Maui.Layouts;
 
 namespace Esri.ArcGISRuntime.Toolkit.Maui;
 
-public partial class OrientedImageryView
+public partial class OrientedImageryViewer
 {
     #region Toolbar state and interaction modes
 

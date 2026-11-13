@@ -1,7 +1,7 @@
 #if ANDROID || __IOS__
 namespace Esri.ArcGISRuntime.Toolkit.Maui;
 
-public partial class OrientedImageryView
+public partial class OrientedImageryViewer
 {
     #region Mode buttons
 

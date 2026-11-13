@@ -30,7 +30,7 @@ internal sealed partial class OrientedImageryControlsViewHandler
 
     #region Toolbar controls
 
-    private void RefreshToolbar(OrientedImageryView owner, ToolbarItemBase item)
+    private void RefreshToolbar(OrientedImageryViewer owner, ToolbarItemBase item)
     {
         var model = owner.ViewModel;
         if (_model != model || _item != item)
@@ -43,12 +43,12 @@ internal sealed partial class OrientedImageryControlsViewHandler
                 ImageSearchModeVM mode => ModePicker(owner, mode),
                 ToolbarDividerVM => Divider(),
                 ShowSelectedFootprintVM footprint => Toggle(owner, "ShowSelectedImageFootprint", "CurrentFootprintStackedLabel",
-                    Geometry(OrientedImageryView.CurrentFootprintGeometry),
+                    Geometry(OrientedImageryViewer.CurrentFootprintGeometry),
                     () => model.ShowSelectedFootprint, value => model.ShowSelectedFootprint = value,
                     () => footprint.Enabled,
                     automationId: "OrientedImageryDesktopCurrentFootprint"),
                 ShowUnselectedFootprintsVM => Toggle(owner, "ShowUnselectedImageFootprints", "AdditionalFootprintsStackedLabel",
-                    Geometry(OrientedImageryView.OverlayGeometry),
+                    Geometry(OrientedImageryViewer.OverlayGeometry),
                     () => model.ShowUnselectedFootprints, value => model.ShowUnselectedFootprints = value,
                     () => model.Images.Count > 1, "OrientedImageryDesktopAdditionalFootprints"),
                 ShowCameraMarkersVM => Toggle(owner, "ToggleCameraMarkers", "CameraLocationsStackedLabel", CameraLocationsIcon(),
@@ -84,7 +84,7 @@ internal sealed partial class OrientedImageryControlsViewHandler
         }
     }
 
-    private NativeButton ActionButton(OrientedImageryView owner, string key, string labelKey, UIElement icon, Action execute, Func<bool> enabled)
+    private NativeButton ActionButton(OrientedImageryViewer owner, string key, string labelKey, UIElement icon, Action execute, Func<bool> enabled)
     {
         var button = new NativeButton
         {
@@ -99,7 +99,7 @@ internal sealed partial class OrientedImageryControlsViewHandler
         return button;
     }
 
-    private ToggleButton Toggle(OrientedImageryView owner, string key, string labelKey, UIElement icon, Func<bool> get, Action<bool> set, Func<bool>? enabled = null, string? automationId = null)
+    private ToggleButton Toggle(OrientedImageryViewer owner, string key, string labelKey, UIElement icon, Func<bool> get, Action<bool> set, Func<bool>? enabled = null, string? automationId = null)
     {
         var toggle = new ToggleButton
         {
@@ -197,7 +197,7 @@ internal sealed partial class OrientedImageryControlsViewHandler
         return selector;
     }
 
-    private NativeGrid ModePicker(OrientedImageryView owner, ImageSearchModeVM mode)
+    private NativeGrid ModePicker(OrientedImageryViewer owner, ImageSearchModeVM mode)
     {
         var host = new NativeGrid
         {
@@ -247,7 +247,7 @@ internal sealed partial class OrientedImageryControlsViewHandler
                 {
                     e.Handled = true;
                     dropdown.IsDropDownOpen = false;
-                    OrientedImageryView.ToggleImageMode(mode, state);
+                    OrientedImageryViewer.ToggleImageMode(mode, state);
                 }
             }), true);
             dropdown.Items.Add(item);
@@ -264,7 +264,7 @@ internal sealed partial class OrientedImageryControlsViewHandler
             {
                 e.Handled = true;
                 dropdown.IsDropDownOpen = false;
-                OrientedImageryView.ToggleImageMode(mode, state);
+                OrientedImageryViewer.ToggleImageMode(mode, state);
             }
         };
         dropdown.SelectionChanged += (_, _) =>
@@ -273,7 +273,7 @@ internal sealed partial class OrientedImageryControlsViewHandler
                 dropdown.SelectedItem is ComboBoxItem { Tag: OrientedImageryViewerInteractionState state })
             {
                 selectionChangedWhileOpen = dropdown.IsDropDownOpen;
-                OrientedImageryView.ToggleImageMode(mode, state);
+                OrientedImageryViewer.ToggleImageMode(mode, state);
             }
         };
         bool? previous = null;
@@ -307,15 +307,15 @@ internal sealed partial class OrientedImageryControlsViewHandler
         return host;
     }
 
-    private ToggleButton SequenceButton(OrientedImageryView owner, SequentialNavigationVM sequence)
+    private ToggleButton SequenceButton(OrientedImageryViewer owner, SequentialNavigationVM sequence)
     {
         var model = owner.ViewModel;
-        return Toggle(owner, "SequentialNavigationLabel", "SequentialNavigationStackedLabel", Geometry(OrientedImageryView.SequenceGeometry),
+        return Toggle(owner, "SequentialNavigationLabel", "SequentialNavigationStackedLabel", Geometry(OrientedImageryViewer.SequenceGeometry),
             () => model.IsSequentialNavigationEnabled, value => model.IsSequentialNavigationEnabled = value,
             () => sequence.CanEnterSequentialNavigation, "OrientedImageryDesktopSequentialMode");
     }
 
-    private ComboBox SymbolPicker(OrientedImageryView owner, SelectNewMarkerSymbolVM picker)
+    private ComboBox SymbolPicker(OrientedImageryViewer owner, SelectNewMarkerSymbolVM picker)
     {
         var combo = CreateToolbarSelector(true);
         Describe(combo, "SelectMarkerSymbol", "OrientedImageryDesktopSelectMarkers");
@@ -364,7 +364,7 @@ internal sealed partial class OrientedImageryControlsViewHandler
         return combo;
     }
 
-    private async Task RenderSymbolAsync(OrientedImageryView owner, Symbol symbol, Microsoft.UI.Xaml.Controls.Image image, int generation)
+    private async Task RenderSymbolAsync(OrientedImageryViewer owner, Symbol symbol, Microsoft.UI.Xaml.Controls.Image image, int generation)
     {
         try
         {

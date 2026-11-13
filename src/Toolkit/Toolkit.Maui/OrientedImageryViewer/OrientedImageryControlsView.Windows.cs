@@ -15,9 +15,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui;
 // Hosts one toolbar item, or image pagination when ToolbarItem is unset.
 internal sealed class OrientedImageryControlsView : Microsoft.Maui.Controls.View
 {
-    private OrientedImageryView? _owner;
+    private OrientedImageryViewer? _owner;
 
-    public OrientedImageryView? Owner
+    public OrientedImageryViewer? Owner
     {
         get => _owner;
         set
@@ -146,7 +146,7 @@ internal sealed partial class OrientedImageryControlsViewHandler : ViewHandler<O
 
     #region Presentation helpers
 
-    private static string Text(string key) => OrientedImageryView.DesktopText(key);
+    private static string Text(string key) => OrientedImageryViewer.DesktopText(key);
 
     private static Microsoft.UI.Xaml.Controls.Border ThemeBorder(string key) =>
         (Microsoft.UI.Xaml.Controls.Border)XamlReader.Load(
@@ -226,7 +226,7 @@ internal sealed partial class OrientedImageryControlsViewHandler : ViewHandler<O
     private static IconElement ImageModeIcon(bool explore) =>
         (PathIcon)XamlReader.Load(
             "<PathIcon xmlns=\"http://schemas.microsoft.com/winfx/2006/xaml/presentation\" Data=\"" +
-            (explore ? OrientedImageryView.ExploreImagesGeometry : OrientedImageryView.DisplayImageGeometry) + "\"/>");
+            (explore ? OrientedImageryViewer.ExploreImagesGeometry : OrientedImageryViewer.DisplayImageGeometry) + "\"/>");
 
     private static void Describe(NativeView control, string key, string? id = null)
     {

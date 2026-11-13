@@ -4,11 +4,11 @@ using Esri.ArcGISRuntime.Maui;
 namespace Toolkit.SampleApp.Maui.Samples;
 
 /// <summary>
-/// Interaction logic for OrientedImageryViewSample.xaml
+/// Interaction logic for OrientedImageryViewerSample.xaml
 /// </summary>
-[SampleInfo(Category = "Oriented Imagery", DisplayName = "Oriented imagery view",
+[SampleInfo(Category = "Oriented Imagery", DisplayName = "Oriented imagery viewer",
     Description = "Search and select oriented imagery, manage overlays and markers, and navigate image sequences.")]
-public partial class OrientedImageryViewSample : ContentPage
+public partial class OrientedImageryViewerSample : ContentPage
 {
     #region Sample state and setup
 
@@ -32,7 +32,7 @@ public partial class OrientedImageryViewSample : ContentPage
     private GeoView CurrentGeoView => _usingMapView ? _mapView : _sceneView;
     private GeoModel CurrentGeoModel => _usingMapView ? _mapView.Map! : _sceneView.Scene!;
 
-    public OrientedImageryViewSample()
+    public OrientedImageryViewerSample()
     {
         InitializeComponent();
         LayerPicker.ItemsSource = _layerUrls;

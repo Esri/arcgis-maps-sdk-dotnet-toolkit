@@ -5,7 +5,7 @@ using Microsoft.Maui.Platform;
 
 namespace Esri.ArcGISRuntime.Toolkit.Maui;
 
-public partial class OrientedImageryView
+public partial class OrientedImageryViewer
 {
     #region Sheet state and lifecycle
 
@@ -223,7 +223,7 @@ public partial class OrientedImageryView
             callback.Enabled = _toolsSheet == null && _infoSheet == null && _connected && (_panelAnchor != null || ViewModel.ImageDetailsPopup != null);
     }
 
-    private sealed class ToolsBackCallback(OrientedImageryView owner, OnBackPressedDispatcher dispatcher) : OnBackPressedCallback(false)
+    private sealed class ToolsBackCallback(OrientedImageryViewer owner, OnBackPressedDispatcher dispatcher) : OnBackPressedCallback(false)
     {
         public override void HandleOnBackPressed()
         {

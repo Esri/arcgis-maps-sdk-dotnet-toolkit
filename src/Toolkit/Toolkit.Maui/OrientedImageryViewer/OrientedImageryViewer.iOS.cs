@@ -5,7 +5,7 @@ using ContentView = Microsoft.Maui.Controls.ContentView;
 
 namespace Esri.ArcGISRuntime.Toolkit.Maui;
 
-public partial class OrientedImageryView
+public partial class OrientedImageryViewer
 {
     #region Sheet state and lifecycle
 
@@ -198,7 +198,7 @@ public partial class OrientedImageryView
             Release();
     }
 
-    private sealed class IosSheetDismissal(OrientedImageryView owner) : UISheetPresentationControllerDelegate
+    private sealed class IosSheetDismissal(OrientedImageryViewer owner) : UISheetPresentationControllerDelegate
     {
         public override void DidDismiss(UIPresentationController presentationController)
         {
