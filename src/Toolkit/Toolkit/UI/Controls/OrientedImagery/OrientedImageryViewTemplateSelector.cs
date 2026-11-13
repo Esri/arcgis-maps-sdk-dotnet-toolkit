@@ -51,10 +51,12 @@ public partial class ToolbarSelector : DataTemplateSelector
 #endif
     {
         return SelectTemplateInner(item) ??
-#if WINDOWS_XAML
-            base.SelectTemplateCore(item, container);
-#else
+#if WPF
             base.SelectTemplate(item, container);
+#elif WINDOWS_XAML
+            base.SelectTemplateCore(item, container);
+#elif MAUI
+            DefaultTemplate;
 #endif
     }
 
@@ -89,12 +91,7 @@ public partial class ToolbarSelector : DataTemplateSelector
             }
         }
 
-#if MAUI
-        return container is OrientedImageryViewer ? DefaultTemplate :
-            throw new InvalidOperationException($"No oriented imagery toolbar template is registered for '{item.GetType().Name}'.");
-#else
         return null;
-#endif
     }
 
     /// <summary>
