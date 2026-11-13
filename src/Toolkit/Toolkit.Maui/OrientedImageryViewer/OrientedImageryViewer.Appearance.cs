@@ -826,8 +826,8 @@ public partial class OrientedImageryViewer
             }
         }
         string selectionInstructions = RefreshSelectionGuidance();
-        ErrorMessage = error ?? TransientErrorMessage ??
-            (showSelectionGuidance ? selectionInstructions : message);
+        ErrorMessage = GeoView == null ? Text("NoGeoView") :
+            layer == null ? Text("NoLayerSelected") : null;
 
         if (_status != null)
         {

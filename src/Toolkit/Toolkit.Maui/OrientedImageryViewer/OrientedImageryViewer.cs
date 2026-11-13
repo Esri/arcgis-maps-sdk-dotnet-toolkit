@@ -179,7 +179,7 @@ public partial class OrientedImageryViewer : TemplatedView
     internal static readonly BindableProperty ErrorMessageProperty = ErrorMessagePropertyKey.BindableProperty;
 
     /// <summary>
-    /// Gets the current error or status message.
+    /// Gets the error message when no GeoView is connected or no layer is selected.
     /// </summary>
     internal string? ErrorMessage
     {
