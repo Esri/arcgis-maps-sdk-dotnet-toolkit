@@ -120,17 +120,19 @@ public partial class OrientedImageryView : TemplatedView
     /// <summary>
     /// Gets a value indicating whether an image selection search has completed after a map tap.
     /// </summary>
-    public bool HasSearchedForImages
+    internal bool HasSearchedForImages
     {
         get => (bool)GetValue(HasSearchedForImagesProperty);
-        private set => SetValue(HasSearchedForImagesProperty, value);
+        private set => SetValue(HasSearchedForImagesPropertyKey, value);
     }
+
+    private static readonly BindablePropertyKey HasSearchedForImagesPropertyKey = BindableProperty.CreateReadOnly(
+        nameof(HasSearchedForImages), typeof(bool), typeof(OrientedImageryView), false);
 
     /// <summary>
     /// Identifies the <see cref="HasSearchedForImages"/> bindable property.
     /// </summary>
-    public static readonly BindableProperty HasSearchedForImagesProperty = BindableProperty.Create(
-        nameof(HasSearchedForImages), typeof(bool), typeof(OrientedImageryView), false);
+    internal static readonly BindableProperty HasSearchedForImagesProperty = HasSearchedForImagesPropertyKey.BindableProperty;
 
     /// <summary>
     /// Gets or sets the background color shown where the image does not fill the display.
