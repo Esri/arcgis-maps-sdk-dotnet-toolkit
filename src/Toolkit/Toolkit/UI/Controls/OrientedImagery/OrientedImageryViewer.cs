@@ -792,7 +792,7 @@ public partial class OrientedImageryViewer
 #endif
 
 /// <summary>
-/// Provides event data and an option to intercept default behavior for taps on an oriented imagery viewer's viewport.
+/// Provides event data and an option to intercept default behavior for taps on the viewport of an <see cref="OrientedImageryViewer"/>.
 /// </summary>
 public sealed class OrientedImageryViewerImageTappedArgs : OrientedImageTappedEventArgs
 {
@@ -807,13 +807,13 @@ public sealed class OrientedImageryViewerImageTappedArgs : OrientedImageTappedEv
     }
 
     /// <summary>
-    /// Gets or sets a value indicating whether the viewer's default image tap logic should be skipped for the current tap event.
+    /// Gets or sets a value indicating whether the default <see cref="OrientedImageryViewer"/> image tap logic should be skipped for the current tap event.
     /// </summary>
     public bool Handled { get; set; }
 }
 
 /// <summary>
-/// Provides event data and an option to intercept default behavior for taps on the <see cref="GeoView"/> connected to an oriented imagery viewer.
+/// Provides event data and an option to intercept default behavior for taps on the <see cref="GeoView"/> connected to an <see cref="OrientedImageryViewer"/>.
 /// </summary>
 public sealed class OrientedImageryViewerGeoViewTappedArgs : EventArgs
 {
@@ -832,7 +832,7 @@ public sealed class OrientedImageryViewerGeoViewTappedArgs : EventArgs
     public GeoViewInputEventArgs GeoViewInputEventArgs { get; }
 
     /// <summary>
-    /// Gets or sets a value indicating whether the viewer's default GeoView tap logic should be skipped for the current tap event.
+    /// Gets or sets a value indicating whether the default <see cref="OrientedImageryViewer"/> GeoView tap logic should be skipped for the current tap event.
     /// </summary>
     public bool Handled { get; set; }
 }
