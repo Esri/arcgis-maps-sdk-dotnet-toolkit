@@ -172,6 +172,7 @@ public partial class OrientedImageryViewer
             case nameof(OrientedImageryViewerModel.Images):
                 UpdatePaginatorSelection();
                 UpdateImageStateMessages();
+                TransientErrorMessage = null;
                 break;
             case nameof(OrientedImageryViewerModel.InteractionState):
                 UpdateImageStateMessages();
@@ -302,6 +303,7 @@ public partial class OrientedImageryViewer
 
         try
         {
+            throw new Exception("test");
             var location = await e.Image.ImageToLocationAsync(e.ImagePoint);
             ViewModel.AddMarkerLocation(location);
         }
@@ -608,7 +610,7 @@ public partial class OrientedImageryViewer
     /// The message shown when the <see cref="OrientedImageryViewer"/> is in a state that prevents all use of the control.
     /// This property does not cover image load errors or user prompts when no image is selected.
     /// </summary>
-    public string? ErrorMessage
+    internal string? ErrorMessage
     {
         get => (string?)GetValue(ErrorMessageProperty);
         private set => SetValue(ErrorMessagePropertyKey, value);
@@ -620,12 +622,12 @@ public partial class OrientedImageryViewer
     /// <summary>
     /// Identifies the <see cref="ErrorMessage" /> dependency property.
     /// </summary>
-    public static readonly DependencyProperty ErrorMessageProperty = PropertyHelper.GetProperty(ErrorMessagePropertyKey);
+    internal static readonly DependencyProperty ErrorMessageProperty = PropertyHelper.GetProperty(ErrorMessagePropertyKey);
 
     /// <summary>
     /// Holds temporary error messages that do not prevent normal control usage.
     /// </summary>
-    public string? TransientErrorMessage
+    internal string? TransientErrorMessage
     {
         get => (string?)GetValue(TransientErrorMessageProperty);
         private set => SetValue(TransientErrorMessagePropertyKey, value);
@@ -637,7 +639,7 @@ public partial class OrientedImageryViewer
     /// <summary>
     /// Identifies the <see cref="TransientErrorMessage" /> dependency property.
     /// </summary>
-    public static readonly DependencyProperty TransientErrorMessageProperty = PropertyHelper.GetProperty(TransientErrorMessagePropertyKey);
+    internal static readonly DependencyProperty TransientErrorMessageProperty = PropertyHelper.GetProperty(TransientErrorMessagePropertyKey);
 
     private static void OnTransientErrorMessageChanged(object? sender, string? _, string? newValue)
     {
