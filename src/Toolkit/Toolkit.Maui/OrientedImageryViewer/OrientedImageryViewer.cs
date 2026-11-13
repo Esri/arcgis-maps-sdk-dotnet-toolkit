@@ -175,12 +175,12 @@ public partial class OrientedImageryViewer : TemplatedView
     /// <summary>
     /// Identifies the <see cref="ErrorMessage"/> bindable property.
     /// </summary>
-    public static readonly BindableProperty ErrorMessageProperty = ErrorMessagePropertyKey.BindableProperty;
+    internal static readonly BindableProperty ErrorMessageProperty = ErrorMessagePropertyKey.BindableProperty;
 
     /// <summary>
     /// Gets the current error or status message.
     /// </summary>
-    public string? ErrorMessage
+    internal string? ErrorMessage
     {
         get => (string?)GetValue(ErrorMessageProperty);
         private set => SetValue(ErrorMessagePropertyKey, value);
@@ -189,7 +189,7 @@ public partial class OrientedImageryViewer : TemplatedView
     /// <summary>
     /// Gets the temporary error message that does not prevent normal control usage.
     /// </summary>
-    public string? TransientErrorMessage
+    internal string? TransientErrorMessage
     {
         get => (string?)GetValue(TransientErrorMessageProperty);
         private set => SetValue(TransientErrorMessagePropertyKey, value);
@@ -202,7 +202,7 @@ public partial class OrientedImageryViewer : TemplatedView
     /// <summary>
     /// Identifies the <see cref="TransientErrorMessage"/> bindable property.
     /// </summary>
-    public static readonly BindableProperty TransientErrorMessageProperty = TransientErrorMessagePropertyKey.BindableProperty;
+    internal static readonly BindableProperty TransientErrorMessageProperty = TransientErrorMessagePropertyKey.BindableProperty;
 
     #endregion
 
