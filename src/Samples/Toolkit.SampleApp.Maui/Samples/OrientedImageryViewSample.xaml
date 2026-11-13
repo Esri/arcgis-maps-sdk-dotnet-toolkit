@@ -6,11 +6,11 @@
              x:Class="Toolkit.SampleApp.Maui.Samples.OrientedImageryViewSample">
     <Grid RowDefinitions="Auto,Auto,*" RowSpacing="0">
         <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="8" Padding="8">
-            <Label Text="{internal:LocalizedString Key=OrientedImageryViewSelectLayer}"
+            <Label Text="{internal:LocalizedString Key=OrientedImageryViewerSelectLayer}"
                    VerticalOptions="Center" />
             <Picker x:Name="LayerPicker" Grid.Column="1"
-                    Title="{OnPlatform Default={internal:LocalizedString Key=OrientedImageryViewSelectLayer}, WinUI={x:Null}}"
-                    SemanticProperties.Description="{internal:LocalizedString Key=OrientedImageryViewSelectLayer}"
+                    Title="{OnPlatform Default={internal:LocalizedString Key=OrientedImageryViewerSelectLayer}, WinUI={x:Null}}"
+                    SemanticProperties.Description="{internal:LocalizedString Key=OrientedImageryViewerSelectLayer}"
                     AutomationId="SampleOrientedImageryLayerPicker"
                     SelectedIndexChanged="LayerSelected" />
             <Button Grid.Column="2"
@@ -25,12 +25,12 @@
             <Grid>
                 <Grid x:Name="GeoViewContainer" />
                 <Button x:Name="OpenButton"
-                        Text="{internal:LocalizedString Key=OrientedImageryViewOpen}"
+                        Text="{internal:LocalizedString Key=OrientedImageryViewerOpen}"
                         AutomationId="OpenOrientedImagery"
                         HorizontalOptions="End" VerticalOptions="Start"
                         Margin="8" Clicked="OpenClicked" />
                 <Button x:Name="CloseButton"
-                        Text="{internal:LocalizedString Key=OrientedImageryViewClose}"
+                        Text="{internal:LocalizedString Key=OrientedImageryViewerClose}"
                         AutomationId="CloseOrientedImagery"
                         HorizontalOptions="End" VerticalOptions="Start"
                         Margin="8" IsVisible="False" Clicked="CloseClicked" />

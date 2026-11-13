@@ -62,7 +62,7 @@ public class ToolbarCategory
     }
 
     /// <summary>
-    /// The collection of toolbar items to be displayed in the <see cref="OrientedImageryViewer"/> connected to the containing
+    /// The collection of toolbar items to be displayed in the oriented imagery viewer connected to the containing
     /// <see cref="OrientedImageryViewerModel"/>.
     /// </summary>
     /// <remarks>
@@ -92,7 +92,7 @@ public class ToolbarCategory
 }
 
 /// <summary>
-/// Base class for view models backing the toolbar controls of an <see cref="OrientedImageryViewer"/>.
+/// Base class for view models backing the toolbar controls of an oriented imagery viewer.
 /// </summary>
 /// <remarks>
 /// <para>
@@ -156,7 +156,7 @@ public abstract class ToolbarItemBase : INotifyPropertyChanged
 }
 
 /// <summary>
-/// View model for the "Allow Adding Markers" toolbar control in the <see cref="OrientedImageryViewer"/>.
+/// View model for the "Allow Adding Markers" toolbar control in the oriented imagery viewer.
 /// </summary>
 internal class AllowAddingMarkersVM : ToolbarItemBase
 {
@@ -207,7 +207,7 @@ internal class AllowAddingMarkersVM : ToolbarItemBase
 }
 
 /// <summary>
-/// View model for the image search mode toolbar control in the <see cref="OrientedImageryViewer"/>.
+/// View model for the image search mode toolbar control in the oriented imagery viewer.
 /// </summary>
 internal class ImageSearchModeVM : ToolbarItemBase
 {
@@ -295,7 +295,7 @@ internal class ImageSearchModeVM : ToolbarItemBase
 }
 
 /// <summary>
-/// View model for the "Show Selected Footprint" toolbar control in the <see cref="OrientedImageryViewer"/>.
+/// View model for the "Show Selected Footprint" toolbar control in the oriented imagery viewer.
 /// </summary>
 internal class ShowSelectedFootprintVM : ToolbarItemBase
 {
@@ -324,17 +324,17 @@ internal class ShowSelectedFootprintVM : ToolbarItemBase
 }
 
 /// <summary>
-/// View model for the "Show Unselected Footprints" toolbar control in the <see cref="OrientedImageryViewer"/>.
+/// View model for the "Show Unselected Footprints" toolbar control in the oriented imagery viewer.
 /// </summary>
 internal class ShowUnselectedFootprintsVM : ToolbarItemBase { }
 
 /// <summary>
-/// View model for the "Show Camera Markers" toolbar control in the <see cref="OrientedImageryViewer"/>.
+/// View model for the "Show Camera Markers" toolbar control in the oriented imagery viewer.
 /// </summary>
 internal class ShowCameraMarkersVM : ToolbarItemBase { }
 
 /// <summary>
-/// View model for the "Clear Markers" toolbar control in the <see cref="OrientedImageryViewer"/>.
+/// View model for the "Clear Markers" toolbar control in the oriented imagery viewer.
 /// </summary>
 internal class ClearMarkersVM : ToolbarItemBase { }
 
@@ -344,7 +344,7 @@ internal class ClearMarkersVM : ToolbarItemBase { }
 internal class ToolbarDividerVM : ToolbarItemBase { }
 
 /// <summary>
-/// View model for the sequential navigation toolbar control in the <see cref="OrientedImageryViewer"/>.
+/// View model for the sequential navigation toolbar control in the oriented imagery viewer.
 /// </summary>
 internal class SequentialNavigationVM : ToolbarItemBase
 {
@@ -378,8 +378,8 @@ internal class SequentialNavigationVM : ToolbarItemBase
 }
 
 /// <summary>
-/// View model for the "Select New Marker Symbol" toolbar control in the <see cref="OrientedImageryViewer"/>.
-/// This control allows the user to select a marker symbol to be used for new markers in the <see cref="OrientedImageryViewer"/>.
+/// View model for the "Select New Marker Symbol" toolbar control in the oriented imagery viewer.
+/// This control allows the user to select a marker symbol to be used for new markers in the oriented imagery viewer.
 /// </summary>
 internal class SelectNewMarkerSymbolVM : ToolbarItemBase
 {

@@ -14,7 +14,7 @@ public partial class OrientedImageryView
 #endif
         foreach (var state in mode.ImageSearchModes)
         {
-            bool search = state == OrientedImageryViewInteractionState.FindImages;
+            bool search = state == OrientedImageryViewerInteractionState.FindImages;
             string title = Text(search ? "ImageSearchModeFind" : "ImageSearchModeDisplay");
             var action = GuardAction(new MenuAction(title, () => ToggleImageMode(mode, state),
                 Icon: () => ImageModeIcon(search),

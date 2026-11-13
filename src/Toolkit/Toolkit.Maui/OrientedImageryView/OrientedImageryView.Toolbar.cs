@@ -10,7 +10,7 @@ public partial class OrientedImageryView
 {
     #region Toolbar state and interaction modes
 
-    private readonly HashSet<OrientedImageryToolbarCategory> _toolbarCategories = new();
+    private readonly HashSet<ToolbarCategory> _toolbarCategories = new();
     // Keep the last image mode even if an app removes all ImageSearchModeVM items.
     private bool _imageSearchEnabled = true;
     private int _toolbarRevision;
@@ -20,14 +20,14 @@ public partial class OrientedImageryView
 
     internal bool ImageSearchEnabled => ViewModel.InteractionState switch
     {
-        OrientedImageryViewInteractionState.FindImages => true,
-        OrientedImageryViewInteractionState.DisplayImage => false,
+        OrientedImageryViewerInteractionState.FindImages => true,
+        OrientedImageryViewerInteractionState.DisplayImage => false,
         _ => _imageSearchEnabled,
     };
 
-    internal bool IsAddingMarkers => ViewModel.InteractionState == OrientedImageryViewInteractionState.AddMarkers;
+    internal bool IsAddingMarkers => ViewModel.InteractionState == OrientedImageryViewerInteractionState.AddMarkers;
 
-    internal static void ToggleImageMode(ImageSearchModeVM mode, OrientedImageryViewInteractionState state)
+    internal static void ToggleImageMode(ImageSearchModeVM mode, OrientedImageryViewerInteractionState state)
     {
         if (mode.IsImageSelectionEnabled && mode.SelectedInteractionState == state)
             mode.IsImageSelectionEnabled = false;
@@ -41,8 +41,8 @@ public partial class OrientedImageryView
     internal void SetAddingMarkers(bool enabled)
     {
         _imageSearchEnabled = ImageSearchEnabled;
-        ViewModel.InteractionState = enabled ? OrientedImageryViewInteractionState.AddMarkers :
-            OrientedImageryViewInteractionState.None;
+        ViewModel.InteractionState = enabled ? OrientedImageryViewerInteractionState.AddMarkers :
+            OrientedImageryViewerInteractionState.None;
     }
 
     #endregion
@@ -99,14 +99,14 @@ public partial class OrientedImageryView
         _renderedToolbarRevision = -1;
     }
 
-    private static bool IsBuiltInToolbarItem(OrientedImageryToolbarItemBase item) =>
+    private static bool IsBuiltInToolbarItem(ToolbarItemBase item) =>
         item is ImageSearchModeVM or ShowSelectedFootprintVM or ShowUnselectedFootprintsVM or ShowCameraMarkersVM or
             AllowAddingMarkersVM or SelectNewMarkerSymbolVM or ClearMarkersVM or SequentialNavigationVM or ToolbarDividerVM;
 
     private View? CreateCustomToolbarView(object item)
     {
         var template = ToolbarItemTemplateSelector?.SelectTemplate(item, this);
-        if (template == null || template == OrientedImageryViewToolbarSelector.DefaultTemplate)
+        if (template == null || template == ToolbarSelector.DefaultTemplate)
             return null;
         if (template.CreateContent() is not View view)
             throw new InvalidOperationException("An oriented imagery toolbar template must create a MAUI View.");
@@ -122,7 +122,7 @@ public partial class OrientedImageryView
         {
             // Rebuild only when toolbar items or templates change.
             ReleaseToolbarPresentation();
-            if ((ToolbarItemTemplateSelector as OrientedImageryViewToolbarSelector)?.SelectionPairs is INotifyCollectionChanged entries)
+            if ((ToolbarItemTemplateSelector as ToolbarSelector)?.SelectionPairs is INotifyCollectionChanged entries)
             {
                 entries.CollectionChanged += SelectorEntriesChanged;
                 _toolbarCleanup.Add(() => entries.CollectionChanged -= SelectorEntriesChanged);
@@ -142,10 +142,10 @@ public partial class OrientedImageryView
 
     #region Category presentation
 
-    private bool IsToolbarItemVisible(OrientedImageryToolbarItemBase item) =>
+    private bool IsToolbarItemVisible(ToolbarItemBase item) =>
         item is not SequentialNavigationVM || ViewModel.SupportsSequentialNavigation;
 
-    private View CreateToolbarCategory(OrientedImageryToolbarCategory category)
+    private View CreateToolbarCategory(ToolbarCategory category)
     {
 #if WINDOWS
         var group = new HorizontalStackLayout();
@@ -179,10 +179,10 @@ public partial class OrientedImageryView
         return group;
 #else
         var key = category.Name;
-        bool navigation = key == OrientedImageryToolbarCategory.MoreCategoryName &&
+        bool navigation = key == ToolbarCategory.MoreCategoryName &&
             category.ToolbarItems.Count == 1 && category.ToolbarItems[0] is SequentialNavigationVM;
-        bool known = key is OrientedImageryToolbarCategory.ModeCategoryName or OrientedImageryToolbarCategory.OverlaysCategoryName or
-            OrientedImageryToolbarCategory.MarkersCategoryName or OrientedImageryToolbarCategory.MoreCategoryName;
+        bool known = key is ToolbarCategory.ModeCategoryName or ToolbarCategory.OverlaysCategoryName or
+            ToolbarCategory.MarkersCategoryName or ToolbarCategory.MoreCategoryName;
         var cell = new Grid { MinimumWidthRequest = 44, MinimumHeightRequest = 44 };
         Layout content =
 #if __IOS__
@@ -192,9 +192,9 @@ public partial class OrientedImageryView
 #endif
         var icon = MainMenuIcon(navigation ? GeometryIcon(SequenceGeometry) : key switch
         {
-            OrientedImageryToolbarCategory.ModeCategoryName => ImageModeIcon(ImageSearchEnabled),
-            OrientedImageryToolbarCategory.OverlaysCategoryName => GeometryIcon(OverlayGeometry),
-            OrientedImageryToolbarCategory.MarkersCategoryName => new Label
+            ToolbarCategory.ModeCategoryName => ImageModeIcon(ImageSearchEnabled),
+            ToolbarCategory.OverlaysCategoryName => GeometryIcon(OverlayGeometry),
+            ToolbarCategory.MarkersCategoryName => new Label
             {
                 Text = "\uE8ED", FontFamily = ToolkitIcons.FontFamilyName, FontSize = 16,
                 FontAttributes = FontAttributes.Bold,
@@ -204,7 +204,7 @@ public partial class OrientedImageryView
             _ => new Label { Text = "\u2022\u2022\u2022", FontAutoScalingEnabled = false, TextColor = Color.FromArgb("#007AC2") },
         });
         icon.WidthRequest = icon.HeightRequest = navigation ? 14 : 16;
-        if (key == OrientedImageryToolbarCategory.MarkersCategoryName)
+        if (key == ToolbarCategory.MarkersCategoryName)
             icon.HeightRequest = 22;
         var iconHost = new Grid { WidthRequest = icon.WidthRequest, HeightRequest = icon.HeightRequest };
         iconHost.Add(icon);
@@ -235,7 +235,7 @@ public partial class OrientedImageryView
         cell.MinimumHeightRequest = 60;
         icon.WidthRequest = icon.HeightRequest = 22;
         iconHost.WidthRequest = iconHost.HeightRequest = 22;
-        if (key == OrientedImageryToolbarCategory.MarkersCategoryName && icon is Label markerIcon)
+        if (key == ToolbarCategory.MarkersCategoryName && icon is Label markerIcon)
         {
             markerIcon.FontSize = 22;
             icon.HeightRequest = iconHost.HeightRequest = 28;
@@ -255,7 +255,7 @@ public partial class OrientedImageryView
             MinimumWidthRequest = 44, MinimumHeightRequest = cell.MinimumHeightRequest,
             AutomationId = "OrientedImagery" + (navigation ? "Navigation" : key),
         };
-        SemanticProperties.SetDescription(button, key == OrientedImageryToolbarCategory.ModeCategoryName ? Text("ImageSearchMode") : label.Text);
+        SemanticProperties.SetDescription(button, key == ToolbarCategory.ModeCategoryName ? Text("ImageSearchMode") : label.Text);
         cell.Add(pill);
         cell.Add(button);
         button.Clicked += (_, _) =>
@@ -270,16 +270,16 @@ public partial class OrientedImageryView
         {
             cell.IsVisible = category.ToolbarItems.Any(item => item is not ToolbarDividerVM && IsToolbarItemVisible(item));
             button.IsEnabled = HasLayer && !_searching;
-            bool active = (key == OrientedImageryToolbarCategory.ModeCategoryName &&
-                    ViewModel.InteractionState is OrientedImageryViewInteractionState.FindImages or OrientedImageryViewInteractionState.DisplayImage) ||
-                (key == OrientedImageryToolbarCategory.MarkersCategoryName && IsAddingMarkers) ||
-                (key == OrientedImageryToolbarCategory.MoreCategoryName && ViewModel.IsSequentialNavigationEnabled);
+            bool active = (key == ToolbarCategory.ModeCategoryName &&
+                    ViewModel.InteractionState is OrientedImageryViewerInteractionState.FindImages or OrientedImageryViewerInteractionState.DisplayImage) ||
+                (key == ToolbarCategory.MarkersCategoryName && IsAddingMarkers) ||
+                (key == ToolbarCategory.MoreCategoryName && ViewModel.IsSequentialNavigationEnabled);
 #if ANDROID || __IOS__
-            if (key == OrientedImageryToolbarCategory.OverlaysCategoryName)
+            if (key == ToolbarCategory.OverlaysCategoryName)
                 active = ViewModel.ShowSelectedFootprint || ViewModel.ShowUnselectedFootprints || ViewModel.ShowCameraLocations;
 #endif
             pill.Opacity = button.IsEnabled ? 1 : 0.45;
-            bool modeChanged = key == OrientedImageryToolbarCategory.ModeCategoryName && previousSearch != ImageSearchEnabled;
+            bool modeChanged = key == ToolbarCategory.ModeCategoryName && previousSearch != ImageSearchEnabled;
             if (modeChanged)
             {
                 iconHost.Clear();
@@ -308,14 +308,14 @@ public partial class OrientedImageryView
                     pill.SetAppThemeColor(BackgroundColorProperty, Color.FromArgb("#E5E5EA"), Color.FromArgb("#3A3A3C"));
 #endif
             }
-            if (key == OrientedImageryToolbarCategory.ModeCategoryName)
+            if (key == ToolbarCategory.ModeCategoryName)
                 SemanticProperties.SetHint(button, $"{Text(ImageSearchEnabled ? "ImageSearchModeFind" : "ImageSearchModeDisplay")}, {Text(active ? "On" : "Off")}");
-            else if (key == OrientedImageryToolbarCategory.MarkersCategoryName)
+            else if (key == ToolbarCategory.MarkersCategoryName)
                 SemanticProperties.SetHint(button, Text(IsAddingMarkers ? "On" : "Off"));
             else if (navigation)
                 SemanticProperties.SetHint(button, Text(ViewModel.IsSequentialNavigationEnabled ? "On" : "Off"));
 #if ANDROID || __IOS__
-            else if (key == OrientedImageryToolbarCategory.OverlaysCategoryName)
+            else if (key == ToolbarCategory.OverlaysCategoryName)
                 SemanticProperties.SetHint(button, Text(active ? "On" : "Off"));
 #endif
             previousActive = active;
@@ -369,15 +369,15 @@ public partial class OrientedImageryView
 
     #region Mobile toolbar options
 
-    private void ShowToolbarCategory(OrientedImageryToolbarCategory category, View anchor, string title)
+    private void ShowToolbarCategory(ToolbarCategory category, View anchor, string title)
     {
         DismissPanel(preservePresentation: true);
 #if ANDROID || __IOS__
         title = category.Name switch
         {
-            OrientedImageryToolbarCategory.ModeCategoryName => Text("ModeSelection"),
-            OrientedImageryToolbarCategory.OverlaysCategoryName => Text("OverlaysSelection"),
-            OrientedImageryToolbarCategory.MarkersCategoryName => Text("MarkerTools"),
+            ToolbarCategory.ModeCategoryName => Text("ModeSelection"),
+            ToolbarCategory.OverlaysCategoryName => Text("OverlaysSelection"),
+            ToolbarCategory.MarkersCategoryName => Text("MarkerTools"),
             _ => title,
         };
 #endif
@@ -393,7 +393,7 @@ public partial class OrientedImageryView
         PresentPanel(anchor, panel);
     }
 
-    private void AddMobileToolbarItem(VerticalStackLayout content, OrientedImageryToolbarItemBase item, View anchor, Action back)
+    private void AddMobileToolbarItem(VerticalStackLayout content, ToolbarItemBase item, View anchor, Action back)
     {
         bool Enabled() => HasLayer && !_searching;
         switch (item)
@@ -404,7 +404,7 @@ public partial class OrientedImageryView
 #else
                 foreach (var state in mode.ImageSearchModes)
                 {
-                    bool search = state == OrientedImageryViewInteractionState.FindImages;
+                    bool search = state == OrientedImageryViewerInteractionState.FindImages;
                     AddActionRow(content, new MenuAction(Text(search ? "ImageSearchModeFind" : "ImageSearchModeDisplay"),
                         () => ToggleImageMode(mode, state), Icon: () => ImageModeIcon(search),
                         Checked: () => ViewModel.InteractionState == state, Enabled: Enabled));

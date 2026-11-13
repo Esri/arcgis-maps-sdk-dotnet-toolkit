@@ -17,8 +17,8 @@ internal sealed class OrientedImageryPaginationViewHandler : ContentViewHandler
         IsAccessibilityElement = true,
         AccessibilityRespondsToUserInteraction = true,
         AccessibilityTraits = UIAccessibilityTrait.Adjustable,
-        AccessibilityLabel = Properties.Resources.GetString("OrientedImageryViewImageNavigation"),
-        AccessibilityHint = Properties.Resources.GetString("OrientedImageryViewImageNavigationHint"),
+        AccessibilityLabel = Properties.Resources.GetString("OrientedImageryViewerImageNavigation"),
+        AccessibilityHint = Properties.Resources.GetString("OrientedImageryViewerImageNavigationHint"),
         AccessibilityValue = ((OrientedImageryPaginationView)VirtualView).Value,
     };
 

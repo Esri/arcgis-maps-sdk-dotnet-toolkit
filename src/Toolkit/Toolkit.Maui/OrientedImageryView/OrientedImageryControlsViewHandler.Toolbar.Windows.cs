@@ -21,7 +21,7 @@ internal sealed partial class OrientedImageryControlsViewHandler
 {
     #region Toolbar state
 
-    private OrientedImageryToolbarItemBase? _item;
+    private ToolbarItemBase? _item;
     private bool _updating;
     private readonly List<TextBlock> _captions = [];
     private readonly List<ToolbarComboBox> _toolbarSelectors = [];
@@ -30,7 +30,7 @@ internal sealed partial class OrientedImageryControlsViewHandler
 
     #region Toolbar controls
 
-    private void RefreshToolbar(OrientedImageryView owner, OrientedImageryToolbarItemBase item)
+    private void RefreshToolbar(OrientedImageryView owner, ToolbarItemBase item)
     {
         var model = owner.ViewModel;
         if (_model != model || _item != item)
@@ -230,7 +230,7 @@ internal sealed partial class OrientedImageryControlsViewHandler
         Describe(dropdown, "ImageSearchMode", "OrientedImageryDesktopModeDropdown");
         foreach (var state in mode.ImageSearchModes)
         {
-            bool search = state == OrientedImageryViewInteractionState.FindImages;
+            bool search = state == OrientedImageryViewerInteractionState.FindImages;
             string key = search ? "ImageSearchModeFind" : "ImageSearchModeDisplay";
             var content = new StackPanel { Orientation = Microsoft.UI.Xaml.Controls.Orientation.Horizontal, Spacing = 8 };
             content.Children.Add(new Viewbox { Width = 24, Height = 24, Child = ImageModeIcon(search) });
@@ -259,7 +259,7 @@ internal sealed partial class OrientedImageryControlsViewHandler
                 e.Key is Windows.System.VirtualKey.Enter or Windows.System.VirtualKey.Space &&
                 FocusManager.GetFocusedElement(dropdown.XamlRoot) is ComboBoxItem
                 {
-                    IsSelected: true, Tag: OrientedImageryViewInteractionState state,
+                    IsSelected: true, Tag: OrientedImageryViewerInteractionState state,
                 })
             {
                 e.Handled = true;
@@ -270,7 +270,7 @@ internal sealed partial class OrientedImageryControlsViewHandler
         dropdown.SelectionChanged += (_, _) =>
         {
             if (!_updating && dropdown.IsEnabled &&
-                dropdown.SelectedItem is ComboBoxItem { Tag: OrientedImageryViewInteractionState state })
+                dropdown.SelectedItem is ComboBoxItem { Tag: OrientedImageryViewerInteractionState state })
             {
                 selectionChangedWhileOpen = dropdown.IsDropDownOpen;
                 OrientedImageryView.ToggleImageMode(mode, state);
@@ -279,7 +279,7 @@ internal sealed partial class OrientedImageryControlsViewHandler
         bool? previous = null;
         _updates.Add(() =>
         {
-            bool search = mode.SelectedInteractionState == OrientedImageryViewInteractionState.FindImages;
+            bool search = mode.SelectedInteractionState == OrientedImageryViewerInteractionState.FindImages;
             if (previous != search)
             {
                 Describe(button, search ? "ImageSearchModeFind" : "ImageSearchModeDisplay", "OrientedImageryDesktopMode");
@@ -292,7 +292,7 @@ internal sealed partial class OrientedImageryControlsViewHandler
                 ((IView)VirtualView).InvalidateMeasure();
             }
             dropdown.SelectedItem = mode.IsImageSelectionEnabled ? dropdown.Items.OfType<ComboBoxItem>()
-                .FirstOrDefault(item => item.Tag is OrientedImageryViewInteractionState state && state == mode.SelectedInteractionState) : null;
+                .FirstOrDefault(item => item.Tag is OrientedImageryViewerInteractionState state && state == mode.SelectedInteractionState) : null;
             button.IsEnabled = owner.DesktopHasLayer;
             dropdown.IsEnabled = button.IsEnabled;
             button.IsChecked = mode.IsImageSelectionEnabled;

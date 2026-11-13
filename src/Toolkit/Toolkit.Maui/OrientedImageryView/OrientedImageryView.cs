@@ -13,7 +13,7 @@ public partial class OrientedImageryView : TemplatedView
     #region State
 
     private GeoView? _connectedGeoView;
-    private OrientedImageryViewModel? _connectedModel;
+    private OrientedImageryViewerModel? _connectedModel;
     private OrientedImageryLayer? _observedLayer;
     private int _operationVersion;
     private int _layerVersion;
@@ -35,25 +35,25 @@ public partial class OrientedImageryView : TemplatedView
     /// Raised when a tap is registered on the displayed image.
     /// </summary>
     /// <remarks>
-    /// Set <see cref="OrientedImageryViewImageTappedArgs.Handled"/> to <c>true</c> before awaiting asynchronous work to override the default tap behavior.
+    /// Set <see cref="OrientedImageryViewerImageTappedArgs.Handled"/> to <c>true</c> before awaiting asynchronous work to override the default tap behavior.
     /// Toolkit-managed marker hits expose <see cref="OrientedImageTappedEventArgs.Marker"/> as <c>null</c>.
     /// </remarks>
-    public event EventHandler<OrientedImageryViewImageTappedArgs>? ImageTapped;
+    public event EventHandler<OrientedImageryViewerImageTappedArgs>? ImageTapped;
 
     /// <summary>
     /// Raised when a tap is registered on the connected <see cref="GeoView"/>.
     /// </summary>
     /// <remarks>
-    /// Set <see cref="OrientedImageryViewGeoViewTappedArgs.Handled"/> to <c>true</c> before awaiting asynchronous work to override the default tap behavior.
+    /// Set <see cref="OrientedImageryViewerGeoViewTappedArgs.Handled"/> to <c>true</c> before awaiting asynchronous work to override the default tap behavior.
     /// </remarks>
-    public event EventHandler<OrientedImageryViewGeoViewTappedArgs>? GeoViewTapped;
+    public event EventHandler<OrientedImageryViewerGeoViewTappedArgs>? GeoViewTapped;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="OrientedImageryView"/> class.
     /// </summary>
     public OrientedImageryView()
     {
-        ViewModel = new OrientedImageryViewModel();
+        ViewModel = new OrientedImageryViewerModel();
         this.SetAppThemeColor(ThemeImageBackgroundProperty, Colors.White, Color.FromArgb("#202020"));
         ControlTemplate = DefaultControlTemplate;
         SizeChanged += (_, _) => Refresh();
@@ -69,7 +69,7 @@ public partial class OrientedImageryView : TemplatedView
     /// </summary>
     /// <remarks>
     /// Setting <see cref="GeoView"/> to <c>null</c> detaches the marker overlay and viewer presentation
-    /// and sets <see cref="OrientedImageryViewModel.OrientedImageryLayer"/> on <see cref="ViewModel"/> to <c>null</c>,
+    /// and sets <see cref="OrientedImageryViewerModel.OrientedImageryLayer"/> on <see cref="ViewModel"/> to <c>null</c>,
     /// clearing its images, footprints, and markers.
     /// The application manages layer loading, map or scene membership, visibility, and viewpoint.
     /// </remarks>
@@ -96,11 +96,11 @@ public partial class OrientedImageryView : TemplatedView
     /// Gets or sets the view model for the oriented imagery view.
     /// </summary>
     /// <remarks>
-    /// Set <see cref="OrientedImageryViewModel.OrientedImageryLayer"/> on the view model to select a layer.
+    /// Set <see cref="OrientedImageryViewerModel.OrientedImageryLayer"/> on the view model to select a layer.
     /// </remarks>
-    public OrientedImageryViewModel ViewModel
+    public OrientedImageryViewerModel ViewModel
     {
-        get => (OrientedImageryViewModel)GetValue(ViewModelProperty);
+        get => (OrientedImageryViewerModel)GetValue(ViewModelProperty);
         set => SetValue(ViewModelProperty, value);
     }
 
@@ -108,8 +108,8 @@ public partial class OrientedImageryView : TemplatedView
     /// Identifies the <see cref="ViewModel"/> bindable property.
     /// </summary>
     public static readonly BindableProperty ViewModelProperty = BindableProperty.Create(
-        nameof(ViewModel), typeof(OrientedImageryViewModel), typeof(OrientedImageryView), null,
-        validateValue: (_, value) => value is OrientedImageryViewModel,
+        nameof(ViewModel), typeof(OrientedImageryViewerModel), typeof(OrientedImageryView), null,
+        validateValue: (_, value) => value is OrientedImageryViewerModel,
         propertyChanged: (s, _, _) =>
         {
             var view = (OrientedImageryView)s;
@@ -154,7 +154,7 @@ public partial class OrientedImageryView : TemplatedView
     /// <summary>
     /// Gets or sets the template selector for toolbar categories and their items.
     /// </summary>
-    /// <remarks>Templates apply to <see cref="OrientedImageryViewModel.ToolbarCategories"/> and their <see cref="OrientedImageryToolbarCategory.ToolbarItems"/>.</remarks>
+    /// <remarks>Templates apply to <see cref="OrientedImageryViewerModel.ToolbarCategories"/> and their <see cref="ToolbarCategory.ToolbarItems"/>.</remarks>
     public DataTemplateSelector? ToolbarItemTemplateSelector
     {
         get => (DataTemplateSelector?)GetValue(ToolbarItemTemplateSelectorProperty);
@@ -337,29 +337,29 @@ public partial class OrientedImageryView : TemplatedView
     {
         switch (e.PropertyName)
         {
-            case nameof(OrientedImageryViewModel.OrientedImageryLayer):
+            case nameof(OrientedImageryViewerModel.OrientedImageryLayer):
                 DispatchUpdate(() =>
                 {
                     HasSearchedForImages = false;
                     ChangeLayer();
                 });
                 break;
-            case nameof(OrientedImageryViewModel.SearchPoint):
-            case nameof(OrientedImageryViewModel.SelectedImage):
+            case nameof(OrientedImageryViewerModel.SearchPoint):
+            case nameof(OrientedImageryViewerModel.SelectedImage):
                 DispatchUpdate(() =>
                 {
                     Refresh();
                     _ = LookAtSearchPointAsync();
                 });
                 break;
-            case nameof(OrientedImageryViewModel.InteractionState):
+            case nameof(OrientedImageryViewerModel.InteractionState):
                 DispatchUpdate(() =>
                 {
                     CancelOperation();
                     Refresh();
                 });
                 break;
-            case nameof(OrientedImageryViewModel.SequentialNavigationError):
+            case nameof(OrientedImageryViewerModel.SequentialNavigationError):
                 var message = ViewModel.SequentialNavigationError?.Message;
                 DispatchUpdate(() =>
                 {
@@ -416,7 +416,7 @@ public partial class OrientedImageryView : TemplatedView
         if (!_connected)
             return;
         int layerVersion = _layerVersion;
-        var eventArgs = new OrientedImageryViewGeoViewTappedArgs(e);
+        var eventArgs = new OrientedImageryViewerGeoViewTappedArgs(e);
         GeoViewTapped?.Invoke(this, eventArgs);
         if (eventArgs.Handled || !_connected || layerVersion != _layerVersion)
             return;
@@ -427,12 +427,12 @@ public partial class OrientedImageryView : TemplatedView
         if (geoView == null || layer == null || e.Location == null)
             return;
         TransientErrorMessage = null;
-        if (model.InteractionState == OrientedImageryViewInteractionState.AddMarkers)
+        if (model.InteractionState == OrientedImageryViewerInteractionState.AddMarkers)
         {
             model.AddMarkerLocation(e.Location);
             return;
         }
-        if (model.InteractionState == OrientedImageryViewInteractionState.None)
+        if (model.InteractionState == OrientedImageryViewerInteractionState.None)
             return;
 
         CancelOperation();
@@ -442,7 +442,7 @@ public partial class OrientedImageryView : TemplatedView
         try
         {
             IReadOnlyList<OrientedImage> images;
-            if (model.InteractionState == OrientedImageryViewInteractionState.FindImages)
+            if (model.InteractionState == OrientedImageryViewerInteractionState.FindImages)
             {
                 images = await layer.SearchImagesAsync(e.Location, new OrientedImageSearchParameters { MaxResults = -1 });
             }
@@ -458,7 +458,7 @@ public partial class OrientedImageryView : TemplatedView
 
             if (version == _operationVersion && layer == model.OrientedImageryLayer && geoView == GeoView && model == ViewModel)
             {
-                bool explore = model.InteractionState == OrientedImageryViewInteractionState.FindImages;
+                bool explore = model.InteractionState == OrientedImageryViewerInteractionState.FindImages;
                 model.SetImages(images, explore || images.Count == 0 ? e.Location : null);
                 model.SelectedImage = images.FirstOrDefault();
                 if (explore)
@@ -489,20 +489,20 @@ public partial class OrientedImageryView : TemplatedView
         if (!_connected)
             return;
         int layerVersion = _layerVersion;
-        var eventArgs = new OrientedImageryViewImageTappedArgs(ViewModel.GetPublicImageTappedEventArgs(e));
+        var eventArgs = new OrientedImageryViewerImageTappedArgs(ViewModel.GetPublicImageTappedEventArgs(e));
         ImageTapped?.Invoke(this, eventArgs);
         if (eventArgs.Handled || !_connected || layerVersion != _layerVersion)
             return;
         var model = ViewModel;
         var layer = model.OrientedImageryLayer;
         int version = _operationVersion;
-        if (model.InteractionState != OrientedImageryViewInteractionState.AddMarkers || e.Marker != null || _viewport?.IsInteractive != true)
+        if (model.InteractionState != OrientedImageryViewerInteractionState.AddMarkers || e.Marker != null || _viewport?.IsInteractive != true)
             return;
         TransientErrorMessage = null;
         try
         {
             var location = await e.Image.ImageToLocationAsync(e.ImagePoint);
-            if (_connected && version == _operationVersion && model == ViewModel && layer == model.OrientedImageryLayer && e.Image == model.SelectedImage && model.InteractionState == OrientedImageryViewInteractionState.AddMarkers)
+            if (_connected && version == _operationVersion && model == ViewModel && layer == model.OrientedImageryLayer && e.Image == model.SelectedImage && model.InteractionState == OrientedImageryViewerInteractionState.AddMarkers)
                 model.AddMarkerLocation(location);
         }
         catch (Exception ex)

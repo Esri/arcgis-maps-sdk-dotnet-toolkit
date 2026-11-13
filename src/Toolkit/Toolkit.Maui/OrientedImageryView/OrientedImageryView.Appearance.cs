@@ -76,7 +76,7 @@ public partial class OrientedImageryView
 
     #region Labels and template construction
 
-    private static string Text(string key) => Properties.Resources.GetString("OrientedImageryView" + key);
+    private static string Text(string key) => Properties.Resources.GetString("OrientedImageryViewer" + key);
 
     private static readonly ControlTemplate DefaultControlTemplate = new(() =>
     {
@@ -724,8 +724,8 @@ public partial class OrientedImageryView
 
     private string RefreshSelectionGuidance()
     {
-        bool find = ViewModel.InteractionState == OrientedImageryViewInteractionState.FindImages;
-        bool display = ViewModel.InteractionState == OrientedImageryViewInteractionState.DisplayImage;
+        bool find = ViewModel.InteractionState == OrientedImageryViewerInteractionState.FindImages;
+        bool display = ViewModel.InteractionState == OrientedImageryViewerInteractionState.DisplayImage;
         if (_selectionInstruction != null)
         {
             _selectionInstruction.Text = Text(find ? "ImageSelectionFindImages" :

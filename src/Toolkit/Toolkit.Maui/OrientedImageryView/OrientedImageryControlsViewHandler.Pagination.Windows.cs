@@ -61,7 +61,7 @@ internal sealed partial class OrientedImageryControlsViewHandler
         }
     }
 
-    private bool CanUsePagination(OrientedImageryView owner, OrientedImageryViewModel model) =>
+    private bool CanUsePagination(OrientedImageryView owner, OrientedImageryViewerModel model) =>
         ((IElementHandler)this).VirtualView is OrientedImageryControlsView view && view.Handler == this &&
         view.Owner == owner && owner.ViewModel == model && !owner.DesktopIsSearching && model.SelectedImage != null;
 

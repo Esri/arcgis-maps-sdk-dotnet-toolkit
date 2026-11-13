@@ -29,7 +29,7 @@ internal sealed class OrientedImageryControlsView : Microsoft.Maui.Controls.View
         }
     }
 
-    public OrientedImageryToolbarItemBase? ToolbarItem { get; init; }
+    public ToolbarItemBase? ToolbarItem { get; init; }
 
     public void Refresh() => (Handler as OrientedImageryControlsViewHandler)?.Refresh();
 }
@@ -38,7 +38,7 @@ internal sealed partial class OrientedImageryControlsViewHandler : ViewHandler<O
 {
     #region Handler state and lifecycle
 
-    private OrientedImageryViewModel? _model;
+    private OrientedImageryViewerModel? _model;
     private readonly List<Action> _updates = [];
     private readonly List<Action> _cleanup = [];
     private FontFamily? _iconFont;

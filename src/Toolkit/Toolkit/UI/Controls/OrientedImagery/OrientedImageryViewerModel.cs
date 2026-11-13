@@ -937,7 +937,7 @@ public class OrientedImageryViewerModel : INotifyPropertyChanged
     private HashSet<ToolbarCategory> _attachedToolbarCategories = new(ReferenceEqualityComparer.Instance);
 
     /// <summary>
-    /// The collection of toolbar categories to be displayed on the containing <see cref="OrientedImageryViewer"/>.
+    /// The collection of toolbar categories to be displayed on the containing oriented imagery viewer.
     /// </summary>
     /// <remarks>
     /// Each toolbar item is an <see cref="ToolbarCategory"/> object with a reference to the containing
@@ -1057,7 +1057,7 @@ public class OrientedImageryViewerModel : INotifyPropertyChanged
 }
 
 /// <summary>
-/// Represents the current interaction state of an <see cref="OrientedImageryViewer"/>.
+/// Represents the current interaction state of an oriented imagery viewer.
 /// </summary>
 public enum OrientedImageryViewerInteractionState
 {
