@@ -1,4 +1,6 @@
 #if ANDROID || __IOS__
+using Esri.ArcGISRuntime.Toolkit.Maui.OrientedImagery;
+
 namespace Esri.ArcGISRuntime.Toolkit.Maui;
 
 public partial class OrientedImageryViewer

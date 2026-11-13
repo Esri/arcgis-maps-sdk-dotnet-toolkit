@@ -2,6 +2,7 @@ using System.ComponentModel;
 using System.Globalization;
 using Esri.ArcGISRuntime.Symbology;
 using Esri.ArcGISRuntime.Toolkit.Maui.Internal;
+using Esri.ArcGISRuntime.Toolkit.Maui.OrientedImagery;
 using Microsoft.Maui.Controls.Internals;
 using Microsoft.Maui.Controls.Shapes;
 using Microsoft.Maui.Layouts;

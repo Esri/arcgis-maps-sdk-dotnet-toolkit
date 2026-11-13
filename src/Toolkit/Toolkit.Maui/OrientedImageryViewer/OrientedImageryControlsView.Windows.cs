@@ -1,5 +1,6 @@
 #if WINDOWS
 using Esri.ArcGISRuntime.Toolkit.Maui.Internal;
+using Esri.ArcGISRuntime.Toolkit.Maui.OrientedImagery;
 using Microsoft.Maui.Handlers;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;

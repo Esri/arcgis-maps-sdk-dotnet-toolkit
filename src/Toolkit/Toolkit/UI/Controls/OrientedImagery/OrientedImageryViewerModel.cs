@@ -24,6 +24,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls;
 
 #if WPF
 using Esri.ArcGISRuntime.Toolkit.UI.Controls.OrientedImagery;
+#elif MAUI
+using Esri.ArcGISRuntime.Toolkit.Maui.OrientedImagery;
 #endif
 #if WPF || MAUI
 /// <summary>

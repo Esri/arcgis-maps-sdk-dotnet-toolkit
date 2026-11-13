@@ -6,7 +6,7 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
 #if MAUI
-namespace Esri.ArcGISRuntime.Toolkit.Maui;
+namespace Esri.ArcGISRuntime.Toolkit.Maui.OrientedImagery;
 #else
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls.OrientedImagery;
 #endif

@@ -1,6 +1,7 @@
 using System.ComponentModel;
 using Esri.ArcGISRuntime.Data;
 using Esri.ArcGISRuntime.Mapping;
+using Esri.ArcGISRuntime.Toolkit.Maui.OrientedImagery;
 using Esri.ArcGISRuntime.UI;
 
 namespace Esri.ArcGISRuntime.Toolkit.Maui;
