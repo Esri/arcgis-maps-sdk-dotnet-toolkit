@@ -2,40 +2,101 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:toolkit="clr-namespace:Esri.ArcGISRuntime.Toolkit.Maui;assembly=Esri.ArcGISRuntime.Toolkit.Maui"
-             xmlns:internal="clr-namespace:Esri.ArcGISRuntime.Toolkit.Internal;assembly=Esri.ArcGISRuntime.Toolkit.Maui"
+             xmlns:oi="clr-namespace:Esri.ArcGISRuntime.Toolkit.Maui.OrientedImagery;assembly=Esri.ArcGISRuntime.Toolkit.Maui"
+             xmlns:local="clr-namespace:Toolkit.SampleApp.Maui.Samples"
              x:Class="Toolkit.SampleApp.Maui.Samples.OrientedImageryViewerSample">
-    <Grid RowDefinitions="Auto,Auto,*" RowSpacing="0">
-        <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="8" Padding="8">
-            <Label Text="{internal:LocalizedString Key=OrientedImageryViewerSelectLayer}"
+    <ContentPage.Resources>
+        <DataTemplate x:Key="PopupToolbarItemTemplate" x:DataType="{x:Type local:ShowSelectedImagePopupVM}">
+            <Button Text="Image details"
+                    SemanticProperties.Description="Open details for selected image"
+                    AutomationId="SampleOrientedImageryOpenImagePopup"
+                    MinimumHeightRequest="44" VerticalOptions="Center" Margin="4"
+                    Loaded="PopupToolbarButtonLoaded" Clicked="OpenSelectedImagePopup" />
+        </DataTemplate>
+        <oi:ToolbarSelector x:Key="AlternateToolbarSelector">
+            <oi:ToolbarSelector.SelectionPairs>
+                <oi:ToolbarItemSelectorPair ItemType="{x:Type local:ShowSelectedImagePopupVM}"
+                                            Template="{StaticResource PopupToolbarItemTemplate}" />
+            </oi:ToolbarSelector.SelectionPairs>
+        </oi:ToolbarSelector>
+    </ContentPage.Resources>
+    <Grid RowDefinitions="Auto,Auto,Auto,*" RowSpacing="0">
+        <Grid ColumnDefinitions="*,Auto" ColumnSpacing="8" Padding="8">
+            <Entry x:Name="LayerUriEntry"
+                   Placeholder="Oriented imagery layer URL"
+                   SemanticProperties.Description="Oriented imagery layer URL"
+                   AutomationId="SampleOrientedImageryLayerUrl"
+                   Text="https://services.arcgis.com/2Pv4ow3pE6NFC9SW/arcgis/rest/services/EsriCampus_GoProSample/FeatureServer/0" />
+            <Button Grid.Column="1"
+                    Text="Add layer"
+                    AutomationId="SampleOrientedImageryAddLayer"
+                    Clicked="AddLayerClicked" />
+        </Grid>
+        <Grid Grid.Row="1" ColumnDefinitions="Auto,*,Auto" ColumnSpacing="8" Padding="8">
+            <Label Text="Select layer"
                    VerticalOptions="Center" />
             <Picker x:Name="LayerPicker" Grid.Column="1"
-                    Title="{OnPlatform Default={internal:LocalizedString Key=OrientedImageryViewerSelectLayer}, WinUI={x:Null}}"
-                    SemanticProperties.Description="{internal:LocalizedString Key=OrientedImageryViewerSelectLayer}"
+                    Title="{OnPlatform Default='Select layer', WinUI={x:Null}}"
+                    SemanticProperties.Description="Select layer"
                     AutomationId="SampleOrientedImageryLayerPicker"
                     SelectedIndexChanged="LayerSelected" />
             <Button Grid.Column="2"
-                    Text="{internal:LocalizedString Key=OrientedImagerySampleToggleView}"
-                    SemanticProperties.Description="{internal:LocalizedString Key=OrientedImagerySampleToggleViewDescription}"
+                    Text="2D/3D"
+                    SemanticProperties.Description="Switch between 2D map and 3D scene"
                     AutomationId="SampleOrientedImageryToggleView"
                     Clicked="ToggleViewClicked" />
         </Grid>
-        <Label x:Name="LoadError" Grid.Row="1" Margin="8"
+        <Label x:Name="LoadError" Grid.Row="2" Margin="8"
                TextColor="{AppThemeBinding Light=Black, Dark=White}" IsVisible="False" />
-        <Grid x:Name="LayoutRoot" Grid.Row="2" RowDefinitions="*,0" RowSpacing="0" ColumnSpacing="0">
+        <Grid x:Name="LayoutRoot" Grid.Row="3" RowDefinitions="*,0" RowSpacing="0" ColumnSpacing="0">
             <Grid>
                 <Grid x:Name="GeoViewContainer" />
+                <ScrollView HorizontalOptions="Start" VerticalOptions="Start"
+                            MaximumHeightRequest="200" MaximumWidthRequest="240" Margin="8">
+                    <VerticalStackLayout Spacing="4">
+                        <Button Text="Toggle elevation surface (3D only)"
+                                AutomationId="SampleOrientedImageryToggleElevation"
+                                Clicked="ToggleElevationClicked" />
+                        <Button Text="Update toolbar"
+                                AutomationId="SampleOrientedImageryUpdateToolbar"
+                                Clicked="UpdateToolbarClicked" />
+                        <Button Text="Override clicks"
+                                AutomationId="SampleOrientedImageryOverrideClicks"
+                                Clicked="OverrideClicksClicked" />
+                        <Button Text="Detach/Reattach GeoView"
+                                AutomationId="SampleOrientedImageryDetachGeoView"
+                                Clicked="DetachReattachGeoViewClicked" />
+                    </VerticalStackLayout>
+                </ScrollView>
                 <Button x:Name="OpenButton"
-                        Text="{internal:LocalizedString Key=OrientedImageryViewerOpen}"
+                        Text="Open oriented imagery"
                         AutomationId="OpenOrientedImagery"
                         HorizontalOptions="End" VerticalOptions="Start"
                         Margin="8" Clicked="OpenClicked" />
                 <Button x:Name="CloseButton"
-                        Text="{internal:LocalizedString Key=OrientedImageryViewerClose}"
+                        Text="Close oriented imagery"
                         AutomationId="CloseOrientedImagery"
                         HorizontalOptions="End" VerticalOptions="Start"
                         Margin="8" IsVisible="False" Clicked="CloseClicked" />
             </Grid>
             <toolkit:OrientedImageryViewer x:Name="ImageryView" Grid.Row="1" IsVisible="False" />
+        </Grid>
+        <Grid x:Name="SelectedImagePopupBackground" Grid.RowSpan="4"
+              BackgroundColor="#AA333333" IsVisible="False">
+            <Grid.GestureRecognizers>
+                <TapGestureRecognizer Tapped="CloseSelectedImagePopup" />
+            </Grid.GestureRecognizers>
+            <Border Margin="16" Padding="8" MaximumWidthRequest="400" MaximumHeightRequest="500"
+                    HorizontalOptions="Center" VerticalOptions="Center"
+                    BackgroundColor="{AppThemeBinding Light=White, Dark=Black}">
+                <Grid RowDefinitions="*,Auto">
+                    <toolkit:PopupViewer x:Name="SelectedImagePopupViewer" />
+                    <Button Grid.Row="1"
+                            Text="Close details"
+                            AutomationId="SampleOrientedImageryCloseImagePopup"
+                            Clicked="CloseSelectedImagePopup" />
+                </Grid>
+            </Border>
         </Grid>
     </Grid>
 </ContentPage>
