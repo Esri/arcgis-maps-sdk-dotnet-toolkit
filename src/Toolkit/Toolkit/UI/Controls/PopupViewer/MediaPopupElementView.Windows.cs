@@ -186,6 +186,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             UpdateContent();
 #elif WinUI
             UpdatePipsVisibility();
+            UpdateFlipViewAutomationName();
 #endif
         }
 
@@ -239,6 +240,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             {
                 _flipView.SelectionChanged += OnFlipViewSelectionChanged;
                 _flipView.SizeChanged += OnFlipViewSizeChanged;
+                UpdateFlipViewAutomationName();
             }
 
             Loaded -= OnMediaPopupElementViewLoaded;
@@ -281,7 +283,34 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         // UISettings raises this event on a background thread.
         private void OnTextScaleFactorChanged(Windows.UI.ViewManagement.UISettings sender, object args) => QueueFlipViewHeightUpdate();
 
-        private void OnFlipViewSelectionChanged(object sender, SelectionChangedEventArgs e) => UpdateFlipViewHeight();
+        private void OnFlipViewSelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            UpdateFlipViewAutomationName();
+            UpdateFlipViewHeight();
+        }
+
+        private void UpdateFlipViewAutomationName()
+        {
+            if (_flipView is null)
+            {
+                return;
+            }
+
+            var selectedIndex = _flipView.SelectedIndex;
+            var media = Element?.Media;
+            var selectedMedia = media is not null && selectedIndex >= 0 && selectedIndex < media.Count ? media[selectedIndex] : null;
+            var newName = selectedMedia?.AlternativeText ?? selectedMedia?.Title ?? selectedMedia?.Caption ?? string.Empty;
+            var oldName = Microsoft.UI.Xaml.Automation.AutomationProperties.GetName(_flipView);
+            if (oldName == newName)
+            {
+                return;
+            }
+
+            Microsoft.UI.Xaml.Automation.AutomationProperties.SetName(_flipView, newName);
+            var peer = FrameworkElementAutomationPeer.FromElement(_flipView)
+                ?? FrameworkElementAutomationPeer.CreatePeerForElement(_flipView);
+            peer?.RaisePropertyChangedEvent(Microsoft.UI.Xaml.Automation.AutomationElementIdentifiers.NameProperty, oldName, newName);
+        }
 
         private void OnFlipViewSizeChanged(object sender, SizeChangedEventArgs e)
         {

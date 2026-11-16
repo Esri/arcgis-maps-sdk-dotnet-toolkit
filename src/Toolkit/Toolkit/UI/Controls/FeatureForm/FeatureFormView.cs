@@ -73,25 +73,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 #endif
         }
 
-        private class Command : System.Windows.Input.ICommand
-        {
-            private Action _execute;
-            private Func<bool> _canExecute;
-
-            public Command(Action execute, Func<bool> canExecute)
-            {
-                _execute = execute;
-                _canExecute = canExecute;
-            }
-            internal void RaiseCanExecuteChanged() => CanExecuteChanged?.Invoke(this, EventArgs.Empty);
-
-            public event EventHandler? CanExecuteChanged;
-
-            public bool CanExecute(object? parameter) => _canExecute();
-
-            public void Execute(object? parameter) => _execute();
-        }
-
         /// <summary>
         /// Command for calling <see cref="FinishEditingAsync(bool)"/> and applying edits to the currently active Feature Form if all fields are valid.
         /// </summary>
@@ -179,7 +160,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             foreach (var item in GetDescendentsOfType<FieldFormElementView>(this))
             {
                 item.ResetValidationState();
-                ((Command)FinishEditingCommand).RaiseCanExecuteChanged();
+                ((Command)FinishEditingCommand).ChangeCanExecute();
             }
         }
 
@@ -255,8 +236,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             {
                 this.Dispatch(() =>
                 {
-                    ((Command)FinishEditingCommand).RaiseCanExecuteChanged();
-                    ((Command)DiscardEditsCommand).RaiseCanExecuteChanged();
+                    ((Command)FinishEditingCommand).ChangeCanExecute();
+                    ((Command)DiscardEditsCommand).ChangeCanExecute();
                 });
             }
         }
@@ -279,7 +260,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 #if MAUI
                     base.OnPropertyChanged(nameof(IsValid));
 #endif
-                    ((Command)FinishEditingCommand).RaiseCanExecuteChanged();
+                    ((Command)FinishEditingCommand).ChangeCanExecute();
                 }
             }
         }
@@ -498,8 +479,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 {
                     item.ResetValidationState();
                 }
-                ((Command)FinishEditingCommand).RaiseCanExecuteChanged();
-
+                ((Command)FinishEditingCommand).ChangeCanExecute();
                 if (requireAllErrorsResolved && ScrollToFirstError()) return false;
                 await FinishEditingAsync();
                 return true;
@@ -1050,8 +1030,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 inpcNew.PropertyChanged += _elementPropertyChangedListener.OnEvent;
             }
             UpdateIsValidProperty();
-            ((Command)FinishEditingCommand).RaiseCanExecuteChanged();
-            ((Command)DiscardEditsCommand).RaiseCanExecuteChanged();
+            ((Command)FinishEditingCommand).ChangeCanExecute();
+            ((Command)DiscardEditsCommand).ChangeCanExecute();
         }
 
         /// <summary>
