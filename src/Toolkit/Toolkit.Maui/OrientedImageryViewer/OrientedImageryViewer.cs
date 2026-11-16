@@ -157,9 +157,9 @@ public partial class OrientedImageryViewer : TemplatedView
     /// Gets or sets the template selector for toolbar categories and their items.
     /// </summary>
     /// <remarks>Templates apply to <see cref="OrientedImageryViewerModel.ToolbarCategories"/> and their <see cref="ToolbarCategory.ToolbarItems"/>.</remarks>
-    public DataTemplateSelector? ToolbarItemTemplateSelector
+    public ToolbarSelector? ToolbarItemTemplateSelector
     {
-        get => (DataTemplateSelector?)GetValue(ToolbarItemTemplateSelectorProperty);
+        get => (ToolbarSelector?)GetValue(ToolbarItemTemplateSelectorProperty);
         set => SetValue(ToolbarItemTemplateSelectorProperty, value);
     }
 
@@ -167,7 +167,7 @@ public partial class OrientedImageryViewer : TemplatedView
     /// Identifies the <see cref="ToolbarItemTemplateSelector"/> bindable property.
     /// </summary>
     public static readonly BindableProperty ToolbarItemTemplateSelectorProperty = BindableProperty.Create(
-        nameof(ToolbarItemTemplateSelector), typeof(DataTemplateSelector), typeof(OrientedImageryViewer), null,
+        nameof(ToolbarItemTemplateSelector), typeof(ToolbarSelector), typeof(OrientedImageryViewer), null,
         propertyChanged: (s, _, _) => ((OrientedImageryViewer)s).InvalidateToolbar());
 
     private static readonly BindablePropertyKey ErrorMessagePropertyKey = BindableProperty.CreateReadOnly(

@@ -123,7 +123,7 @@ public partial class OrientedImageryViewer
         {
             // Rebuild only when toolbar items or templates change.
             ReleaseToolbarPresentation();
-            if ((ToolbarItemTemplateSelector as ToolbarSelector)?.SelectionPairs is INotifyCollectionChanged entries)
+            if (ToolbarItemTemplateSelector?.SelectionPairs is INotifyCollectionChanged entries)
             {
                 entries.CollectionChanged += SelectorEntriesChanged;
                 _toolbarCleanup.Add(() => entries.CollectionChanged -= SelectorEntriesChanged);
