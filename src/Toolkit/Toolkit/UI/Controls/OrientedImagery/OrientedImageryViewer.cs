@@ -1,23 +1,21 @@
-#if WPF || MAUI
+#if !MAUI
 
-#if WPF
 using Esri.ArcGISRuntime.Data;
 using Esri.ArcGISRuntime.Geometry;
 using Esri.ArcGISRuntime.Mapping;
 using Esri.ArcGISRuntime.Toolkit.Internal;
 using Esri.ArcGISRuntime.UI;
 using System.ComponentModel;
-using System.Windows.Automation;
+using System.Diagnostics;
 using Esri.ArcGISRuntime.Toolkit.UI.Controls.OrientedImagery;
-
-namespace Esri.ArcGISRuntime.Toolkit.UI.Controls;
-#else
-using Esri.ArcGISRuntime.Maui;
-
-namespace Esri.ArcGISRuntime.Toolkit.Maui;
+#if WPF
+using System.Windows.Automation;
+#elif WINDOWS_XAML
+using Microsoft.UI.Xaml.Automation.Peers;
 #endif
 
-#if WPF
+namespace Esri.ArcGISRuntime.Toolkit.UI.Controls;
+
 /// <summary>
 /// Displays oriented imagery and provides controls for managing image selection, footprints, and markers.
 /// </summary>
@@ -28,6 +26,8 @@ public partial class OrientedImageryViewer
     private const string PaginatorName = "PART_Paginator";
     private const string MainErrorMessagePresenterName = "PART_MainErrorMessagePresenter";
     private const string DismissTransientErrorButtonName = "PART_DismissTransientErrorButton";
+    private const string ImageDetailsButtonName = "PART_ImageDetailsButton";
+    private const string CloseDetailsButtonName = "PART_CloseDetailsButton";
 
     /// <summary>
     /// Initializes a new instance of the <see cref="OrientedImageryViewer"/> class.
@@ -41,14 +41,11 @@ public partial class OrientedImageryViewer
 #if WPF
         Loaded += (_, _) => UpdateErrorMessages();
         IsVisibleChanged += (_, _) => UpdateErrorMessages();
+#elif WINDOWS_XAML
+        InitializeAccessibility_WinUI();
 #endif
 
-#if MAUI
-        // MAUI layout containers are not tab stops by default, so no IsTabStop is needed here.
-        ControlTemplate = DefaultControlTemplate;
-#else
         DefaultStyleKey = typeof(OrientedImageryViewer);
-#endif
     }
 
     /// <inheritdoc/>
@@ -83,9 +80,7 @@ public partial class OrientedImageryViewer
         RewireViewModel();
         UpdatePaginatorSelection();
         UpdateErrorMessages();
-#if WPF
         UpdateDetailsFocus();
-#endif
     }
 
 #region ViewModel
@@ -198,17 +193,15 @@ public partial class OrientedImageryViewer
                 if (ViewModel.SequentialNavigationError?.Message != null)
                     TransientErrorMessage = ViewModel.SequentialNavigationError?.Message;
                 break;
-#if WPF
             case nameof(OrientedImageryViewerModel.ImageDetailsPopup):
                 UpdateDetailsFocus();
                 break;
-#endif
         }
     }
 
     private void ViewModel_SequenceBoundaryReached(object? sender, SequenceBoundaryReachedArgs e)
     {
-        if (!ReferenceEquals(sender, ViewModel) || !IsLoaded || !IsVisible || ErrorMessage != null)
+        if (!ReferenceEquals(sender, ViewModel) || !LoadedAndVisible() || ErrorMessage != null)
             return;
 
         string? resourceKey = (e.HasReachedStart, e.HasReachedEnd) switch
@@ -261,6 +254,8 @@ public partial class OrientedImageryViewer
     /// <summary>
     /// Gets or sets the background color shown where the image does not fill the display.
     /// </summary>
+    /// <remarks>On WinUI, the default <see cref="System.Drawing.Color.Empty"/> follows the active theme.
+    /// Set an explicit color to override it, or restore <see cref="System.Drawing.Color.Empty"/> to follow the theme again.</remarks>
     public System.Drawing.Color DisplayBackgroundColor
     {
         get => (System.Drawing.Color)GetValue(DisplayBackgroundColorProperty);
@@ -271,12 +266,17 @@ public partial class OrientedImageryViewer
     /// Identifies the <see cref="DisplayBackgroundColor" /> dependency property.
     /// </summary>
     public static readonly DependencyProperty DisplayBackgroundColorProperty =
+#if WINDOWS_XAML
+        PropertyHelper.CreateProperty<System.Drawing.Color, OrientedImageryViewer>(nameof(DisplayBackgroundColor), System.Drawing.Color.Empty, (s, oldValue, newValue) => s.UpdateDisplayBackgroundColor(newValue));
+#else
         PropertyHelper.CreateProperty<System.Drawing.Color, OrientedImageryViewer>(nameof(DisplayBackgroundColor), System.Drawing.Color.White, (s, oldValue, newValue) => s.UpdateDisplayBackgroundColor(newValue));
+#endif
 
     private void WireViewport(OrientedImageViewport viewport)
     {
         viewport.ImageTapped += Viewport_ImageTapped;
         viewport.StateChanged += Viewport_StateChanged;
+        UpdateDisplayBackgroundColor(DisplayBackgroundColor);
     }
 
     private void UnwireViewport(OrientedImageViewport viewport)
@@ -291,6 +291,13 @@ public partial class OrientedImageryViewer
 
     private void UpdateDisplayBackgroundColor(System.Drawing.Color displayBackgroundColor)
     {
+#if WINDOWS_XAML
+        if (displayBackgroundColor.IsEmpty)
+        {
+            var color = ThemeDisplayBackgroundBrush?.Color ?? default;
+            displayBackgroundColor = System.Drawing.Color.FromArgb(color.A, color.R, color.G, color.B);
+        }
+#endif
         if (_viewport != null)
             _viewport.DisplayBackgroundColor = displayBackgroundColor;
     }
@@ -541,15 +548,16 @@ public partial class OrientedImageryViewer
 
     private void OnItemTemplateSelectorChanged(ToolbarSelector? oldSelector, ToolbarSelector? newSelector)
     {
+#if WPF
         // Save and in the future merge the default selector so the default styles are always available unless overridden.
         if (ReadLocalValue(ToolbarItemTemplateSelectorProperty) == DependencyProperty.UnsetValue)
         {
             _defaultItemTemplateSelector = newSelector;
         }
-        else if (_defaultItemTemplateSelector is not null)
-        {
+#endif
+
+        if (_defaultItemTemplateSelector is not null && !ReferenceEquals(newSelector, _defaultItemTemplateSelector))
             newSelector?.Merge(_defaultItemTemplateSelector);
-        }
 
         if (_toolbarContainer != null)
             _toolbarContainer.ItemTemplateSelector = newSelector;
@@ -559,6 +567,10 @@ public partial class OrientedImageryViewer
     {
         toolbarContainer.ItemTemplateSelector = ToolbarItemTemplateSelector;
         toolbarContainer.Items.Clear();
+        toolbarContainer.ItemsSource = ViewModel?.ToolbarCategories;
+#if WINDOWS_XAML
+        WireToolbar_WinUI();
+#endif
     }
 
     private void UnwireToolbarContainer(ItemsControl toolbarContainer)
@@ -718,7 +730,7 @@ public partial class OrientedImageryViewer
     private bool UpdateImageErrorAnnouncement()
     {
         string? announcement = _viewport?.Error?.Message;
-        if (!IsLoaded || !IsVisible || ErrorMessage != null || string.IsNullOrWhiteSpace(announcement))
+        if (!LoadedAndVisible() || ErrorMessage != null || string.IsNullOrWhiteSpace(announcement))
         {
             _lastImageErrorAnnouncement = null;
             return false;
@@ -750,7 +762,7 @@ public partial class OrientedImageryViewer
 
     private string? GetNoImagesAnnouncement()
     {
-        if (!IsLoaded || !IsVisible || ErrorMessage != null || _viewport?.IsImageLoading == true || ViewModel == null || ViewModel.SelectedImage != null || ViewModel.Images.Count > 0)
+        if (!LoadedAndVisible() || ErrorMessage != null || _viewport?.IsImageLoading == true || ViewModel == null || ViewModel.SelectedImage != null || ViewModel.Images.Count > 0)
             return null;
 
         string resourceKey;
@@ -768,13 +780,11 @@ public partial class OrientedImageryViewer
 
     private void RaiseImageStateNotification(string announcement)
     {
-#if WPF || WINUI
         ScreenReaderHelpers.RaiseNotificationAnnouncement(
             this,
             announcement,
             ImageStateActivityId,
             AutomationNotificationProcessing.MostRecent);
-#endif
     }
 
     private void RewireDismissTransientErrorButton()
@@ -787,54 +797,15 @@ public partial class OrientedImageryViewer
         if (_dismissTransientErrorButton != null)
             _dismissTransientErrorButton.Click += DismissTransientErrorButton_Click;
     }
+
+    private bool LoadedAndVisible()
+    {
+#if WPF
+        return IsLoaded && IsVisible;
+#elif WINUI
+        return IsLoaded && Visibility == Visibility.Visible;
+#endif
+    }
 #endregion Errors
 }
-#endif
-
-/// <summary>
-/// Provides event data and an option to intercept default behavior for taps on the viewport of an <see cref="OrientedImageryViewer"/>.
-/// </summary>
-public sealed class OrientedImageryViewerImageTappedArgs : OrientedImageTappedEventArgs
-{
-    /// <summary>
-    /// Initializes a new instance of the <see cref="OrientedImageryViewerImageTappedArgs"/> class.
-    /// </summary>
-    /// <param name="orientedImageTappedEventArgs">The event arguments supplied by the original <see cref="OrientedImageViewport.ImageTapped"/> event.</param>
-    public OrientedImageryViewerImageTappedArgs(OrientedImageTappedEventArgs orientedImageTappedEventArgs) :
-        base(orientedImageTappedEventArgs.ImagePoint, orientedImageTappedEventArgs.Image, orientedImageTappedEventArgs.Marker)
-    {
-        Handled = false;
-    }
-
-    /// <summary>
-    /// Gets or sets a value indicating whether the default <see cref="OrientedImageryViewer"/> image tap logic should be skipped for the current tap event.
-    /// </summary>
-    public bool Handled { get; set; }
-}
-
-/// <summary>
-/// Provides event data and an option to intercept default behavior for taps on the <see cref="GeoView"/> connected to an <see cref="OrientedImageryViewer"/>.
-/// </summary>
-public sealed class OrientedImageryViewerGeoViewTappedArgs : EventArgs
-{
-    /// <summary>
-    /// Initializes a new instance of the <see cref="OrientedImageryViewerGeoViewTappedArgs"/> class.
-    /// </summary>
-    /// <param name="geoViewInputEventArgs">The event arguments supplied by the original <see cref="GeoView.GeoViewTapped"/> event.</param>
-    public OrientedImageryViewerGeoViewTappedArgs(GeoViewInputEventArgs geoViewInputEventArgs)
-    {
-        GeoViewInputEventArgs = geoViewInputEventArgs;
-    }
-
-    /// <summary>
-    /// Gets the event arguments supplied by the original <see cref="GeoView.GeoViewTapped"/> event.
-    /// </summary>
-    public GeoViewInputEventArgs GeoViewInputEventArgs { get; }
-
-    /// <summary>
-    /// Gets or sets a value indicating whether the default <see cref="OrientedImageryViewer"/> GeoView tap logic should be skipped for the current tap event.
-    /// </summary>
-    public bool Handled { get; set; }
-}
-
 #endif
