@@ -795,6 +795,7 @@
                                     <ColumnDefinition Width="Auto" />
                                 </Grid.ColumnDefinitions>
 
+                                <!-- Note: The Bindings on to PART_ImageViewport can be replaced with x:Bind once the fix for this issue released in WinUI: https://github.com/microsoft/microsoft-ui-xaml/issues/11183 -->
                                 <controls:OrientedImageViewport
                                     x:Name="PART_ImageViewport"
                                     Grid.ColumnSpan="3"
@@ -802,8 +803,8 @@
 
                                         <Border
                                             Grid.ColumnSpan="3"
-                                            Background="#80FFFFFF"
-                                            local:NullVisibility.WhenTrue="{x:Bind PART_ImageViewport.IsImageLoading, Mode=OneWay}">
+                                            Background="{ThemeResource LayerFillColorDefaultBrush}"
+                                            local:NullVisibility.WhenTrue="{Binding IsImageLoading, ElementName=PART_ImageViewport, Mode=OneWay}">
                                             <TextBlock
                                                 HorizontalAlignment="Center"
                                                 VerticalAlignment="Center"
@@ -815,7 +816,7 @@
                                     Height="2"
                                     VerticalAlignment="Top"
                                     IsIndeterminate="True"
-                                    local:NullVisibility.WhenTrue="{x:Bind PART_ImageViewport.IsImageLoading, Mode=OneWay}" />
+                                    local:NullVisibility.WhenTrue="{Binding IsImageLoading, ElementName=PART_ImageViewport, Mode=OneWay}" />
 
                                 <Border
                                     Grid.ColumnSpan="3"
@@ -899,6 +900,7 @@
                                     </StackPanel>
                                 </Border>
 
+                                <!-- Note: The Bindings on to PART_ImageViewport can be replaced with x:Bind once the fix for this issue released in WinUI: https://github.com/microsoft/microsoft-ui-xaml/issues/11183 -->
                                 <Border
                                     Grid.ColumnSpan="3"
                                     MaxWidth="300"
@@ -908,8 +910,9 @@
                                     Background="{ThemeResource OrientedImageryOverlayBackgroundBrush}"
                                     BorderBrush="{ThemeResource OrientedImageryOverlayBorderBrush}"
                                     BorderThickness="1"
-                                    local:NullVisibility.WhenNotNull="{x:Bind PART_ImageViewport.Error, Mode=OneWay}">
-                                    <TextBlock Text="{x:Bind PART_ImageViewport.Error.Message, Mode=OneWay, FallbackValue=''}" TextWrapping="Wrap" />
+                                    Visibility="Collapsed"
+                                    local:NullVisibility.WhenNotNull="{Binding Error, ElementName=PART_ImageViewport, Mode=OneWay}">
+                                    <TextBlock Text="{Binding Error.Message, ElementName=PART_ImageViewport, Mode=OneWay, TargetNullValue=''}" TextWrapping="Wrap" />
                                 </Border>
 
                                 <Button
