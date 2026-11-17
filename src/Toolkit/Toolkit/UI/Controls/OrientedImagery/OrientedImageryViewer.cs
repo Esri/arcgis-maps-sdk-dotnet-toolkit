@@ -1,5 +1,6 @@
-#if WPF
+#if WPF || MAUI
 
+#if WPF
 using Esri.ArcGISRuntime.Data;
 using Esri.ArcGISRuntime.Geometry;
 using Esri.ArcGISRuntime.Mapping;
@@ -10,7 +11,13 @@ using System.Windows.Automation;
 using Esri.ArcGISRuntime.Toolkit.UI.Controls.OrientedImagery;
 
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls;
+#else
+using Esri.ArcGISRuntime.Maui;
 
+namespace Esri.ArcGISRuntime.Toolkit.Maui;
+#endif
+
+#if WPF
 /// <summary>
 /// Displays oriented imagery and provides controls for managing image selection, footprints, and markers.
 /// </summary>
@@ -224,6 +231,15 @@ public partial class OrientedImageryViewer
 
 #region Display
     /// <summary>
+    /// Raised when a tap is registered on the displayed image.
+    /// </summary>
+    /// <remarks>
+    /// Set <see cref="OrientedImageryViewerImageTappedArgs.Handled"/> to <c>true</c> before awaiting asynchronous work to override the default tap behavior.
+    /// Toolkit-managed marker hits expose <see cref="OrientedImageTappedEventArgs.Marker"/> as <c>null</c>.
+    /// </remarks>
+    public event EventHandler<OrientedImageryViewerImageTappedArgs>? ImageTapped;
+
+    /// <summary>
     /// Gets a value indicating whether an image selection search has completed after a map tap.
     /// </summary>
     internal bool HasSearchedForImages
@@ -241,15 +257,6 @@ public partial class OrientedImageryViewer
     internal static readonly DependencyProperty HasSearchedForImagesProperty = PropertyHelper.GetProperty(HasSearchedForImagesPropertyKey);
 
     private OrientedImageViewport? _viewport;
-
-    /// <summary>
-    /// Raised when a tap is registered on the displayed image.
-    /// </summary>
-    /// <remarks>
-    /// Set <see cref="OrientedImageryViewerImageTappedArgs.Handled"/> to <c>true</c> before awaiting asynchronous work to override the default tap behavior.
-    /// Internally-managed marker hits (such as on the search point marker) are not registered on this event.
-    /// </remarks>
-    public event EventHandler<OrientedImageryViewerImageTappedArgs>? ImageTapped;
 
     /// <summary>
     /// Gets or sets the background color shown where the image does not fill the display.
@@ -358,8 +365,6 @@ public partial class OrientedImageryViewer
 #endregion Display
 
 #region GeoView
-    private CancellationTokenSource? _geoViewTappedCTS;
-
     /// <summary>
     /// Raised when a tap is registered on the connected <see cref="GeoView"/>.
     /// </summary>
@@ -367,6 +372,8 @@ public partial class OrientedImageryViewer
     /// Set <see cref="OrientedImageryViewerGeoViewTappedArgs.Handled"/> to <c>true</c> before awaiting asynchronous work to override the default tap behavior.
     /// </remarks>
     public event EventHandler<OrientedImageryViewerGeoViewTappedArgs>? GeoViewTapped;
+
+    private CancellationTokenSource? _geoViewTappedCTS;
 
     /// <summary>
     /// Gets or sets the <see cref="Esri.ArcGISRuntime.UI.Controls.GeoView"/> on which marker graphics are displayed.
@@ -782,6 +789,7 @@ public partial class OrientedImageryViewer
     }
 #endregion Errors
 }
+#endif
 
 /// <summary>
 /// Provides event data and an option to intercept default behavior for taps on the viewport of an <see cref="OrientedImageryViewer"/>.

@@ -8,3 +8,4 @@
 
 [assembly: Microsoft.Maui.Controls.XmlnsPrefix("http://schemas.esri.com/arcgis/runtime/2013", "esri")]
 [assembly: XmlnsDefinition("http://schemas.esri.com/arcgis/runtime/2013", "Esri.ArcGISRuntime.Toolkit.Maui")]
+[assembly: XmlnsDefinition("http://schemas.esri.com/arcgis/runtime/2013", "Esri.ArcGISRuntime.Toolkit.Maui.OrientedImagery")]
