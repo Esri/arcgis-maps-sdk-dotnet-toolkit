@@ -14,8 +14,10 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls.OrientedImagery;
 /// <summary>
 /// An implementation of <see cref="DataTemplateSelector"/> for selecting templates based on a set of predefined key-template pairs.
 /// </summary>
-#if WPF
+#if WPF || MAUI
 [ContentProperty(nameof(SelectionPairs))]
+#elif WINDOWS_XAML
+[ContentProperty(Name = nameof(SelectionPairs))]
 #endif
 public partial class ToolbarSelector : DataTemplateSelector
 {

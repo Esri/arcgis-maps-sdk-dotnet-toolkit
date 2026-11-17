@@ -68,6 +68,10 @@ internal sealed partial class OrientedImageryResources : ResourceDictionary
         => Properties.Resources.GetString(state == OrientedImageryViewerInteractionState.FindImages
             ? "OrientedImageryViewerImageSearchModeFind" : "OrientedImageryViewerImageSearchModeDisplay");
 
+    public static string? ImageSearchModeStackedLabel(OrientedImageryViewerInteractionState state)
+        => Properties.Resources.GetString(state == OrientedImageryViewerInteractionState.FindImages
+            ? "OrientedImageryViewerImageSearchModeFindStackedLabel" : "OrientedImageryViewerImageSearchModeDisplayStackedLabel");
+
     public static Visibility VisibleWhenFalse(bool value) => value ? Visibility.Collapsed : Visibility.Visible;
 
 }

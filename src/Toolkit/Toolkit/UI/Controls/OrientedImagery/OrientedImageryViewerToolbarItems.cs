@@ -457,4 +457,7 @@ internal sealed class LabeledSymbol(Symbol Symbol, string Label)
     /// Gets the symbol label.
     /// </summary>
     public string Label { get; private set; } = Label;
+
+    /// <inheritdoc />
+    public override string ToString() => Label;
 }
