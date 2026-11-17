@@ -207,3 +207,33 @@ internal static class ImageSearchModeSelectionBehavior
     }
 }
 #endregion ImageSearchModeComboBox
+
+/// <summary>
+/// Moves keyboard focus to the next element when the attached control becomes disabled.
+/// </summary>
+internal static class MoveFocusWhenDisabledBehavior
+{
+    public static readonly DependencyProperty IsEnabledProperty = DependencyProperty.RegisterAttached(
+        "IsEnabled", typeof(bool), typeof(MoveFocusWhenDisabledBehavior), new PropertyMetadata(false, OnIsEnabledChanged));
+
+    public static bool GetIsEnabled(DependencyObject element) => (bool)element.GetValue(IsEnabledProperty);
+
+    public static void SetIsEnabled(DependencyObject element, bool value) => element.SetValue(IsEnabledProperty, value);
+
+    private static void OnIsEnabledChanged(DependencyObject sender, DependencyPropertyChangedEventArgs e)
+    {
+        if (sender is Control control)
+        {
+            if ((bool)e.NewValue)
+                control.IsEnabledChanged += Control_IsEnabledChanged;
+            else
+                control.IsEnabledChanged -= Control_IsEnabledChanged;
+        }
+    }
+
+    private static void Control_IsEnabledChanged(object sender, DependencyPropertyChangedEventArgs e)
+    {
+        if (sender is Control { IsEnabled: false, FocusState: not FocusState.Unfocused, XamlRoot: { } root })
+            FocusManager.TryMoveFocus(FocusNavigationDirection.Next, new FindNextElementOptions { SearchRoot = root.Content });
+    }
+}

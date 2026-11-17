@@ -54,6 +54,36 @@ public partial class OrientedImageryViewer : Control
 }
 
 /// <summary>
+/// Moves keyboard focus to the next element when the attached element becomes disabled.
+/// </summary>
+internal static class MoveFocusWhenDisabledBehavior
+{
+    public static readonly DependencyProperty IsEnabledProperty = DependencyProperty.RegisterAttached(
+        "IsEnabled", typeof(bool), typeof(MoveFocusWhenDisabledBehavior), new PropertyMetadata(false, OnIsEnabledChanged));
+
+    public static bool GetIsEnabled(DependencyObject element) => (bool)element.GetValue(IsEnabledProperty);
+
+    public static void SetIsEnabled(DependencyObject element, bool value) => element.SetValue(IsEnabledProperty, value);
+
+    private static void OnIsEnabledChanged(DependencyObject sender, DependencyPropertyChangedEventArgs e)
+    {
+        if (sender is UIElement element)
+        {
+            if ((bool)e.NewValue)
+                element.IsEnabledChanged += Element_IsEnabledChanged;
+            else
+                element.IsEnabledChanged -= Element_IsEnabledChanged;
+        }
+    }
+
+    private static void Element_IsEnabledChanged(object sender, DependencyPropertyChangedEventArgs e)
+    {
+        if (sender is UIElement { IsEnabled: false, IsKeyboardFocusWithin: true } element)
+            element.MoveFocus(new TraversalRequest(FocusNavigationDirection.Next));
+    }
+}
+
+/// <summary>
 /// Attached property to make sure the ComboBox always triggers an update even when clicking an already-selected option. This is used
 /// in the oriented imagery view to make sure that sketch mode always gets disabled whenever you interact with the search mode selector.
 /// </summary>

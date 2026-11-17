@@ -676,9 +676,13 @@
     <DataTemplate x:Key="ClearMarkersToolbarTemplate" x:DataType="oi:ClearMarkersVM">
         <Button
             Command="{x:Bind ViewModel.ClearMarkersCommand, Mode=OneWay}"
-            Style="{StaticResource OrientedImageryToolbarLabeledButtonStyle}"
             ToolTipService.ToolTip="{internal:LocalizedString Key=OrientedImageryViewerClearMarkersLabel}"
             AutomationProperties.Name="{internal:LocalizedString Key=OrientedImageryViewerClearMarkersLabel}">
+            <Button.Style>
+                <Style TargetType="Button" BasedOn="{StaticResource OrientedImageryToolbarLabeledButtonStyle}">
+                    <Setter Property="local:MoveFocusWhenDisabledBehavior.IsEnabled" Value="True" />
+                </Style>
+            </Button.Style>
             <StackPanel>
                 <Viewbox Width="28" Height="28" Stretch="Uniform">
                     <FontIcon
