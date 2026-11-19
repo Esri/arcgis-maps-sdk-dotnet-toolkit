@@ -1,4 +1,4 @@
-﻿#if WINDOWS || __IOS__
+﻿#if WINDOWS || __IOS__ || ANDROID
 using Microsoft.Maui.Handlers;
 
 namespace Esri.ArcGISRuntime.Toolkit.Maui.Internal
