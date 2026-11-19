@@ -77,7 +77,7 @@ internal sealed class HyperlinkLabelHandler : ViewHandler<HyperlinkLabel, UIText
 
     public void Dispose()
     {
-        if (PlatformView is not null)
+        if ((this as ViewHandler).PlatformView is not null)
             PlatformView.Delegate = null;
         _delegate?.Dispose();
         _delegate = null;
