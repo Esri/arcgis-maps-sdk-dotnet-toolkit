@@ -1,11 +1,16 @@
-﻿#if WPF
 using Esri.ArcGISRuntime.Symbology;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Windows.Input;
+using Symbol = Esri.ArcGISRuntime.Symbology.Symbol;
 
+#if MAUI
+namespace Esri.ArcGISRuntime.Toolkit.Maui.OrientedImagery;
+#else
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls.OrientedImagery;
+#endif
 
 /// <summary>
 /// View model for a toolbar representing a category of items. Used for nested views.
@@ -452,5 +457,7 @@ internal sealed class LabeledSymbol(Symbol Symbol, string Label)
     /// Gets the symbol label.
     /// </summary>
     public string Label { get; private set; } = Label;
+
+    /// <inheritdoc />
+    public override string ToString() => Label;
 }
-#endif

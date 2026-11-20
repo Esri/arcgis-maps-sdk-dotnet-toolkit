@@ -764,6 +764,7 @@
     <DataTemplate x:Key="ClearMarkersToolbarTemplate" DataType="{x:Type local:ClearMarkersVM}">
         <Button Style="{StaticResource ToolbarLabeledButtonStyle}"
                 Command="{Binding ViewModel.ClearMarkersCommand}"
+                controls:MoveFocusWhenDisabledBehavior.IsEnabled="True"
                 AutomationProperties.Name="{internal:LocalizedString Key=OrientedImageryViewerClearMarkersLabel}"
                 ToolTip="{internal:LocalizedString Key=OrientedImageryViewerClearMarkersTooltip}">
             <StackPanel>
@@ -960,7 +961,7 @@
                                                 TextElement.Foreground="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}">
 
                                         <!-- User prompts when no image is selected -->
-                                        <ContentControl x:Name="PART_NoImagesPromptPresenter" Content="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=ViewModel.InteractionState}"
+                                        <ContentControl Content="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=ViewModel.InteractionState}"
                                                         Focusable="False" IsTabStop="False">
                                             <ContentControl.Style>
                                                 <Style TargetType="{x:Type ContentControl}">

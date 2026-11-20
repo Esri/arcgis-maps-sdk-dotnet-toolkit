@@ -1,5 +1,8 @@
-#if WPF || WINDOWS_XAML
+#if MAUI
+namespace Esri.ArcGISRuntime.Toolkit.Maui;
+#else
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls;
+#endif
 
 internal static class OrientedImageryPagination
 {
@@ -15,4 +18,3 @@ internal static class OrientedImageryPagination
         return (Math.Clamp(current - count / 2, 0, totalPages - count), count);
     }
 }
-#endif

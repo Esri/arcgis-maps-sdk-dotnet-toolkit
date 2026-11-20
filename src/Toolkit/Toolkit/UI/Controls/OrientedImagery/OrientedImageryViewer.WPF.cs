@@ -15,9 +15,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls;
 [TemplatePart(Name = DismissTransientErrorButtonName, Type = typeof(Button))]
 public partial class OrientedImageryViewer : Control
 {
-    private const string CloseDetailsButtonName = "PART_CloseDetailsButton";
-    private const string ImageDetailsButtonName = "PART_ImageDetailsButton";
-
     private void DismissTransientErrorButton_Click(object sender, RoutedEventArgs e)
     {
         if (sender == _dismissTransientErrorButton && _dismissTransientErrorButton.IsKeyboardFocusWithin == true)
@@ -53,6 +50,36 @@ public partial class OrientedImageryViewer : Control
         }
 
         protected override string GetLocalizedControlTypeCore() => Properties.Resources.GetString("OrientedImageryViewerAutomationTypeName")!;
+    }
+}
+
+/// <summary>
+/// Moves keyboard focus to the next element when the attached element becomes disabled.
+/// </summary>
+internal static class MoveFocusWhenDisabledBehavior
+{
+    public static readonly DependencyProperty IsEnabledProperty = DependencyProperty.RegisterAttached(
+        "IsEnabled", typeof(bool), typeof(MoveFocusWhenDisabledBehavior), new PropertyMetadata(false, OnIsEnabledChanged));
+
+    public static bool GetIsEnabled(DependencyObject element) => (bool)element.GetValue(IsEnabledProperty);
+
+    public static void SetIsEnabled(DependencyObject element, bool value) => element.SetValue(IsEnabledProperty, value);
+
+    private static void OnIsEnabledChanged(DependencyObject sender, DependencyPropertyChangedEventArgs e)
+    {
+        if (sender is UIElement element)
+        {
+            if ((bool)e.NewValue)
+                element.IsEnabledChanged += Element_IsEnabledChanged;
+            else
+                element.IsEnabledChanged -= Element_IsEnabledChanged;
+        }
+    }
+
+    private static void Element_IsEnabledChanged(object sender, DependencyPropertyChangedEventArgs e)
+    {
+        if (sender is UIElement { IsEnabled: false, IsKeyboardFocusWithin: true } element)
+            element.MoveFocus(new TraversalRequest(FocusNavigationDirection.Next));
     }
 }
 

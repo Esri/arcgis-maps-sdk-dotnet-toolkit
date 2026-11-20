@@ -1,15 +1,25 @@
-#if WPF
-
 using System.Collections.ObjectModel;
+#if WPF
 using System.Windows.Markup;
+#elif WINDOWS_XAML
+using Microsoft.UI.Xaml.Markup;
+#endif
 
+#if MAUI
+namespace Esri.ArcGISRuntime.Toolkit.Maui.OrientedImagery;
+#else
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls.OrientedImagery;
+#endif
 
 /// <summary>
 /// An implementation of <see cref="DataTemplateSelector"/> for selecting templates based on a set of predefined key-template pairs.
 /// </summary>
+#if WPF || MAUI
 [ContentProperty(nameof(SelectionPairs))]
-public class ToolbarSelector : DataTemplateSelector
+#elif WINDOWS_XAML
+[ContentProperty(Name = nameof(SelectionPairs))]
+#endif
+public partial class ToolbarSelector : DataTemplateSelector
 {
     /// <summary>
     /// Initializes a new instance of the <see cref="ToolbarSelector"/> class.
@@ -28,8 +38,39 @@ public class ToolbarSelector : DataTemplateSelector
     /// </remarks>
     public Collection<ToolbarSelectorPair> SelectionPairs { get; private set; }
 
+#if MAUI
+    // The owning control supplies its platform presentation when no override matches.
+    internal static DataTemplate DefaultTemplate { get; } = new DataTemplate();
+
+    /// <inheritdoc/>
+    protected override DataTemplate OnSelectTemplate(object item, BindableObject container)
+#elif WPF
     /// <inheritdoc/>
     public override DataTemplate SelectTemplate(object item, DependencyObject container)
+#elif WINDOWS_XAML
+    /// <inheritdoc/>
+    protected override DataTemplate SelectTemplateCore(object item, DependencyObject container)
+#endif
+    {
+        return SelectTemplateInner(item) ??
+#if WPF
+            base.SelectTemplate(item, container);
+#elif WINDOWS_XAML
+            base.SelectTemplateCore(item, container);
+#elif MAUI
+            DefaultTemplate;
+#endif
+    }
+
+#if WINDOWS_XAML
+    /// <inheritdoc/>
+    protected override DataTemplate SelectTemplateCore(object item)
+    {
+        return SelectTemplateInner(item) ?? base.SelectTemplateCore(item);
+    }
+#endif
+
+    private DataTemplate? SelectTemplateInner(object item)
     {
         if (item is ToolbarCategory category)
         {
@@ -52,7 +93,7 @@ public class ToolbarSelector : DataTemplateSelector
             }
         }
 
-        return base.SelectTemplate(item, container);
+        return null;
     }
 
     /// <summary>
@@ -211,4 +252,3 @@ public class ToolbarSelectorPair
         Item
     }
 }
-#endif
