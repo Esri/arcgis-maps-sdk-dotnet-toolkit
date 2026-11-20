@@ -862,207 +862,199 @@
     <value>תצלום מכוון</value>
   </data>
   <data name="OrientedImageryViewerAutomationTypeName" xml:space="preserve">
-    <value>כן_Oriented imagery view______________________ש</value>
+    <value>תצוגת תצלומים מכוונים</value>
   </data>
   <data name="OrientedImageryViewerSelectMarkerSymbol" xml:space="preserve">
-    <value>כן_Select marker symbol_____________________ש</value>
+    <value>בחר בסמל נקודתי</value>
   </data>
   <data name="OrientedImageryViewerToggleAddMarkers" xml:space="preserve">
-    <value>כן_Toggle add markers___________________ש</value>
+    <value>שנה מצב סמנים</value>
   </data>
   <data name="OrientedImageryViewerShowSelectedImageFootprint" xml:space="preserve">
-    <value>כן_Show current footprint_______________________ש</value>
+    <value>הצג עקבה נוכחית</value>
   </data>
   <data name="OrientedImageryViewerShowUnselectedImageFootprints" xml:space="preserve">
-    <value>כן_Show additional footprints___________________________ש</value>
+    <value>הצג עקבות נוספות</value>
   </data>
   <data name="OrientedImageryViewerImageSearchMode" xml:space="preserve">
-    <value>כן_Image search mode__________________ש</value>
+    <value>מצב חיפוש תמונה</value>
   </data>
   <data name="OrientedImageryViewerCurrentFootprintLabel" xml:space="preserve">
-    <value>כן_Current Footprint__________________ש</value>
+    <value>עקבה נוכחית</value>
   </data>
   <data name="OrientedImageryViewerCurrentFootprintStackedLabel" xml:space="preserve">
-    <value>כן_Current_______________ש
-כן_Footprint___________________ש</value>
+    <value>עקבה נוכחית</value>
   </data>
   <data name="OrientedImageryViewerAdditionalFootprintsLabel" xml:space="preserve">
-    <value>כן_Additional Footprints______________________ש</value>
+    <value>עקבות נוספות</value>
   </data>
   <data name="OrientedImageryViewerAdditionalFootprintsStackedLabel" xml:space="preserve">
-    <value>כן_Additional_____________________ש
-כן_Footprints_____________________ש</value>
+    <value>עקבות נוספות</value>
   </data>
   <data name="OrientedImageryViewerCameraLocationsLabel" xml:space="preserve">
-    <value>כן_Camera Locations_________________ש</value>
+    <value>מיקומי מצלמות</value>
   </data>
   <data name="OrientedImageryViewerCameraLocationsStackedLabel" xml:space="preserve">
-    <value>כן_Camera_____________ש
-כן_Locations___________________ש</value>
+    <value>מיקומי מצלמות</value>
   </data>
   <data name="OrientedImageryViewerAddMarkersLabel" xml:space="preserve">
-    <value>כן_Add Markers____________ש</value>
+    <value>הוסף סמנים</value>
   </data>
   <data name="OrientedImageryViewerAddMarkersStackedLabel" xml:space="preserve">
-    <value>כן_Add_______ש
-כן_Markers_______________ש</value>
+    <value>הוסף סמנים</value>
   </data>
   <data name="OrientedImageryViewerClearMarkersLabel" xml:space="preserve">
-    <value>כן_Clear Markers______________ש</value>
+    <value>נקה סמנים</value>
   </data>
   <data name="OrientedImageryViewerClearMarkersTooltip" xml:space="preserve">
-    <value>כן_Clear markers______________ש</value>
+    <value>נקה סמנים</value>
   </data>
   <data name="OrientedImageryViewerClearMarkersStackedLabel" xml:space="preserve">
-    <value>כן_Clear___________ש
-כן_Markers_______________ש</value>
+    <value>נקה סמנים</value>
   </data>
   <data name="OrientedImageryViewerImageSearchModeFind" xml:space="preserve">
-    <value>כן_Find Images____________ש</value>
+    <value>מצא תמונות</value>
   </data>
   <data name="OrientedImageryViewerImageSearchModeFindStackedLabel" xml:space="preserve">
-    <value>כן_Find_________ש
-כן_Images_____________ש</value>
+    <value>מצא תמונות</value>
   </data>
   <data name="OrientedImageryViewerImageSearchModeDisplay" xml:space="preserve">
-    <value>כן_Display Image______________ש</value>
+    <value>הצג תמונה</value>
   </data>
   <data name="OrientedImageryViewerImageSearchModeDisplayStackedLabel" xml:space="preserve">
-    <value>כן_Display_______________ש
-כן_Image___________ש</value>
+    <value>הצג תמונה</value>
   </data>
   <data name="OrientedImageryViewerOpenSelectedImagePopup" xml:space="preserve">
-    <value>כן_Open details for selected image_________________ש</value>
+    <value>פתח את פרטי התמונה הנבחרת</value>
   </data>
   <data name="OrientedImageryViewerImageDetails" xml:space="preserve">
-    <value>כן_Image details______________ש</value>
+    <value>פרטי תמונה</value>
   </data>
   <data name="OrientedImageryViewerCloseSelectedImagePopup" xml:space="preserve">
-    <value>כן_Close details______________ש</value>
+    <value>סגור פרטים</value>
   </data>
   <data name="OrientedImageryViewerGoToPageFormat" xml:space="preserve">
-    <value>כן_Go to image {0} of {1}_______________________ש</value>
+    <value>עבור לתמונה {0} מתוך {1}</value>
   </data>
   <data name="OrientedImageryViewerSelectedPageFormat" xml:space="preserve">
-    <value>כן_Image {0} of {1}, selected___________________________ש</value>
+    <value>תמונה {0} מתוך {1}, נבחרה</value>
   </data>
   <data name="OrientedImageryViewerToggleCameraMarkers" xml:space="preserve">
-    <value>כן_Show camera locations______________________ש</value>
+    <value>הצג מיקומי מצלמות</value>
   </data>
   <data name="OrientedImageryViewerSequentialNavigationTooltip" xml:space="preserve">
-    <value>כן_Sequential navigation______________________ש</value>
+    <value>ניווט ברצף</value>
   </data>
   <data name="OrientedImageryViewerSequentialNavigationLabel" xml:space="preserve">
-    <value>כן_Sequential Navigation______________________ש</value>
+    <value>ניווט ברצף</value>
   </data>
   <data name="OrientedImageryViewerSequentialNavigationStackedLabel" xml:space="preserve">
-    <value>כן_Sequential_____________________ש
-כן_Navigation_____________________ש</value>
+    <value>ניווט ברצף</value>
   </data>
   <data name="OrientedImageryViewerPreviousImage" xml:space="preserve">
-    <value>כן_Previous image_______________ש</value>
+    <value>התמונה הקודמת</value>
   </data>
   <data name="OrientedImageryViewerNextImage" xml:space="preserve">
-    <value>כן_Next image_____________________ש</value>
+    <value>התמונה הבאה</value>
   </data>
   <data name="OrientedImageryViewerImageLoading" xml:space="preserve">
-    <value>כן_Image loading_________________ש...</value>
+    <value>טוען תמונה...</value>
   </data>
   <data name="OrientedImageryViewerImageLoaded" xml:space="preserve">
-    <value>כן_Image loaded_____________ש</value>
+    <value>התמונה נטענה</value>
   </data>
   <data name="OrientedImageryViewerNoImageToDisplay" xml:space="preserve">
-    <value>כן_No image to display____________________ש</value>
+    <value>אין תמונה להצגה</value>
   </data>
   <data name="OrientedImageryViewerNoImagesFound" xml:space="preserve">
-    <value>כן_No images found for the tapped location_____________________ש</value>
+    <value>לא נמצאו תמונות במיקום שהוקש</value>
   </data>
   <data name="OrientedImageryViewerImageSelectionNoImagesNone" xml:space="preserve">
-    <value>כן_No image to display. Enable find images or display image mode to search for images__________________________________________ש</value>
+    <value>אין תמונה להצגה. הפעל חיפוש תמונות או מצב הצגת תמונה כדי לחפש תמונות</value>
   </data>
   <data name="OrientedImageryViewerImageSelectionNoImagesFind" xml:space="preserve">
-    <value>כן_No image to display. Tap on the map to search for images or switch to display image mode______________________________________________ש.</value>
+    <value>אין תמונה להצגה. הקש על המפה כדי לחפש תמונות או כדי לעבור למצב הצגת תמונה.</value>
   </data>
   <data name="OrientedImageryViewerImageSelectionNoImagesDisplay" xml:space="preserve">
-    <value>כן_No image to display. Tap on a feature to view its image or switch to find images mode____________________________________________ש.</value>
+    <value>אין תמונה להצגה. הקש על יישות כדי להציג את התמונה שלה או כדי לעבור למצב חיפוש תמונות.</value>
   </data>
   <data name="OrientedImageryViewerImageSelectionEnable" xml:space="preserve">
-    <value>כן_Enable_____________ש</value>
+    <value>אפשר</value>
   </data>
   <data name="OrientedImageryViewerImageSelectionOr" xml:space="preserve">
-    <value>כן_or_____ש</value>
+    <value>או</value>
   </data>
   <data name="OrientedImageryViewerImageSelectionSearchMode" xml:space="preserve">
-    <value>כן_mode to search for images__________________________ש</value>
+    <value>מצב לחיפוש תמונות</value>
   </data>
   <data name="OrientedImageryViewerImageSelectionFindImages" xml:space="preserve">
-    <value>כן_Tap on the map to search for images___________________ש</value>
+    <value>הקש על המפה כדי לחפש תמונות</value>
   </data>
   <data name="OrientedImageryViewerImageSelectionDisplayImage" xml:space="preserve">
-    <value>כן_Tap on a feature to view its image__________________ש</value>
+    <value>הקש על יישות כדי להציג את התמונה שלה</value>
   </data>
   <data name="OrientedImageryViewerImageSelectionSwitchMode" xml:space="preserve">
-    <value>כן_or switch to_____________ש</value>
+    <value>או עבור אל</value>
   </data>
   <data name="OrientedImageryViewerImageSelectionMode" xml:space="preserve">
-    <value>כן_mode_________ש</value>
+    <value>מצב</value>
   </data>
   <data name="OrientedImageryViewerNoGeoView" xml:space="preserve">
-    <value>כן_Connect a GeoView to view oriented imagery_______________________ש.</value>
+    <value>חבר GeoView להצגת תמונה מכוונת.</value>
   </data>
   <data name="OrientedImageryViewerNoLayerSelected" xml:space="preserve">
-    <value>כן_No layer selected___________________ש.</value>
+    <value>לא נבחרה שכבה.</value>
   </data>
   <data name="OrientedImageryViewerAnnounceTransientError" xml:space="preserve">
-    <value>כן_Error raised_____________ש</value>
+    <value>דווחה שגיאה</value>
   </data>
   <data name="OrientedImageryViewerDismissError" xml:space="preserve">
-    <value>כן_Dismiss error______________ש</value>
+    <value>התעלם מהשגיאה</value>
   </data>
   <data name="OrientedImageryViewerPreviousLabel" xml:space="preserve">
-    <value>כן_Prev_________ש</value>
+    <value>הקודם</value>
   </data>
   <data name="OrientedImageryViewerNextLabel" xml:space="preserve">
-    <value>כן_Next_________ש</value>
+    <value>הבא</value>
   </data>
   <data name="OrientedImageryViewerSequenceStartReached" xml:space="preserve">
-    <value>כן_Start of image sequence reached_________________ש</value>
+    <value>תחילת רצף התמונות</value>
   </data>
   <data name="OrientedImageryViewerSequenceEndReached" xml:space="preserve">
-    <value>כן_End of image sequence reached______________________________ש</value>
+    <value>סוף רצף התמונות</value>
   </data>
   <data name="OrientedImageryViewerSequenceStartAndEndReached" xml:space="preserve">
-    <value>כן_Start and end of image sequence reached_____________________ש</value>
+    <value>תחילת או סוף רצף התמונות</value>
   </data>
   <data name="OrientedImageryViewerClose" xml:space="preserve">
-    <value>כן_Close oriented imagery_______________________ש</value>
+    <value>סגור את התמונות המכוונות</value>
   </data>
   <data name="OrientedImageryViewerClosePanel" xml:space="preserve">
-    <value>כן_Close panel____________ש</value>
+    <value>סגור לוח</value>
   </data>
   <data name="OrientedImageryViewerOverlays" xml:space="preserve">
-    <value>כן_Overlays_________________ש</value>
+    <value>כיסויים</value>
   </data>
   <data name="OrientedImageryViewerMarkers" xml:space="preserve">
-    <value>כן_Markers_______________ש</value>
+    <value>סמנים</value>
   </data>
   <data name="OrientedImageryViewerMode" xml:space="preserve">
-    <value>כן_Mode_________ש</value>
+    <value>אופן</value>
   </data>
   <data name="OrientedImageryViewerShowPreviousImageInSequence" xml:space="preserve">
-    <value>כן_Show previous image in sequence_________________ש</value>
+    <value>הצג את התמונה הקודמת ברצף</value>
   </data>
   <data name="OrientedImageryViewerShowNextImageInSequence" xml:space="preserve">
-    <value>כן_Show next image in sequence____________________________ש</value>
+    <value>הצג את התמונה הבאה ברצף</value>
   </data>
   <data name="OrientedImageryViewerMore" xml:space="preserve">
-    <value>כן_More_________ש</value>
+    <value>עוד</value>
   </data>
   <data name="OrientedImageryViewerPage" xml:space="preserve">
-    <value>כן_Image {0} of {1}_________________ש</value>
+    <value>תמונה {0} מתוך {1}</value>
   </data>
   <data name="OrientedImageryViewerSelectLayer" xml:space="preserve">
-    <value>כן_Select layer_____________ש</value>
+    <value>בחר שכבה</value>
   </data>
   <data name="OrientedImagerySampleToggleView" xml:space="preserve">
     <value>דו/תלת-ממד</value>
@@ -1071,78 +1063,78 @@
     <value>עבור בין מפה דו ממדית לסצנה תלת ממדית</value>
   </data>
   <data name="OrientedImageryViewerMarkerSelection" xml:space="preserve">
-    <value>כן_Marker selection_________________ש</value>
+    <value>בחירת סמן</value>
   </data>
   <data name="OrientedImageryViewerMarkerOption" xml:space="preserve">
-    <value>כן_Marker {0}_____________________ש</value>
+    <value>סמן {0}</value>
   </data>
   <data name="OrientedImageryViewerMarkerCircle" xml:space="preserve">
-    <value>כן_Circle marker______________ש</value>
+    <value>סמן עיגול</value>
   </data>
   <data name="OrientedImageryViewerMarkerSquare" xml:space="preserve">
-    <value>כן_Square marker______________ש</value>
+    <value>סמן מרובע</value>
   </data>
   <data name="OrientedImageryViewerMarkerTriangle" xml:space="preserve">
-    <value>כן_Triangle marker________________ש</value>
+    <value>סמן משולש</value>
   </data>
   <data name="OrientedImageryViewerMarkerDiamond" xml:space="preserve">
-    <value>כן_Diamond marker_______________ש</value>
+    <value>סמן יהלום</value>
   </data>
   <data name="OrientedImageryViewerMarkerX" xml:space="preserve">
-    <value>כן_Cross marker_____________ש</value>
+    <value>סמן צלב</value>
   </data>
   <data name="OrientedImageryViewerMobileSequentialMode" xml:space="preserve">
-    <value>כן_Sequential_____________________ש</value>
+    <value>סדרתי</value>
   </data>
   <data name="OrientedImageryViewerNavigation" xml:space="preserve">
-    <value>כן_Explore_______________ש</value>
+    <value>גלה</value>
   </data>
   <data name="OrientedImageryViewerModeSelection" xml:space="preserve">
-    <value>כן_Mode Selection_______________ש</value>
+    <value>בחירת מצב</value>
   </data>
   <data name="OrientedImageryViewerOverlaysSelection" xml:space="preserve">
-    <value>כן_Overlays Selection___________________ש</value>
+    <value>בחירת כיסוי</value>
   </data>
   <data name="OrientedImageryViewerMarkerTools" xml:space="preserve">
-    <value>כן_Marker Tools_____________ש</value>
+    <value>כלי סמן</value>
   </data>
   <data name="OrientedImageryViewerOpen" xml:space="preserve">
-    <value>כן_Open oriented imagery______________________ש</value>
+    <value>פתח תצלום כיווני</value>
   </data>
   <data name="OrientedImageryViewerOn" xml:space="preserve">
-    <value>כן_On_____ש</value>
+    <value>פועל</value>
   </data>
   <data name="OrientedImageryViewerOff" xml:space="preserve">
-    <value>כן_Off_______ש</value>
+    <value>כבוי</value>
   </data>
   <data name="OrientedImageryViewerSelected" xml:space="preserve">
-    <value>כן_Selected_________________ש</value>
+    <value>נבחר</value>
   </data>
   <data name="OrientedImageryViewerNotSelected" xml:space="preserve">
-    <value>כן_Not selected_____________ש</value>
+    <value>לא נבחר</value>
   </data>
   <data name="OrientedImageryViewerMobileBackToMarkers" xml:space="preserve">
-    <value>כן_Back to Marker Tools_____________________ש</value>
+    <value>חזרה לכלי סמן</value>
   </data>
   <data name="OrientedImageryViewerMobileSelectMarkerSymbol" xml:space="preserve">
-    <value>כן_Select Symbol______________ש</value>
+    <value>בחר סמל</value>
   </data>
   <data name="OrientedImageryViewerMobileCurrentFootprint" xml:space="preserve">
-    <value>כן_Show Current Footprint_______________________ש</value>
+    <value>הצג עקבה נוכחית</value>
   </data>
   <data name="OrientedImageryViewerMobileAdditionalFootprints" xml:space="preserve">
-    <value>כן_Show Additional Footprints___________________________ש</value>
+    <value>הצג עקבות נוספות</value>
   </data>
   <data name="OrientedImageryViewerMobileCameraLocations" xml:space="preserve">
-    <value>כן_Show Camera Locations______________________ש</value>
+    <value>הצג מיקומי מצלמות</value>
   </data>
   <data name="OrientedImageryViewerImageNavigation" xml:space="preserve">
-    <value>כן_Image navigation_________________ש</value>
+    <value>ניווט בתמונה</value>
   </data>
   <data name="OrientedImageryViewerImageNavigationHint" xml:space="preserve">
-    <value>כן_Use Left Arrow for the previous image or Right Arrow for the next image_____________________________________ש.</value>
+    <value>לחץ על החץ השמאלי לתמונה הקודמת או על החץ הימני לתמונה הבאה.</value>
   </data>
   <data name="OrientedImageryViewerSequenceNavigation" xml:space="preserve">
-    <value>כן_Sequential image navigation____________________________ש</value>
+    <value>ניווט ברצף בתמונות</value>
   </data>
 </root>

@@ -862,207 +862,199 @@
     <value>صورة موجهة</value>
   </data>
   <data name="OrientedImageryViewerAutomationTypeName" xml:space="preserve">
-    <value>بيت_Oriented imagery view______________________لاحقة</value>
+    <value>عرض الصور الموجَّهة</value>
   </data>
   <data name="OrientedImageryViewerSelectMarkerSymbol" xml:space="preserve">
-    <value>بيت_Select marker symbol_____________________لاحقة</value>
+    <value>تحديد رموز العلامة</value>
   </data>
   <data name="OrientedImageryViewerToggleAddMarkers" xml:space="preserve">
-    <value>بيت_Toggle add markers___________________لاحقة</value>
+    <value>تبديل تشغيل/إيقاف إضافة العلامات</value>
   </data>
   <data name="OrientedImageryViewerShowSelectedImageFootprint" xml:space="preserve">
-    <value>بيت_Show current footprint_______________________لاحقة</value>
+    <value>إظهار الموضع الحالي</value>
   </data>
   <data name="OrientedImageryViewerShowUnselectedImageFootprints" xml:space="preserve">
-    <value>بيت_Show additional footprints___________________________لاحقة</value>
+    <value>إظهار مواضع إضافية</value>
   </data>
   <data name="OrientedImageryViewerImageSearchMode" xml:space="preserve">
-    <value>بيت_Image search mode__________________لاحقة</value>
+    <value>وضع البحث عن الصور</value>
   </data>
   <data name="OrientedImageryViewerCurrentFootprintLabel" xml:space="preserve">
-    <value>بيت_Current Footprint__________________لاحقة</value>
+    <value>الموضع الحالي</value>
   </data>
   <data name="OrientedImageryViewerCurrentFootprintStackedLabel" xml:space="preserve">
-    <value>بيت_Current_______________لاحقة
-بيت_Footprint___________________لاحقة</value>
+    <value>الموضع الحالي</value>
   </data>
   <data name="OrientedImageryViewerAdditionalFootprintsLabel" xml:space="preserve">
-    <value>بيت_Additional Footprints______________________لاحقة</value>
+    <value>مواضع إضافية</value>
   </data>
   <data name="OrientedImageryViewerAdditionalFootprintsStackedLabel" xml:space="preserve">
-    <value>بيت_Additional_____________________لاحقة
-بيت_Footprints_____________________لاحقة</value>
+    <value>مواضع إضافية</value>
   </data>
   <data name="OrientedImageryViewerCameraLocationsLabel" xml:space="preserve">
-    <value>بيت_Camera Locations_________________لاحقة</value>
+    <value>مواقع الكاميرا</value>
   </data>
   <data name="OrientedImageryViewerCameraLocationsStackedLabel" xml:space="preserve">
-    <value>بيت_Camera_____________لاحقة
-بيت_Locations___________________لاحقة</value>
+    <value>مواقع الكاميرا</value>
   </data>
   <data name="OrientedImageryViewerAddMarkersLabel" xml:space="preserve">
-    <value>بيت_Add Markers____________لاحقة</value>
+    <value>إضافة علامات</value>
   </data>
   <data name="OrientedImageryViewerAddMarkersStackedLabel" xml:space="preserve">
-    <value>بيت_Add_______لاحقة
-بيت_Markers_______________لاحقة</value>
+    <value>إضافة علامات</value>
   </data>
   <data name="OrientedImageryViewerClearMarkersLabel" xml:space="preserve">
-    <value>بيت_Clear Markers______________لاحقة</value>
+    <value>حذف العلامات</value>
   </data>
   <data name="OrientedImageryViewerClearMarkersTooltip" xml:space="preserve">
-    <value>بيت_Clear markers______________لاحقة</value>
+    <value>حذف العلامات</value>
   </data>
   <data name="OrientedImageryViewerClearMarkersStackedLabel" xml:space="preserve">
-    <value>بيت_Clear___________لاحقة
-بيت_Markers_______________لاحقة</value>
+    <value>حذف العلامات</value>
   </data>
   <data name="OrientedImageryViewerImageSearchModeFind" xml:space="preserve">
-    <value>بيت_Find Images____________لاحقة</value>
+    <value>العثور على الصور</value>
   </data>
   <data name="OrientedImageryViewerImageSearchModeFindStackedLabel" xml:space="preserve">
-    <value>بيت_Find_________لاحقة
-بيت_Images_____________لاحقة</value>
+    <value>العثور على الصور</value>
   </data>
   <data name="OrientedImageryViewerImageSearchModeDisplay" xml:space="preserve">
-    <value>بيت_Display Image______________لاحقة</value>
+    <value>عرض الصورة</value>
   </data>
   <data name="OrientedImageryViewerImageSearchModeDisplayStackedLabel" xml:space="preserve">
-    <value>بيت_Display_______________لاحقة
-بيت_Image___________لاحقة</value>
+    <value>عرض الصورة</value>
   </data>
   <data name="OrientedImageryViewerOpenSelectedImagePopup" xml:space="preserve">
-    <value>بيت_Open details for selected image_________________لاحقة</value>
+    <value>فتح تفاصيل الصورة المحددة</value>
   </data>
   <data name="OrientedImageryViewerImageDetails" xml:space="preserve">
-    <value>بيت_Image details______________لاحقة</value>
+    <value>تفاصيل الصورة</value>
   </data>
   <data name="OrientedImageryViewerCloseSelectedImagePopup" xml:space="preserve">
-    <value>بيت_Close details______________لاحقة</value>
+    <value>إغلاق التفاصيل</value>
   </data>
   <data name="OrientedImageryViewerGoToPageFormat" xml:space="preserve">
-    <value>بيت_Go to image {0} of {1}_______________________لاحقة</value>
+    <value>الانتقال إلى الصورة {0} من {1}</value>
   </data>
   <data name="OrientedImageryViewerSelectedPageFormat" xml:space="preserve">
-    <value>بيت_Image {0} of {1}, selected___________________________لاحقة</value>
+    <value>الصورة {0} من {1}، محددة</value>
   </data>
   <data name="OrientedImageryViewerToggleCameraMarkers" xml:space="preserve">
-    <value>بيت_Show camera locations______________________لاحقة</value>
+    <value>إظهار مواقع الكاميرا</value>
   </data>
   <data name="OrientedImageryViewerSequentialNavigationTooltip" xml:space="preserve">
-    <value>بيت_Sequential navigation______________________لاحقة</value>
+    <value>التنقّل التسلسلي</value>
   </data>
   <data name="OrientedImageryViewerSequentialNavigationLabel" xml:space="preserve">
-    <value>بيت_Sequential Navigation______________________لاحقة</value>
+    <value>التنقّل التسلسلي</value>
   </data>
   <data name="OrientedImageryViewerSequentialNavigationStackedLabel" xml:space="preserve">
-    <value>بيت_Sequential_____________________لاحقة
-بيت_Navigation_____________________لاحقة</value>
+    <value>التنقّل التسلسلي</value>
   </data>
   <data name="OrientedImageryViewerPreviousImage" xml:space="preserve">
-    <value>بيت_Previous image_______________لاحقة</value>
+    <value>الصورة السابقة</value>
   </data>
   <data name="OrientedImageryViewerNextImage" xml:space="preserve">
-    <value>بيت_Next image_____________________لاحقة</value>
+    <value>الصورة التالية</value>
   </data>
   <data name="OrientedImageryViewerImageLoading" xml:space="preserve">
-    <value>بيت_Image loading_________________لاحقة...</value>
+    <value>جارٍ تحميل الصورة...</value>
   </data>
   <data name="OrientedImageryViewerImageLoaded" xml:space="preserve">
-    <value>بيت_Image loaded_____________لاحقة</value>
+    <value>تم تحميل الصورة</value>
   </data>
   <data name="OrientedImageryViewerNoImageToDisplay" xml:space="preserve">
-    <value>بيت_No image to display____________________لاحقة</value>
+    <value>لا توجد صورة لعرضها</value>
   </data>
   <data name="OrientedImageryViewerNoImagesFound" xml:space="preserve">
-    <value>بيت_No images found for the tapped location_____________________لاحقة</value>
+    <value>لم يتم العثور على صور للموقع الذي تم النقر عليه</value>
   </data>
   <data name="OrientedImageryViewerImageSelectionNoImagesNone" xml:space="preserve">
-    <value>بيت_No image to display. Enable find images or display image mode to search for images__________________________________________لاحقة</value>
+    <value>لا توجد صورة لعرضها. تمكين خاصية العثور على الصور أو وضع عرض الصورة للبحث عن صور</value>
   </data>
   <data name="OrientedImageryViewerImageSelectionNoImagesFind" xml:space="preserve">
-    <value>بيت_No image to display. Tap on the map to search for images or switch to display image mode______________________________________________لاحقة.</value>
+    <value>لا توجد صورة لعرضها. انقر فوق الخريطة للبحث عن صور أو انتقل إلى وضع عرض الصورة.</value>
   </data>
   <data name="OrientedImageryViewerImageSelectionNoImagesDisplay" xml:space="preserve">
-    <value>بيت_No image to display. Tap on a feature to view its image or switch to find images mode____________________________________________لاحقة.</value>
+    <value>لا توجد صورة لعرضها. انقر فوق أحد المعالم لعرض صورته أو انتقل إلى وضع العثور على الصور.</value>
   </data>
   <data name="OrientedImageryViewerImageSelectionEnable" xml:space="preserve">
-    <value>بيت_Enable_____________لاحقة</value>
+    <value>تمكين</value>
   </data>
   <data name="OrientedImageryViewerImageSelectionOr" xml:space="preserve">
-    <value>بيت_or_____لاحقة</value>
+    <value>أو</value>
   </data>
   <data name="OrientedImageryViewerImageSelectionSearchMode" xml:space="preserve">
-    <value>بيت_mode to search for images__________________________لاحقة</value>
+    <value>وضع للبحث عن الصور</value>
   </data>
   <data name="OrientedImageryViewerImageSelectionFindImages" xml:space="preserve">
-    <value>بيت_Tap on the map to search for images___________________لاحقة</value>
+    <value>انقر فوق الخريطة للبحث عن صور</value>
   </data>
   <data name="OrientedImageryViewerImageSelectionDisplayImage" xml:space="preserve">
-    <value>بيت_Tap on a feature to view its image__________________لاحقة</value>
+    <value>انقر فوق أحد المعالم لعرض صورته</value>
   </data>
   <data name="OrientedImageryViewerImageSelectionSwitchMode" xml:space="preserve">
-    <value>بيت_or switch to_____________لاحقة</value>
+    <value>أو انتقل إلى</value>
   </data>
   <data name="OrientedImageryViewerImageSelectionMode" xml:space="preserve">
-    <value>بيت_mode_________لاحقة</value>
+    <value>الوضع</value>
   </data>
   <data name="OrientedImageryViewerNoGeoView" xml:space="preserve">
-    <value>بيت_Connect a GeoView to view oriented imagery_______________________لاحقة.</value>
+    <value>اربط GeoView لعرض الصور الموجَّهة.</value>
   </data>
   <data name="OrientedImageryViewerNoLayerSelected" xml:space="preserve">
-    <value>بيت_No layer selected___________________لاحقة.</value>
+    <value>لم يتم تحديد طبقة.</value>
   </data>
   <data name="OrientedImageryViewerAnnounceTransientError" xml:space="preserve">
-    <value>بيت_Error raised_____________لاحقة</value>
+    <value>تم إطلاق خطأ</value>
   </data>
   <data name="OrientedImageryViewerDismissError" xml:space="preserve">
-    <value>بيت_Dismiss error______________لاحقة</value>
+    <value>تجاهل الخطأ</value>
   </data>
   <data name="OrientedImageryViewerPreviousLabel" xml:space="preserve">
-    <value>بيت_Prev_________لاحقة</value>
+    <value>سابق</value>
   </data>
   <data name="OrientedImageryViewerNextLabel" xml:space="preserve">
-    <value>بيت_Next_________لاحقة</value>
+    <value>التالي</value>
   </data>
   <data name="OrientedImageryViewerSequenceStartReached" xml:space="preserve">
-    <value>بيت_Start of image sequence reached_________________لاحقة</value>
+    <value>تم الوصول إلى بداية تسلسل الصور</value>
   </data>
   <data name="OrientedImageryViewerSequenceEndReached" xml:space="preserve">
-    <value>بيت_End of image sequence reached______________________________لاحقة</value>
+    <value>تم الوصول إلى نهاية تسلسل الصور</value>
   </data>
   <data name="OrientedImageryViewerSequenceStartAndEndReached" xml:space="preserve">
-    <value>بيت_Start and end of image sequence reached_____________________لاحقة</value>
+    <value>تم الوصول إلى بداية ونهاية تسلسل الصور</value>
   </data>
   <data name="OrientedImageryViewerClose" xml:space="preserve">
-    <value>بيت_Close oriented imagery_______________________لاحقة</value>
+    <value>إغلاق الصورة الموجهة</value>
   </data>
   <data name="OrientedImageryViewerClosePanel" xml:space="preserve">
-    <value>بيت_Close panel____________لاحقة</value>
+    <value>إغلاق اللوحة</value>
   </data>
   <data name="OrientedImageryViewerOverlays" xml:space="preserve">
-    <value>بيت_Overlays_________________لاحقة</value>
+    <value>تراكبات</value>
   </data>
   <data name="OrientedImageryViewerMarkers" xml:space="preserve">
-    <value>بيت_Markers_______________لاحقة</value>
+    <value>العلامات</value>
   </data>
   <data name="OrientedImageryViewerMode" xml:space="preserve">
-    <value>بيت_Mode_________لاحقة</value>
+    <value>الوضع</value>
   </data>
   <data name="OrientedImageryViewerShowPreviousImageInSequence" xml:space="preserve">
-    <value>بيت_Show previous image in sequence_________________لاحقة</value>
+    <value>إظهار الصورة السابقة في التسلسل</value>
   </data>
   <data name="OrientedImageryViewerShowNextImageInSequence" xml:space="preserve">
-    <value>بيت_Show next image in sequence____________________________لاحقة</value>
+    <value>إظهار الصورة التالية في التسلسل</value>
   </data>
   <data name="OrientedImageryViewerMore" xml:space="preserve">
-    <value>بيت_More_________لاحقة</value>
+    <value>المزيد</value>
   </data>
   <data name="OrientedImageryViewerPage" xml:space="preserve">
-    <value>بيت_Image {0} of {1}_________________لاحقة</value>
+    <value>صورة {0} من {1}</value>
   </data>
   <data name="OrientedImageryViewerSelectLayer" xml:space="preserve">
-    <value>بيت_Select layer_____________لاحقة</value>
+    <value>تحديد طبقة</value>
   </data>
   <data name="OrientedImagerySampleToggleView" xml:space="preserve">
     <value>ثنائي/ثلاثي الأبعاد</value>
@@ -1071,78 +1063,78 @@
     <value>التبديل بين خريطة ثنائية الأبعاد ومشهد ثلاثي الأبعاد</value>
   </data>
   <data name="OrientedImageryViewerMarkerSelection" xml:space="preserve">
-    <value>بيت_Marker selection_________________لاحقة</value>
+    <value>تحديد علامة</value>
   </data>
   <data name="OrientedImageryViewerMarkerOption" xml:space="preserve">
-    <value>بيت_Marker {0}_____________________لاحقة</value>
+    <value>العلامة {0}</value>
   </data>
   <data name="OrientedImageryViewerMarkerCircle" xml:space="preserve">
-    <value>بيت_Circle marker______________لاحقة</value>
+    <value>علامة دائرية</value>
   </data>
   <data name="OrientedImageryViewerMarkerSquare" xml:space="preserve">
-    <value>بيت_Square marker______________لاحقة</value>
+    <value>علامة مربعة</value>
   </data>
   <data name="OrientedImageryViewerMarkerTriangle" xml:space="preserve">
-    <value>بيت_Triangle marker________________لاحقة</value>
+    <value>علامة مثلثة</value>
   </data>
   <data name="OrientedImageryViewerMarkerDiamond" xml:space="preserve">
-    <value>بيت_Diamond marker_______________لاحقة</value>
+    <value>علامة مُعيَّنة</value>
   </data>
   <data name="OrientedImageryViewerMarkerX" xml:space="preserve">
-    <value>بيت_Cross marker_____________لاحقة</value>
+    <value>علامة تقاطعية</value>
   </data>
   <data name="OrientedImageryViewerMobileSequentialMode" xml:space="preserve">
-    <value>بيت_Sequential_____________________لاحقة</value>
+    <value>تسلسلي</value>
   </data>
   <data name="OrientedImageryViewerNavigation" xml:space="preserve">
-    <value>بيت_Explore_______________لاحقة</value>
+    <value>استكشاف</value>
   </data>
   <data name="OrientedImageryViewerModeSelection" xml:space="preserve">
-    <value>بيت_Mode Selection_______________لاحقة</value>
+    <value>تحديد الوضع</value>
   </data>
   <data name="OrientedImageryViewerOverlaysSelection" xml:space="preserve">
-    <value>بيت_Overlays Selection___________________لاحقة</value>
+    <value>تحديد التراكبات</value>
   </data>
   <data name="OrientedImageryViewerMarkerTools" xml:space="preserve">
-    <value>بيت_Marker Tools_____________لاحقة</value>
+    <value>أدوات العلامات</value>
   </data>
   <data name="OrientedImageryViewerOpen" xml:space="preserve">
-    <value>بيت_Open oriented imagery______________________لاحقة</value>
+    <value>فتح الصورة الموجهة</value>
   </data>
   <data name="OrientedImageryViewerOn" xml:space="preserve">
-    <value>بيت_On_____لاحقة</value>
+    <value>تشغيل</value>
   </data>
   <data name="OrientedImageryViewerOff" xml:space="preserve">
-    <value>بيت_Off_______لاحقة</value>
+    <value>إيقاف تشغيل</value>
   </data>
   <data name="OrientedImageryViewerSelected" xml:space="preserve">
-    <value>بيت_Selected_________________لاحقة</value>
+    <value>المحدد</value>
   </data>
   <data name="OrientedImageryViewerNotSelected" xml:space="preserve">
-    <value>بيت_Not selected_____________لاحقة</value>
+    <value>غير محدد</value>
   </data>
   <data name="OrientedImageryViewerMobileBackToMarkers" xml:space="preserve">
-    <value>بيت_Back to Marker Tools_____________________لاحقة</value>
+    <value>الرجوع إلى أدوات العلامات</value>
   </data>
   <data name="OrientedImageryViewerMobileSelectMarkerSymbol" xml:space="preserve">
-    <value>بيت_Select Symbol______________لاحقة</value>
+    <value>تحديد الرمز</value>
   </data>
   <data name="OrientedImageryViewerMobileCurrentFootprint" xml:space="preserve">
-    <value>بيت_Show Current Footprint_______________________لاحقة</value>
+    <value>إظهار الموضع الحالي</value>
   </data>
   <data name="OrientedImageryViewerMobileAdditionalFootprints" xml:space="preserve">
-    <value>بيت_Show Additional Footprints___________________________لاحقة</value>
+    <value>إظهار مواضع إضافية</value>
   </data>
   <data name="OrientedImageryViewerMobileCameraLocations" xml:space="preserve">
-    <value>بيت_Show Camera Locations______________________لاحقة</value>
+    <value>إظهار مواقع الكاميرا</value>
   </data>
   <data name="OrientedImageryViewerImageNavigation" xml:space="preserve">
-    <value>بيت_Image navigation_________________لاحقة</value>
+    <value>التنقل في الصور</value>
   </data>
   <data name="OrientedImageryViewerImageNavigationHint" xml:space="preserve">
-    <value>بيت_Use Left Arrow for the previous image or Right Arrow for the next image_____________________________________لاحقة.</value>
+    <value>استخدم سهم الاتجاه إلى اليسار للوصول إلى الصورة السابقة أو سهم الاتجاه إلى اليمين للوصول إلى الصورة التالية.</value>
   </data>
   <data name="OrientedImageryViewerSequenceNavigation" xml:space="preserve">
-    <value>بيت_Sequential image navigation____________________________لاحقة</value>
+    <value>التنقل التسلسلي بين الصور</value>
   </data>
 </root>

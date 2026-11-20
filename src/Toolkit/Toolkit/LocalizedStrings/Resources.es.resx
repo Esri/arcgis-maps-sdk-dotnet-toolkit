@@ -862,207 +862,199 @@
     <value>Imagen orientada</value>
   </data>
   <data name="OrientedImageryViewerAutomationTypeName" xml:space="preserve">
-    <value>á_Oriented imagery view______________________Ó</value>
+    <value>Vista de imágenes orientadas</value>
   </data>
   <data name="OrientedImageryViewerSelectMarkerSymbol" xml:space="preserve">
-    <value>á_Select marker symbol_____________________Ó</value>
+    <value>Seleccionar símbolo de marcador</value>
   </data>
   <data name="OrientedImageryViewerToggleAddMarkers" xml:space="preserve">
-    <value>á_Toggle add markers___________________Ó</value>
+    <value>Activar/desactivar adición de marcadores</value>
   </data>
   <data name="OrientedImageryViewerShowSelectedImageFootprint" xml:space="preserve">
-    <value>á_Show current footprint_______________________Ó</value>
+    <value>Mostrar huella actual</value>
   </data>
   <data name="OrientedImageryViewerShowUnselectedImageFootprints" xml:space="preserve">
-    <value>á_Show additional footprints___________________________Ó</value>
+    <value>Mostrar huellas adicionales</value>
   </data>
   <data name="OrientedImageryViewerImageSearchMode" xml:space="preserve">
-    <value>á_Image search mode__________________Ó</value>
+    <value>Modo de búsqueda de imágenes</value>
   </data>
   <data name="OrientedImageryViewerCurrentFootprintLabel" xml:space="preserve">
-    <value>á_Current Footprint__________________Ó</value>
+    <value>Huella actual</value>
   </data>
   <data name="OrientedImageryViewerCurrentFootprintStackedLabel" xml:space="preserve">
-    <value>á_Current_______________Ó
-á_Footprint___________________Ó</value>
+    <value>Huella actual</value>
   </data>
   <data name="OrientedImageryViewerAdditionalFootprintsLabel" xml:space="preserve">
-    <value>á_Additional Footprints______________________Ó</value>
+    <value>Huellas adicionales</value>
   </data>
   <data name="OrientedImageryViewerAdditionalFootprintsStackedLabel" xml:space="preserve">
-    <value>á_Additional_____________________Ó
-á_Footprints_____________________Ó</value>
+    <value>Huellas adicionales</value>
   </data>
   <data name="OrientedImageryViewerCameraLocationsLabel" xml:space="preserve">
-    <value>á_Camera Locations_________________Ó</value>
+    <value>Ubicaciones de cámara</value>
   </data>
   <data name="OrientedImageryViewerCameraLocationsStackedLabel" xml:space="preserve">
-    <value>á_Camera_____________Ó
-á_Locations___________________Ó</value>
+    <value>Ubicaciones de cámara</value>
   </data>
   <data name="OrientedImageryViewerAddMarkersLabel" xml:space="preserve">
-    <value>á_Add Markers____________Ó</value>
+    <value>Agregar marcadores</value>
   </data>
   <data name="OrientedImageryViewerAddMarkersStackedLabel" xml:space="preserve">
-    <value>á_Add_______Ó
-á_Markers_______________Ó</value>
+    <value>Agregar marcadores</value>
   </data>
   <data name="OrientedImageryViewerClearMarkersLabel" xml:space="preserve">
-    <value>á_Clear Markers______________Ó</value>
+    <value>Borrar marcadores</value>
   </data>
   <data name="OrientedImageryViewerClearMarkersTooltip" xml:space="preserve">
-    <value>á_Clear markers______________Ó</value>
+    <value>Borrar marcadores</value>
   </data>
   <data name="OrientedImageryViewerClearMarkersStackedLabel" xml:space="preserve">
-    <value>á_Clear___________Ó
-á_Markers_______________Ó</value>
+    <value>Borrar marcadores</value>
   </data>
   <data name="OrientedImageryViewerImageSearchModeFind" xml:space="preserve">
-    <value>á_Find Images____________Ó</value>
+    <value>Buscar imágenes</value>
   </data>
   <data name="OrientedImageryViewerImageSearchModeFindStackedLabel" xml:space="preserve">
-    <value>á_Find_________Ó
-á_Images_____________Ó</value>
+    <value>Buscar imágenes</value>
   </data>
   <data name="OrientedImageryViewerImageSearchModeDisplay" xml:space="preserve">
-    <value>á_Display Image______________Ó</value>
+    <value>Mostrar imagen</value>
   </data>
   <data name="OrientedImageryViewerImageSearchModeDisplayStackedLabel" xml:space="preserve">
-    <value>á_Display_______________Ó
-á_Image___________Ó</value>
+    <value>Mostrar imagen</value>
   </data>
   <data name="OrientedImageryViewerOpenSelectedImagePopup" xml:space="preserve">
-    <value>á_Open details for selected image_________________Ó</value>
+    <value>Abrir detalles para la imagen seleccionada</value>
   </data>
   <data name="OrientedImageryViewerImageDetails" xml:space="preserve">
-    <value>á_Image details______________Ó</value>
+    <value>Detalles de imagen</value>
   </data>
   <data name="OrientedImageryViewerCloseSelectedImagePopup" xml:space="preserve">
-    <value>á_Close details______________Ó</value>
+    <value>Cerrar detalles</value>
   </data>
   <data name="OrientedImageryViewerGoToPageFormat" xml:space="preserve">
-    <value>á_Go to image {0} of {1}_______________________Ó</value>
+    <value>Ir a la imagen {0} de {1}</value>
   </data>
   <data name="OrientedImageryViewerSelectedPageFormat" xml:space="preserve">
-    <value>á_Image {0} of {1}, selected___________________________Ó</value>
+    <value>Imagen {0} de {1}, seleccionada</value>
   </data>
   <data name="OrientedImageryViewerToggleCameraMarkers" xml:space="preserve">
-    <value>á_Show camera locations______________________Ó</value>
+    <value>Mostrar ubicaciones de cámara</value>
   </data>
   <data name="OrientedImageryViewerSequentialNavigationTooltip" xml:space="preserve">
-    <value>á_Sequential navigation______________________Ó</value>
+    <value>Navegación secuencial</value>
   </data>
   <data name="OrientedImageryViewerSequentialNavigationLabel" xml:space="preserve">
-    <value>á_Sequential Navigation______________________Ó</value>
+    <value>Navegación secuencial</value>
   </data>
   <data name="OrientedImageryViewerSequentialNavigationStackedLabel" xml:space="preserve">
-    <value>á_Sequential_____________________Ó
-á_Navigation_____________________Ó</value>
+    <value>Navegación secuencial</value>
   </data>
   <data name="OrientedImageryViewerPreviousImage" xml:space="preserve">
-    <value>á_Previous image_______________Ó</value>
+    <value>Imagen anterior</value>
   </data>
   <data name="OrientedImageryViewerNextImage" xml:space="preserve">
-    <value>á_Next image_____________________Ó</value>
+    <value>Imagen siguiente</value>
   </data>
   <data name="OrientedImageryViewerImageLoading" xml:space="preserve">
-    <value>á_Image loading_________________Ó...</value>
+    <value>Cargando imagen...</value>
   </data>
   <data name="OrientedImageryViewerImageLoaded" xml:space="preserve">
-    <value>á_Image loaded_____________Ó</value>
+    <value>Imagen cargada</value>
   </data>
   <data name="OrientedImageryViewerNoImageToDisplay" xml:space="preserve">
-    <value>á_No image to display____________________Ó</value>
+    <value>No hay ninguna imagen por mostrar</value>
   </data>
   <data name="OrientedImageryViewerNoImagesFound" xml:space="preserve">
-    <value>á_No images found for the tapped location_____________________Ó</value>
+    <value>No se han encontrado imágenes para la ubicación seleccionada</value>
   </data>
   <data name="OrientedImageryViewerImageSelectionNoImagesNone" xml:space="preserve">
-    <value>á_No image to display. Enable find images or display image mode to search for images__________________________________________Ó</value>
+    <value>No hay ninguna imagen por mostrar. Habilite el modo de búsqueda de imágenes o de visualización de imágenes para buscar imágenes</value>
   </data>
   <data name="OrientedImageryViewerImageSelectionNoImagesFind" xml:space="preserve">
-    <value>á_No image to display. Tap on the map to search for images or switch to display image mode______________________________________________Ó.</value>
+    <value>No hay ninguna imagen por mostrar. Toque en el mapa para buscar imágenes o cambie al modo de visualización de imágenes.</value>
   </data>
   <data name="OrientedImageryViewerImageSelectionNoImagesDisplay" xml:space="preserve">
-    <value>á_No image to display. Tap on a feature to view its image or switch to find images mode____________________________________________Ó.</value>
+    <value>No hay ninguna imagen por mostrar. Toque en la entidad para ver la imagen correspondiente o cambie al modo de búsqueda de imágenes.</value>
   </data>
   <data name="OrientedImageryViewerImageSelectionEnable" xml:space="preserve">
-    <value>á_Enable_____________Ó</value>
+    <value>Habilitar</value>
   </data>
   <data name="OrientedImageryViewerImageSelectionOr" xml:space="preserve">
-    <value>á_or_____Ó</value>
+    <value>o</value>
   </data>
   <data name="OrientedImageryViewerImageSelectionSearchMode" xml:space="preserve">
-    <value>á_mode to search for images__________________________Ó</value>
+    <value>modo para buscar imágenes</value>
   </data>
   <data name="OrientedImageryViewerImageSelectionFindImages" xml:space="preserve">
-    <value>á_Tap on the map to search for images___________________Ó</value>
+    <value>Toque en el mapa para buscar imágenes</value>
   </data>
   <data name="OrientedImageryViewerImageSelectionDisplayImage" xml:space="preserve">
-    <value>á_Tap on a feature to view its image__________________Ó</value>
+    <value>Toque en una entidad para ver la imagen correspondiente</value>
   </data>
   <data name="OrientedImageryViewerImageSelectionSwitchMode" xml:space="preserve">
-    <value>á_or switch to_____________Ó</value>
+    <value>o cambie al</value>
   </data>
   <data name="OrientedImageryViewerImageSelectionMode" xml:space="preserve">
-    <value>á_mode_________Ó</value>
+    <value>modo</value>
   </data>
   <data name="OrientedImageryViewerNoGeoView" xml:space="preserve">
-    <value>á_Connect a GeoView to view oriented imagery_______________________Ó.</value>
+    <value>Conecte una GeoView para visualizar imágenes orientadas.</value>
   </data>
   <data name="OrientedImageryViewerNoLayerSelected" xml:space="preserve">
-    <value>á_No layer selected___________________Ó.</value>
+    <value>No hay ninguna capa seleccionada.</value>
   </data>
   <data name="OrientedImageryViewerAnnounceTransientError" xml:space="preserve">
-    <value>á_Error raised_____________Ó</value>
+    <value>Se ha producido un error</value>
   </data>
   <data name="OrientedImageryViewerDismissError" xml:space="preserve">
-    <value>á_Dismiss error______________Ó</value>
+    <value>Descartar error</value>
   </data>
   <data name="OrientedImageryViewerPreviousLabel" xml:space="preserve">
-    <value>á_Prev_________Ó</value>
+    <value>Vista previa</value>
   </data>
   <data name="OrientedImageryViewerNextLabel" xml:space="preserve">
-    <value>á_Next_________Ó</value>
+    <value>Siguiente</value>
   </data>
   <data name="OrientedImageryViewerSequenceStartReached" xml:space="preserve">
-    <value>á_Start of image sequence reached_________________Ó</value>
+    <value>Inicio de la secuencia de imágenes alcanzado</value>
   </data>
   <data name="OrientedImageryViewerSequenceEndReached" xml:space="preserve">
-    <value>á_End of image sequence reached______________________________Ó</value>
+    <value>Final de la secuencia de imágenes alcanzado</value>
   </data>
   <data name="OrientedImageryViewerSequenceStartAndEndReached" xml:space="preserve">
-    <value>á_Start and end of image sequence reached_____________________Ó</value>
+    <value>Inicio y final de la secuencia de imágenes alcanzados</value>
   </data>
   <data name="OrientedImageryViewerClose" xml:space="preserve">
-    <value>á_Close oriented imagery_______________________Ó</value>
+    <value>Cerrar imágenes orientadas</value>
   </data>
   <data name="OrientedImageryViewerClosePanel" xml:space="preserve">
-    <value>á_Close panel____________Ó</value>
+    <value>Cerrar panel</value>
   </data>
   <data name="OrientedImageryViewerOverlays" xml:space="preserve">
-    <value>á_Overlays_________________Ó</value>
+    <value>Superposiciones</value>
   </data>
   <data name="OrientedImageryViewerMarkers" xml:space="preserve">
-    <value>á_Markers_______________Ó</value>
+    <value>Marcadores</value>
   </data>
   <data name="OrientedImageryViewerMode" xml:space="preserve">
-    <value>á_Mode_________Ó</value>
+    <value>Modo</value>
   </data>
   <data name="OrientedImageryViewerShowPreviousImageInSequence" xml:space="preserve">
-    <value>á_Show previous image in sequence_________________Ó</value>
+    <value>Mostrar la imagen anterior de la secuencia</value>
   </data>
   <data name="OrientedImageryViewerShowNextImageInSequence" xml:space="preserve">
-    <value>á_Show next image in sequence____________________________Ó</value>
+    <value>Mostrar la imagen siguiente de la secuencia</value>
   </data>
   <data name="OrientedImageryViewerMore" xml:space="preserve">
-    <value>á_More_________Ó</value>
+    <value>Más</value>
   </data>
   <data name="OrientedImageryViewerPage" xml:space="preserve">
-    <value>á_Image {0} of {1}_________________Ó</value>
+    <value>Imagen {0} de {1}</value>
   </data>
   <data name="OrientedImageryViewerSelectLayer" xml:space="preserve">
-    <value>á_Select layer_____________Ó</value>
+    <value>Seleccionar capa</value>
   </data>
   <data name="OrientedImagerySampleToggleView" xml:space="preserve">
     <value>2D/3D</value>
@@ -1071,78 +1063,78 @@
     <value>Cambiar entre mapa 2D y escena 3D</value>
   </data>
   <data name="OrientedImageryViewerMarkerSelection" xml:space="preserve">
-    <value>á_Marker selection_________________Ó</value>
+    <value>Selección de marcadores</value>
   </data>
   <data name="OrientedImageryViewerMarkerOption" xml:space="preserve">
-    <value>á_Marker {0}_____________________Ó</value>
+    <value>Marcador {0}</value>
   </data>
   <data name="OrientedImageryViewerMarkerCircle" xml:space="preserve">
-    <value>á_Circle marker______________Ó</value>
+    <value>Marcador de círculo</value>
   </data>
   <data name="OrientedImageryViewerMarkerSquare" xml:space="preserve">
-    <value>á_Square marker______________Ó</value>
+    <value>Marcador de cuadrado</value>
   </data>
   <data name="OrientedImageryViewerMarkerTriangle" xml:space="preserve">
-    <value>á_Triangle marker________________Ó</value>
+    <value>Marcadro de triángulo</value>
   </data>
   <data name="OrientedImageryViewerMarkerDiamond" xml:space="preserve">
-    <value>á_Diamond marker_______________Ó</value>
+    <value>Marcador de rombo</value>
   </data>
   <data name="OrientedImageryViewerMarkerX" xml:space="preserve">
-    <value>á_Cross marker_____________Ó</value>
+    <value>Marcador de cruz</value>
   </data>
   <data name="OrientedImageryViewerMobileSequentialMode" xml:space="preserve">
-    <value>á_Sequential_____________________Ó</value>
+    <value>Secuencial</value>
   </data>
   <data name="OrientedImageryViewerNavigation" xml:space="preserve">
-    <value>á_Explore_______________Ó</value>
+    <value>Explorar</value>
   </data>
   <data name="OrientedImageryViewerModeSelection" xml:space="preserve">
-    <value>á_Mode Selection_______________Ó</value>
+    <value>Selección de modo</value>
   </data>
   <data name="OrientedImageryViewerOverlaysSelection" xml:space="preserve">
-    <value>á_Overlays Selection___________________Ó</value>
+    <value>Selección de superposiciones</value>
   </data>
   <data name="OrientedImageryViewerMarkerTools" xml:space="preserve">
-    <value>á_Marker Tools_____________Ó</value>
+    <value>Herramientas de marcador</value>
   </data>
   <data name="OrientedImageryViewerOpen" xml:space="preserve">
-    <value>á_Open oriented imagery______________________Ó</value>
+    <value>Abrir imágenes orientadas</value>
   </data>
   <data name="OrientedImageryViewerOn" xml:space="preserve">
-    <value>á_On_____Ó</value>
+    <value>Activado</value>
   </data>
   <data name="OrientedImageryViewerOff" xml:space="preserve">
-    <value>á_Off_______Ó</value>
+    <value>Desactivado</value>
   </data>
   <data name="OrientedImageryViewerSelected" xml:space="preserve">
-    <value>á_Selected_________________Ó</value>
+    <value>Seleccionado</value>
   </data>
   <data name="OrientedImageryViewerNotSelected" xml:space="preserve">
-    <value>á_Not selected_____________Ó</value>
+    <value>No seleccionado</value>
   </data>
   <data name="OrientedImageryViewerMobileBackToMarkers" xml:space="preserve">
-    <value>á_Back to Marker Tools_____________________Ó</value>
+    <value>Regresar a las herramientas de marcador</value>
   </data>
   <data name="OrientedImageryViewerMobileSelectMarkerSymbol" xml:space="preserve">
-    <value>á_Select Symbol______________Ó</value>
+    <value>Seleccionar símbolo</value>
   </data>
   <data name="OrientedImageryViewerMobileCurrentFootprint" xml:space="preserve">
-    <value>á_Show Current Footprint_______________________Ó</value>
+    <value>Mostrar huella actual</value>
   </data>
   <data name="OrientedImageryViewerMobileAdditionalFootprints" xml:space="preserve">
-    <value>á_Show Additional Footprints___________________________Ó</value>
+    <value>Mostrar huellas adicionales</value>
   </data>
   <data name="OrientedImageryViewerMobileCameraLocations" xml:space="preserve">
-    <value>á_Show Camera Locations______________________Ó</value>
+    <value>Mostrar ubicaciones de cámara</value>
   </data>
   <data name="OrientedImageryViewerImageNavigation" xml:space="preserve">
-    <value>á_Image navigation_________________Ó</value>
+    <value>Navegación de imágenes</value>
   </data>
   <data name="OrientedImageryViewerImageNavigationHint" xml:space="preserve">
-    <value>á_Use Left Arrow for the previous image or Right Arrow for the next image_____________________________________Ó.</value>
+    <value>Utilice la tecla de flecha izquierda para la imagen anterior o la de flecha derecha para la imagen siguiente</value>
   </data>
   <data name="OrientedImageryViewerSequenceNavigation" xml:space="preserve">
-    <value>á_Sequential image navigation____________________________Ó</value>
+    <value>Navegación secuencial de imágenes</value>
   </data>
 </root>

@@ -862,207 +862,199 @@
     <value>Orientēts attēls</value>
   </data>
   <data name="OrientedImageryViewerAutomationTypeName" xml:space="preserve">
-    <value>ķ_Oriented imagery view______________________ū</value>
+    <value>Orientēto attēlu skats</value>
   </data>
   <data name="OrientedImageryViewerSelectMarkerSymbol" xml:space="preserve">
-    <value>ķ_Select marker symbol_____________________ū</value>
+    <value>Atlasīt marķiera simbolu</value>
   </data>
   <data name="OrientedImageryViewerToggleAddMarkers" xml:space="preserve">
-    <value>ķ_Toggle add markers___________________ū</value>
+    <value>Pārslēgt marķieru pievienošanu</value>
   </data>
   <data name="OrientedImageryViewerShowSelectedImageFootprint" xml:space="preserve">
-    <value>ķ_Show current footprint_______________________ū</value>
+    <value>Rādīt pašreizējo pēdas nospiedumu</value>
   </data>
   <data name="OrientedImageryViewerShowUnselectedImageFootprints" xml:space="preserve">
-    <value>ķ_Show additional footprints___________________________ū</value>
+    <value>Rādīt papildu pēdas nospiedumus</value>
   </data>
   <data name="OrientedImageryViewerImageSearchMode" xml:space="preserve">
-    <value>ķ_Image search mode__________________ū</value>
+    <value>Attēlu meklēšanas režīms</value>
   </data>
   <data name="OrientedImageryViewerCurrentFootprintLabel" xml:space="preserve">
-    <value>ķ_Current Footprint__________________ū</value>
+    <value>Pašreizējais pēdas nospiedums</value>
   </data>
   <data name="OrientedImageryViewerCurrentFootprintStackedLabel" xml:space="preserve">
-    <value>ķ_Current_______________ū
-ķ_Footprint___________________ū</value>
+    <value>Pašreizējais pēdas nospiedums</value>
   </data>
   <data name="OrientedImageryViewerAdditionalFootprintsLabel" xml:space="preserve">
-    <value>ķ_Additional Footprints______________________ū</value>
+    <value>Papildu pēdas nospiedumi</value>
   </data>
   <data name="OrientedImageryViewerAdditionalFootprintsStackedLabel" xml:space="preserve">
-    <value>ķ_Additional_____________________ū
-ķ_Footprints_____________________ū</value>
+    <value>Papildu pēdas nospiedumi</value>
   </data>
   <data name="OrientedImageryViewerCameraLocationsLabel" xml:space="preserve">
-    <value>ķ_Camera Locations_________________ū</value>
+    <value>Kameras atrašanās vietas</value>
   </data>
   <data name="OrientedImageryViewerCameraLocationsStackedLabel" xml:space="preserve">
-    <value>ķ_Camera_____________ū
-ķ_Locations___________________ū</value>
+    <value>Kameras atrašanās vietas</value>
   </data>
   <data name="OrientedImageryViewerAddMarkersLabel" xml:space="preserve">
-    <value>ķ_Add Markers____________ū</value>
+    <value>Pievienot marķierus</value>
   </data>
   <data name="OrientedImageryViewerAddMarkersStackedLabel" xml:space="preserve">
-    <value>ķ_Add_______ū
-ķ_Markers_______________ū</value>
+    <value>Pievienot marķierus</value>
   </data>
   <data name="OrientedImageryViewerClearMarkersLabel" xml:space="preserve">
-    <value>ķ_Clear Markers______________ū</value>
+    <value>Notīrīt marķierus</value>
   </data>
   <data name="OrientedImageryViewerClearMarkersTooltip" xml:space="preserve">
-    <value>ķ_Clear markers______________ū</value>
+    <value>Notīrīt marķierus</value>
   </data>
   <data name="OrientedImageryViewerClearMarkersStackedLabel" xml:space="preserve">
-    <value>ķ_Clear___________ū
-ķ_Markers_______________ū</value>
+    <value>Notīrīt marķierus</value>
   </data>
   <data name="OrientedImageryViewerImageSearchModeFind" xml:space="preserve">
-    <value>ķ_Find Images____________ū</value>
+    <value>Atrast attēlus</value>
   </data>
   <data name="OrientedImageryViewerImageSearchModeFindStackedLabel" xml:space="preserve">
-    <value>ķ_Find_________ū
-ķ_Images_____________ū</value>
+    <value>Atrast attēlus</value>
   </data>
   <data name="OrientedImageryViewerImageSearchModeDisplay" xml:space="preserve">
-    <value>ķ_Display Image______________ū</value>
+    <value>Parādīt attēlu</value>
   </data>
   <data name="OrientedImageryViewerImageSearchModeDisplayStackedLabel" xml:space="preserve">
-    <value>ķ_Display_______________ū
-ķ_Image___________ū</value>
+    <value>Parādīt attēlu</value>
   </data>
   <data name="OrientedImageryViewerOpenSelectedImagePopup" xml:space="preserve">
-    <value>ķ_Open details for selected image_________________ū</value>
+    <value>Atvērt datus atlasītajam attēlam</value>
   </data>
   <data name="OrientedImageryViewerImageDetails" xml:space="preserve">
-    <value>ķ_Image details______________ū</value>
+    <value>Attēla informācija</value>
   </data>
   <data name="OrientedImageryViewerCloseSelectedImagePopup" xml:space="preserve">
-    <value>ķ_Close details______________ū</value>
+    <value>Aizvērt informāciju</value>
   </data>
   <data name="OrientedImageryViewerGoToPageFormat" xml:space="preserve">
-    <value>ķ_Go to image {0} of {1}_______________________ū</value>
+    <value>Doties uz attēlu {0} no {1}</value>
   </data>
   <data name="OrientedImageryViewerSelectedPageFormat" xml:space="preserve">
-    <value>ķ_Image {0} of {1}, selected___________________________ū</value>
+    <value>Attēls {0} no {1}, atlasīts</value>
   </data>
   <data name="OrientedImageryViewerToggleCameraMarkers" xml:space="preserve">
-    <value>ķ_Show camera locations______________________ū</value>
+    <value>Rādīt kameras atrašanās vietas</value>
   </data>
   <data name="OrientedImageryViewerSequentialNavigationTooltip" xml:space="preserve">
-    <value>ķ_Sequential navigation______________________ū</value>
+    <value>Secīga navigācija</value>
   </data>
   <data name="OrientedImageryViewerSequentialNavigationLabel" xml:space="preserve">
-    <value>ķ_Sequential Navigation______________________ū</value>
+    <value>Secīga navigācija</value>
   </data>
   <data name="OrientedImageryViewerSequentialNavigationStackedLabel" xml:space="preserve">
-    <value>ķ_Sequential_____________________ū
-ķ_Navigation_____________________ū</value>
+    <value>Secīga navigācija</value>
   </data>
   <data name="OrientedImageryViewerPreviousImage" xml:space="preserve">
-    <value>ķ_Previous image_______________ū</value>
+    <value>Iepriekšējais attēls</value>
   </data>
   <data name="OrientedImageryViewerNextImage" xml:space="preserve">
-    <value>ķ_Next image_____________________ū</value>
+    <value>Nākamais attēls</value>
   </data>
   <data name="OrientedImageryViewerImageLoading" xml:space="preserve">
-    <value>ķ_Image loading_________________ū...</value>
+    <value>Attēla ielāde...</value>
   </data>
   <data name="OrientedImageryViewerImageLoaded" xml:space="preserve">
-    <value>ķ_Image loaded_____________ū</value>
+    <value>Attēls ielādēts</value>
   </data>
   <data name="OrientedImageryViewerNoImageToDisplay" xml:space="preserve">
-    <value>ķ_No image to display____________________ū</value>
+    <value>Nav attēla, ko parādīt</value>
   </data>
   <data name="OrientedImageryViewerNoImagesFound" xml:space="preserve">
-    <value>ķ_No images found for the tapped location_____________________ū</value>
+    <value>Aizskartajai atrašanās vietai nav atrasts neviens attēls</value>
   </data>
   <data name="OrientedImageryViewerImageSelectionNoImagesNone" xml:space="preserve">
-    <value>ķ_No image to display. Enable find images or display image mode to search for images__________________________________________ū</value>
+    <value>Nav attēlu, ko parādīt. Iespējot attēlu atrašanu vai attēlu parādīšanas režīmu, lai meklētu attēlus</value>
   </data>
   <data name="OrientedImageryViewerImageSelectionNoImagesFind" xml:space="preserve">
-    <value>ķ_No image to display. Tap on the map to search for images or switch to display image mode______________________________________________ū.</value>
+    <value>Nav attēlu, ko parādīt. Pieskarieties kartei, lai meklētu attēlus, vai pārslēdziet uz attēlu parādīšanas režīmu.</value>
   </data>
   <data name="OrientedImageryViewerImageSelectionNoImagesDisplay" xml:space="preserve">
-    <value>ķ_No image to display. Tap on a feature to view its image or switch to find images mode____________________________________________ū.</value>
+    <value>Nav attēlu, ko parādīt. Pieskarieties kādam elementam, lai skatītu tā attēlu, vai pārslēdziet uz attēlu meklēšanas režīmu.</value>
   </data>
   <data name="OrientedImageryViewerImageSelectionEnable" xml:space="preserve">
-    <value>ķ_Enable_____________ū</value>
+    <value>Iespējot</value>
   </data>
   <data name="OrientedImageryViewerImageSelectionOr" xml:space="preserve">
-    <value>ķ_or_____ū</value>
+    <value>vai</value>
   </data>
   <data name="OrientedImageryViewerImageSelectionSearchMode" xml:space="preserve">
-    <value>ķ_mode to search for images__________________________ū</value>
+    <value>režīmu, lai meklētu attēlus</value>
   </data>
   <data name="OrientedImageryViewerImageSelectionFindImages" xml:space="preserve">
-    <value>ķ_Tap on the map to search for images___________________ū</value>
+    <value>Pieskarieties kartei, lai meklētu attēlus</value>
   </data>
   <data name="OrientedImageryViewerImageSelectionDisplayImage" xml:space="preserve">
-    <value>ķ_Tap on a feature to view its image__________________ū</value>
+    <value>Pieskarieties kādam elementam, lai skatītu tā attēlu,</value>
   </data>
   <data name="OrientedImageryViewerImageSelectionSwitchMode" xml:space="preserve">
-    <value>ķ_or switch to_____________ū</value>
+    <value>vai pārslēdziet uz</value>
   </data>
   <data name="OrientedImageryViewerImageSelectionMode" xml:space="preserve">
-    <value>ķ_mode_________ū</value>
+    <value>režīmu</value>
   </data>
   <data name="OrientedImageryViewerNoGeoView" xml:space="preserve">
-    <value>ķ_Connect a GeoView to view oriented imagery_______________________ū.</value>
+    <value>Savienojiet ar GeoView, lai skatītu orientētus attēlus.</value>
   </data>
   <data name="OrientedImageryViewerNoLayerSelected" xml:space="preserve">
-    <value>ķ_No layer selected___________________ū.</value>
+    <value>Nav izvēlēts neviens slānis.</value>
   </data>
   <data name="OrientedImageryViewerAnnounceTransientError" xml:space="preserve">
-    <value>ķ_Error raised_____________ū</value>
+    <value>Radās kļūda</value>
   </data>
   <data name="OrientedImageryViewerDismissError" xml:space="preserve">
-    <value>ķ_Dismiss error______________ū</value>
+    <value>Noraidīt kļūdu</value>
   </data>
   <data name="OrientedImageryViewerPreviousLabel" xml:space="preserve">
-    <value>ķ_Prev_________ū</value>
+    <value>Atpakaļ</value>
   </data>
   <data name="OrientedImageryViewerNextLabel" xml:space="preserve">
-    <value>ķ_Next_________ū</value>
+    <value>Tālāk</value>
   </data>
   <data name="OrientedImageryViewerSequenceStartReached" xml:space="preserve">
-    <value>ķ_Start of image sequence reached_________________ū</value>
+    <value>Sasniegts attēlu secības sākums</value>
   </data>
   <data name="OrientedImageryViewerSequenceEndReached" xml:space="preserve">
-    <value>ķ_End of image sequence reached______________________________ū</value>
+    <value>Sasniegtas attēlu secības beigas</value>
   </data>
   <data name="OrientedImageryViewerSequenceStartAndEndReached" xml:space="preserve">
-    <value>ķ_Start and end of image sequence reached_____________________ū</value>
+    <value>Sasniegts attēlu secības sākums un beigas</value>
   </data>
   <data name="OrientedImageryViewerClose" xml:space="preserve">
-    <value>ķ_Close oriented imagery_______________________ū</value>
+    <value>Aizvērt orientētos attēlus</value>
   </data>
   <data name="OrientedImageryViewerClosePanel" xml:space="preserve">
-    <value>ķ_Close panel____________ū</value>
+    <value>Aizvērt paneli</value>
   </data>
   <data name="OrientedImageryViewerOverlays" xml:space="preserve">
-    <value>ķ_Overlays_________________ū</value>
+    <value>Pārklājumi</value>
   </data>
   <data name="OrientedImageryViewerMarkers" xml:space="preserve">
-    <value>ķ_Markers_______________ū</value>
+    <value>Marķieri</value>
   </data>
   <data name="OrientedImageryViewerMode" xml:space="preserve">
-    <value>ķ_Mode_________ū</value>
+    <value>Režīms</value>
   </data>
   <data name="OrientedImageryViewerShowPreviousImageInSequence" xml:space="preserve">
-    <value>ķ_Show previous image in sequence_________________ū</value>
+    <value>Rādīt secības iepriekšējo attēlu</value>
   </data>
   <data name="OrientedImageryViewerShowNextImageInSequence" xml:space="preserve">
-    <value>ķ_Show next image in sequence____________________________ū</value>
+    <value>Rādīt secības nākamo attēlu</value>
   </data>
   <data name="OrientedImageryViewerMore" xml:space="preserve">
-    <value>ķ_More_________ū</value>
+    <value>Vairāk</value>
   </data>
   <data name="OrientedImageryViewerPage" xml:space="preserve">
-    <value>ķ_Image {0} of {1}_________________ū</value>
+    <value>Attēls {0} of {1}</value>
   </data>
   <data name="OrientedImageryViewerSelectLayer" xml:space="preserve">
-    <value>ķ_Select layer_____________ū</value>
+    <value>Atlasīt slāni</value>
   </data>
   <data name="OrientedImagerySampleToggleView" xml:space="preserve">
     <value>2D/3D</value>
@@ -1071,78 +1063,78 @@
     <value>Pārslēgt starp 2D karti un 3D scēnu</value>
   </data>
   <data name="OrientedImageryViewerMarkerSelection" xml:space="preserve">
-    <value>ķ_Marker selection_________________ū</value>
+    <value>Marķiera izvēle</value>
   </data>
   <data name="OrientedImageryViewerMarkerOption" xml:space="preserve">
-    <value>ķ_Marker {0}_____________________ū</value>
+    <value>Marķieris {0}</value>
   </data>
   <data name="OrientedImageryViewerMarkerCircle" xml:space="preserve">
-    <value>ķ_Circle marker______________ū</value>
+    <value>Apļa marķieris</value>
   </data>
   <data name="OrientedImageryViewerMarkerSquare" xml:space="preserve">
-    <value>ķ_Square marker______________ū</value>
+    <value>Kvadrāta marķieris</value>
   </data>
   <data name="OrientedImageryViewerMarkerTriangle" xml:space="preserve">
-    <value>ķ_Triangle marker________________ū</value>
+    <value>Trijstūra marķieris</value>
   </data>
   <data name="OrientedImageryViewerMarkerDiamond" xml:space="preserve">
-    <value>ķ_Diamond marker_______________ū</value>
+    <value>Romba marķieris</value>
   </data>
   <data name="OrientedImageryViewerMarkerX" xml:space="preserve">
-    <value>ķ_Cross marker_____________ū</value>
+    <value>Krusta marķieris</value>
   </data>
   <data name="OrientedImageryViewerMobileSequentialMode" xml:space="preserve">
-    <value>ķ_Sequential_____________________ū</value>
+    <value>Secīgs</value>
   </data>
   <data name="OrientedImageryViewerNavigation" xml:space="preserve">
-    <value>ķ_Explore_______________ū</value>
+    <value>Izpētīt</value>
   </data>
   <data name="OrientedImageryViewerModeSelection" xml:space="preserve">
-    <value>ķ_Mode Selection_______________ū</value>
+    <value>Režīma izvēle</value>
   </data>
   <data name="OrientedImageryViewerOverlaysSelection" xml:space="preserve">
-    <value>ķ_Overlays Selection___________________ū</value>
+    <value>Pārklājumu izvēle</value>
   </data>
   <data name="OrientedImageryViewerMarkerTools" xml:space="preserve">
-    <value>ķ_Marker Tools_____________ū</value>
+    <value>Marķiera rīki</value>
   </data>
   <data name="OrientedImageryViewerOpen" xml:space="preserve">
-    <value>ķ_Open oriented imagery______________________ū</value>
+    <value>Atvērt orientētos attēlus</value>
   </data>
   <data name="OrientedImageryViewerOn" xml:space="preserve">
-    <value>ķ_On_____ū</value>
+    <value>Ieslēgts</value>
   </data>
   <data name="OrientedImageryViewerOff" xml:space="preserve">
-    <value>ķ_Off_______ū</value>
+    <value>Izslēgts</value>
   </data>
   <data name="OrientedImageryViewerSelected" xml:space="preserve">
-    <value>ķ_Selected_________________ū</value>
+    <value>Izvēlētais</value>
   </data>
   <data name="OrientedImageryViewerNotSelected" xml:space="preserve">
-    <value>ķ_Not selected_____________ū</value>
+    <value>Nav izvēlēts</value>
   </data>
   <data name="OrientedImageryViewerMobileBackToMarkers" xml:space="preserve">
-    <value>ķ_Back to Marker Tools_____________________ū</value>
+    <value>Atpakaļ uz marķiera rīkiem</value>
   </data>
   <data name="OrientedImageryViewerMobileSelectMarkerSymbol" xml:space="preserve">
-    <value>ķ_Select Symbol______________ū</value>
+    <value>Izvēlēties simbolu</value>
   </data>
   <data name="OrientedImageryViewerMobileCurrentFootprint" xml:space="preserve">
-    <value>ķ_Show Current Footprint_______________________ū</value>
+    <value>Rādīt pašreizējo pēdas nospiedumu</value>
   </data>
   <data name="OrientedImageryViewerMobileAdditionalFootprints" xml:space="preserve">
-    <value>ķ_Show Additional Footprints___________________________ū</value>
+    <value>Rādīt papildu pēdas nospiedumus</value>
   </data>
   <data name="OrientedImageryViewerMobileCameraLocations" xml:space="preserve">
-    <value>ķ_Show Camera Locations______________________ū</value>
+    <value>Rādīt kameras atrašanās vietas</value>
   </data>
   <data name="OrientedImageryViewerImageNavigation" xml:space="preserve">
-    <value>ķ_Image navigation_________________ū</value>
+    <value>Attēlu navigācija</value>
   </data>
   <data name="OrientedImageryViewerImageNavigationHint" xml:space="preserve">
-    <value>ķ_Use Left Arrow for the previous image or Right Arrow for the next image_____________________________________ū.</value>
+    <value>Izmantojiet labo bultiņu iepriekšējam attēlam vai labo bultiņu nākamajam attēlam.</value>
   </data>
   <data name="OrientedImageryViewerSequenceNavigation" xml:space="preserve">
-    <value>ķ_Sequential image navigation____________________________ū</value>
+    <value>Secīga attēlu navigācija</value>
   </data>
 </root>

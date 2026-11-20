@@ -862,207 +862,199 @@
     <value>方向付き画像</value>
   </data>
   <data name="OrientedImageryViewerAutomationTypeName" xml:space="preserve">
-    <value>須_Oriented imagery view______________________鷗</value>
+    <value>方向付き画像ビュー</value>
   </data>
   <data name="OrientedImageryViewerSelectMarkerSymbol" xml:space="preserve">
-    <value>須_Select marker symbol_____________________鷗</value>
+    <value>マーカー シンボルの選択</value>
   </data>
   <data name="OrientedImageryViewerToggleAddMarkers" xml:space="preserve">
-    <value>須_Toggle add markers___________________鷗</value>
+    <value>マーカーの追加の切り替え</value>
   </data>
   <data name="OrientedImageryViewerShowSelectedImageFootprint" xml:space="preserve">
-    <value>須_Show current footprint_______________________鷗</value>
+    <value>現在のフットプリントを表示</value>
   </data>
   <data name="OrientedImageryViewerShowUnselectedImageFootprints" xml:space="preserve">
-    <value>須_Show additional footprints___________________________鷗</value>
+    <value>その他のフットプリントを表示</value>
   </data>
   <data name="OrientedImageryViewerImageSearchMode" xml:space="preserve">
-    <value>須_Image search mode__________________鷗</value>
+    <value>画像検索モード</value>
   </data>
   <data name="OrientedImageryViewerCurrentFootprintLabel" xml:space="preserve">
-    <value>須_Current Footprint__________________鷗</value>
+    <value>現在のフットプリント</value>
   </data>
   <data name="OrientedImageryViewerCurrentFootprintStackedLabel" xml:space="preserve">
-    <value>須_Current_______________鷗
-須_Footprint___________________鷗</value>
+    <value>現在の フットプリント</value>
   </data>
   <data name="OrientedImageryViewerAdditionalFootprintsLabel" xml:space="preserve">
-    <value>須_Additional Footprints______________________鷗</value>
+    <value>その他のフットプリント</value>
   </data>
   <data name="OrientedImageryViewerAdditionalFootprintsStackedLabel" xml:space="preserve">
-    <value>須_Additional_____________________鷗
-須_Footprints_____________________鷗</value>
+    <value>その他の フットプリント</value>
   </data>
   <data name="OrientedImageryViewerCameraLocationsLabel" xml:space="preserve">
-    <value>須_Camera Locations_________________鷗</value>
+    <value>カメラの位置</value>
   </data>
   <data name="OrientedImageryViewerCameraLocationsStackedLabel" xml:space="preserve">
-    <value>須_Camera_____________鷗
-須_Locations___________________鷗</value>
+    <value>カメラの 位置</value>
   </data>
   <data name="OrientedImageryViewerAddMarkersLabel" xml:space="preserve">
-    <value>須_Add Markers____________鷗</value>
+    <value>マーカーの追加</value>
   </data>
   <data name="OrientedImageryViewerAddMarkersStackedLabel" xml:space="preserve">
-    <value>須_Add_______鷗
-須_Markers_______________鷗</value>
+    <value>マーカーの 追加</value>
   </data>
   <data name="OrientedImageryViewerClearMarkersLabel" xml:space="preserve">
-    <value>須_Clear Markers______________鷗</value>
+    <value>マーカーの消去</value>
   </data>
   <data name="OrientedImageryViewerClearMarkersTooltip" xml:space="preserve">
-    <value>須_Clear markers______________鷗</value>
+    <value>マーカーの消去</value>
   </data>
   <data name="OrientedImageryViewerClearMarkersStackedLabel" xml:space="preserve">
-    <value>須_Clear___________鷗
-須_Markers_______________鷗</value>
+    <value>マーカーの 消去</value>
   </data>
   <data name="OrientedImageryViewerImageSearchModeFind" xml:space="preserve">
-    <value>須_Find Images____________鷗</value>
+    <value>画像の検索</value>
   </data>
   <data name="OrientedImageryViewerImageSearchModeFindStackedLabel" xml:space="preserve">
-    <value>須_Find_________鷗
-須_Images_____________鷗</value>
+    <value>画像の 検索</value>
   </data>
   <data name="OrientedImageryViewerImageSearchModeDisplay" xml:space="preserve">
-    <value>須_Display Image______________鷗</value>
+    <value>画像の表示</value>
   </data>
   <data name="OrientedImageryViewerImageSearchModeDisplayStackedLabel" xml:space="preserve">
-    <value>須_Display_______________鷗
-須_Image___________鷗</value>
+    <value>画像の 表示</value>
   </data>
   <data name="OrientedImageryViewerOpenSelectedImagePopup" xml:space="preserve">
-    <value>須_Open details for selected image_________________鷗</value>
+    <value>選択した画像の詳細を開く</value>
   </data>
   <data name="OrientedImageryViewerImageDetails" xml:space="preserve">
-    <value>須_Image details______________鷗</value>
+    <value>画像の詳細</value>
   </data>
   <data name="OrientedImageryViewerCloseSelectedImagePopup" xml:space="preserve">
-    <value>須_Close details______________鷗</value>
+    <value>詳細を閉じる</value>
   </data>
   <data name="OrientedImageryViewerGoToPageFormat" xml:space="preserve">
-    <value>須_Go to image {0} of {1}_______________________鷗</value>
+    <value>画像 {0} / {1} に移動</value>
   </data>
   <data name="OrientedImageryViewerSelectedPageFormat" xml:space="preserve">
-    <value>須_Image {0} of {1}, selected___________________________鷗</value>
+    <value>画像 {0} / {1} が選択されました</value>
   </data>
   <data name="OrientedImageryViewerToggleCameraMarkers" xml:space="preserve">
-    <value>須_Show camera locations______________________鷗</value>
+    <value>カメラ位置を表示</value>
   </data>
   <data name="OrientedImageryViewerSequentialNavigationTooltip" xml:space="preserve">
-    <value>須_Sequential navigation______________________鷗</value>
+    <value>シーケンシャル ナビゲーション</value>
   </data>
   <data name="OrientedImageryViewerSequentialNavigationLabel" xml:space="preserve">
-    <value>須_Sequential Navigation______________________鷗</value>
+    <value>シーケンシャル ナビゲーション</value>
   </data>
   <data name="OrientedImageryViewerSequentialNavigationStackedLabel" xml:space="preserve">
-    <value>須_Sequential_____________________鷗
-須_Navigation_____________________鷗</value>
+    <value>シーケンシャル ナビゲーション</value>
   </data>
   <data name="OrientedImageryViewerPreviousImage" xml:space="preserve">
-    <value>須_Previous image_______________鷗</value>
+    <value>前の画像</value>
   </data>
   <data name="OrientedImageryViewerNextImage" xml:space="preserve">
-    <value>須_Next image_____________________鷗</value>
+    <value>次の画像</value>
   </data>
   <data name="OrientedImageryViewerImageLoading" xml:space="preserve">
-    <value>須_Image loading_________________鷗...</value>
+    <value>画像を読み込んでいます...</value>
   </data>
   <data name="OrientedImageryViewerImageLoaded" xml:space="preserve">
-    <value>須_Image loaded_____________鷗</value>
+    <value>画像が読み込まれました</value>
   </data>
   <data name="OrientedImageryViewerNoImageToDisplay" xml:space="preserve">
-    <value>須_No image to display____________________鷗</value>
+    <value>表示する画像がありません</value>
   </data>
   <data name="OrientedImageryViewerNoImagesFound" xml:space="preserve">
-    <value>須_No images found for the tapped location_____________________鷗</value>
+    <value>タップした位置の画像が見つかりません</value>
   </data>
   <data name="OrientedImageryViewerImageSelectionNoImagesNone" xml:space="preserve">
-    <value>須_No image to display. Enable find images or display image mode to search for images__________________________________________鷗</value>
+    <value>表示する画像がありません。 画像検索または画像表示モードを有効にして画像を検索します</value>
   </data>
   <data name="OrientedImageryViewerImageSelectionNoImagesFind" xml:space="preserve">
-    <value>須_No image to display. Tap on the map to search for images or switch to display image mode______________________________________________鷗.</value>
+    <value>表示する画像がありません。 マップをタップして画像を検索するか、画像表示モードに切り替えます。</value>
   </data>
   <data name="OrientedImageryViewerImageSelectionNoImagesDisplay" xml:space="preserve">
-    <value>須_No image to display. Tap on a feature to view its image or switch to find images mode____________________________________________鷗.</value>
+    <value>表示する画像がありません。 フィーチャをタップしてその画像を表示するか、画像検索モードに切り替えます。</value>
   </data>
   <data name="OrientedImageryViewerImageSelectionEnable" xml:space="preserve">
-    <value>須_Enable_____________鷗</value>
+    <value>有効化</value>
   </data>
   <data name="OrientedImageryViewerImageSelectionOr" xml:space="preserve">
-    <value>須_or_____鷗</value>
+    <value>または</value>
   </data>
   <data name="OrientedImageryViewerImageSelectionSearchMode" xml:space="preserve">
-    <value>須_mode to search for images__________________________鷗</value>
+    <value>画像検索モード</value>
   </data>
   <data name="OrientedImageryViewerImageSelectionFindImages" xml:space="preserve">
-    <value>須_Tap on the map to search for images___________________鷗</value>
+    <value>マップをタップして画像を検索</value>
   </data>
   <data name="OrientedImageryViewerImageSelectionDisplayImage" xml:space="preserve">
-    <value>須_Tap on a feature to view its image__________________鷗</value>
+    <value>フィーチャをタップしてその画像を表示</value>
   </data>
   <data name="OrientedImageryViewerImageSelectionSwitchMode" xml:space="preserve">
-    <value>須_or switch to_____________鷗</value>
+    <value>または以下に切り替えます</value>
   </data>
   <data name="OrientedImageryViewerImageSelectionMode" xml:space="preserve">
-    <value>須_mode_________鷗</value>
+    <value>モード</value>
   </data>
   <data name="OrientedImageryViewerNoGeoView" xml:space="preserve">
-    <value>須_Connect a GeoView to view oriented imagery_______________________鷗.</value>
+    <value>方向付き画像を表示するには、GeoView を接続します。</value>
   </data>
   <data name="OrientedImageryViewerNoLayerSelected" xml:space="preserve">
-    <value>須_No layer selected___________________鷗.</value>
+    <value>レイヤーが選択されていません。</value>
   </data>
   <data name="OrientedImageryViewerAnnounceTransientError" xml:space="preserve">
-    <value>須_Error raised_____________鷗</value>
+    <value>エラーが発生しました</value>
   </data>
   <data name="OrientedImageryViewerDismissError" xml:space="preserve">
-    <value>須_Dismiss error______________鷗</value>
+    <value>エラーを解除</value>
   </data>
   <data name="OrientedImageryViewerPreviousLabel" xml:space="preserve">
-    <value>須_Prev_________鷗</value>
+    <value>前へ</value>
   </data>
   <data name="OrientedImageryViewerNextLabel" xml:space="preserve">
-    <value>須_Next_________鷗</value>
+    <value>次へ</value>
   </data>
   <data name="OrientedImageryViewerSequenceStartReached" xml:space="preserve">
-    <value>須_Start of image sequence reached_________________鷗</value>
+    <value>画像シーケンスの先頭に達しました</value>
   </data>
   <data name="OrientedImageryViewerSequenceEndReached" xml:space="preserve">
-    <value>須_End of image sequence reached______________________________鷗</value>
+    <value>画像シーケンスの末尾に達しました</value>
   </data>
   <data name="OrientedImageryViewerSequenceStartAndEndReached" xml:space="preserve">
-    <value>須_Start and end of image sequence reached_____________________鷗</value>
+    <value>画像シーケンスの先頭と末尾に達しました</value>
   </data>
   <data name="OrientedImageryViewerClose" xml:space="preserve">
-    <value>須_Close oriented imagery_______________________鷗</value>
+    <value>方向付き画像を閉じる</value>
   </data>
   <data name="OrientedImageryViewerClosePanel" xml:space="preserve">
-    <value>須_Close panel____________鷗</value>
+    <value>パネルを閉じる</value>
   </data>
   <data name="OrientedImageryViewerOverlays" xml:space="preserve">
-    <value>須_Overlays_________________鷗</value>
+    <value>オーバーレイ</value>
   </data>
   <data name="OrientedImageryViewerMarkers" xml:space="preserve">
-    <value>須_Markers_______________鷗</value>
+    <value>マーカー</value>
   </data>
   <data name="OrientedImageryViewerMode" xml:space="preserve">
-    <value>須_Mode_________鷗</value>
+    <value>モード</value>
   </data>
   <data name="OrientedImageryViewerShowPreviousImageInSequence" xml:space="preserve">
-    <value>須_Show previous image in sequence_________________鷗</value>
+    <value>シーケンスの前の画像を表示</value>
   </data>
   <data name="OrientedImageryViewerShowNextImageInSequence" xml:space="preserve">
-    <value>須_Show next image in sequence____________________________鷗</value>
+    <value>シーケンスの次の画像を表示</value>
   </data>
   <data name="OrientedImageryViewerMore" xml:space="preserve">
-    <value>須_More_________鷗</value>
+    <value>詳細</value>
   </data>
   <data name="OrientedImageryViewerPage" xml:space="preserve">
-    <value>須_Image {0} of {1}_________________鷗</value>
+    <value>画像 {0} / {1}</value>
   </data>
   <data name="OrientedImageryViewerSelectLayer" xml:space="preserve">
-    <value>須_Select layer_____________鷗</value>
+    <value>レイヤーの選択</value>
   </data>
   <data name="OrientedImagerySampleToggleView" xml:space="preserve">
     <value>2D/3D</value>
@@ -1071,78 +1063,78 @@
     <value>2D マップと 3D シーンの切り替え</value>
   </data>
   <data name="OrientedImageryViewerMarkerSelection" xml:space="preserve">
-    <value>須_Marker selection_________________鷗</value>
+    <value>マーカーの選択</value>
   </data>
   <data name="OrientedImageryViewerMarkerOption" xml:space="preserve">
-    <value>須_Marker {0}_____________________鷗</value>
+    <value>マーカー {0}</value>
   </data>
   <data name="OrientedImageryViewerMarkerCircle" xml:space="preserve">
-    <value>須_Circle marker______________鷗</value>
+    <value>円形マーカー</value>
   </data>
   <data name="OrientedImageryViewerMarkerSquare" xml:space="preserve">
-    <value>須_Square marker______________鷗</value>
+    <value>正方形マーカー</value>
   </data>
   <data name="OrientedImageryViewerMarkerTriangle" xml:space="preserve">
-    <value>須_Triangle marker________________鷗</value>
+    <value>三角形マーカー</value>
   </data>
   <data name="OrientedImageryViewerMarkerDiamond" xml:space="preserve">
-    <value>須_Diamond marker_______________鷗</value>
+    <value>菱形マーカー</value>
   </data>
   <data name="OrientedImageryViewerMarkerX" xml:space="preserve">
-    <value>須_Cross marker_____________鷗</value>
+    <value>十字マーカー</value>
   </data>
   <data name="OrientedImageryViewerMobileSequentialMode" xml:space="preserve">
-    <value>須_Sequential_____________________鷗</value>
+    <value>連続</value>
   </data>
   <data name="OrientedImageryViewerNavigation" xml:space="preserve">
-    <value>須_Explore_______________鷗</value>
+    <value>探索</value>
   </data>
   <data name="OrientedImageryViewerModeSelection" xml:space="preserve">
-    <value>須_Mode Selection_______________鷗</value>
+    <value>モードの選択</value>
   </data>
   <data name="OrientedImageryViewerOverlaysSelection" xml:space="preserve">
-    <value>須_Overlays Selection___________________鷗</value>
+    <value>オーバーレイの選択</value>
   </data>
   <data name="OrientedImageryViewerMarkerTools" xml:space="preserve">
-    <value>須_Marker Tools_____________鷗</value>
+    <value>マーカー ツール</value>
   </data>
   <data name="OrientedImageryViewerOpen" xml:space="preserve">
-    <value>須_Open oriented imagery______________________鷗</value>
+    <value>方向付き画像を開く</value>
   </data>
   <data name="OrientedImageryViewerOn" xml:space="preserve">
-    <value>須_On_____鷗</value>
+    <value>オン</value>
   </data>
   <data name="OrientedImageryViewerOff" xml:space="preserve">
-    <value>須_Off_______鷗</value>
+    <value>オフ</value>
   </data>
   <data name="OrientedImageryViewerSelected" xml:space="preserve">
-    <value>須_Selected_________________鷗</value>
+    <value>選択済み</value>
   </data>
   <data name="OrientedImageryViewerNotSelected" xml:space="preserve">
-    <value>須_Not selected_____________鷗</value>
+    <value>未選択</value>
   </data>
   <data name="OrientedImageryViewerMobileBackToMarkers" xml:space="preserve">
-    <value>須_Back to Marker Tools_____________________鷗</value>
+    <value>マーカー ツールに戻る</value>
   </data>
   <data name="OrientedImageryViewerMobileSelectMarkerSymbol" xml:space="preserve">
-    <value>須_Select Symbol______________鷗</value>
+    <value>シンボルの選択</value>
   </data>
   <data name="OrientedImageryViewerMobileCurrentFootprint" xml:space="preserve">
-    <value>須_Show Current Footprint_______________________鷗</value>
+    <value>現在のフットプリントを表示</value>
   </data>
   <data name="OrientedImageryViewerMobileAdditionalFootprints" xml:space="preserve">
-    <value>須_Show Additional Footprints___________________________鷗</value>
+    <value>その他のフットプリントを表示</value>
   </data>
   <data name="OrientedImageryViewerMobileCameraLocations" xml:space="preserve">
-    <value>須_Show Camera Locations______________________鷗</value>
+    <value>カメラ位置を表示</value>
   </data>
   <data name="OrientedImageryViewerImageNavigation" xml:space="preserve">
-    <value>須_Image navigation_________________鷗</value>
+    <value>画像上の移動</value>
   </data>
   <data name="OrientedImageryViewerImageNavigationHint" xml:space="preserve">
-    <value>須_Use Left Arrow for the previous image or Right Arrow for the next image_____________________________________鷗.</value>
+    <value>前の画像には左矢印、次の画像には右矢印を使用します。</value>
   </data>
   <data name="OrientedImageryViewerSequenceNavigation" xml:space="preserve">
-    <value>須_Sequential image navigation____________________________鷗</value>
+    <value>シーケンシャル画像ナビゲーション</value>
   </data>
 </root>

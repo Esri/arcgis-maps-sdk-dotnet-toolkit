@@ -862,207 +862,199 @@
     <value>Ориентирано изображение</value>
   </data>
   <data name="OrientedImageryViewerAutomationTypeName" xml:space="preserve">
-    <value>й_Oriented imagery view______________________й</value>
+    <value>Изглед с ориентирани изображения</value>
   </data>
   <data name="OrientedImageryViewerSelectMarkerSymbol" xml:space="preserve">
-    <value>й_Select marker symbol_____________________й</value>
+    <value>Избор на символ за маркер</value>
   </data>
   <data name="OrientedImageryViewerToggleAddMarkers" xml:space="preserve">
-    <value>й_Toggle add markers___________________й</value>
+    <value>Превключване на добавяне на маркери</value>
   </data>
   <data name="OrientedImageryViewerShowSelectedImageFootprint" xml:space="preserve">
-    <value>й_Show current footprint_______________________й</value>
+    <value>Показване на текущия отпечатък</value>
   </data>
   <data name="OrientedImageryViewerShowUnselectedImageFootprints" xml:space="preserve">
-    <value>й_Show additional footprints___________________________й</value>
+    <value>Показване на допълнителни отпечатъци</value>
   </data>
   <data name="OrientedImageryViewerImageSearchMode" xml:space="preserve">
-    <value>й_Image search mode__________________й</value>
+    <value>Режим на търсене по изображение</value>
   </data>
   <data name="OrientedImageryViewerCurrentFootprintLabel" xml:space="preserve">
-    <value>й_Current Footprint__________________й</value>
+    <value>Текущ отпечатък</value>
   </data>
   <data name="OrientedImageryViewerCurrentFootprintStackedLabel" xml:space="preserve">
-    <value>й_Current_______________й
-й_Footprint___________________й</value>
+    <value>Текущ отпечатък</value>
   </data>
   <data name="OrientedImageryViewerAdditionalFootprintsLabel" xml:space="preserve">
-    <value>й_Additional Footprints______________________й</value>
+    <value>Допълнителни отпечатъци</value>
   </data>
   <data name="OrientedImageryViewerAdditionalFootprintsStackedLabel" xml:space="preserve">
-    <value>й_Additional_____________________й
-й_Footprints_____________________й</value>
+    <value>Допълнителни отпечатъци</value>
   </data>
   <data name="OrientedImageryViewerCameraLocationsLabel" xml:space="preserve">
-    <value>й_Camera Locations_________________й</value>
+    <value>Местоположения на камерите</value>
   </data>
   <data name="OrientedImageryViewerCameraLocationsStackedLabel" xml:space="preserve">
-    <value>й_Camera_____________й
-й_Locations___________________й</value>
+    <value>Местоположения на камерите</value>
   </data>
   <data name="OrientedImageryViewerAddMarkersLabel" xml:space="preserve">
-    <value>й_Add Markers____________й</value>
+    <value>Добавяне на маркери</value>
   </data>
   <data name="OrientedImageryViewerAddMarkersStackedLabel" xml:space="preserve">
-    <value>й_Add_______й
-й_Markers_______________й</value>
+    <value>Добавяне на маркери</value>
   </data>
   <data name="OrientedImageryViewerClearMarkersLabel" xml:space="preserve">
-    <value>й_Clear Markers______________й</value>
+    <value>Изчистване на маркери</value>
   </data>
   <data name="OrientedImageryViewerClearMarkersTooltip" xml:space="preserve">
-    <value>й_Clear markers______________й</value>
+    <value>Изчистване на маркери</value>
   </data>
   <data name="OrientedImageryViewerClearMarkersStackedLabel" xml:space="preserve">
-    <value>й_Clear___________й
-й_Markers_______________й</value>
+    <value>Изчистване на маркери</value>
   </data>
   <data name="OrientedImageryViewerImageSearchModeFind" xml:space="preserve">
-    <value>й_Find Images____________й</value>
+    <value>Намиране на изображения</value>
   </data>
   <data name="OrientedImageryViewerImageSearchModeFindStackedLabel" xml:space="preserve">
-    <value>й_Find_________й
-й_Images_____________й</value>
+    <value>Намиране на изображения</value>
   </data>
   <data name="OrientedImageryViewerImageSearchModeDisplay" xml:space="preserve">
-    <value>й_Display Image______________й</value>
+    <value>Показване на изображение</value>
   </data>
   <data name="OrientedImageryViewerImageSearchModeDisplayStackedLabel" xml:space="preserve">
-    <value>й_Display_______________й
-й_Image___________й</value>
+    <value>Показване на изображение</value>
   </data>
   <data name="OrientedImageryViewerOpenSelectedImagePopup" xml:space="preserve">
-    <value>й_Open details for selected image_________________й</value>
+    <value>Отваряне на подробна информация за избраното изображение</value>
   </data>
   <data name="OrientedImageryViewerImageDetails" xml:space="preserve">
-    <value>й_Image details______________й</value>
+    <value>Подробности за изображението</value>
   </data>
   <data name="OrientedImageryViewerCloseSelectedImagePopup" xml:space="preserve">
-    <value>й_Close details______________й</value>
+    <value>Затваряне на подробни данни</value>
   </data>
   <data name="OrientedImageryViewerGoToPageFormat" xml:space="preserve">
-    <value>й_Go to image {0} of {1}_______________________й</value>
+    <value>Преминаване към изображение {0} от {1}</value>
   </data>
   <data name="OrientedImageryViewerSelectedPageFormat" xml:space="preserve">
-    <value>й_Image {0} of {1}, selected___________________________й</value>
+    <value>Избрано изображение {0} от {1}</value>
   </data>
   <data name="OrientedImageryViewerToggleCameraMarkers" xml:space="preserve">
-    <value>й_Show camera locations______________________й</value>
+    <value>Показване на местоположенията на камерите</value>
   </data>
   <data name="OrientedImageryViewerSequentialNavigationTooltip" xml:space="preserve">
-    <value>й_Sequential navigation______________________й</value>
+    <value>Последователна навигация</value>
   </data>
   <data name="OrientedImageryViewerSequentialNavigationLabel" xml:space="preserve">
-    <value>й_Sequential Navigation______________________й</value>
+    <value>Последователна навигация</value>
   </data>
   <data name="OrientedImageryViewerSequentialNavigationStackedLabel" xml:space="preserve">
-    <value>й_Sequential_____________________й
-й_Navigation_____________________й</value>
+    <value>Последователна навигация</value>
   </data>
   <data name="OrientedImageryViewerPreviousImage" xml:space="preserve">
-    <value>й_Previous image_______________й</value>
+    <value>Предишно изображение</value>
   </data>
   <data name="OrientedImageryViewerNextImage" xml:space="preserve">
-    <value>й_Next image_____________________й</value>
+    <value>Следващо изображение</value>
   </data>
   <data name="OrientedImageryViewerImageLoading" xml:space="preserve">
-    <value>й_Image loading_________________й...</value>
+    <value>Зареждане на изображение...</value>
   </data>
   <data name="OrientedImageryViewerImageLoaded" xml:space="preserve">
-    <value>й_Image loaded_____________й</value>
+    <value>Изображението е заредено</value>
   </data>
   <data name="OrientedImageryViewerNoImageToDisplay" xml:space="preserve">
-    <value>й_No image to display____________________й</value>
+    <value>Няма изображение за показване</value>
   </data>
   <data name="OrientedImageryViewerNoImagesFound" xml:space="preserve">
-    <value>й_No images found for the tapped location_____________________й</value>
+    <value>Не са намерени изображения за докоснатото местоположение</value>
   </data>
   <data name="OrientedImageryViewerImageSelectionNoImagesNone" xml:space="preserve">
-    <value>й_No image to display. Enable find images or display image mode to search for images__________________________________________й</value>
+    <value>Няма изображение за показване. Активирайте режима за намиране или показване на изображения, за да търсите изображения</value>
   </data>
   <data name="OrientedImageryViewerImageSelectionNoImagesFind" xml:space="preserve">
-    <value>й_No image to display. Tap on the map to search for images or switch to display image mode______________________________________________й.</value>
+    <value>Няма изображение за показване. Докоснете картата, за да търсите изображения, или превключете към режим за показване на изображения.</value>
   </data>
   <data name="OrientedImageryViewerImageSelectionNoImagesDisplay" xml:space="preserve">
-    <value>й_No image to display. Tap on a feature to view its image or switch to find images mode____________________________________________й.</value>
+    <value>Няма изображение за показване. Докоснете обект, за да видите изображението му, или превключете към режим за намиране на изображения.</value>
   </data>
   <data name="OrientedImageryViewerImageSelectionEnable" xml:space="preserve">
-    <value>й_Enable_____________й</value>
+    <value>Активиране</value>
   </data>
   <data name="OrientedImageryViewerImageSelectionOr" xml:space="preserve">
-    <value>й_or_____й</value>
+    <value>или</value>
   </data>
   <data name="OrientedImageryViewerImageSelectionSearchMode" xml:space="preserve">
-    <value>й_mode to search for images__________________________й</value>
+    <value>режим за търсене на изображения</value>
   </data>
   <data name="OrientedImageryViewerImageSelectionFindImages" xml:space="preserve">
-    <value>й_Tap on the map to search for images___________________й</value>
+    <value>Докоснете картата, за да търсите изображения</value>
   </data>
   <data name="OrientedImageryViewerImageSelectionDisplayImage" xml:space="preserve">
-    <value>й_Tap on a feature to view its image__________________й</value>
+    <value>Докоснете обект, за да видите изображението му</value>
   </data>
   <data name="OrientedImageryViewerImageSelectionSwitchMode" xml:space="preserve">
-    <value>й_or switch to_____________й</value>
+    <value>или преминете към</value>
   </data>
   <data name="OrientedImageryViewerImageSelectionMode" xml:space="preserve">
-    <value>й_mode_________й</value>
+    <value>режим</value>
   </data>
   <data name="OrientedImageryViewerNoGeoView" xml:space="preserve">
-    <value>й_Connect a GeoView to view oriented imagery_______________________й.</value>
+    <value>Свържете GeoView, за да прегледате ориентирани изображения.</value>
   </data>
   <data name="OrientedImageryViewerNoLayerSelected" xml:space="preserve">
-    <value>й_No layer selected___________________й.</value>
+    <value>Няма избран слой.</value>
   </data>
   <data name="OrientedImageryViewerAnnounceTransientError" xml:space="preserve">
-    <value>й_Error raised_____________й</value>
+    <value>Изтрита грешка</value>
   </data>
   <data name="OrientedImageryViewerDismissError" xml:space="preserve">
-    <value>й_Dismiss error______________й</value>
+    <value>Отхвърлена грешка</value>
   </data>
   <data name="OrientedImageryViewerPreviousLabel" xml:space="preserve">
-    <value>й_Prev_________й</value>
+    <value>Назад</value>
   </data>
   <data name="OrientedImageryViewerNextLabel" xml:space="preserve">
-    <value>й_Next_________й</value>
+    <value>Напред</value>
   </data>
   <data name="OrientedImageryViewerSequenceStartReached" xml:space="preserve">
-    <value>й_Start of image sequence reached_________________й</value>
+    <value>Достигнато е началото на поредицата от изображения</value>
   </data>
   <data name="OrientedImageryViewerSequenceEndReached" xml:space="preserve">
-    <value>й_End of image sequence reached______________________________й</value>
+    <value>Достигнат е краят на поредицата от изображения</value>
   </data>
   <data name="OrientedImageryViewerSequenceStartAndEndReached" xml:space="preserve">
-    <value>й_Start and end of image sequence reached_____________________й</value>
+    <value>Достигнати са началото и краят на поредицата от изображения</value>
   </data>
   <data name="OrientedImageryViewerClose" xml:space="preserve">
-    <value>й_Close oriented imagery_______________________й</value>
+    <value>Затваряне на ориентираните изображения</value>
   </data>
   <data name="OrientedImageryViewerClosePanel" xml:space="preserve">
-    <value>й_Close panel____________й</value>
+    <value>Затваряне на панел</value>
   </data>
   <data name="OrientedImageryViewerOverlays" xml:space="preserve">
-    <value>й_Overlays_________________й</value>
+    <value>Наслагвания</value>
   </data>
   <data name="OrientedImageryViewerMarkers" xml:space="preserve">
-    <value>й_Markers_______________й</value>
+    <value>Маркери</value>
   </data>
   <data name="OrientedImageryViewerMode" xml:space="preserve">
-    <value>й_Mode_________й</value>
+    <value>Режим</value>
   </data>
   <data name="OrientedImageryViewerShowPreviousImageInSequence" xml:space="preserve">
-    <value>й_Show previous image in sequence_________________й</value>
+    <value>Показване на предишното изображение в поредицата</value>
   </data>
   <data name="OrientedImageryViewerShowNextImageInSequence" xml:space="preserve">
-    <value>й_Show next image in sequence____________________________й</value>
+    <value>Показване на следващото изображение в поредицата</value>
   </data>
   <data name="OrientedImageryViewerMore" xml:space="preserve">
-    <value>й_More_________й</value>
+    <value>Още</value>
   </data>
   <data name="OrientedImageryViewerPage" xml:space="preserve">
-    <value>й_Image {0} of {1}_________________й</value>
+    <value>Изображение {0} от {1}</value>
   </data>
   <data name="OrientedImageryViewerSelectLayer" xml:space="preserve">
-    <value>й_Select layer_____________й</value>
+    <value>Избор на слой</value>
   </data>
   <data name="OrientedImagerySampleToggleView" xml:space="preserve">
     <value>2D/3D</value>
@@ -1071,78 +1063,78 @@
     <value>Превключване между 2D карта и 3D сцена</value>
   </data>
   <data name="OrientedImageryViewerMarkerSelection" xml:space="preserve">
-    <value>й_Marker selection_________________й</value>
+    <value>Избор на маркер</value>
   </data>
   <data name="OrientedImageryViewerMarkerOption" xml:space="preserve">
-    <value>й_Marker {0}_____________________й</value>
+    <value>Маркер {0}</value>
   </data>
   <data name="OrientedImageryViewerMarkerCircle" xml:space="preserve">
-    <value>й_Circle marker______________й</value>
+    <value>Кръгъл маркер</value>
   </data>
   <data name="OrientedImageryViewerMarkerSquare" xml:space="preserve">
-    <value>й_Square marker______________й</value>
+    <value>Квадратен маркер</value>
   </data>
   <data name="OrientedImageryViewerMarkerTriangle" xml:space="preserve">
-    <value>й_Triangle marker________________й</value>
+    <value>Триъгълен маркер</value>
   </data>
   <data name="OrientedImageryViewerMarkerDiamond" xml:space="preserve">
-    <value>й_Diamond marker_______________й</value>
+    <value>Ромбовиден маркер</value>
   </data>
   <data name="OrientedImageryViewerMarkerX" xml:space="preserve">
-    <value>й_Cross marker_____________й</value>
+    <value>Кръстовиден маркер</value>
   </data>
   <data name="OrientedImageryViewerMobileSequentialMode" xml:space="preserve">
-    <value>й_Sequential_____________________й</value>
+    <value>Последователно</value>
   </data>
   <data name="OrientedImageryViewerNavigation" xml:space="preserve">
-    <value>й_Explore_______________й</value>
+    <value>Изследване</value>
   </data>
   <data name="OrientedImageryViewerModeSelection" xml:space="preserve">
-    <value>й_Mode Selection_______________й</value>
+    <value>Избор на режим</value>
   </data>
   <data name="OrientedImageryViewerOverlaysSelection" xml:space="preserve">
-    <value>й_Overlays Selection___________________й</value>
+    <value>Избор на наслагвания</value>
   </data>
   <data name="OrientedImageryViewerMarkerTools" xml:space="preserve">
-    <value>й_Marker Tools_____________й</value>
+    <value>Инструменти за маркери</value>
   </data>
   <data name="OrientedImageryViewerOpen" xml:space="preserve">
-    <value>й_Open oriented imagery______________________й</value>
+    <value>Отваряне на ориентирани изображения</value>
   </data>
   <data name="OrientedImageryViewerOn" xml:space="preserve">
-    <value>й_On_____й</value>
+    <value>Включен</value>
   </data>
   <data name="OrientedImageryViewerOff" xml:space="preserve">
-    <value>й_Off_______й</value>
+    <value>Изключен</value>
   </data>
   <data name="OrientedImageryViewerSelected" xml:space="preserve">
-    <value>й_Selected_________________й</value>
+    <value>Избрани</value>
   </data>
   <data name="OrientedImageryViewerNotSelected" xml:space="preserve">
-    <value>й_Not selected_____________й</value>
+    <value>Няма избрани</value>
   </data>
   <data name="OrientedImageryViewerMobileBackToMarkers" xml:space="preserve">
-    <value>й_Back to Marker Tools_____________________й</value>
+    <value>Назад към инструментите за маркери</value>
   </data>
   <data name="OrientedImageryViewerMobileSelectMarkerSymbol" xml:space="preserve">
-    <value>й_Select Symbol______________й</value>
+    <value>Избор на символ</value>
   </data>
   <data name="OrientedImageryViewerMobileCurrentFootprint" xml:space="preserve">
-    <value>й_Show Current Footprint_______________________й</value>
+    <value>Показване на текущия отпечатък</value>
   </data>
   <data name="OrientedImageryViewerMobileAdditionalFootprints" xml:space="preserve">
-    <value>й_Show Additional Footprints___________________________й</value>
+    <value>Показване на допълнителни отпечатъци</value>
   </data>
   <data name="OrientedImageryViewerMobileCameraLocations" xml:space="preserve">
-    <value>й_Show Camera Locations______________________й</value>
+    <value>Показване на местоположенията на камерите</value>
   </data>
   <data name="OrientedImageryViewerImageNavigation" xml:space="preserve">
-    <value>й_Image navigation_________________й</value>
+    <value>Навигация в изображенията</value>
   </data>
   <data name="OrientedImageryViewerImageNavigationHint" xml:space="preserve">
-    <value>й_Use Left Arrow for the previous image or Right Arrow for the next image_____________________________________й.</value>
+    <value>Използвайте стрелка наляво за предишното изображение или стрелка надясно за следващото изображение.</value>
   </data>
   <data name="OrientedImageryViewerSequenceNavigation" xml:space="preserve">
-    <value>й_Sequential image navigation____________________________й</value>
+    <value>Последователна навигация в изображенията</value>
   </data>
 </root>

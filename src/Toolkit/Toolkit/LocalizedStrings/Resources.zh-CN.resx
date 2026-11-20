@@ -862,207 +862,199 @@
     <value>定向影像</value>
   </data>
   <data name="OrientedImageryViewerAutomationTypeName" xml:space="preserve">
-    <value>试_Oriented imagery view______________________验</value>
+    <value>定向影像视图</value>
   </data>
   <data name="OrientedImageryViewerSelectMarkerSymbol" xml:space="preserve">
-    <value>试_Select marker symbol_____________________验</value>
+    <value>选择标记符号</value>
   </data>
   <data name="OrientedImageryViewerToggleAddMarkers" xml:space="preserve">
-    <value>试_Toggle add markers___________________验</value>
+    <value>切换添加标记</value>
   </data>
   <data name="OrientedImageryViewerShowSelectedImageFootprint" xml:space="preserve">
-    <value>试_Show current footprint_______________________验</value>
+    <value>显示当前覆盖区</value>
   </data>
   <data name="OrientedImageryViewerShowUnselectedImageFootprints" xml:space="preserve">
-    <value>试_Show additional footprints___________________________验</value>
+    <value>显示其他覆盖区</value>
   </data>
   <data name="OrientedImageryViewerImageSearchMode" xml:space="preserve">
-    <value>试_Image search mode__________________验</value>
+    <value>影像搜索模式</value>
   </data>
   <data name="OrientedImageryViewerCurrentFootprintLabel" xml:space="preserve">
-    <value>试_Current Footprint__________________验</value>
+    <value>当前覆盖区</value>
   </data>
   <data name="OrientedImageryViewerCurrentFootprintStackedLabel" xml:space="preserve">
-    <value>试_Current_______________验
-试_Footprint___________________验</value>
+    <value>当前 覆盖区</value>
   </data>
   <data name="OrientedImageryViewerAdditionalFootprintsLabel" xml:space="preserve">
-    <value>试_Additional Footprints______________________验</value>
+    <value>其他覆盖区</value>
   </data>
   <data name="OrientedImageryViewerAdditionalFootprintsStackedLabel" xml:space="preserve">
-    <value>试_Additional_____________________验
-试_Footprints_____________________验</value>
+    <value>其他 覆盖区</value>
   </data>
   <data name="OrientedImageryViewerCameraLocationsLabel" xml:space="preserve">
-    <value>试_Camera Locations_________________验</value>
+    <value>相机位置</value>
   </data>
   <data name="OrientedImageryViewerCameraLocationsStackedLabel" xml:space="preserve">
-    <value>试_Camera_____________验
-试_Locations___________________验</value>
+    <value>相机 位置</value>
   </data>
   <data name="OrientedImageryViewerAddMarkersLabel" xml:space="preserve">
-    <value>试_Add Markers____________验</value>
+    <value>添加标记</value>
   </data>
   <data name="OrientedImageryViewerAddMarkersStackedLabel" xml:space="preserve">
-    <value>试_Add_______验
-试_Markers_______________验</value>
+    <value>添加 标记</value>
   </data>
   <data name="OrientedImageryViewerClearMarkersLabel" xml:space="preserve">
-    <value>试_Clear Markers______________验</value>
+    <value>清除标记</value>
   </data>
   <data name="OrientedImageryViewerClearMarkersTooltip" xml:space="preserve">
-    <value>试_Clear markers______________验</value>
+    <value>清除标记</value>
   </data>
   <data name="OrientedImageryViewerClearMarkersStackedLabel" xml:space="preserve">
-    <value>试_Clear___________验
-试_Markers_______________验</value>
+    <value>清除 标记</value>
   </data>
   <data name="OrientedImageryViewerImageSearchModeFind" xml:space="preserve">
-    <value>试_Find Images____________验</value>
+    <value>查找影像</value>
   </data>
   <data name="OrientedImageryViewerImageSearchModeFindStackedLabel" xml:space="preserve">
-    <value>试_Find_________验
-试_Images_____________验</value>
+    <value>查找 影像</value>
   </data>
   <data name="OrientedImageryViewerImageSearchModeDisplay" xml:space="preserve">
-    <value>试_Display Image______________验</value>
+    <value>显示影像</value>
   </data>
   <data name="OrientedImageryViewerImageSearchModeDisplayStackedLabel" xml:space="preserve">
-    <value>试_Display_______________验
-试_Image___________验</value>
+    <value>显示 影像</value>
   </data>
   <data name="OrientedImageryViewerOpenSelectedImagePopup" xml:space="preserve">
-    <value>试_Open details for selected image_________________验</value>
+    <value>打开所选影像的详细信息</value>
   </data>
   <data name="OrientedImageryViewerImageDetails" xml:space="preserve">
-    <value>试_Image details______________验</value>
+    <value>影像详细信息</value>
   </data>
   <data name="OrientedImageryViewerCloseSelectedImagePopup" xml:space="preserve">
-    <value>试_Close details______________验</value>
+    <value>关闭详细信息</value>
   </data>
   <data name="OrientedImageryViewerGoToPageFormat" xml:space="preserve">
-    <value>试_Go to image {0} of {1}_______________________验</value>
+    <value>转到第 {0} 个影像，共 {1} 个</value>
   </data>
   <data name="OrientedImageryViewerSelectedPageFormat" xml:space="preserve">
-    <value>试_Image {0} of {1}, selected___________________________验</value>
+    <value>第 {0} 个影像，共 {1} 个，已选择</value>
   </data>
   <data name="OrientedImageryViewerToggleCameraMarkers" xml:space="preserve">
-    <value>试_Show camera locations______________________验</value>
+    <value>显示相机位置</value>
   </data>
   <data name="OrientedImageryViewerSequentialNavigationTooltip" xml:space="preserve">
-    <value>试_Sequential navigation______________________验</value>
+    <value>顺序导航</value>
   </data>
   <data name="OrientedImageryViewerSequentialNavigationLabel" xml:space="preserve">
-    <value>试_Sequential Navigation______________________验</value>
+    <value>顺序导航</value>
   </data>
   <data name="OrientedImageryViewerSequentialNavigationStackedLabel" xml:space="preserve">
-    <value>试_Sequential_____________________验
-试_Navigation_____________________验</value>
+    <value>顺序 导航</value>
   </data>
   <data name="OrientedImageryViewerPreviousImage" xml:space="preserve">
-    <value>试_Previous image_______________验</value>
+    <value>上一影像</value>
   </data>
   <data name="OrientedImageryViewerNextImage" xml:space="preserve">
-    <value>试_Next image_____________________验</value>
+    <value>下一影像</value>
   </data>
   <data name="OrientedImageryViewerImageLoading" xml:space="preserve">
-    <value>试_Image loading_________________验...</value>
+    <value>正在加载影像...</value>
   </data>
   <data name="OrientedImageryViewerImageLoaded" xml:space="preserve">
-    <value>试_Image loaded_____________验</value>
+    <value>影像已加载</value>
   </data>
   <data name="OrientedImageryViewerNoImageToDisplay" xml:space="preserve">
-    <value>试_No image to display____________________验</value>
+    <value>无可显示的影像</value>
   </data>
   <data name="OrientedImageryViewerNoImagesFound" xml:space="preserve">
-    <value>试_No images found for the tapped location_____________________验</value>
+    <value>未找到所点击位置的影像</value>
   </data>
   <data name="OrientedImageryViewerImageSelectionNoImagesNone" xml:space="preserve">
-    <value>试_No image to display. Enable find images or display image mode to search for images__________________________________________验</value>
+    <value>无可显示的影像。 启用“查找影像”或“显示影像”模式以搜索影像</value>
   </data>
   <data name="OrientedImageryViewerImageSelectionNoImagesFind" xml:space="preserve">
-    <value>试_No image to display. Tap on the map to search for images or switch to display image mode______________________________________________验.</value>
+    <value>无可显示的影像。 点击地图以搜索影像，或切换到显示影像模式。</value>
   </data>
   <data name="OrientedImageryViewerImageSelectionNoImagesDisplay" xml:space="preserve">
-    <value>试_No image to display. Tap on a feature to view its image or switch to find images mode____________________________________________验.</value>
+    <value>无可显示的影像。 点击要素以查看其影像，或切换到查找影像模式。</value>
   </data>
   <data name="OrientedImageryViewerImageSelectionEnable" xml:space="preserve">
-    <value>试_Enable_____________验</value>
+    <value>启用</value>
   </data>
   <data name="OrientedImageryViewerImageSelectionOr" xml:space="preserve">
-    <value>试_or_____验</value>
+    <value>或者</value>
   </data>
   <data name="OrientedImageryViewerImageSelectionSearchMode" xml:space="preserve">
-    <value>试_mode to search for images__________________________验</value>
+    <value>用于搜索影像的模式</value>
   </data>
   <data name="OrientedImageryViewerImageSelectionFindImages" xml:space="preserve">
-    <value>试_Tap on the map to search for images___________________验</value>
+    <value>点击地图以搜索影像</value>
   </data>
   <data name="OrientedImageryViewerImageSelectionDisplayImage" xml:space="preserve">
-    <value>试_Tap on a feature to view its image__________________验</value>
+    <value>点击要素以查看其影像</value>
   </data>
   <data name="OrientedImageryViewerImageSelectionSwitchMode" xml:space="preserve">
-    <value>试_or switch to_____________验</value>
+    <value>或切换至</value>
   </data>
   <data name="OrientedImageryViewerImageSelectionMode" xml:space="preserve">
-    <value>试_mode_________验</value>
+    <value>模式</value>
   </data>
   <data name="OrientedImageryViewerNoGeoView" xml:space="preserve">
-    <value>试_Connect a GeoView to view oriented imagery_______________________验.</value>
+    <value>连接 GeoView 以查看定向影像。</value>
   </data>
   <data name="OrientedImageryViewerNoLayerSelected" xml:space="preserve">
-    <value>试_No layer selected___________________验.</value>
+    <value>未选择图层。</value>
   </data>
   <data name="OrientedImageryViewerAnnounceTransientError" xml:space="preserve">
-    <value>试_Error raised_____________验</value>
+    <value>已引发错误</value>
   </data>
   <data name="OrientedImageryViewerDismissError" xml:space="preserve">
-    <value>试_Dismiss error______________验</value>
+    <value>清除错误</value>
   </data>
   <data name="OrientedImageryViewerPreviousLabel" xml:space="preserve">
-    <value>试_Prev_________验</value>
+    <value>上一个</value>
   </data>
   <data name="OrientedImageryViewerNextLabel" xml:space="preserve">
-    <value>试_Next_________验</value>
+    <value>下一个</value>
   </data>
   <data name="OrientedImageryViewerSequenceStartReached" xml:space="preserve">
-    <value>试_Start of image sequence reached_________________验</value>
+    <value>已到达影像序列的开头</value>
   </data>
   <data name="OrientedImageryViewerSequenceEndReached" xml:space="preserve">
-    <value>试_End of image sequence reached______________________________验</value>
+    <value>已到达影像序列的末尾</value>
   </data>
   <data name="OrientedImageryViewerSequenceStartAndEndReached" xml:space="preserve">
-    <value>试_Start and end of image sequence reached_____________________验</value>
+    <value>已到达影像序列的开头和末尾</value>
   </data>
   <data name="OrientedImageryViewerClose" xml:space="preserve">
-    <value>试_Close oriented imagery_______________________验</value>
+    <value>关闭定向影像</value>
   </data>
   <data name="OrientedImageryViewerClosePanel" xml:space="preserve">
-    <value>试_Close panel____________验</value>
+    <value>关闭面板</value>
   </data>
   <data name="OrientedImageryViewerOverlays" xml:space="preserve">
-    <value>试_Overlays_________________验</value>
+    <value>叠加</value>
   </data>
   <data name="OrientedImageryViewerMarkers" xml:space="preserve">
-    <value>试_Markers_______________验</value>
+    <value>标记</value>
   </data>
   <data name="OrientedImageryViewerMode" xml:space="preserve">
-    <value>试_Mode_________验</value>
+    <value>模式</value>
   </data>
   <data name="OrientedImageryViewerShowPreviousImageInSequence" xml:space="preserve">
-    <value>试_Show previous image in sequence_________________验</value>
+    <value>显示序列中的上一影像</value>
   </data>
   <data name="OrientedImageryViewerShowNextImageInSequence" xml:space="preserve">
-    <value>试_Show next image in sequence____________________________验</value>
+    <value>显示序列中的下一影像</value>
   </data>
   <data name="OrientedImageryViewerMore" xml:space="preserve">
-    <value>试_More_________验</value>
+    <value>更多信息</value>
   </data>
   <data name="OrientedImageryViewerPage" xml:space="preserve">
-    <value>试_Image {0} of {1}_________________验</value>
+    <value>第 {0} 个影像，共 {1} 个</value>
   </data>
   <data name="OrientedImageryViewerSelectLayer" xml:space="preserve">
-    <value>试_Select layer_____________验</value>
+    <value>选择图层</value>
   </data>
   <data name="OrientedImagerySampleToggleView" xml:space="preserve">
     <value>2D/3D</value>
@@ -1071,78 +1063,78 @@
     <value>在 2D 地图和 3D 场景之间切换</value>
   </data>
   <data name="OrientedImageryViewerMarkerSelection" xml:space="preserve">
-    <value>试_Marker selection_________________验</value>
+    <value>标记选择</value>
   </data>
   <data name="OrientedImageryViewerMarkerOption" xml:space="preserve">
-    <value>试_Marker {0}_____________________验</value>
+    <value>标记 {0}</value>
   </data>
   <data name="OrientedImageryViewerMarkerCircle" xml:space="preserve">
-    <value>试_Circle marker______________验</value>
+    <value>圆形标记</value>
   </data>
   <data name="OrientedImageryViewerMarkerSquare" xml:space="preserve">
-    <value>试_Square marker______________验</value>
+    <value>正方形标记</value>
   </data>
   <data name="OrientedImageryViewerMarkerTriangle" xml:space="preserve">
-    <value>试_Triangle marker________________验</value>
+    <value>三角形标记</value>
   </data>
   <data name="OrientedImageryViewerMarkerDiamond" xml:space="preserve">
-    <value>试_Diamond marker_______________验</value>
+    <value>菱形标记</value>
   </data>
   <data name="OrientedImageryViewerMarkerX" xml:space="preserve">
-    <value>试_Cross marker_____________验</value>
+    <value>十字形标记</value>
   </data>
   <data name="OrientedImageryViewerMobileSequentialMode" xml:space="preserve">
-    <value>试_Sequential_____________________验</value>
+    <value>连续</value>
   </data>
   <data name="OrientedImageryViewerNavigation" xml:space="preserve">
-    <value>试_Explore_______________验</value>
+    <value>浏览</value>
   </data>
   <data name="OrientedImageryViewerModeSelection" xml:space="preserve">
-    <value>试_Mode Selection_______________验</value>
+    <value>模式选择</value>
   </data>
   <data name="OrientedImageryViewerOverlaysSelection" xml:space="preserve">
-    <value>试_Overlays Selection___________________验</value>
+    <value>叠加选择</value>
   </data>
   <data name="OrientedImageryViewerMarkerTools" xml:space="preserve">
-    <value>试_Marker Tools_____________验</value>
+    <value>标记工具</value>
   </data>
   <data name="OrientedImageryViewerOpen" xml:space="preserve">
-    <value>试_Open oriented imagery______________________验</value>
+    <value>打开定向影像</value>
   </data>
   <data name="OrientedImageryViewerOn" xml:space="preserve">
-    <value>试_On_____验</value>
+    <value>开</value>
   </data>
   <data name="OrientedImageryViewerOff" xml:space="preserve">
-    <value>试_Off_______验</value>
+    <value>关</value>
   </data>
   <data name="OrientedImageryViewerSelected" xml:space="preserve">
-    <value>试_Selected_________________验</value>
+    <value>已选择</value>
   </data>
   <data name="OrientedImageryViewerNotSelected" xml:space="preserve">
-    <value>试_Not selected_____________验</value>
+    <value>未选择</value>
   </data>
   <data name="OrientedImageryViewerMobileBackToMarkers" xml:space="preserve">
-    <value>试_Back to Marker Tools_____________________验</value>
+    <value>返回标记工具</value>
   </data>
   <data name="OrientedImageryViewerMobileSelectMarkerSymbol" xml:space="preserve">
-    <value>试_Select Symbol______________验</value>
+    <value>选择符号</value>
   </data>
   <data name="OrientedImageryViewerMobileCurrentFootprint" xml:space="preserve">
-    <value>试_Show Current Footprint_______________________验</value>
+    <value>显示当前覆盖区</value>
   </data>
   <data name="OrientedImageryViewerMobileAdditionalFootprints" xml:space="preserve">
-    <value>试_Show Additional Footprints___________________________验</value>
+    <value>显示其他覆盖区</value>
   </data>
   <data name="OrientedImageryViewerMobileCameraLocations" xml:space="preserve">
-    <value>试_Show Camera Locations______________________验</value>
+    <value>显示相机位置</value>
   </data>
   <data name="OrientedImageryViewerImageNavigation" xml:space="preserve">
-    <value>试_Image navigation_________________验</value>
+    <value>图像导航</value>
   </data>
   <data name="OrientedImageryViewerImageNavigationHint" xml:space="preserve">
-    <value>试_Use Left Arrow for the previous image or Right Arrow for the next image_____________________________________验.</value>
+    <value>使用左箭头查看上一影像，或使用右箭头查看下一影像。</value>
   </data>
   <data name="OrientedImageryViewerSequenceNavigation" xml:space="preserve">
-    <value>试_Sequential image navigation____________________________验</value>
+    <value>顺序影像导航</value>
   </data>
 </root>

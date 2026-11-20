@@ -862,207 +862,199 @@
     <value>Yönlendirilmiş görüntü</value>
   </data>
   <data name="OrientedImageryViewerAutomationTypeName" xml:space="preserve">
-    <value>ı_Oriented imagery view______________________İ</value>
+    <value>Yönlendirilmiş görüntü görüntüleme</value>
   </data>
   <data name="OrientedImageryViewerSelectMarkerSymbol" xml:space="preserve">
-    <value>ı_Select marker symbol_____________________İ</value>
+    <value>İşaretleyici simgesi seç</value>
   </data>
   <data name="OrientedImageryViewerToggleAddMarkers" xml:space="preserve">
-    <value>ı_Toggle add markers___________________İ</value>
+    <value>İşaretçi ekleyi aç/kapat</value>
   </data>
   <data name="OrientedImageryViewerShowSelectedImageFootprint" xml:space="preserve">
-    <value>ı_Show current footprint_______________________İ</value>
+    <value>Geçerli taban alanını göster</value>
   </data>
   <data name="OrientedImageryViewerShowUnselectedImageFootprints" xml:space="preserve">
-    <value>ı_Show additional footprints___________________________İ</value>
+    <value>Ek taban alanlarını göster</value>
   </data>
   <data name="OrientedImageryViewerImageSearchMode" xml:space="preserve">
-    <value>ı_Image search mode__________________İ</value>
+    <value>Görüntü arama modu</value>
   </data>
   <data name="OrientedImageryViewerCurrentFootprintLabel" xml:space="preserve">
-    <value>ı_Current Footprint__________________İ</value>
+    <value>Geçerli Taban Alanı</value>
   </data>
   <data name="OrientedImageryViewerCurrentFootprintStackedLabel" xml:space="preserve">
-    <value>ı_Current_______________İ
-ı_Footprint___________________İ</value>
+    <value>Geçerli Taban Alanı</value>
   </data>
   <data name="OrientedImageryViewerAdditionalFootprintsLabel" xml:space="preserve">
-    <value>ı_Additional Footprints______________________İ</value>
+    <value>Ek Taban Alanları</value>
   </data>
   <data name="OrientedImageryViewerAdditionalFootprintsStackedLabel" xml:space="preserve">
-    <value>ı_Additional_____________________İ
-ı_Footprints_____________________İ</value>
+    <value>Ek Taban Alanları</value>
   </data>
   <data name="OrientedImageryViewerCameraLocationsLabel" xml:space="preserve">
-    <value>ı_Camera Locations_________________İ</value>
+    <value>Kamera Konumları</value>
   </data>
   <data name="OrientedImageryViewerCameraLocationsStackedLabel" xml:space="preserve">
-    <value>ı_Camera_____________İ
-ı_Locations___________________İ</value>
+    <value>Kamera Konumları</value>
   </data>
   <data name="OrientedImageryViewerAddMarkersLabel" xml:space="preserve">
-    <value>ı_Add Markers____________İ</value>
+    <value>İşaretçi Ekle</value>
   </data>
   <data name="OrientedImageryViewerAddMarkersStackedLabel" xml:space="preserve">
-    <value>ı_Add_______İ
-ı_Markers_______________İ</value>
+    <value>İşaretçiEkle</value>
   </data>
   <data name="OrientedImageryViewerClearMarkersLabel" xml:space="preserve">
-    <value>ı_Clear Markers______________İ</value>
+    <value>İşaretçileri Temizle</value>
   </data>
   <data name="OrientedImageryViewerClearMarkersTooltip" xml:space="preserve">
-    <value>ı_Clear markers______________İ</value>
+    <value>İşaretçileri temizle</value>
   </data>
   <data name="OrientedImageryViewerClearMarkersStackedLabel" xml:space="preserve">
-    <value>ı_Clear___________İ
-ı_Markers_______________İ</value>
+    <value>İşaretçileri Temizle</value>
   </data>
   <data name="OrientedImageryViewerImageSearchModeFind" xml:space="preserve">
-    <value>ı_Find Images____________İ</value>
+    <value>Görüntüleri bul</value>
   </data>
   <data name="OrientedImageryViewerImageSearchModeFindStackedLabel" xml:space="preserve">
-    <value>ı_Find_________İ
-ı_Images_____________İ</value>
+    <value>Görüntüleri Bul</value>
   </data>
   <data name="OrientedImageryViewerImageSearchModeDisplay" xml:space="preserve">
-    <value>ı_Display Image______________İ</value>
+    <value>Görüntüyü Görüntüle</value>
   </data>
   <data name="OrientedImageryViewerImageSearchModeDisplayStackedLabel" xml:space="preserve">
-    <value>ı_Display_______________İ
-ı_Image___________İ</value>
+    <value>Görüntüyü Görüntüle</value>
   </data>
   <data name="OrientedImageryViewerOpenSelectedImagePopup" xml:space="preserve">
-    <value>ı_Open details for selected image_________________İ</value>
+    <value>Seçili görüntü için ayrıntıları aç</value>
   </data>
   <data name="OrientedImageryViewerImageDetails" xml:space="preserve">
-    <value>ı_Image details______________İ</value>
+    <value>Görüntü ayrıntıları</value>
   </data>
   <data name="OrientedImageryViewerCloseSelectedImagePopup" xml:space="preserve">
-    <value>ı_Close details______________İ</value>
+    <value>Ayrıntıları kapat</value>
   </data>
   <data name="OrientedImageryViewerGoToPageFormat" xml:space="preserve">
-    <value>ı_Go to image {0} of {1}_______________________İ</value>
+    <value>Git: Görüntü {0} / {1}</value>
   </data>
   <data name="OrientedImageryViewerSelectedPageFormat" xml:space="preserve">
-    <value>ı_Image {0} of {1}, selected___________________________İ</value>
+    <value>Görüntü {0} / {1}, seçildi</value>
   </data>
   <data name="OrientedImageryViewerToggleCameraMarkers" xml:space="preserve">
-    <value>ı_Show camera locations______________________İ</value>
+    <value>Kamera konumlarını göster</value>
   </data>
   <data name="OrientedImageryViewerSequentialNavigationTooltip" xml:space="preserve">
-    <value>ı_Sequential navigation______________________İ</value>
+    <value>Sıralı dolaşma</value>
   </data>
   <data name="OrientedImageryViewerSequentialNavigationLabel" xml:space="preserve">
-    <value>ı_Sequential Navigation______________________İ</value>
+    <value>Sıralı Dolaşma</value>
   </data>
   <data name="OrientedImageryViewerSequentialNavigationStackedLabel" xml:space="preserve">
-    <value>ı_Sequential_____________________İ
-ı_Navigation_____________________İ</value>
+    <value>Sıralı Dolaşma</value>
   </data>
   <data name="OrientedImageryViewerPreviousImage" xml:space="preserve">
-    <value>ı_Previous image_______________İ</value>
+    <value>Önceki görüntü</value>
   </data>
   <data name="OrientedImageryViewerNextImage" xml:space="preserve">
-    <value>ı_Next image_____________________İ</value>
+    <value>Sonraki görüntü</value>
   </data>
   <data name="OrientedImageryViewerImageLoading" xml:space="preserve">
-    <value>ı_Image loading_________________İ...</value>
+    <value>Görüntü yükleniyor...</value>
   </data>
   <data name="OrientedImageryViewerImageLoaded" xml:space="preserve">
-    <value>ı_Image loaded_____________İ</value>
+    <value>Görüntü yüklendi</value>
   </data>
   <data name="OrientedImageryViewerNoImageToDisplay" xml:space="preserve">
-    <value>ı_No image to display____________________İ</value>
+    <value>Görüntü gösterilemedi</value>
   </data>
   <data name="OrientedImageryViewerNoImagesFound" xml:space="preserve">
-    <value>ı_No images found for the tapped location_____________________İ</value>
+    <value>Dokunulan konum için görüntü bulunamadı</value>
   </data>
   <data name="OrientedImageryViewerImageSelectionNoImagesNone" xml:space="preserve">
-    <value>ı_No image to display. Enable find images or display image mode to search for images__________________________________________İ</value>
+    <value>Görüntülenecek görüntü yok. Görüntüler aramak için görüntüleri bul veya görüntüyü görüntüle işlevini etkinleştirin.</value>
   </data>
   <data name="OrientedImageryViewerImageSelectionNoImagesFind" xml:space="preserve">
-    <value>ı_No image to display. Tap on the map to search for images or switch to display image mode______________________________________________İ.</value>
+    <value>Görüntülenecek görüntü yok. Görüntüleri aramak için haritaya dokunun veya görüntü görüntüleme moduna geçiş yapın.</value>
   </data>
   <data name="OrientedImageryViewerImageSelectionNoImagesDisplay" xml:space="preserve">
-    <value>ı_No image to display. Tap on a feature to view its image or switch to find images mode____________________________________________İ.</value>
+    <value>Görüntülenecek görüntü yok. Görüntüsünü aramak için bir detaya dokunun veya görüntü bulma moduna geçiş yapın.</value>
   </data>
   <data name="OrientedImageryViewerImageSelectionEnable" xml:space="preserve">
-    <value>ı_Enable_____________İ</value>
+    <value>Etkinleştir</value>
   </data>
   <data name="OrientedImageryViewerImageSelectionOr" xml:space="preserve">
-    <value>ı_or_____İ</value>
+    <value>veya</value>
   </data>
   <data name="OrientedImageryViewerImageSelectionSearchMode" xml:space="preserve">
-    <value>ı_mode to search for images__________________________İ</value>
+    <value>modunu etkinleştirerek görüntüleri arayın</value>
   </data>
   <data name="OrientedImageryViewerImageSelectionFindImages" xml:space="preserve">
-    <value>ı_Tap on the map to search for images___________________İ</value>
+    <value>Görüntüleri aramak için harita üzerine dokunun</value>
   </data>
   <data name="OrientedImageryViewerImageSelectionDisplayImage" xml:space="preserve">
-    <value>ı_Tap on a feature to view its image__________________İ</value>
+    <value>Görüntüsünü görüntülemek için bir detaya dokunun</value>
   </data>
   <data name="OrientedImageryViewerImageSelectionSwitchMode" xml:space="preserve">
-    <value>ı_or switch to_____________İ</value>
+    <value>veya geçiş yapın</value>
   </data>
   <data name="OrientedImageryViewerImageSelectionMode" xml:space="preserve">
-    <value>ı_mode_________İ</value>
+    <value>mod</value>
   </data>
   <data name="OrientedImageryViewerNoGeoView" xml:space="preserve">
-    <value>ı_Connect a GeoView to view oriented imagery_______________________İ.</value>
+    <value>Yönlendirilmiş görüntüyü görüntülemek için GeoView'e bağlanın.</value>
   </data>
   <data name="OrientedImageryViewerNoLayerSelected" xml:space="preserve">
-    <value>ı_No layer selected___________________İ.</value>
+    <value>Katman seçilmedi.</value>
   </data>
   <data name="OrientedImageryViewerAnnounceTransientError" xml:space="preserve">
-    <value>ı_Error raised_____________İ</value>
+    <value>Hata yükseltildi</value>
   </data>
   <data name="OrientedImageryViewerDismissError" xml:space="preserve">
-    <value>ı_Dismiss error______________İ</value>
+    <value>Hatayı reddet</value>
   </data>
   <data name="OrientedImageryViewerPreviousLabel" xml:space="preserve">
-    <value>ı_Prev_________İ</value>
+    <value>Önceki</value>
   </data>
   <data name="OrientedImageryViewerNextLabel" xml:space="preserve">
-    <value>ı_Next_________İ</value>
+    <value>İleri</value>
   </data>
   <data name="OrientedImageryViewerSequenceStartReached" xml:space="preserve">
-    <value>ı_Start of image sequence reached_________________İ</value>
+    <value>Görüntü sırası başlangıcına ulaşıldı</value>
   </data>
   <data name="OrientedImageryViewerSequenceEndReached" xml:space="preserve">
-    <value>ı_End of image sequence reached______________________________İ</value>
+    <value>Görüntü sırası sonuna ulaşıldı</value>
   </data>
   <data name="OrientedImageryViewerSequenceStartAndEndReached" xml:space="preserve">
-    <value>ı_Start and end of image sequence reached_____________________İ</value>
+    <value>Görüntü sırası başlangıcına ve sonuna ulaşıldı</value>
   </data>
   <data name="OrientedImageryViewerClose" xml:space="preserve">
-    <value>ı_Close oriented imagery_______________________İ</value>
+    <value>Yönlendirilmiş görüntüyü kapat</value>
   </data>
   <data name="OrientedImageryViewerClosePanel" xml:space="preserve">
-    <value>ı_Close panel____________İ</value>
+    <value>Paneli kapat</value>
   </data>
   <data name="OrientedImageryViewerOverlays" xml:space="preserve">
-    <value>ı_Overlays_________________İ</value>
+    <value>Örtüşmeler</value>
   </data>
   <data name="OrientedImageryViewerMarkers" xml:space="preserve">
-    <value>ı_Markers_______________İ</value>
+    <value>İşaretçiler</value>
   </data>
   <data name="OrientedImageryViewerMode" xml:space="preserve">
-    <value>ı_Mode_________İ</value>
+    <value>Mod</value>
   </data>
   <data name="OrientedImageryViewerShowPreviousImageInSequence" xml:space="preserve">
-    <value>ı_Show previous image in sequence_________________İ</value>
+    <value>Sıradaki önceki görüntüyü göster</value>
   </data>
   <data name="OrientedImageryViewerShowNextImageInSequence" xml:space="preserve">
-    <value>ı_Show next image in sequence____________________________İ</value>
+    <value>Sıradaki sonraki görüntüyü göster</value>
   </data>
   <data name="OrientedImageryViewerMore" xml:space="preserve">
-    <value>ı_More_________İ</value>
+    <value>Dahası</value>
   </data>
   <data name="OrientedImageryViewerPage" xml:space="preserve">
-    <value>ı_Image {0} of {1}_________________İ</value>
+    <value>Görüntü {0} / {1}</value>
   </data>
   <data name="OrientedImageryViewerSelectLayer" xml:space="preserve">
-    <value>ı_Select layer_____________İ</value>
+    <value>Katman seç</value>
   </data>
   <data name="OrientedImagerySampleToggleView" xml:space="preserve">
     <value>2B/3B</value>
@@ -1071,78 +1063,78 @@
     <value>2B harita ve 3B sahne arasında geçiş</value>
   </data>
   <data name="OrientedImageryViewerMarkerSelection" xml:space="preserve">
-    <value>ı_Marker selection_________________İ</value>
+    <value>İşaretçi seçimi</value>
   </data>
   <data name="OrientedImageryViewerMarkerOption" xml:space="preserve">
-    <value>ı_Marker {0}_____________________İ</value>
+    <value>İşaretçi {0}</value>
   </data>
   <data name="OrientedImageryViewerMarkerCircle" xml:space="preserve">
-    <value>ı_Circle marker______________İ</value>
+    <value>Daire işaretçi</value>
   </data>
   <data name="OrientedImageryViewerMarkerSquare" xml:space="preserve">
-    <value>ı_Square marker______________İ</value>
+    <value>Kare işaretçi</value>
   </data>
   <data name="OrientedImageryViewerMarkerTriangle" xml:space="preserve">
-    <value>ı_Triangle marker________________İ</value>
+    <value>Üçgen işaretçi</value>
   </data>
   <data name="OrientedImageryViewerMarkerDiamond" xml:space="preserve">
-    <value>ı_Diamond marker_______________İ</value>
+    <value>Elmas işaretçi</value>
   </data>
   <data name="OrientedImageryViewerMarkerX" xml:space="preserve">
-    <value>ı_Cross marker_____________İ</value>
+    <value>Çarpı işaretçi</value>
   </data>
   <data name="OrientedImageryViewerMobileSequentialMode" xml:space="preserve">
-    <value>ı_Sequential_____________________İ</value>
+    <value>Sıralı</value>
   </data>
   <data name="OrientedImageryViewerNavigation" xml:space="preserve">
-    <value>ı_Explore_______________İ</value>
+    <value>Keşfet</value>
   </data>
   <data name="OrientedImageryViewerModeSelection" xml:space="preserve">
-    <value>ı_Mode Selection_______________İ</value>
+    <value>Mod Seçimi</value>
   </data>
   <data name="OrientedImageryViewerOverlaysSelection" xml:space="preserve">
-    <value>ı_Overlays Selection___________________İ</value>
+    <value>Örtüşme Seçimi</value>
   </data>
   <data name="OrientedImageryViewerMarkerTools" xml:space="preserve">
-    <value>ı_Marker Tools_____________İ</value>
+    <value>İşaretçi Araçları</value>
   </data>
   <data name="OrientedImageryViewerOpen" xml:space="preserve">
-    <value>ı_Open oriented imagery______________________İ</value>
+    <value>Yönelimli görüntüyü aç</value>
   </data>
   <data name="OrientedImageryViewerOn" xml:space="preserve">
-    <value>ı_On_____İ</value>
+    <value>Açık</value>
   </data>
   <data name="OrientedImageryViewerOff" xml:space="preserve">
-    <value>ı_Off_______İ</value>
+    <value>Kapalı</value>
   </data>
   <data name="OrientedImageryViewerSelected" xml:space="preserve">
-    <value>ı_Selected_________________İ</value>
+    <value>Seçili</value>
   </data>
   <data name="OrientedImageryViewerNotSelected" xml:space="preserve">
-    <value>ı_Not selected_____________İ</value>
+    <value>Seçilmedi</value>
   </data>
   <data name="OrientedImageryViewerMobileBackToMarkers" xml:space="preserve">
-    <value>ı_Back to Marker Tools_____________________İ</value>
+    <value>İşaretçi Araçlarına Dön</value>
   </data>
   <data name="OrientedImageryViewerMobileSelectMarkerSymbol" xml:space="preserve">
-    <value>ı_Select Symbol______________İ</value>
+    <value>Simge Seç</value>
   </data>
   <data name="OrientedImageryViewerMobileCurrentFootprint" xml:space="preserve">
-    <value>ı_Show Current Footprint_______________________İ</value>
+    <value>Geçerli Taban Alanını Göster</value>
   </data>
   <data name="OrientedImageryViewerMobileAdditionalFootprints" xml:space="preserve">
-    <value>ı_Show Additional Footprints___________________________İ</value>
+    <value>Ek Taban Alanlarını Göster</value>
   </data>
   <data name="OrientedImageryViewerMobileCameraLocations" xml:space="preserve">
-    <value>ı_Show Camera Locations______________________İ</value>
+    <value>Kamera Konumlarını Göster</value>
   </data>
   <data name="OrientedImageryViewerImageNavigation" xml:space="preserve">
-    <value>ı_Image navigation_________________İ</value>
+    <value>Görüntü gezintisi</value>
   </data>
   <data name="OrientedImageryViewerImageNavigationHint" xml:space="preserve">
-    <value>ı_Use Left Arrow for the previous image or Right Arrow for the next image_____________________________________İ.</value>
+    <value>Önceki görüntü için Sol Ok veya sonraki görüntü için Sağ Ok tuşunu kullanın.</value>
   </data>
   <data name="OrientedImageryViewerSequenceNavigation" xml:space="preserve">
-    <value>ı_Sequential image navigation____________________________İ</value>
+    <value>Sıralı görüntü gezintisi</value>
   </data>
 </root>

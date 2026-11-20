@@ -862,207 +862,199 @@
     <value>Gambar yang diorientasi</value>
   </data>
   <data name="OrientedImageryViewerAutomationTypeName" xml:space="preserve">
-    <value>ng_Oriented imagery view______________________ny</value>
+    <value>Tampilan citra berorientasi</value>
   </data>
   <data name="OrientedImageryViewerSelectMarkerSymbol" xml:space="preserve">
-    <value>ng_Select marker symbol_____________________ny</value>
+    <value>Pilih simbol penanda</value>
   </data>
   <data name="OrientedImageryViewerToggleAddMarkers" xml:space="preserve">
-    <value>ng_Toggle add markers___________________ny</value>
+    <value>Alihkan tambah penanda</value>
   </data>
   <data name="OrientedImageryViewerShowSelectedImageFootprint" xml:space="preserve">
-    <value>ng_Show current footprint_______________________ny</value>
+    <value>Tampilkan jejak saat ini</value>
   </data>
   <data name="OrientedImageryViewerShowUnselectedImageFootprints" xml:space="preserve">
-    <value>ng_Show additional footprints___________________________ny</value>
+    <value>Tampilkan jejak tambahan</value>
   </data>
   <data name="OrientedImageryViewerImageSearchMode" xml:space="preserve">
-    <value>ng_Image search mode__________________ny</value>
+    <value>Mode pencarian gambar</value>
   </data>
   <data name="OrientedImageryViewerCurrentFootprintLabel" xml:space="preserve">
-    <value>ng_Current Footprint__________________ny</value>
+    <value>Jejak Saat Ini</value>
   </data>
   <data name="OrientedImageryViewerCurrentFootprintStackedLabel" xml:space="preserve">
-    <value>ng_Current_______________ny
-ng_Footprint___________________ny</value>
+    <value>Jejak Saat Ini</value>
   </data>
   <data name="OrientedImageryViewerAdditionalFootprintsLabel" xml:space="preserve">
-    <value>ng_Additional Footprints______________________ny</value>
+    <value>Jejak Tambahan</value>
   </data>
   <data name="OrientedImageryViewerAdditionalFootprintsStackedLabel" xml:space="preserve">
-    <value>ng_Additional_____________________ny
-ng_Footprints_____________________ny</value>
+    <value>Jejak Tambahan</value>
   </data>
   <data name="OrientedImageryViewerCameraLocationsLabel" xml:space="preserve">
-    <value>ng_Camera Locations_________________ny</value>
+    <value>Lokasi Kamera</value>
   </data>
   <data name="OrientedImageryViewerCameraLocationsStackedLabel" xml:space="preserve">
-    <value>ng_Camera_____________ny
-ng_Locations___________________ny</value>
+    <value>Lokasi Kamera</value>
   </data>
   <data name="OrientedImageryViewerAddMarkersLabel" xml:space="preserve">
-    <value>ng_Add Markers____________ny</value>
+    <value>Tambahkan Penanda</value>
   </data>
   <data name="OrientedImageryViewerAddMarkersStackedLabel" xml:space="preserve">
-    <value>ng_Add_______ny
-ng_Markers_______________ny</value>
+    <value>Tambahkan Penanda</value>
   </data>
   <data name="OrientedImageryViewerClearMarkersLabel" xml:space="preserve">
-    <value>ng_Clear Markers______________ny</value>
+    <value>Hapus Penanda</value>
   </data>
   <data name="OrientedImageryViewerClearMarkersTooltip" xml:space="preserve">
-    <value>ng_Clear markers______________ny</value>
+    <value>Hapus penanda</value>
   </data>
   <data name="OrientedImageryViewerClearMarkersStackedLabel" xml:space="preserve">
-    <value>ng_Clear___________ny
-ng_Markers_______________ny</value>
+    <value>Hapus Penanda</value>
   </data>
   <data name="OrientedImageryViewerImageSearchModeFind" xml:space="preserve">
-    <value>ng_Find Images____________ny</value>
+    <value>Cari Gambar</value>
   </data>
   <data name="OrientedImageryViewerImageSearchModeFindStackedLabel" xml:space="preserve">
-    <value>ng_Find_________ny
-ng_Images_____________ny</value>
+    <value>Cari Gambar</value>
   </data>
   <data name="OrientedImageryViewerImageSearchModeDisplay" xml:space="preserve">
-    <value>ng_Display Image______________ny</value>
+    <value>Tampilkan Gambar</value>
   </data>
   <data name="OrientedImageryViewerImageSearchModeDisplayStackedLabel" xml:space="preserve">
-    <value>ng_Display_______________ny
-ng_Image___________ny</value>
+    <value>Tampilkan Gambar</value>
   </data>
   <data name="OrientedImageryViewerOpenSelectedImagePopup" xml:space="preserve">
-    <value>ng_Open details for selected image_________________ny</value>
+    <value>Buka detail untuk gambar yang dipilih</value>
   </data>
   <data name="OrientedImageryViewerImageDetails" xml:space="preserve">
-    <value>ng_Image details______________ny</value>
+    <value>Detail gambar</value>
   </data>
   <data name="OrientedImageryViewerCloseSelectedImagePopup" xml:space="preserve">
-    <value>ng_Close details______________ny</value>
+    <value>Tutup detail</value>
   </data>
   <data name="OrientedImageryViewerGoToPageFormat" xml:space="preserve">
-    <value>ng_Go to image {0} of {1}_______________________ny</value>
+    <value>Buka gambar {0} dari {1}</value>
   </data>
   <data name="OrientedImageryViewerSelectedPageFormat" xml:space="preserve">
-    <value>ng_Image {0} of {1}, selected___________________________ny</value>
+    <value>Gambar {0} dari {1}, dipilih</value>
   </data>
   <data name="OrientedImageryViewerToggleCameraMarkers" xml:space="preserve">
-    <value>ng_Show camera locations______________________ny</value>
+    <value>Tampilkan lokasi kamera</value>
   </data>
   <data name="OrientedImageryViewerSequentialNavigationTooltip" xml:space="preserve">
-    <value>ng_Sequential navigation______________________ny</value>
+    <value>Navigasi berurutan</value>
   </data>
   <data name="OrientedImageryViewerSequentialNavigationLabel" xml:space="preserve">
-    <value>ng_Sequential Navigation______________________ny</value>
+    <value>Navigasi Berurutan</value>
   </data>
   <data name="OrientedImageryViewerSequentialNavigationStackedLabel" xml:space="preserve">
-    <value>ng_Sequential_____________________ny
-ng_Navigation_____________________ny</value>
+    <value>Navigasi Berurutan</value>
   </data>
   <data name="OrientedImageryViewerPreviousImage" xml:space="preserve">
-    <value>ng_Previous image_______________ny</value>
+    <value>Gambar sebelumnya</value>
   </data>
   <data name="OrientedImageryViewerNextImage" xml:space="preserve">
-    <value>ng_Next image_____________________ny</value>
+    <value>Gambar berikutnya</value>
   </data>
   <data name="OrientedImageryViewerImageLoading" xml:space="preserve">
-    <value>ng_Image loading_________________ny...</value>
+    <value>Memuat gambar...</value>
   </data>
   <data name="OrientedImageryViewerImageLoaded" xml:space="preserve">
-    <value>ng_Image loaded_____________ny</value>
+    <value>Gambar dimuat</value>
   </data>
   <data name="OrientedImageryViewerNoImageToDisplay" xml:space="preserve">
-    <value>ng_No image to display____________________ny</value>
+    <value>Tidak ada gambar untuk ditampilkan</value>
   </data>
   <data name="OrientedImageryViewerNoImagesFound" xml:space="preserve">
-    <value>ng_No images found for the tapped location_____________________ny</value>
+    <value>Tidak ada gambar yang ditemukan untuk lokasi yang diketuk</value>
   </data>
   <data name="OrientedImageryViewerImageSelectionNoImagesNone" xml:space="preserve">
-    <value>ng_No image to display. Enable find images or display image mode to search for images__________________________________________ny</value>
+    <value>Tidak ada gambar untuk ditampilkan. Aktifkan pencarian gambar atau mode tampilan gambar untuk mencari gambar</value>
   </data>
   <data name="OrientedImageryViewerImageSelectionNoImagesFind" xml:space="preserve">
-    <value>ng_No image to display. Tap on the map to search for images or switch to display image mode______________________________________________ny.</value>
+    <value>Tidak ada gambar untuk ditampilkan. Ketuk pada peta untuk mencari gambar atau beralih ke mode tampilan gambar.</value>
   </data>
   <data name="OrientedImageryViewerImageSelectionNoImagesDisplay" xml:space="preserve">
-    <value>ng_No image to display. Tap on a feature to view its image or switch to find images mode____________________________________________ny.</value>
+    <value>Tidak ada gambar untuk ditampilkan. Ketuk pada fitur untuk melihat gambarnya atau beralih ke mode pencarian gambar.</value>
   </data>
   <data name="OrientedImageryViewerImageSelectionEnable" xml:space="preserve">
-    <value>ng_Enable_____________ny</value>
+    <value>Aktifkan</value>
   </data>
   <data name="OrientedImageryViewerImageSelectionOr" xml:space="preserve">
-    <value>ng_or_____ny</value>
+    <value>atau</value>
   </data>
   <data name="OrientedImageryViewerImageSelectionSearchMode" xml:space="preserve">
-    <value>ng_mode to search for images__________________________ny</value>
+    <value>mode untuk mencari gambar</value>
   </data>
   <data name="OrientedImageryViewerImageSelectionFindImages" xml:space="preserve">
-    <value>ng_Tap on the map to search for images___________________ny</value>
+    <value>Ketuk peta untuk mencari gambar</value>
   </data>
   <data name="OrientedImageryViewerImageSelectionDisplayImage" xml:space="preserve">
-    <value>ng_Tap on a feature to view its image__________________ny</value>
+    <value>Ketuk pada fitur untuk melihat gambarnya</value>
   </data>
   <data name="OrientedImageryViewerImageSelectionSwitchMode" xml:space="preserve">
-    <value>ng_or switch to_____________ny</value>
+    <value>atau beralih ke</value>
   </data>
   <data name="OrientedImageryViewerImageSelectionMode" xml:space="preserve">
-    <value>ng_mode_________ny</value>
+    <value>mode</value>
   </data>
   <data name="OrientedImageryViewerNoGeoView" xml:space="preserve">
-    <value>ng_Connect a GeoView to view oriented imagery_______________________ny.</value>
+    <value>Hubungkan GeoView untuk melihat citra terorientasi</value>
   </data>
   <data name="OrientedImageryViewerNoLayerSelected" xml:space="preserve">
-    <value>ng_No layer selected___________________ny.</value>
+    <value>Tidak ada layer yang dipilih.</value>
   </data>
   <data name="OrientedImageryViewerAnnounceTransientError" xml:space="preserve">
-    <value>ng_Error raised_____________ny</value>
+    <value>Terjadi kesalahan</value>
   </data>
   <data name="OrientedImageryViewerDismissError" xml:space="preserve">
-    <value>ng_Dismiss error______________ny</value>
+    <value>Abaikan kesalahan</value>
   </data>
   <data name="OrientedImageryViewerPreviousLabel" xml:space="preserve">
-    <value>ng_Prev_________ny</value>
+    <value>Pratinjau</value>
   </data>
   <data name="OrientedImageryViewerNextLabel" xml:space="preserve">
-    <value>ng_Next_________ny</value>
+    <value>Selanjutnya</value>
   </data>
   <data name="OrientedImageryViewerSequenceStartReached" xml:space="preserve">
-    <value>ng_Start of image sequence reached_________________ny</value>
+    <value>Awal urutan gambar telah tercapai</value>
   </data>
   <data name="OrientedImageryViewerSequenceEndReached" xml:space="preserve">
-    <value>ng_End of image sequence reached______________________________ny</value>
+    <value>Akhir urutan gambar telah tercapai</value>
   </data>
   <data name="OrientedImageryViewerSequenceStartAndEndReached" xml:space="preserve">
-    <value>ng_Start and end of image sequence reached_____________________ny</value>
+    <value>Awal dan akhir urutan gambar telah tercapai</value>
   </data>
   <data name="OrientedImageryViewerClose" xml:space="preserve">
-    <value>ng_Close oriented imagery_______________________ny</value>
+    <value>Tutup citra yang diorientasi</value>
   </data>
   <data name="OrientedImageryViewerClosePanel" xml:space="preserve">
-    <value>ng_Close panel____________ny</value>
+    <value>Tutup panel</value>
   </data>
   <data name="OrientedImageryViewerOverlays" xml:space="preserve">
-    <value>ng_Overlays_________________ny</value>
+    <value>Overlay</value>
   </data>
   <data name="OrientedImageryViewerMarkers" xml:space="preserve">
-    <value>ng_Markers_______________ny</value>
+    <value>Penanda</value>
   </data>
   <data name="OrientedImageryViewerMode" xml:space="preserve">
-    <value>ng_Mode_________ny</value>
+    <value>Mode</value>
   </data>
   <data name="OrientedImageryViewerShowPreviousImageInSequence" xml:space="preserve">
-    <value>ng_Show previous image in sequence_________________ny</value>
+    <value>Tampilkan gambar sebelumnya dalam urutan</value>
   </data>
   <data name="OrientedImageryViewerShowNextImageInSequence" xml:space="preserve">
-    <value>ng_Show next image in sequence____________________________ny</value>
+    <value>Tampilkan gambar berikutnya dalam urutan</value>
   </data>
   <data name="OrientedImageryViewerMore" xml:space="preserve">
-    <value>ng_More_________ny</value>
+    <value>Lainnya</value>
   </data>
   <data name="OrientedImageryViewerPage" xml:space="preserve">
-    <value>ng_Image {0} of {1}_________________ny</value>
+    <value>Gambar {0} dari {1}</value>
   </data>
   <data name="OrientedImageryViewerSelectLayer" xml:space="preserve">
-    <value>ng_Select layer_____________ny</value>
+    <value>Pilih layer</value>
   </data>
   <data name="OrientedImagerySampleToggleView" xml:space="preserve">
     <value>2D/3D</value>
@@ -1071,78 +1063,78 @@ ng_Navigation_____________________ny</value>
     <value>Beralih antara peta 2D dan scene 3D</value>
   </data>
   <data name="OrientedImageryViewerMarkerSelection" xml:space="preserve">
-    <value>ng_Marker selection_________________ny</value>
+    <value>Pemilihan penanda</value>
   </data>
   <data name="OrientedImageryViewerMarkerOption" xml:space="preserve">
-    <value>ng_Marker {0}_____________________ny</value>
+    <value>Penanda {0}</value>
   </data>
   <data name="OrientedImageryViewerMarkerCircle" xml:space="preserve">
-    <value>ng_Circle marker______________ny</value>
+    <value>Penanda bentuk lingkaran</value>
   </data>
   <data name="OrientedImageryViewerMarkerSquare" xml:space="preserve">
-    <value>ng_Square marker______________ny</value>
+    <value>Penanda bentuk persegi</value>
   </data>
   <data name="OrientedImageryViewerMarkerTriangle" xml:space="preserve">
-    <value>ng_Triangle marker________________ny</value>
+    <value>Penanda bentuk segitiga</value>
   </data>
   <data name="OrientedImageryViewerMarkerDiamond" xml:space="preserve">
-    <value>ng_Diamond marker_______________ny</value>
+    <value>Penanda bentuk belah ketupat</value>
   </data>
   <data name="OrientedImageryViewerMarkerX" xml:space="preserve">
-    <value>ng_Cross marker_____________ny</value>
+    <value>Tanda silang</value>
   </data>
   <data name="OrientedImageryViewerMobileSequentialMode" xml:space="preserve">
-    <value>ng_Sequential_____________________ny</value>
+    <value>Sekuensial</value>
   </data>
   <data name="OrientedImageryViewerNavigation" xml:space="preserve">
-    <value>ng_Explore_______________ny</value>
+    <value>Jelajahi</value>
   </data>
   <data name="OrientedImageryViewerModeSelection" xml:space="preserve">
-    <value>ng_Mode Selection_______________ny</value>
+    <value>Pemilihan Mode</value>
   </data>
   <data name="OrientedImageryViewerOverlaysSelection" xml:space="preserve">
-    <value>ng_Overlays Selection___________________ny</value>
+    <value>Pemilihan Overlay</value>
   </data>
   <data name="OrientedImageryViewerMarkerTools" xml:space="preserve">
-    <value>ng_Marker Tools_____________ny</value>
+    <value>Alat Penanda</value>
   </data>
   <data name="OrientedImageryViewerOpen" xml:space="preserve">
-    <value>ng_Open oriented imagery______________________ny</value>
+    <value>Buka citra yang diorientasi</value>
   </data>
   <data name="OrientedImageryViewerOn" xml:space="preserve">
-    <value>ng_On_____ny</value>
+    <value>Aktif</value>
   </data>
   <data name="OrientedImageryViewerOff" xml:space="preserve">
-    <value>ng_Off_______ny</value>
+    <value>Mati</value>
   </data>
   <data name="OrientedImageryViewerSelected" xml:space="preserve">
-    <value>ng_Selected_________________ny</value>
+    <value>Dipilih</value>
   </data>
   <data name="OrientedImageryViewerNotSelected" xml:space="preserve">
-    <value>ng_Not selected_____________ny</value>
+    <value>Tidak terpilih</value>
   </data>
   <data name="OrientedImageryViewerMobileBackToMarkers" xml:space="preserve">
-    <value>ng_Back to Marker Tools_____________________ny</value>
+    <value>Kembali ke Alat Penanda</value>
   </data>
   <data name="OrientedImageryViewerMobileSelectMarkerSymbol" xml:space="preserve">
-    <value>ng_Select Symbol______________ny</value>
+    <value>Pilih Simbol</value>
   </data>
   <data name="OrientedImageryViewerMobileCurrentFootprint" xml:space="preserve">
-    <value>ng_Show Current Footprint_______________________ny</value>
+    <value>Tampilkan Jejak Saat Ini</value>
   </data>
   <data name="OrientedImageryViewerMobileAdditionalFootprints" xml:space="preserve">
-    <value>ng_Show Additional Footprints___________________________ny</value>
+    <value>Tampilkan Jejak Tambahan</value>
   </data>
   <data name="OrientedImageryViewerMobileCameraLocations" xml:space="preserve">
-    <value>ng_Show Camera Locations______________________ny</value>
+    <value>Tampilkan Lokasi Kamera</value>
   </data>
   <data name="OrientedImageryViewerImageNavigation" xml:space="preserve">
-    <value>ng_Image navigation_________________ny</value>
+    <value>Navigasi gambar</value>
   </data>
   <data name="OrientedImageryViewerImageNavigationHint" xml:space="preserve">
-    <value>ng_Use Left Arrow for the previous image or Right Arrow for the next image_____________________________________ny.</value>
+    <value>Gunakan Panah Kiri untuk gambar sebelumnya atau Panah Kanan untuk gambar berikutnya.</value>
   </data>
   <data name="OrientedImageryViewerSequenceNavigation" xml:space="preserve">
-    <value>ng_Sequential image navigation____________________________ny</value>
+    <value>Navigasi urutan gambar</value>
   </data>
 </root>

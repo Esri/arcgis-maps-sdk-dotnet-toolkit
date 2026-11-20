@@ -862,207 +862,199 @@
     <value>Tájolt távérzékelt felvétel</value>
   </data>
   <data name="OrientedImageryViewerAutomationTypeName" xml:space="preserve">
-    <value>í_Oriented imagery view______________________ő</value>
+    <value>Tájolt távérzékelt felvétel megtekintése</value>
   </data>
   <data name="OrientedImageryViewerSelectMarkerSymbol" xml:space="preserve">
-    <value>í_Select marker symbol_____________________ő</value>
+    <value>Jelölő szimbólum választása</value>
   </data>
   <data name="OrientedImageryViewerToggleAddMarkers" xml:space="preserve">
-    <value>í_Toggle add markers___________________ő</value>
+    <value>Jelölő-hozzáadás be-/kikapcsolása</value>
   </data>
   <data name="OrientedImageryViewerShowSelectedImageFootprint" xml:space="preserve">
-    <value>í_Show current footprint_______________________ő</value>
+    <value>Aktuális lenyomat megjelenítése</value>
   </data>
   <data name="OrientedImageryViewerShowUnselectedImageFootprints" xml:space="preserve">
-    <value>í_Show additional footprints___________________________ő</value>
+    <value>További lenyomatok megjelenítése</value>
   </data>
   <data name="OrientedImageryViewerImageSearchMode" xml:space="preserve">
-    <value>í_Image search mode__________________ő</value>
+    <value>Képkeresési mód</value>
   </data>
   <data name="OrientedImageryViewerCurrentFootprintLabel" xml:space="preserve">
-    <value>í_Current Footprint__________________ő</value>
+    <value>Aktuális lenyomat</value>
   </data>
   <data name="OrientedImageryViewerCurrentFootprintStackedLabel" xml:space="preserve">
-    <value>í_Current_______________ő
-í_Footprint___________________ő</value>
+    <value>Aktuális lenyomat</value>
   </data>
   <data name="OrientedImageryViewerAdditionalFootprintsLabel" xml:space="preserve">
-    <value>í_Additional Footprints______________________ő</value>
+    <value>További lenyomatok</value>
   </data>
   <data name="OrientedImageryViewerAdditionalFootprintsStackedLabel" xml:space="preserve">
-    <value>í_Additional_____________________ő
-í_Footprints_____________________ő</value>
+    <value>További lenyomatok</value>
   </data>
   <data name="OrientedImageryViewerCameraLocationsLabel" xml:space="preserve">
-    <value>í_Camera Locations_________________ő</value>
+    <value>Kamerahelyek</value>
   </data>
   <data name="OrientedImageryViewerCameraLocationsStackedLabel" xml:space="preserve">
-    <value>í_Camera_____________ő
-í_Locations___________________ő</value>
+    <value>Kamera- helyek</value>
   </data>
   <data name="OrientedImageryViewerAddMarkersLabel" xml:space="preserve">
-    <value>í_Add Markers____________ő</value>
+    <value>Jelölők hozzáadása</value>
   </data>
   <data name="OrientedImageryViewerAddMarkersStackedLabel" xml:space="preserve">
-    <value>í_Add_______ő
-í_Markers_______________ő</value>
+    <value>Jelölők hozzáadása</value>
   </data>
   <data name="OrientedImageryViewerClearMarkersLabel" xml:space="preserve">
-    <value>í_Clear Markers______________ő</value>
+    <value>Jelölők törlése</value>
   </data>
   <data name="OrientedImageryViewerClearMarkersTooltip" xml:space="preserve">
-    <value>í_Clear markers______________ő</value>
+    <value>Jelölők törlése</value>
   </data>
   <data name="OrientedImageryViewerClearMarkersStackedLabel" xml:space="preserve">
-    <value>í_Clear___________ő
-í_Markers_______________ő</value>
+    <value>Jelölők törlése</value>
   </data>
   <data name="OrientedImageryViewerImageSearchModeFind" xml:space="preserve">
-    <value>í_Find Images____________ő</value>
+    <value>Képek keresése</value>
   </data>
   <data name="OrientedImageryViewerImageSearchModeFindStackedLabel" xml:space="preserve">
-    <value>í_Find_________ő
-í_Images_____________ő</value>
+    <value>Képek keresése</value>
   </data>
   <data name="OrientedImageryViewerImageSearchModeDisplay" xml:space="preserve">
-    <value>í_Display Image______________ő</value>
+    <value>Kép megjelenítése</value>
   </data>
   <data name="OrientedImageryViewerImageSearchModeDisplayStackedLabel" xml:space="preserve">
-    <value>í_Display_______________ő
-í_Image___________ő</value>
+    <value>Kép megjelenítése</value>
   </data>
   <data name="OrientedImageryViewerOpenSelectedImagePopup" xml:space="preserve">
-    <value>í_Open details for selected image_________________ő</value>
+    <value>Kijelölt kép részleteinek megnyitása</value>
   </data>
   <data name="OrientedImageryViewerImageDetails" xml:space="preserve">
-    <value>í_Image details______________ő</value>
+    <value>Kép részletei</value>
   </data>
   <data name="OrientedImageryViewerCloseSelectedImagePopup" xml:space="preserve">
-    <value>í_Close details______________ő</value>
+    <value>Részletek bezárása</value>
   </data>
   <data name="OrientedImageryViewerGoToPageFormat" xml:space="preserve">
-    <value>í_Go to image {0} of {1}_______________________ő</value>
+    <value>Ugrás {0}/{1} képhez</value>
   </data>
   <data name="OrientedImageryViewerSelectedPageFormat" xml:space="preserve">
-    <value>í_Image {0} of {1}, selected___________________________ő</value>
+    <value>{0}/{1} kép, kijelölve</value>
   </data>
   <data name="OrientedImageryViewerToggleCameraMarkers" xml:space="preserve">
-    <value>í_Show camera locations______________________ő</value>
+    <value>Kamerahelyek megjelenítése</value>
   </data>
   <data name="OrientedImageryViewerSequentialNavigationTooltip" xml:space="preserve">
-    <value>í_Sequential navigation______________________ő</value>
+    <value>Szekvenciális navigáció</value>
   </data>
   <data name="OrientedImageryViewerSequentialNavigationLabel" xml:space="preserve">
-    <value>í_Sequential Navigation______________________ő</value>
+    <value>Szekvenciális navigáció</value>
   </data>
   <data name="OrientedImageryViewerSequentialNavigationStackedLabel" xml:space="preserve">
-    <value>í_Sequential_____________________ő
-í_Navigation_____________________ő</value>
+    <value>Szekvenciális navigáció</value>
   </data>
   <data name="OrientedImageryViewerPreviousImage" xml:space="preserve">
-    <value>í_Previous image_______________ő</value>
+    <value>Előző kép</value>
   </data>
   <data name="OrientedImageryViewerNextImage" xml:space="preserve">
-    <value>í_Next image_____________________ő</value>
+    <value>Következő kép</value>
   </data>
   <data name="OrientedImageryViewerImageLoading" xml:space="preserve">
-    <value>í_Image loading_________________ő...</value>
+    <value>Kép betöltése...</value>
   </data>
   <data name="OrientedImageryViewerImageLoaded" xml:space="preserve">
-    <value>í_Image loaded_____________ő</value>
+    <value>Kép betöltve</value>
   </data>
   <data name="OrientedImageryViewerNoImageToDisplay" xml:space="preserve">
-    <value>í_No image to display____________________ő</value>
+    <value>Nincs megjeleníthető kép</value>
   </data>
   <data name="OrientedImageryViewerNoImagesFound" xml:space="preserve">
-    <value>í_No images found for the tapped location_____________________ő</value>
+    <value>A megérintett helyhez nem találhatók képek</value>
   </data>
   <data name="OrientedImageryViewerImageSelectionNoImagesNone" xml:space="preserve">
-    <value>í_No image to display. Enable find images or display image mode to search for images__________________________________________ő</value>
+    <value>Nincs megjeleníthető kép. Kép kereséséhez engedélyezze a képkeresést vagy a képmegjelenítési módot</value>
   </data>
   <data name="OrientedImageryViewerImageSelectionNoImagesFind" xml:space="preserve">
-    <value>í_No image to display. Tap on the map to search for images or switch to display image mode______________________________________________ő.</value>
+    <value>Nincs megjeleníthető kép. Képek kereséséhez vagy képmegjelenítési módra váltáshoz koppintson a térképre.</value>
   </data>
   <data name="OrientedImageryViewerImageSelectionNoImagesDisplay" xml:space="preserve">
-    <value>í_No image to display. Tap on a feature to view its image or switch to find images mode____________________________________________ő.</value>
+    <value>Nincs megjeleníthető kép. A képe megtekintéséhez vagy képmegjelenítési módra váltáshoz koppintson a kívánt vektoros elemre.</value>
   </data>
   <data name="OrientedImageryViewerImageSelectionEnable" xml:space="preserve">
-    <value>í_Enable_____________ő</value>
+    <value>Engedélyezés</value>
   </data>
   <data name="OrientedImageryViewerImageSelectionOr" xml:space="preserve">
-    <value>í_or_____ő</value>
+    <value>vagy</value>
   </data>
   <data name="OrientedImageryViewerImageSelectionSearchMode" xml:space="preserve">
-    <value>í_mode to search for images__________________________ő</value>
+    <value>módot képek kereséséhez</value>
   </data>
   <data name="OrientedImageryViewerImageSelectionFindImages" xml:space="preserve">
-    <value>í_Tap on the map to search for images___________________ő</value>
+    <value>Képek kereséséhez koppintson a térképre</value>
   </data>
   <data name="OrientedImageryViewerImageSelectionDisplayImage" xml:space="preserve">
-    <value>í_Tap on a feature to view its image__________________ő</value>
+    <value>Koppintson a kívánt vektoros elemre a képe megtekintéséhez</value>
   </data>
   <data name="OrientedImageryViewerImageSelectionSwitchMode" xml:space="preserve">
-    <value>í_or switch to_____________ő</value>
+    <value>vagy</value>
   </data>
   <data name="OrientedImageryViewerImageSelectionMode" xml:space="preserve">
-    <value>í_mode_________ő</value>
+    <value>módra váltáshoz</value>
   </data>
   <data name="OrientedImageryViewerNoGeoView" xml:space="preserve">
-    <value>í_Connect a GeoView to view oriented imagery_______________________ő.</value>
+    <value>Orientált felvételek megtekintéséhez kapcsolódjon GeoView-hoz</value>
   </data>
   <data name="OrientedImageryViewerNoLayerSelected" xml:space="preserve">
-    <value>í_No layer selected___________________ő.</value>
+    <value>Nincs kiválasztott réteg.</value>
   </data>
   <data name="OrientedImageryViewerAnnounceTransientError" xml:space="preserve">
-    <value>í_Error raised_____________ő</value>
+    <value>Hiba lépett fel</value>
   </data>
   <data name="OrientedImageryViewerDismissError" xml:space="preserve">
-    <value>í_Dismiss error______________ő</value>
+    <value>Hiba elvetése</value>
   </data>
   <data name="OrientedImageryViewerPreviousLabel" xml:space="preserve">
-    <value>í_Prev_________ő</value>
+    <value>Előző</value>
   </data>
   <data name="OrientedImageryViewerNextLabel" xml:space="preserve">
-    <value>í_Next_________ő</value>
+    <value>Tovább</value>
   </data>
   <data name="OrientedImageryViewerSequenceStartReached" xml:space="preserve">
-    <value>í_Start of image sequence reached_________________ő</value>
+    <value>Képsorozat eleje elérve</value>
   </data>
   <data name="OrientedImageryViewerSequenceEndReached" xml:space="preserve">
-    <value>í_End of image sequence reached______________________________ő</value>
+    <value>Képsorozat vége elérve</value>
   </data>
   <data name="OrientedImageryViewerSequenceStartAndEndReached" xml:space="preserve">
-    <value>í_Start and end of image sequence reached_____________________ő</value>
+    <value>Képsorozat eleje és vége elérve</value>
   </data>
   <data name="OrientedImageryViewerClose" xml:space="preserve">
-    <value>í_Close oriented imagery_______________________ő</value>
+    <value>Tájolt távérzékelt felvétel bezárása</value>
   </data>
   <data name="OrientedImageryViewerClosePanel" xml:space="preserve">
-    <value>í_Close panel____________ő</value>
+    <value>Panel bezárása</value>
   </data>
   <data name="OrientedImageryViewerOverlays" xml:space="preserve">
-    <value>í_Overlays_________________ő</value>
+    <value>Fedvényműveletek</value>
   </data>
   <data name="OrientedImageryViewerMarkers" xml:space="preserve">
-    <value>í_Markers_______________ő</value>
+    <value>Jelölők</value>
   </data>
   <data name="OrientedImageryViewerMode" xml:space="preserve">
-    <value>í_Mode_________ő</value>
+    <value>Mód</value>
   </data>
   <data name="OrientedImageryViewerShowPreviousImageInSequence" xml:space="preserve">
-    <value>í_Show previous image in sequence_________________ő</value>
+    <value>Előző kép megjelenítése a sorozatban</value>
   </data>
   <data name="OrientedImageryViewerShowNextImageInSequence" xml:space="preserve">
-    <value>í_Show next image in sequence____________________________ő</value>
+    <value>Következő kép megjelenítése a sorozatban</value>
   </data>
   <data name="OrientedImageryViewerMore" xml:space="preserve">
-    <value>í_More_________ő</value>
+    <value>Továbbiak</value>
   </data>
   <data name="OrientedImageryViewerPage" xml:space="preserve">
-    <value>í_Image {0} of {1}_________________ő</value>
+    <value>{0}/{1} kép</value>
   </data>
   <data name="OrientedImageryViewerSelectLayer" xml:space="preserve">
-    <value>í_Select layer_____________ő</value>
+    <value>Réteg kiválasztása</value>
   </data>
   <data name="OrientedImagerySampleToggleView" xml:space="preserve">
     <value>2D/3D</value>
@@ -1071,78 +1063,78 @@
     <value>2D térkép és 3D térkép közötti váltás</value>
   </data>
   <data name="OrientedImageryViewerMarkerSelection" xml:space="preserve">
-    <value>í_Marker selection_________________ő</value>
+    <value>Jelölő kiválasztása</value>
   </data>
   <data name="OrientedImageryViewerMarkerOption" xml:space="preserve">
-    <value>í_Marker {0}_____________________ő</value>
+    <value>„{0}” jelölő</value>
   </data>
   <data name="OrientedImageryViewerMarkerCircle" xml:space="preserve">
-    <value>í_Circle marker______________ő</value>
+    <value>Kör alakú jelölő</value>
   </data>
   <data name="OrientedImageryViewerMarkerSquare" xml:space="preserve">
-    <value>í_Square marker______________ő</value>
+    <value>Négyzet alakú jelölő</value>
   </data>
   <data name="OrientedImageryViewerMarkerTriangle" xml:space="preserve">
-    <value>í_Triangle marker________________ő</value>
+    <value>Háromszög alakú jelölő</value>
   </data>
   <data name="OrientedImageryViewerMarkerDiamond" xml:space="preserve">
-    <value>í_Diamond marker_______________ő</value>
+    <value>Rombusz alakú jelölő</value>
   </data>
   <data name="OrientedImageryViewerMarkerX" xml:space="preserve">
-    <value>í_Cross marker_____________ő</value>
+    <value>Kereszt jelölő</value>
   </data>
   <data name="OrientedImageryViewerMobileSequentialMode" xml:space="preserve">
-    <value>í_Sequential_____________________ő</value>
+    <value>Szekvenciális</value>
   </data>
   <data name="OrientedImageryViewerNavigation" xml:space="preserve">
-    <value>í_Explore_______________ő</value>
+    <value>Böngészés</value>
   </data>
   <data name="OrientedImageryViewerModeSelection" xml:space="preserve">
-    <value>í_Mode Selection_______________ő</value>
+    <value>Módválasztás</value>
   </data>
   <data name="OrientedImageryViewerOverlaysSelection" xml:space="preserve">
-    <value>í_Overlays Selection___________________ő</value>
+    <value>Fedvényválasztás</value>
   </data>
   <data name="OrientedImageryViewerMarkerTools" xml:space="preserve">
-    <value>í_Marker Tools_____________ő</value>
+    <value>Jelölőeszközök</value>
   </data>
   <data name="OrientedImageryViewerOpen" xml:space="preserve">
-    <value>í_Open oriented imagery______________________ő</value>
+    <value>Tájolt felvételek megnyitása</value>
   </data>
   <data name="OrientedImageryViewerOn" xml:space="preserve">
-    <value>í_On_____ő</value>
+    <value>Be</value>
   </data>
   <data name="OrientedImageryViewerOff" xml:space="preserve">
-    <value>í_Off_______ő</value>
+    <value>Ki</value>
   </data>
   <data name="OrientedImageryViewerSelected" xml:space="preserve">
-    <value>í_Selected_________________ő</value>
+    <value>Kijelölve</value>
   </data>
   <data name="OrientedImageryViewerNotSelected" xml:space="preserve">
-    <value>í_Not selected_____________ő</value>
+    <value>Nincs kijelölve</value>
   </data>
   <data name="OrientedImageryViewerMobileBackToMarkers" xml:space="preserve">
-    <value>í_Back to Marker Tools_____________________ő</value>
+    <value>Vissza a jelölőeszközökhöz</value>
   </data>
   <data name="OrientedImageryViewerMobileSelectMarkerSymbol" xml:space="preserve">
-    <value>í_Select Symbol______________ő</value>
+    <value>Szimbólum választása</value>
   </data>
   <data name="OrientedImageryViewerMobileCurrentFootprint" xml:space="preserve">
-    <value>í_Show Current Footprint_______________________ő</value>
+    <value>Aktuális lenyomat megjelenítése</value>
   </data>
   <data name="OrientedImageryViewerMobileAdditionalFootprints" xml:space="preserve">
-    <value>í_Show Additional Footprints___________________________ő</value>
+    <value>További lenyomatok megjelenítése</value>
   </data>
   <data name="OrientedImageryViewerMobileCameraLocations" xml:space="preserve">
-    <value>í_Show Camera Locations______________________ő</value>
+    <value>Kamerahelyek megjelenítése</value>
   </data>
   <data name="OrientedImageryViewerImageNavigation" xml:space="preserve">
-    <value>í_Image navigation_________________ő</value>
+    <value>Képnavigáció</value>
   </data>
   <data name="OrientedImageryViewerImageNavigationHint" xml:space="preserve">
-    <value>í_Use Left Arrow for the previous image or Right Arrow for the next image_____________________________________ő.</value>
+    <value>Használja a balra nyilat az előző képhez vagy a jobbra nyilat a következő képhez.</value>
   </data>
   <data name="OrientedImageryViewerSequenceNavigation" xml:space="preserve">
-    <value>í_Sequential image navigation____________________________ő</value>
+    <value>Szekvenciális képnavigáció</value>
   </data>
 </root>

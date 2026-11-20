@@ -862,207 +862,199 @@
     <value>Oriented image</value>
   </data>
   <data name="OrientedImageryViewerAutomationTypeName" xml:space="preserve">
-    <value>Ĳ_Oriented imagery view______________________ä</value>
+    <value>Weergave Oriented Imagery</value>
   </data>
   <data name="OrientedImageryViewerSelectMarkerSymbol" xml:space="preserve">
-    <value>Ĳ_Select marker symbol_____________________ä</value>
+    <value>Markeringssymbool selecteren</value>
   </data>
   <data name="OrientedImageryViewerToggleAddMarkers" xml:space="preserve">
-    <value>Ĳ_Toggle add markers___________________ä</value>
+    <value>Markeringstekens toevoegen in-/uitschakelen</value>
   </data>
   <data name="OrientedImageryViewerShowSelectedImageFootprint" xml:space="preserve">
-    <value>Ĳ_Show current footprint_______________________ä</value>
+    <value>Huidige voetafdruk weergeven</value>
   </data>
   <data name="OrientedImageryViewerShowUnselectedImageFootprints" xml:space="preserve">
-    <value>Ĳ_Show additional footprints___________________________ä</value>
+    <value>Extra voetafdrukken weergeven</value>
   </data>
   <data name="OrientedImageryViewerImageSearchMode" xml:space="preserve">
-    <value>Ĳ_Image search mode__________________ä</value>
+    <value>Zoekmodus afbeeldingen</value>
   </data>
   <data name="OrientedImageryViewerCurrentFootprintLabel" xml:space="preserve">
-    <value>Ĳ_Current Footprint__________________ä</value>
+    <value>Huidige voetafdruk</value>
   </data>
   <data name="OrientedImageryViewerCurrentFootprintStackedLabel" xml:space="preserve">
-    <value>Ĳ_Current_______________ä
-Ĳ_Footprint___________________ä</value>
+    <value>Huidige voetafdruk</value>
   </data>
   <data name="OrientedImageryViewerAdditionalFootprintsLabel" xml:space="preserve">
-    <value>Ĳ_Additional Footprints______________________ä</value>
+    <value>Extra voetafdrukken</value>
   </data>
   <data name="OrientedImageryViewerAdditionalFootprintsStackedLabel" xml:space="preserve">
-    <value>Ĳ_Additional_____________________ä
-Ĳ_Footprints_____________________ä</value>
+    <value>Extra voetafdrukken</value>
   </data>
   <data name="OrientedImageryViewerCameraLocationsLabel" xml:space="preserve">
-    <value>Ĳ_Camera Locations_________________ä</value>
+    <value>Cameralocaties</value>
   </data>
   <data name="OrientedImageryViewerCameraLocationsStackedLabel" xml:space="preserve">
-    <value>Ĳ_Camera_____________ä
-Ĳ_Locations___________________ä</value>
+    <value>Camera- locaties</value>
   </data>
   <data name="OrientedImageryViewerAddMarkersLabel" xml:space="preserve">
-    <value>Ĳ_Add Markers____________ä</value>
+    <value>Markeringen toevoegen</value>
   </data>
   <data name="OrientedImageryViewerAddMarkersStackedLabel" xml:space="preserve">
-    <value>Ĳ_Add_______ä
-Ĳ_Markers_______________ä</value>
+    <value>Markeringen toevoegen</value>
   </data>
   <data name="OrientedImageryViewerClearMarkersLabel" xml:space="preserve">
-    <value>Ĳ_Clear Markers______________ä</value>
+    <value>Markeringen wissen</value>
   </data>
   <data name="OrientedImageryViewerClearMarkersTooltip" xml:space="preserve">
-    <value>Ĳ_Clear markers______________ä</value>
+    <value>Markeringen wissen</value>
   </data>
   <data name="OrientedImageryViewerClearMarkersStackedLabel" xml:space="preserve">
-    <value>Ĳ_Clear___________ä
-Ĳ_Markers_______________ä</value>
+    <value>Markeringen wissen</value>
   </data>
   <data name="OrientedImageryViewerImageSearchModeFind" xml:space="preserve">
-    <value>Ĳ_Find Images____________ä</value>
+    <value>Afbeeldingen zoeken</value>
   </data>
   <data name="OrientedImageryViewerImageSearchModeFindStackedLabel" xml:space="preserve">
-    <value>Ĳ_Find_________ä
-Ĳ_Images_____________ä</value>
+    <value>Afbeeldingen zoeken</value>
   </data>
   <data name="OrientedImageryViewerImageSearchModeDisplay" xml:space="preserve">
-    <value>Ĳ_Display Image______________ä</value>
+    <value>Afbeelding weergeven</value>
   </data>
   <data name="OrientedImageryViewerImageSearchModeDisplayStackedLabel" xml:space="preserve">
-    <value>Ĳ_Display_______________ä
-Ĳ_Image___________ä</value>
+    <value>Afbeelding weergeven</value>
   </data>
   <data name="OrientedImageryViewerOpenSelectedImagePopup" xml:space="preserve">
-    <value>Ĳ_Open details for selected image_________________ä</value>
+    <value>Details openen voor geselecteerde afbeelding</value>
   </data>
   <data name="OrientedImageryViewerImageDetails" xml:space="preserve">
-    <value>Ĳ_Image details______________ä</value>
+    <value>Details afbeelding</value>
   </data>
   <data name="OrientedImageryViewerCloseSelectedImagePopup" xml:space="preserve">
-    <value>Ĳ_Close details______________ä</value>
+    <value>Details sluiten</value>
   </data>
   <data name="OrientedImageryViewerGoToPageFormat" xml:space="preserve">
-    <value>Ĳ_Go to image {0} of {1}_______________________ä</value>
+    <value>Ga naar afbeelding {0} van {1}</value>
   </data>
   <data name="OrientedImageryViewerSelectedPageFormat" xml:space="preserve">
-    <value>Ĳ_Image {0} of {1}, selected___________________________ä</value>
+    <value>Afbeelding {0} van {1}, geselecteerd</value>
   </data>
   <data name="OrientedImageryViewerToggleCameraMarkers" xml:space="preserve">
-    <value>Ĳ_Show camera locations______________________ä</value>
+    <value>Cameralocaties weergeven</value>
   </data>
   <data name="OrientedImageryViewerSequentialNavigationTooltip" xml:space="preserve">
-    <value>Ĳ_Sequential navigation______________________ä</value>
+    <value>Reeksnavigatie</value>
   </data>
   <data name="OrientedImageryViewerSequentialNavigationLabel" xml:space="preserve">
-    <value>Ĳ_Sequential Navigation______________________ä</value>
+    <value>Reeksnavigatie</value>
   </data>
   <data name="OrientedImageryViewerSequentialNavigationStackedLabel" xml:space="preserve">
-    <value>Ĳ_Sequential_____________________ä
-Ĳ_Navigation_____________________ä</value>
+    <value>Reeks- navigatie</value>
   </data>
   <data name="OrientedImageryViewerPreviousImage" xml:space="preserve">
-    <value>Ĳ_Previous image_______________ä</value>
+    <value>Vorige afbeelding</value>
   </data>
   <data name="OrientedImageryViewerNextImage" xml:space="preserve">
-    <value>Ĳ_Next image_____________________ä</value>
+    <value>Volgende afbeelding</value>
   </data>
   <data name="OrientedImageryViewerImageLoading" xml:space="preserve">
-    <value>Ĳ_Image loading_________________ä...</value>
+    <value>Bezig met laden afbeelding...</value>
   </data>
   <data name="OrientedImageryViewerImageLoaded" xml:space="preserve">
-    <value>Ĳ_Image loaded_____________ä</value>
+    <value>Afbeelding is geladen</value>
   </data>
   <data name="OrientedImageryViewerNoImageToDisplay" xml:space="preserve">
-    <value>Ĳ_No image to display____________________ä</value>
+    <value>Geen afbeeldingen beschikbaar</value>
   </data>
   <data name="OrientedImageryViewerNoImagesFound" xml:space="preserve">
-    <value>Ĳ_No images found for the tapped location_____________________ä</value>
+    <value>Kan geen afbeeldingen vinden voor de aangetikte locatie</value>
   </data>
   <data name="OrientedImageryViewerImageSelectionNoImagesNone" xml:space="preserve">
-    <value>Ĳ_No image to display. Enable find images or display image mode to search for images__________________________________________ä</value>
+    <value>Er is geen afbeelding die u kunt weergeven. Schakel Afbeeldingen zoeken of de modus Afbeelding weergeven in als u afbeeldingen wilt zoeken.</value>
   </data>
   <data name="OrientedImageryViewerImageSelectionNoImagesFind" xml:space="preserve">
-    <value>Ĳ_No image to display. Tap on the map to search for images or switch to display image mode______________________________________________ä.</value>
+    <value>Er is geen afbeelding die u kunt weergeven. Tik op de kaart om naar afbeeldingen te zoeken of schakel over naar de modus Afbeelding weergeven.</value>
   </data>
   <data name="OrientedImageryViewerImageSelectionNoImagesDisplay" xml:space="preserve">
-    <value>Ĳ_No image to display. Tap on a feature to view its image or switch to find images mode____________________________________________ä.</value>
+    <value>Er is geen afbeelding die u kunt weergeven. Tik op een object om de bijbehorende afbeelding weer te geven of schakel over naar de modus Afbeelding zoeken.</value>
   </data>
   <data name="OrientedImageryViewerImageSelectionEnable" xml:space="preserve">
-    <value>Ĳ_Enable_____________ä</value>
+    <value>Inschakelen</value>
   </data>
   <data name="OrientedImageryViewerImageSelectionOr" xml:space="preserve">
-    <value>Ĳ_or_____ä</value>
+    <value>of</value>
   </data>
   <data name="OrientedImageryViewerImageSelectionSearchMode" xml:space="preserve">
-    <value>Ĳ_mode to search for images__________________________ä</value>
+    <value>modus voor het zoeken naar afbeeldingen</value>
   </data>
   <data name="OrientedImageryViewerImageSelectionFindImages" xml:space="preserve">
-    <value>Ĳ_Tap on the map to search for images___________________ä</value>
+    <value>Tik op de kaart om afbeeldingen te zoeken</value>
   </data>
   <data name="OrientedImageryViewerImageSelectionDisplayImage" xml:space="preserve">
-    <value>Ĳ_Tap on a feature to view its image__________________ä</value>
+    <value>Tik op een object om de bijbehorende afbeelding weer te geven</value>
   </data>
   <data name="OrientedImageryViewerImageSelectionSwitchMode" xml:space="preserve">
-    <value>Ĳ_or switch to_____________ä</value>
+    <value>of schakel over naar</value>
   </data>
   <data name="OrientedImageryViewerImageSelectionMode" xml:space="preserve">
-    <value>Ĳ_mode_________ä</value>
+    <value>modus</value>
   </data>
   <data name="OrientedImageryViewerNoGeoView" xml:space="preserve">
-    <value>Ĳ_Connect a GeoView to view oriented imagery_______________________ä.</value>
+    <value>Maak verbinding met GeoView om oriented imagery weer te geven.</value>
   </data>
   <data name="OrientedImageryViewerNoLayerSelected" xml:space="preserve">
-    <value>Ĳ_No layer selected___________________ä.</value>
+    <value>Er is geen laag geselecteerd.</value>
   </data>
   <data name="OrientedImageryViewerAnnounceTransientError" xml:space="preserve">
-    <value>Ĳ_Error raised_____________ä</value>
+    <value>Fout opgetreden</value>
   </data>
   <data name="OrientedImageryViewerDismissError" xml:space="preserve">
-    <value>Ĳ_Dismiss error______________ä</value>
+    <value>Fout negeren</value>
   </data>
   <data name="OrientedImageryViewerPreviousLabel" xml:space="preserve">
-    <value>Ĳ_Prev_________ä</value>
+    <value>Vorige</value>
   </data>
   <data name="OrientedImageryViewerNextLabel" xml:space="preserve">
-    <value>Ĳ_Next_________ä</value>
+    <value>Volgende</value>
   </data>
   <data name="OrientedImageryViewerSequenceStartReached" xml:space="preserve">
-    <value>Ĳ_Start of image sequence reached_________________ä</value>
+    <value>Start afbeeldingenreeks is bereikt</value>
   </data>
   <data name="OrientedImageryViewerSequenceEndReached" xml:space="preserve">
-    <value>Ĳ_End of image sequence reached______________________________ä</value>
+    <value>Einde afbeeldingenreeks is bereikt</value>
   </data>
   <data name="OrientedImageryViewerSequenceStartAndEndReached" xml:space="preserve">
-    <value>Ĳ_Start and end of image sequence reached_____________________ä</value>
+    <value>Start en einde afbeeldingenreeks zijn bereikt</value>
   </data>
   <data name="OrientedImageryViewerClose" xml:space="preserve">
-    <value>Ĳ_Close oriented imagery_______________________ä</value>
+    <value>Oriented imagery sluiten</value>
   </data>
   <data name="OrientedImageryViewerClosePanel" xml:space="preserve">
-    <value>Ĳ_Close panel____________ä</value>
+    <value>Paneel sluiten</value>
   </data>
   <data name="OrientedImageryViewerOverlays" xml:space="preserve">
-    <value>Ĳ_Overlays_________________ä</value>
+    <value>Overlays</value>
   </data>
   <data name="OrientedImageryViewerMarkers" xml:space="preserve">
-    <value>Ĳ_Markers_______________ä</value>
+    <value>Markeringen</value>
   </data>
   <data name="OrientedImageryViewerMode" xml:space="preserve">
-    <value>Ĳ_Mode_________ä</value>
+    <value>Modus</value>
   </data>
   <data name="OrientedImageryViewerShowPreviousImageInSequence" xml:space="preserve">
-    <value>Ĳ_Show previous image in sequence_________________ä</value>
+    <value>Vorige afbeelding in reeks weergeven</value>
   </data>
   <data name="OrientedImageryViewerShowNextImageInSequence" xml:space="preserve">
-    <value>Ĳ_Show next image in sequence____________________________ä</value>
+    <value>Volgende afbeelding in reeks weergeven</value>
   </data>
   <data name="OrientedImageryViewerMore" xml:space="preserve">
-    <value>Ĳ_More_________ä</value>
+    <value>Meer</value>
   </data>
   <data name="OrientedImageryViewerPage" xml:space="preserve">
-    <value>Ĳ_Image {0} of {1}_________________ä</value>
+    <value>Afbeelding {0} van {1}</value>
   </data>
   <data name="OrientedImageryViewerSelectLayer" xml:space="preserve">
-    <value>Ĳ_Select layer_____________ä</value>
+    <value>Laag selecteren</value>
   </data>
   <data name="OrientedImagerySampleToggleView" xml:space="preserve">
     <value>2D/3D</value>
@@ -1071,78 +1063,78 @@
     <value>Overschakelen tussen 2D-kaart en 3D-scene</value>
   </data>
   <data name="OrientedImageryViewerMarkerSelection" xml:space="preserve">
-    <value>Ĳ_Marker selection_________________ä</value>
+    <value>Selectie markering</value>
   </data>
   <data name="OrientedImageryViewerMarkerOption" xml:space="preserve">
-    <value>Ĳ_Marker {0}_____________________ä</value>
+    <value>Markering {0}</value>
   </data>
   <data name="OrientedImageryViewerMarkerCircle" xml:space="preserve">
-    <value>Ĳ_Circle marker______________ä</value>
+    <value>Cirkelmarkering</value>
   </data>
   <data name="OrientedImageryViewerMarkerSquare" xml:space="preserve">
-    <value>Ĳ_Square marker______________ä</value>
+    <value>Vierkante markering</value>
   </data>
   <data name="OrientedImageryViewerMarkerTriangle" xml:space="preserve">
-    <value>Ĳ_Triangle marker________________ä</value>
+    <value>Driehoekmarkering</value>
   </data>
   <data name="OrientedImageryViewerMarkerDiamond" xml:space="preserve">
-    <value>Ĳ_Diamond marker_______________ä</value>
+    <value>Ruitmarkering</value>
   </data>
   <data name="OrientedImageryViewerMarkerX" xml:space="preserve">
-    <value>Ĳ_Cross marker_____________ä</value>
+    <value>Kruismarkering</value>
   </data>
   <data name="OrientedImageryViewerMobileSequentialMode" xml:space="preserve">
-    <value>Ĳ_Sequential_____________________ä</value>
+    <value>Opeenvolgend</value>
   </data>
   <data name="OrientedImageryViewerNavigation" xml:space="preserve">
-    <value>Ĳ_Explore_______________ä</value>
+    <value>Verkennen</value>
   </data>
   <data name="OrientedImageryViewerModeSelection" xml:space="preserve">
-    <value>Ĳ_Mode Selection_______________ä</value>
+    <value>Modusselectie</value>
   </data>
   <data name="OrientedImageryViewerOverlaysSelection" xml:space="preserve">
-    <value>Ĳ_Overlays Selection___________________ä</value>
+    <value>Overlaysselectie</value>
   </data>
   <data name="OrientedImageryViewerMarkerTools" xml:space="preserve">
-    <value>Ĳ_Marker Tools_____________ä</value>
+    <value>Markeertools</value>
   </data>
   <data name="OrientedImageryViewerOpen" xml:space="preserve">
-    <value>Ĳ_Open oriented imagery______________________ä</value>
+    <value>Oriented imagery openen</value>
   </data>
   <data name="OrientedImageryViewerOn" xml:space="preserve">
-    <value>Ĳ_On_____ä</value>
+    <value>Aan</value>
   </data>
   <data name="OrientedImageryViewerOff" xml:space="preserve">
-    <value>Ĳ_Off_______ä</value>
+    <value>Uit</value>
   </data>
   <data name="OrientedImageryViewerSelected" xml:space="preserve">
-    <value>Ĳ_Selected_________________ä</value>
+    <value>Geselecteerd</value>
   </data>
   <data name="OrientedImageryViewerNotSelected" xml:space="preserve">
-    <value>Ĳ_Not selected_____________ä</value>
+    <value>Niet geselecteerd</value>
   </data>
   <data name="OrientedImageryViewerMobileBackToMarkers" xml:space="preserve">
-    <value>Ĳ_Back to Marker Tools_____________________ä</value>
+    <value>Terug naar markeertools</value>
   </data>
   <data name="OrientedImageryViewerMobileSelectMarkerSymbol" xml:space="preserve">
-    <value>Ĳ_Select Symbol______________ä</value>
+    <value>Symbool selecteren</value>
   </data>
   <data name="OrientedImageryViewerMobileCurrentFootprint" xml:space="preserve">
-    <value>Ĳ_Show Current Footprint_______________________ä</value>
+    <value>Huidige voetafdruk weergeven</value>
   </data>
   <data name="OrientedImageryViewerMobileAdditionalFootprints" xml:space="preserve">
-    <value>Ĳ_Show Additional Footprints___________________________ä</value>
+    <value>Extra voetafdrukken weergeven</value>
   </data>
   <data name="OrientedImageryViewerMobileCameraLocations" xml:space="preserve">
-    <value>Ĳ_Show Camera Locations______________________ä</value>
+    <value>Cameralocaties weergeven</value>
   </data>
   <data name="OrientedImageryViewerImageNavigation" xml:space="preserve">
-    <value>Ĳ_Image navigation_________________ä</value>
+    <value>Afbeeldingsnavigatie</value>
   </data>
   <data name="OrientedImageryViewerImageNavigationHint" xml:space="preserve">
-    <value>Ĳ_Use Left Arrow for the previous image or Right Arrow for the next image_____________________________________ä.</value>
+    <value>Gebruik pijl-links voor de vorige afbeelding of pijl-rechts voor de volgende afbeelding.</value>
   </data>
   <data name="OrientedImageryViewerSequenceNavigation" xml:space="preserve">
-    <value>Ĳ_Sequential image navigation____________________________ä</value>
+    <value>Navigatie opeenvolgende afbeeldingen</value>
   </data>
 </root>

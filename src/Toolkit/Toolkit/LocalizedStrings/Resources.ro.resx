@@ -862,207 +862,199 @@
     <value>Imagine orientată</value>
   </data>
   <data name="OrientedImageryViewerAutomationTypeName" xml:space="preserve">
-    <value>Ă_Oriented imagery view______________________ș</value>
+    <value>Vizualizare imagini orientate</value>
   </data>
   <data name="OrientedImageryViewerSelectMarkerSymbol" xml:space="preserve">
-    <value>Ă_Select marker symbol_____________________ș</value>
+    <value>Selectare simbol de marcator</value>
   </data>
   <data name="OrientedImageryViewerToggleAddMarkers" xml:space="preserve">
-    <value>Ă_Toggle add markers___________________ș</value>
+    <value>Comutare adăugare marcatori</value>
   </data>
   <data name="OrientedImageryViewerShowSelectedImageFootprint" xml:space="preserve">
-    <value>Ă_Show current footprint_______________________ș</value>
+    <value>Afișare amprentă curentă</value>
   </data>
   <data name="OrientedImageryViewerShowUnselectedImageFootprints" xml:space="preserve">
-    <value>Ă_Show additional footprints___________________________ș</value>
+    <value>Afișare amprente suplimentare</value>
   </data>
   <data name="OrientedImageryViewerImageSearchMode" xml:space="preserve">
-    <value>Ă_Image search mode__________________ș</value>
+    <value>Mod căutare imagini</value>
   </data>
   <data name="OrientedImageryViewerCurrentFootprintLabel" xml:space="preserve">
-    <value>Ă_Current Footprint__________________ș</value>
+    <value>Amprentă curentă</value>
   </data>
   <data name="OrientedImageryViewerCurrentFootprintStackedLabel" xml:space="preserve">
-    <value>Ă_Current_______________ș
-Ă_Footprint___________________ș</value>
+    <value>Amprentă curentă</value>
   </data>
   <data name="OrientedImageryViewerAdditionalFootprintsLabel" xml:space="preserve">
-    <value>Ă_Additional Footprints______________________ș</value>
+    <value>Amprente suplimentare</value>
   </data>
   <data name="OrientedImageryViewerAdditionalFootprintsStackedLabel" xml:space="preserve">
-    <value>Ă_Additional_____________________ș
-Ă_Footprints_____________________ș</value>
+    <value>Amprente suplimentare</value>
   </data>
   <data name="OrientedImageryViewerCameraLocationsLabel" xml:space="preserve">
-    <value>Ă_Camera Locations_________________ș</value>
+    <value>Locații cameră</value>
   </data>
   <data name="OrientedImageryViewerCameraLocationsStackedLabel" xml:space="preserve">
-    <value>Ă_Camera_____________ș
-Ă_Locations___________________ș</value>
+    <value>Locații cameră</value>
   </data>
   <data name="OrientedImageryViewerAddMarkersLabel" xml:space="preserve">
-    <value>Ă_Add Markers____________ș</value>
+    <value>Adăugare marcatori</value>
   </data>
   <data name="OrientedImageryViewerAddMarkersStackedLabel" xml:space="preserve">
-    <value>Ă_Add_______ș
-Ă_Markers_______________ș</value>
+    <value>Adăugare marcatori</value>
   </data>
   <data name="OrientedImageryViewerClearMarkersLabel" xml:space="preserve">
-    <value>Ă_Clear Markers______________ș</value>
+    <value>Eliminare marcatori</value>
   </data>
   <data name="OrientedImageryViewerClearMarkersTooltip" xml:space="preserve">
-    <value>Ă_Clear markers______________ș</value>
+    <value>Eliminare marcatori</value>
   </data>
   <data name="OrientedImageryViewerClearMarkersStackedLabel" xml:space="preserve">
-    <value>Ă_Clear___________ș
-Ă_Markers_______________ș</value>
+    <value>Eliminare marcatori</value>
   </data>
   <data name="OrientedImageryViewerImageSearchModeFind" xml:space="preserve">
-    <value>Ă_Find Images____________ș</value>
+    <value>Găsire imagini</value>
   </data>
   <data name="OrientedImageryViewerImageSearchModeFindStackedLabel" xml:space="preserve">
-    <value>Ă_Find_________ș
-Ă_Images_____________ș</value>
+    <value>Găsire imagini</value>
   </data>
   <data name="OrientedImageryViewerImageSearchModeDisplay" xml:space="preserve">
-    <value>Ă_Display Image______________ș</value>
+    <value>Afișare imagine</value>
   </data>
   <data name="OrientedImageryViewerImageSearchModeDisplayStackedLabel" xml:space="preserve">
-    <value>Ă_Display_______________ș
-Ă_Image___________ș</value>
+    <value>Afișare imagine</value>
   </data>
   <data name="OrientedImageryViewerOpenSelectedImagePopup" xml:space="preserve">
-    <value>Ă_Open details for selected image_________________ș</value>
+    <value>Deschidere detalii pentru imaginea selectată</value>
   </data>
   <data name="OrientedImageryViewerImageDetails" xml:space="preserve">
-    <value>Ă_Image details______________ș</value>
+    <value>Detalii imagine</value>
   </data>
   <data name="OrientedImageryViewerCloseSelectedImagePopup" xml:space="preserve">
-    <value>Ă_Close details______________ș</value>
+    <value>Închidere detalii</value>
   </data>
   <data name="OrientedImageryViewerGoToPageFormat" xml:space="preserve">
-    <value>Ă_Go to image {0} of {1}_______________________ș</value>
+    <value>Accesați imaginea {0} din {1}</value>
   </data>
   <data name="OrientedImageryViewerSelectedPageFormat" xml:space="preserve">
-    <value>Ă_Image {0} of {1}, selected___________________________ș</value>
+    <value>Imaginea {0} din {1}, selectată</value>
   </data>
   <data name="OrientedImageryViewerToggleCameraMarkers" xml:space="preserve">
-    <value>Ă_Show camera locations______________________ș</value>
+    <value>Afișare locații cameră</value>
   </data>
   <data name="OrientedImageryViewerSequentialNavigationTooltip" xml:space="preserve">
-    <value>Ă_Sequential navigation______________________ș</value>
+    <value>Navigare secvențială</value>
   </data>
   <data name="OrientedImageryViewerSequentialNavigationLabel" xml:space="preserve">
-    <value>Ă_Sequential Navigation______________________ș</value>
+    <value>Navigare secvențială</value>
   </data>
   <data name="OrientedImageryViewerSequentialNavigationStackedLabel" xml:space="preserve">
-    <value>Ă_Sequential_____________________ș
-Ă_Navigation_____________________ș</value>
+    <value>Navigare secvențială</value>
   </data>
   <data name="OrientedImageryViewerPreviousImage" xml:space="preserve">
-    <value>Ă_Previous image_______________ș</value>
+    <value>Imaginea precedentă</value>
   </data>
   <data name="OrientedImageryViewerNextImage" xml:space="preserve">
-    <value>Ă_Next image_____________________ș</value>
+    <value>Imaginea următoare</value>
   </data>
   <data name="OrientedImageryViewerImageLoading" xml:space="preserve">
-    <value>Ă_Image loading_________________ș...</value>
+    <value>Se încarcă imaginea...</value>
   </data>
   <data name="OrientedImageryViewerImageLoaded" xml:space="preserve">
-    <value>Ă_Image loaded_____________ș</value>
+    <value>Imagine încărcată</value>
   </data>
   <data name="OrientedImageryViewerNoImageToDisplay" xml:space="preserve">
-    <value>Ă_No image to display____________________ș</value>
+    <value>Nu există imagini de afișat</value>
   </data>
   <data name="OrientedImageryViewerNoImagesFound" xml:space="preserve">
-    <value>Ă_No images found for the tapped location_____________________ș</value>
+    <value>Nu au fost găsite imagini pentru locația selectată</value>
   </data>
   <data name="OrientedImageryViewerImageSelectionNoImagesNone" xml:space="preserve">
-    <value>Ă_No image to display. Enable find images or display image mode to search for images__________________________________________ș</value>
+    <value>Nu există imagini de afișat. Activați modul de găsire a imaginilor sau modul de afișare a imaginilor pentru a căuta imagini</value>
   </data>
   <data name="OrientedImageryViewerImageSelectionNoImagesFind" xml:space="preserve">
-    <value>Ă_No image to display. Tap on the map to search for images or switch to display image mode______________________________________________ș.</value>
+    <value>Nu există imagini de afișat. Atingeți harta pentru a căuta imagini sau comutați la modul de afișare a imaginilor.</value>
   </data>
   <data name="OrientedImageryViewerImageSelectionNoImagesDisplay" xml:space="preserve">
-    <value>Ă_No image to display. Tap on a feature to view its image or switch to find images mode____________________________________________ș.</value>
+    <value>Nu există imagini de afișat. Atingeți un obiect spațial pentru a vizualiza imaginea acestuia sau comutați la modul de găsire a imaginilor.</value>
   </data>
   <data name="OrientedImageryViewerImageSelectionEnable" xml:space="preserve">
-    <value>Ă_Enable_____________ș</value>
+    <value>Activare</value>
   </data>
   <data name="OrientedImageryViewerImageSelectionOr" xml:space="preserve">
-    <value>Ă_or_____ș</value>
+    <value>sau</value>
   </data>
   <data name="OrientedImageryViewerImageSelectionSearchMode" xml:space="preserve">
-    <value>Ă_mode to search for images__________________________ș</value>
+    <value>mod pentru a căuta imagini</value>
   </data>
   <data name="OrientedImageryViewerImageSelectionFindImages" xml:space="preserve">
-    <value>Ă_Tap on the map to search for images___________________ș</value>
+    <value>Atingeți harta pentru a căuta imagini</value>
   </data>
   <data name="OrientedImageryViewerImageSelectionDisplayImage" xml:space="preserve">
-    <value>Ă_Tap on a feature to view its image__________________ș</value>
+    <value>Atingeți un obiect spațial pentru a vizualiza imaginea acestuia</value>
   </data>
   <data name="OrientedImageryViewerImageSelectionSwitchMode" xml:space="preserve">
-    <value>Ă_or switch to_____________ș</value>
+    <value>sau comutați la</value>
   </data>
   <data name="OrientedImageryViewerImageSelectionMode" xml:space="preserve">
-    <value>Ă_mode_________ș</value>
+    <value>mod</value>
   </data>
   <data name="OrientedImageryViewerNoGeoView" xml:space="preserve">
-    <value>Ă_Connect a GeoView to view oriented imagery_______________________ș.</value>
+    <value>Conectați un GeoView pentru a vizualiza imagini orientate.</value>
   </data>
   <data name="OrientedImageryViewerNoLayerSelected" xml:space="preserve">
-    <value>Ă_No layer selected___________________ș.</value>
+    <value>Niciun strat tematic selectat.</value>
   </data>
   <data name="OrientedImageryViewerAnnounceTransientError" xml:space="preserve">
-    <value>Ă_Error raised_____________ș</value>
+    <value>Eroare ridicată</value>
   </data>
   <data name="OrientedImageryViewerDismissError" xml:space="preserve">
-    <value>Ă_Dismiss error______________ș</value>
+    <value>Închidere eroare</value>
   </data>
   <data name="OrientedImageryViewerPreviousLabel" xml:space="preserve">
-    <value>Ă_Prev_________ș</value>
+    <value>Anterior</value>
   </data>
   <data name="OrientedImageryViewerNextLabel" xml:space="preserve">
-    <value>Ă_Next_________ș</value>
+    <value>Următorul</value>
   </data>
   <data name="OrientedImageryViewerSequenceStartReached" xml:space="preserve">
-    <value>Ă_Start of image sequence reached_________________ș</value>
+    <value>A fost atins începutul secvenței de imagini</value>
   </data>
   <data name="OrientedImageryViewerSequenceEndReached" xml:space="preserve">
-    <value>Ă_End of image sequence reached______________________________ș</value>
+    <value>A fost atins sfârșitul secvenței de imagini</value>
   </data>
   <data name="OrientedImageryViewerSequenceStartAndEndReached" xml:space="preserve">
-    <value>Ă_Start and end of image sequence reached_____________________ș</value>
+    <value>A fost atins începutul și sfârșitul secvenței de imagini</value>
   </data>
   <data name="OrientedImageryViewerClose" xml:space="preserve">
-    <value>Ă_Close oriented imagery_______________________ș</value>
+    <value>Închidere imagine orientată</value>
   </data>
   <data name="OrientedImageryViewerClosePanel" xml:space="preserve">
-    <value>Ă_Close panel____________ș</value>
+    <value>Închidere panou</value>
   </data>
   <data name="OrientedImageryViewerOverlays" xml:space="preserve">
-    <value>Ă_Overlays_________________ș</value>
+    <value>Suprapuneri</value>
   </data>
   <data name="OrientedImageryViewerMarkers" xml:space="preserve">
-    <value>Ă_Markers_______________ș</value>
+    <value>Marcatori</value>
   </data>
   <data name="OrientedImageryViewerMode" xml:space="preserve">
-    <value>Ă_Mode_________ș</value>
+    <value>Mod</value>
   </data>
   <data name="OrientedImageryViewerShowPreviousImageInSequence" xml:space="preserve">
-    <value>Ă_Show previous image in sequence_________________ș</value>
+    <value>Afișare imagine precedentă în secvență</value>
   </data>
   <data name="OrientedImageryViewerShowNextImageInSequence" xml:space="preserve">
-    <value>Ă_Show next image in sequence____________________________ș</value>
+    <value>Afișare imagine următoare în secvență</value>
   </data>
   <data name="OrientedImageryViewerMore" xml:space="preserve">
-    <value>Ă_More_________ș</value>
+    <value>Mai mult</value>
   </data>
   <data name="OrientedImageryViewerPage" xml:space="preserve">
-    <value>Ă_Image {0} of {1}_________________ș</value>
+    <value>Imaginea {0} din {1}</value>
   </data>
   <data name="OrientedImageryViewerSelectLayer" xml:space="preserve">
-    <value>Ă_Select layer_____________ș</value>
+    <value>Selectare strat tematic</value>
   </data>
   <data name="OrientedImagerySampleToggleView" xml:space="preserve">
     <value>2D/3D</value>
@@ -1071,78 +1063,78 @@
     <value>Comutați între hartă 2D și scenă 3D</value>
   </data>
   <data name="OrientedImageryViewerMarkerSelection" xml:space="preserve">
-    <value>Ă_Marker selection_________________ș</value>
+    <value>Selectare marcator</value>
   </data>
   <data name="OrientedImageryViewerMarkerOption" xml:space="preserve">
-    <value>Ă_Marker {0}_____________________ș</value>
+    <value>Marcator {0}</value>
   </data>
   <data name="OrientedImageryViewerMarkerCircle" xml:space="preserve">
-    <value>Ă_Circle marker______________ș</value>
+    <value>Marcator cerc</value>
   </data>
   <data name="OrientedImageryViewerMarkerSquare" xml:space="preserve">
-    <value>Ă_Square marker______________ș</value>
+    <value>Marcator pătrat</value>
   </data>
   <data name="OrientedImageryViewerMarkerTriangle" xml:space="preserve">
-    <value>Ă_Triangle marker________________ș</value>
+    <value>Marcator triunghi</value>
   </data>
   <data name="OrientedImageryViewerMarkerDiamond" xml:space="preserve">
-    <value>Ă_Diamond marker_______________ș</value>
+    <value>Marcator romb</value>
   </data>
   <data name="OrientedImageryViewerMarkerX" xml:space="preserve">
-    <value>Ă_Cross marker_____________ș</value>
+    <value>Marcator cruce</value>
   </data>
   <data name="OrientedImageryViewerMobileSequentialMode" xml:space="preserve">
-    <value>Ă_Sequential_____________________ș</value>
+    <value>Secvențial</value>
   </data>
   <data name="OrientedImageryViewerNavigation" xml:space="preserve">
-    <value>Ă_Explore_______________ș</value>
+    <value>Exploraţi</value>
   </data>
   <data name="OrientedImageryViewerModeSelection" xml:space="preserve">
-    <value>Ă_Mode Selection_______________ș</value>
+    <value>Selectare mod</value>
   </data>
   <data name="OrientedImageryViewerOverlaysSelection" xml:space="preserve">
-    <value>Ă_Overlays Selection___________________ș</value>
+    <value>Selectare suprapuneri</value>
   </data>
   <data name="OrientedImageryViewerMarkerTools" xml:space="preserve">
-    <value>Ă_Marker Tools_____________ș</value>
+    <value>Instrumente marcatori</value>
   </data>
   <data name="OrientedImageryViewerOpen" xml:space="preserve">
-    <value>Ă_Open oriented imagery______________________ș</value>
+    <value>Deschidere imagine orientată</value>
   </data>
   <data name="OrientedImageryViewerOn" xml:space="preserve">
-    <value>Ă_On_____ș</value>
+    <value>Activ</value>
   </data>
   <data name="OrientedImageryViewerOff" xml:space="preserve">
-    <value>Ă_Off_______ș</value>
+    <value>Inactiv</value>
   </data>
   <data name="OrientedImageryViewerSelected" xml:space="preserve">
-    <value>Ă_Selected_________________ș</value>
+    <value>S-a selectat</value>
   </data>
   <data name="OrientedImageryViewerNotSelected" xml:space="preserve">
-    <value>Ă_Not selected_____________ș</value>
+    <value>Neselectat</value>
   </data>
   <data name="OrientedImageryViewerMobileBackToMarkers" xml:space="preserve">
-    <value>Ă_Back to Marker Tools_____________________ș</value>
+    <value>Înapoi la Instrumente marcatori</value>
   </data>
   <data name="OrientedImageryViewerMobileSelectMarkerSymbol" xml:space="preserve">
-    <value>Ă_Select Symbol______________ș</value>
+    <value>Selectare simbol</value>
   </data>
   <data name="OrientedImageryViewerMobileCurrentFootprint" xml:space="preserve">
-    <value>Ă_Show Current Footprint_______________________ș</value>
+    <value>Afișare amprentă curentă</value>
   </data>
   <data name="OrientedImageryViewerMobileAdditionalFootprints" xml:space="preserve">
-    <value>Ă_Show Additional Footprints___________________________ș</value>
+    <value>Afișare amprente suplimentare</value>
   </data>
   <data name="OrientedImageryViewerMobileCameraLocations" xml:space="preserve">
-    <value>Ă_Show Camera Locations______________________ș</value>
+    <value>Afișare locații cameră</value>
   </data>
   <data name="OrientedImageryViewerImageNavigation" xml:space="preserve">
-    <value>Ă_Image navigation_________________ș</value>
+    <value>Navigare imagini</value>
   </data>
   <data name="OrientedImageryViewerImageNavigationHint" xml:space="preserve">
-    <value>Ă_Use Left Arrow for the previous image or Right Arrow for the next image_____________________________________ș.</value>
+    <value>Utilizați săgeata la stânga pentru imaginea precedentă și săgeata la dreapta pentru imaginea următoare.</value>
   </data>
   <data name="OrientedImageryViewerSequenceNavigation" xml:space="preserve">
-    <value>Ă_Sequential image navigation____________________________ș</value>
+    <value>Navigare imagini secvențiale</value>
   </data>
 </root>

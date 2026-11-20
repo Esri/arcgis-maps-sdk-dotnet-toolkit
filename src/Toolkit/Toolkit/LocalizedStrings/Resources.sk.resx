@@ -862,207 +862,199 @@
     <value>Orientovaná snímka</value>
   </data>
   <data name="OrientedImageryViewerAutomationTypeName" xml:space="preserve">
-    <value>ĺ_Oriented imagery view______________________ľ</value>
+    <value>Zobrazenie orientovaných snímok</value>
   </data>
   <data name="OrientedImageryViewerSelectMarkerSymbol" xml:space="preserve">
-    <value>ĺ_Select marker symbol_____________________ľ</value>
+    <value>Vyberte bodový symbol</value>
   </data>
   <data name="OrientedImageryViewerToggleAddMarkers" xml:space="preserve">
-    <value>ĺ_Toggle add markers___________________ľ</value>
+    <value>Prepnúť pridávanie značkovačov</value>
   </data>
   <data name="OrientedImageryViewerShowSelectedImageFootprint" xml:space="preserve">
-    <value>ĺ_Show current footprint_______________________ľ</value>
+    <value>Zobraziť aktuálny obrys rastra</value>
   </data>
   <data name="OrientedImageryViewerShowUnselectedImageFootprints" xml:space="preserve">
-    <value>ĺ_Show additional footprints___________________________ľ</value>
+    <value>Zobraziť doplnkové obrysy rastra</value>
   </data>
   <data name="OrientedImageryViewerImageSearchMode" xml:space="preserve">
-    <value>ĺ_Image search mode__________________ľ</value>
+    <value>Režim vyhľadávania snímok</value>
   </data>
   <data name="OrientedImageryViewerCurrentFootprintLabel" xml:space="preserve">
-    <value>ĺ_Current Footprint__________________ľ</value>
+    <value>Aktuálny obrys rastra</value>
   </data>
   <data name="OrientedImageryViewerCurrentFootprintStackedLabel" xml:space="preserve">
-    <value>ĺ_Current_______________ľ
-ĺ_Footprint___________________ľ</value>
+    <value>Aktuálny obrys rastra</value>
   </data>
   <data name="OrientedImageryViewerAdditionalFootprintsLabel" xml:space="preserve">
-    <value>ĺ_Additional Footprints______________________ľ</value>
+    <value>Doplnkové obrysy rastra</value>
   </data>
   <data name="OrientedImageryViewerAdditionalFootprintsStackedLabel" xml:space="preserve">
-    <value>ĺ_Additional_____________________ľ
-ĺ_Footprints_____________________ľ</value>
+    <value>Doplnkové obrysy rastra</value>
   </data>
   <data name="OrientedImageryViewerCameraLocationsLabel" xml:space="preserve">
-    <value>ĺ_Camera Locations_________________ľ</value>
+    <value>Pozície kamery</value>
   </data>
   <data name="OrientedImageryViewerCameraLocationsStackedLabel" xml:space="preserve">
-    <value>ĺ_Camera_____________ľ
-ĺ_Locations___________________ľ</value>
+    <value>Pozície kamery</value>
   </data>
   <data name="OrientedImageryViewerAddMarkersLabel" xml:space="preserve">
-    <value>ĺ_Add Markers____________ľ</value>
+    <value>Pridať značkovače</value>
   </data>
   <data name="OrientedImageryViewerAddMarkersStackedLabel" xml:space="preserve">
-    <value>ĺ_Add_______ľ
-ĺ_Markers_______________ľ</value>
+    <value>Pridať značkovače</value>
   </data>
   <data name="OrientedImageryViewerClearMarkersLabel" xml:space="preserve">
-    <value>ĺ_Clear Markers______________ľ</value>
+    <value>Vyčistiť značkovače</value>
   </data>
   <data name="OrientedImageryViewerClearMarkersTooltip" xml:space="preserve">
-    <value>ĺ_Clear markers______________ľ</value>
+    <value>Vyčistiť značkovače</value>
   </data>
   <data name="OrientedImageryViewerClearMarkersStackedLabel" xml:space="preserve">
-    <value>ĺ_Clear___________ľ
-ĺ_Markers_______________ľ</value>
+    <value>Vyčistiť značkovače</value>
   </data>
   <data name="OrientedImageryViewerImageSearchModeFind" xml:space="preserve">
-    <value>ĺ_Find Images____________ľ</value>
+    <value>Vyhľadať snímky</value>
   </data>
   <data name="OrientedImageryViewerImageSearchModeFindStackedLabel" xml:space="preserve">
-    <value>ĺ_Find_________ľ
-ĺ_Images_____________ľ</value>
+    <value>Vyhľadať snímky</value>
   </data>
   <data name="OrientedImageryViewerImageSearchModeDisplay" xml:space="preserve">
-    <value>ĺ_Display Image______________ľ</value>
+    <value>Zobraziť snímku</value>
   </data>
   <data name="OrientedImageryViewerImageSearchModeDisplayStackedLabel" xml:space="preserve">
-    <value>ĺ_Display_______________ľ
-ĺ_Image___________ľ</value>
+    <value>Zobraziť snímku</value>
   </data>
   <data name="OrientedImageryViewerOpenSelectedImagePopup" xml:space="preserve">
-    <value>ĺ_Open details for selected image_________________ľ</value>
+    <value>Otvoriť podrobnosti pre zvolenú snímku</value>
   </data>
   <data name="OrientedImageryViewerImageDetails" xml:space="preserve">
-    <value>ĺ_Image details______________ľ</value>
+    <value>Detaily snímky</value>
   </data>
   <data name="OrientedImageryViewerCloseSelectedImagePopup" xml:space="preserve">
-    <value>ĺ_Close details______________ľ</value>
+    <value>Zatvoriť podrobnosti</value>
   </data>
   <data name="OrientedImageryViewerGoToPageFormat" xml:space="preserve">
-    <value>ĺ_Go to image {0} of {1}_______________________ľ</value>
+    <value>Prejsť na snímku {0} z {1}</value>
   </data>
   <data name="OrientedImageryViewerSelectedPageFormat" xml:space="preserve">
-    <value>ĺ_Image {0} of {1}, selected___________________________ľ</value>
+    <value>Snímka {0} z {1}, vybraných</value>
   </data>
   <data name="OrientedImageryViewerToggleCameraMarkers" xml:space="preserve">
-    <value>ĺ_Show camera locations______________________ľ</value>
+    <value>Zobraziť pozície kamier</value>
   </data>
   <data name="OrientedImageryViewerSequentialNavigationTooltip" xml:space="preserve">
-    <value>ĺ_Sequential navigation______________________ľ</value>
+    <value>Sekvenčná navigácia</value>
   </data>
   <data name="OrientedImageryViewerSequentialNavigationLabel" xml:space="preserve">
-    <value>ĺ_Sequential Navigation______________________ľ</value>
+    <value>Sekvenčná navigácia</value>
   </data>
   <data name="OrientedImageryViewerSequentialNavigationStackedLabel" xml:space="preserve">
-    <value>ĺ_Sequential_____________________ľ
-ĺ_Navigation_____________________ľ</value>
+    <value>Sekvenčná navigácia</value>
   </data>
   <data name="OrientedImageryViewerPreviousImage" xml:space="preserve">
-    <value>ĺ_Previous image_______________ľ</value>
+    <value>Predchádzajúca snímka</value>
   </data>
   <data name="OrientedImageryViewerNextImage" xml:space="preserve">
-    <value>ĺ_Next image_____________________ľ</value>
+    <value>Ďalšia snímka</value>
   </data>
   <data name="OrientedImageryViewerImageLoading" xml:space="preserve">
-    <value>ĺ_Image loading_________________ľ...</value>
+    <value>Načítava sa snímka...</value>
   </data>
   <data name="OrientedImageryViewerImageLoaded" xml:space="preserve">
-    <value>ĺ_Image loaded_____________ľ</value>
+    <value>Snímka bola načítaná</value>
   </data>
   <data name="OrientedImageryViewerNoImageToDisplay" xml:space="preserve">
-    <value>ĺ_No image to display____________________ľ</value>
+    <value>Žiadna snímka na zobrazenie</value>
   </data>
   <data name="OrientedImageryViewerNoImagesFound" xml:space="preserve">
-    <value>ĺ_No images found for the tapped location_____________________ľ</value>
+    <value>Nenašli sa žiadne snímky pre lokalitu, na ktorú ťukol používateľ.</value>
   </data>
   <data name="OrientedImageryViewerImageSelectionNoImagesNone" xml:space="preserve">
-    <value>ĺ_No image to display. Enable find images or display image mode to search for images__________________________________________ľ</value>
+    <value>Žiadna snímka na zobrazenie. Umožniť režim vyhľadávania alebo zobrazenia snímok pre možnosť vyhľadávania snímok.</value>
   </data>
   <data name="OrientedImageryViewerImageSelectionNoImagesFind" xml:space="preserve">
-    <value>ĺ_No image to display. Tap on the map to search for images or switch to display image mode______________________________________________ľ.</value>
+    <value>Žiadna snímka na zobrazenie. Ťuknite do mapy, ak chcete vyhľadať snímku, alebo prepnite do režimu zobrazenia snímok.</value>
   </data>
   <data name="OrientedImageryViewerImageSelectionNoImagesDisplay" xml:space="preserve">
-    <value>ĺ_No image to display. Tap on a feature to view its image or switch to find images mode____________________________________________ľ.</value>
+    <value>Žiadna snímka na zobrazenie. Ťuknite na prvok, aby ste zobrazili jeho snímku, alebo prepnite do režimu vyhľadávania snímok.</value>
   </data>
   <data name="OrientedImageryViewerImageSelectionEnable" xml:space="preserve">
-    <value>ĺ_Enable_____________ľ</value>
+    <value>Povoliť</value>
   </data>
   <data name="OrientedImageryViewerImageSelectionOr" xml:space="preserve">
-    <value>ĺ_or_____ľ</value>
+    <value>alebo</value>
   </data>
   <data name="OrientedImageryViewerImageSelectionSearchMode" xml:space="preserve">
-    <value>ĺ_mode to search for images__________________________ľ</value>
+    <value>režim vyhľadávania snímok</value>
   </data>
   <data name="OrientedImageryViewerImageSelectionFindImages" xml:space="preserve">
-    <value>ĺ_Tap on the map to search for images___________________ľ</value>
+    <value>Ťuknutím do mapy vyhľadávajte snímky</value>
   </data>
   <data name="OrientedImageryViewerImageSelectionDisplayImage" xml:space="preserve">
-    <value>ĺ_Tap on a feature to view its image__________________ľ</value>
+    <value>Ťuknite na prvok, aby ste zobrazili jeho snímku</value>
   </data>
   <data name="OrientedImageryViewerImageSelectionSwitchMode" xml:space="preserve">
-    <value>ĺ_or switch to_____________ľ</value>
+    <value>alebo prepnite do</value>
   </data>
   <data name="OrientedImageryViewerImageSelectionMode" xml:space="preserve">
-    <value>ĺ_mode_________ľ</value>
+    <value>režim</value>
   </data>
   <data name="OrientedImageryViewerNoGeoView" xml:space="preserve">
-    <value>ĺ_Connect a GeoView to view oriented imagery_______________________ľ.</value>
+    <value>Pripojte GeoView na zobrazenie orientovaných snímok.</value>
   </data>
   <data name="OrientedImageryViewerNoLayerSelected" xml:space="preserve">
-    <value>ĺ_No layer selected___________________ľ.</value>
+    <value>Nie je vybraná žiadna vrstva.</value>
   </data>
   <data name="OrientedImageryViewerAnnounceTransientError" xml:space="preserve">
-    <value>ĺ_Error raised_____________ľ</value>
+    <value>Vyskytla sa chyba</value>
   </data>
   <data name="OrientedImageryViewerDismissError" xml:space="preserve">
-    <value>ĺ_Dismiss error______________ľ</value>
+    <value>Odmietnuť chybu</value>
   </data>
   <data name="OrientedImageryViewerPreviousLabel" xml:space="preserve">
-    <value>ĺ_Prev_________ľ</value>
+    <value>Predchádzajúca</value>
   </data>
   <data name="OrientedImageryViewerNextLabel" xml:space="preserve">
-    <value>ĺ_Next_________ľ</value>
+    <value>Nasledujúca</value>
   </data>
   <data name="OrientedImageryViewerSequenceStartReached" xml:space="preserve">
-    <value>ĺ_Start of image sequence reached_________________ľ</value>
+    <value>Dosiahnutý začiatok sekvencie snímok</value>
   </data>
   <data name="OrientedImageryViewerSequenceEndReached" xml:space="preserve">
-    <value>ĺ_End of image sequence reached______________________________ľ</value>
+    <value>Dosiahnutý koniec sekvencie snímok</value>
   </data>
   <data name="OrientedImageryViewerSequenceStartAndEndReached" xml:space="preserve">
-    <value>ĺ_Start and end of image sequence reached_____________________ľ</value>
+    <value>Dosiahnutý začiatok a koniec sekvencie snímok</value>
   </data>
   <data name="OrientedImageryViewerClose" xml:space="preserve">
-    <value>ĺ_Close oriented imagery_______________________ľ</value>
+    <value>Zatvoriť orientované snímky</value>
   </data>
   <data name="OrientedImageryViewerClosePanel" xml:space="preserve">
-    <value>ĺ_Close panel____________ľ</value>
+    <value>Zatvoriť panel</value>
   </data>
   <data name="OrientedImageryViewerOverlays" xml:space="preserve">
-    <value>ĺ_Overlays_________________ľ</value>
+    <value>Prekrytia</value>
   </data>
   <data name="OrientedImageryViewerMarkers" xml:space="preserve">
-    <value>ĺ_Markers_______________ľ</value>
+    <value>Značkovače</value>
   </data>
   <data name="OrientedImageryViewerMode" xml:space="preserve">
-    <value>ĺ_Mode_________ľ</value>
+    <value>Režim</value>
   </data>
   <data name="OrientedImageryViewerShowPreviousImageInSequence" xml:space="preserve">
-    <value>ĺ_Show previous image in sequence_________________ľ</value>
+    <value>Zobraziť predchádzajúcu snímku v sekvencii</value>
   </data>
   <data name="OrientedImageryViewerShowNextImageInSequence" xml:space="preserve">
-    <value>ĺ_Show next image in sequence____________________________ľ</value>
+    <value>Zobraziť nasledujúcu snímku v sekvencii</value>
   </data>
   <data name="OrientedImageryViewerMore" xml:space="preserve">
-    <value>ĺ_More_________ľ</value>
+    <value>Viac</value>
   </data>
   <data name="OrientedImageryViewerPage" xml:space="preserve">
-    <value>ĺ_Image {0} of {1}_________________ľ</value>
+    <value>Snímka {0} z {1}</value>
   </data>
   <data name="OrientedImageryViewerSelectLayer" xml:space="preserve">
-    <value>ĺ_Select layer_____________ľ</value>
+    <value>Vybrať vrstvu</value>
   </data>
   <data name="OrientedImagerySampleToggleView" xml:space="preserve">
     <value>2D/3D</value>
@@ -1071,78 +1063,78 @@
     <value>Prepnúť medzi 2D mapou a 3D scénou</value>
   </data>
   <data name="OrientedImageryViewerMarkerSelection" xml:space="preserve">
-    <value>ĺ_Marker selection_________________ľ</value>
+    <value>Výber značkovača</value>
   </data>
   <data name="OrientedImageryViewerMarkerOption" xml:space="preserve">
-    <value>ĺ_Marker {0}_____________________ľ</value>
+    <value>Značkovač {0}</value>
   </data>
   <data name="OrientedImageryViewerMarkerCircle" xml:space="preserve">
-    <value>ĺ_Circle marker______________ľ</value>
+    <value>Kruhový značkovač</value>
   </data>
   <data name="OrientedImageryViewerMarkerSquare" xml:space="preserve">
-    <value>ĺ_Square marker______________ľ</value>
+    <value>Štvorcový značkovač</value>
   </data>
   <data name="OrientedImageryViewerMarkerTriangle" xml:space="preserve">
-    <value>ĺ_Triangle marker________________ľ</value>
+    <value>Trojuholníkový značkovač</value>
   </data>
   <data name="OrientedImageryViewerMarkerDiamond" xml:space="preserve">
-    <value>ĺ_Diamond marker_______________ľ</value>
+    <value>Kosoštvorcový značkovač</value>
   </data>
   <data name="OrientedImageryViewerMarkerX" xml:space="preserve">
-    <value>ĺ_Cross marker_____________ľ</value>
+    <value>Krížový značkovač</value>
   </data>
   <data name="OrientedImageryViewerMobileSequentialMode" xml:space="preserve">
-    <value>ĺ_Sequential_____________________ľ</value>
+    <value>Sekvenčné</value>
   </data>
   <data name="OrientedImageryViewerNavigation" xml:space="preserve">
-    <value>ĺ_Explore_______________ľ</value>
+    <value>Preskúmať</value>
   </data>
   <data name="OrientedImageryViewerModeSelection" xml:space="preserve">
-    <value>ĺ_Mode Selection_______________ľ</value>
+    <value>Výber režimu</value>
   </data>
   <data name="OrientedImageryViewerOverlaysSelection" xml:space="preserve">
-    <value>ĺ_Overlays Selection___________________ľ</value>
+    <value>Výber prekrytia</value>
   </data>
   <data name="OrientedImageryViewerMarkerTools" xml:space="preserve">
-    <value>ĺ_Marker Tools_____________ľ</value>
+    <value>Značkovacie nástroje</value>
   </data>
   <data name="OrientedImageryViewerOpen" xml:space="preserve">
-    <value>ĺ_Open oriented imagery______________________ľ</value>
+    <value>Otvoriť orientované snímky</value>
   </data>
   <data name="OrientedImageryViewerOn" xml:space="preserve">
-    <value>ĺ_On_____ľ</value>
+    <value>Zapnuté</value>
   </data>
   <data name="OrientedImageryViewerOff" xml:space="preserve">
-    <value>ĺ_Off_______ľ</value>
+    <value>Vypnuté</value>
   </data>
   <data name="OrientedImageryViewerSelected" xml:space="preserve">
-    <value>ĺ_Selected_________________ľ</value>
+    <value>Vybrané</value>
   </data>
   <data name="OrientedImageryViewerNotSelected" xml:space="preserve">
-    <value>ĺ_Not selected_____________ľ</value>
+    <value>Nie je vybrané</value>
   </data>
   <data name="OrientedImageryViewerMobileBackToMarkers" xml:space="preserve">
-    <value>ĺ_Back to Marker Tools_____________________ľ</value>
+    <value>Späť na značkovacie nástroje</value>
   </data>
   <data name="OrientedImageryViewerMobileSelectMarkerSymbol" xml:space="preserve">
-    <value>ĺ_Select Symbol______________ľ</value>
+    <value>Vybrať symbol</value>
   </data>
   <data name="OrientedImageryViewerMobileCurrentFootprint" xml:space="preserve">
-    <value>ĺ_Show Current Footprint_______________________ľ</value>
+    <value>Zobraziť aktuálny obrys rastra</value>
   </data>
   <data name="OrientedImageryViewerMobileAdditionalFootprints" xml:space="preserve">
-    <value>ĺ_Show Additional Footprints___________________________ľ</value>
+    <value>Zobraziť doplnkové obrysy rastra</value>
   </data>
   <data name="OrientedImageryViewerMobileCameraLocations" xml:space="preserve">
-    <value>ĺ_Show Camera Locations______________________ľ</value>
+    <value>Zobraziť pozície kamier</value>
   </data>
   <data name="OrientedImageryViewerImageNavigation" xml:space="preserve">
-    <value>ĺ_Image navigation_________________ľ</value>
+    <value>Navigácia v snímke</value>
   </data>
   <data name="OrientedImageryViewerImageNavigationHint" xml:space="preserve">
-    <value>ĺ_Use Left Arrow for the previous image or Right Arrow for the next image_____________________________________ľ.</value>
+    <value>Na zobrazenie predchádzajúcej snímky použite šípku doľava, na zobrazenie nasledujúcej snímky šípku doprava.</value>
   </data>
   <data name="OrientedImageryViewerSequenceNavigation" xml:space="preserve">
-    <value>ĺ_Sequential image navigation____________________________ľ</value>
+    <value>Sekvenčná navigácia v snímke</value>
   </data>
 </root>

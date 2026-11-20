@@ -862,207 +862,199 @@
     <value>Orijentirana slika</value>
   </data>
   <data name="OrientedImageryViewerAutomationTypeName" xml:space="preserve">
-    <value>Č_Oriented imagery view______________________ž</value>
+    <value>Prikaz orijentirane slike</value>
   </data>
   <data name="OrientedImageryViewerSelectMarkerSymbol" xml:space="preserve">
-    <value>Č_Select marker symbol_____________________ž</value>
+    <value>Odaberite simbol oznake</value>
   </data>
   <data name="OrientedImageryViewerToggleAddMarkers" xml:space="preserve">
-    <value>Č_Toggle add markers___________________ž</value>
+    <value>Uključi/isključi dodavanje oznaka</value>
   </data>
   <data name="OrientedImageryViewerShowSelectedImageFootprint" xml:space="preserve">
-    <value>Č_Show current footprint_______________________ž</value>
+    <value>Prikaži trenutačni otisak</value>
   </data>
   <data name="OrientedImageryViewerShowUnselectedImageFootprints" xml:space="preserve">
-    <value>Č_Show additional footprints___________________________ž</value>
+    <value>Prikaži dodatne otiske</value>
   </data>
   <data name="OrientedImageryViewerImageSearchMode" xml:space="preserve">
-    <value>Č_Image search mode__________________ž</value>
+    <value>Način rada za pretraživanje slika</value>
   </data>
   <data name="OrientedImageryViewerCurrentFootprintLabel" xml:space="preserve">
-    <value>Č_Current Footprint__________________ž</value>
+    <value>Trenutačni otisak</value>
   </data>
   <data name="OrientedImageryViewerCurrentFootprintStackedLabel" xml:space="preserve">
-    <value>Č_Current_______________ž
-Č_Footprint___________________ž</value>
+    <value>Trenutačni otisak</value>
   </data>
   <data name="OrientedImageryViewerAdditionalFootprintsLabel" xml:space="preserve">
-    <value>Č_Additional Footprints______________________ž</value>
+    <value>Dodatni otisci</value>
   </data>
   <data name="OrientedImageryViewerAdditionalFootprintsStackedLabel" xml:space="preserve">
-    <value>Č_Additional_____________________ž
-Č_Footprints_____________________ž</value>
+    <value>Dodatni otisci</value>
   </data>
   <data name="OrientedImageryViewerCameraLocationsLabel" xml:space="preserve">
-    <value>Č_Camera Locations_________________ž</value>
+    <value>Lokacije kamere</value>
   </data>
   <data name="OrientedImageryViewerCameraLocationsStackedLabel" xml:space="preserve">
-    <value>Č_Camera_____________ž
-Č_Locations___________________ž</value>
+    <value>Lokacije kamere</value>
   </data>
   <data name="OrientedImageryViewerAddMarkersLabel" xml:space="preserve">
-    <value>Č_Add Markers____________ž</value>
+    <value>Dodaj oznake</value>
   </data>
   <data name="OrientedImageryViewerAddMarkersStackedLabel" xml:space="preserve">
-    <value>Č_Add_______ž
-Č_Markers_______________ž</value>
+    <value>Dodaj oznake</value>
   </data>
   <data name="OrientedImageryViewerClearMarkersLabel" xml:space="preserve">
-    <value>Č_Clear Markers______________ž</value>
+    <value>Ukloni oznake</value>
   </data>
   <data name="OrientedImageryViewerClearMarkersTooltip" xml:space="preserve">
-    <value>Č_Clear markers______________ž</value>
+    <value>Ukloni oznake</value>
   </data>
   <data name="OrientedImageryViewerClearMarkersStackedLabel" xml:space="preserve">
-    <value>Č_Clear___________ž
-Č_Markers_______________ž</value>
+    <value>Ukloni oznake</value>
   </data>
   <data name="OrientedImageryViewerImageSearchModeFind" xml:space="preserve">
-    <value>Č_Find Images____________ž</value>
+    <value>Pronađi slike</value>
   </data>
   <data name="OrientedImageryViewerImageSearchModeFindStackedLabel" xml:space="preserve">
-    <value>Č_Find_________ž
-Č_Images_____________ž</value>
+    <value>Pronađi slike</value>
   </data>
   <data name="OrientedImageryViewerImageSearchModeDisplay" xml:space="preserve">
-    <value>Č_Display Image______________ž</value>
+    <value>Prikaži sliku</value>
   </data>
   <data name="OrientedImageryViewerImageSearchModeDisplayStackedLabel" xml:space="preserve">
-    <value>Č_Display_______________ž
-Č_Image___________ž</value>
+    <value>Prikaži sliku</value>
   </data>
   <data name="OrientedImageryViewerOpenSelectedImagePopup" xml:space="preserve">
-    <value>Č_Open details for selected image_________________ž</value>
+    <value>Otvori pojedinosti za odabranu sliku</value>
   </data>
   <data name="OrientedImageryViewerImageDetails" xml:space="preserve">
-    <value>Č_Image details______________ž</value>
+    <value>Pojedinosti o slici</value>
   </data>
   <data name="OrientedImageryViewerCloseSelectedImagePopup" xml:space="preserve">
-    <value>Č_Close details______________ž</value>
+    <value>Zatvori pojedinosti</value>
   </data>
   <data name="OrientedImageryViewerGoToPageFormat" xml:space="preserve">
-    <value>Č_Go to image {0} of {1}_______________________ž</value>
+    <value>Idi na sliku {0} od {1}</value>
   </data>
   <data name="OrientedImageryViewerSelectedPageFormat" xml:space="preserve">
-    <value>Č_Image {0} of {1}, selected___________________________ž</value>
+    <value>Slika {0} od {1}, odabrana</value>
   </data>
   <data name="OrientedImageryViewerToggleCameraMarkers" xml:space="preserve">
-    <value>Č_Show camera locations______________________ž</value>
+    <value>Prikaži lokacije kamere</value>
   </data>
   <data name="OrientedImageryViewerSequentialNavigationTooltip" xml:space="preserve">
-    <value>Č_Sequential navigation______________________ž</value>
+    <value>Sekvencijalna navigacija</value>
   </data>
   <data name="OrientedImageryViewerSequentialNavigationLabel" xml:space="preserve">
-    <value>Č_Sequential Navigation______________________ž</value>
+    <value>Sekvencijalna navigacija</value>
   </data>
   <data name="OrientedImageryViewerSequentialNavigationStackedLabel" xml:space="preserve">
-    <value>Č_Sequential_____________________ž
-Č_Navigation_____________________ž</value>
+    <value>Sekvencijalna navigacija</value>
   </data>
   <data name="OrientedImageryViewerPreviousImage" xml:space="preserve">
-    <value>Č_Previous image_______________ž</value>
+    <value>Prethodna slika</value>
   </data>
   <data name="OrientedImageryViewerNextImage" xml:space="preserve">
-    <value>Č_Next image_____________________ž</value>
+    <value>Sljedeća slika</value>
   </data>
   <data name="OrientedImageryViewerImageLoading" xml:space="preserve">
-    <value>Č_Image loading_________________ž...</value>
+    <value>Učitavanje slike...</value>
   </data>
   <data name="OrientedImageryViewerImageLoaded" xml:space="preserve">
-    <value>Č_Image loaded_____________ž</value>
+    <value>Slika je učitana</value>
   </data>
   <data name="OrientedImageryViewerNoImageToDisplay" xml:space="preserve">
-    <value>Č_No image to display____________________ž</value>
+    <value>Nema nijedne slike za prikaz</value>
   </data>
   <data name="OrientedImageryViewerNoImagesFound" xml:space="preserve">
-    <value>Č_No images found for the tapped location_____________________ž</value>
+    <value>Nije pronađena nijedna slika za dodirnutu lokaciju</value>
   </data>
   <data name="OrientedImageryViewerImageSelectionNoImagesNone" xml:space="preserve">
-    <value>Č_No image to display. Enable find images or display image mode to search for images__________________________________________ž</value>
+    <value>Nema nijedne slike za prikaz. Omogućite način rada za pronalaženje slika ili za prikazivanje slika kako biste pretraživali slike.</value>
   </data>
   <data name="OrientedImageryViewerImageSelectionNoImagesFind" xml:space="preserve">
-    <value>Č_No image to display. Tap on the map to search for images or switch to display image mode______________________________________________ž.</value>
+    <value>Nema nijedne slike za prikaz. Dodirnite kartu kako biste pretraživali slike ili se prebacite na način rada za prikazivanje slika.</value>
   </data>
   <data name="OrientedImageryViewerImageSelectionNoImagesDisplay" xml:space="preserve">
-    <value>Č_No image to display. Tap on a feature to view its image or switch to find images mode____________________________________________ž.</value>
+    <value>Nema nijedne slike za prikaz. Dodirnite geoobjekt kako biste prikazali njegovu sliku ili se prebacite na način rada za pronalaženje slika.</value>
   </data>
   <data name="OrientedImageryViewerImageSelectionEnable" xml:space="preserve">
-    <value>Č_Enable_____________ž</value>
+    <value>Omogući</value>
   </data>
   <data name="OrientedImageryViewerImageSelectionOr" xml:space="preserve">
-    <value>Č_or_____ž</value>
+    <value>ili</value>
   </data>
   <data name="OrientedImageryViewerImageSelectionSearchMode" xml:space="preserve">
-    <value>Č_mode to search for images__________________________ž</value>
+    <value>način rada za pretraživanje slika</value>
   </data>
   <data name="OrientedImageryViewerImageSelectionFindImages" xml:space="preserve">
-    <value>Č_Tap on the map to search for images___________________ž</value>
+    <value>Dodirnite mapu kako biste pretraživali slike</value>
   </data>
   <data name="OrientedImageryViewerImageSelectionDisplayImage" xml:space="preserve">
-    <value>Č_Tap on a feature to view its image__________________ž</value>
+    <value>Dodirnite geoobjekt kako biste prikazali njegovu sliku</value>
   </data>
   <data name="OrientedImageryViewerImageSelectionSwitchMode" xml:space="preserve">
-    <value>Č_or switch to_____________ž</value>
+    <value>ili se prebacite na</value>
   </data>
   <data name="OrientedImageryViewerImageSelectionMode" xml:space="preserve">
-    <value>Č_mode_________ž</value>
+    <value>način rada</value>
   </data>
   <data name="OrientedImageryViewerNoGeoView" xml:space="preserve">
-    <value>Č_Connect a GeoView to view oriented imagery_______________________ž.</value>
+    <value>Povežite GeoView kako biste prikazali orijentirane slike.</value>
   </data>
   <data name="OrientedImageryViewerNoLayerSelected" xml:space="preserve">
-    <value>Č_No layer selected___________________ž.</value>
+    <value>Nije odabran nijedan sloj.</value>
   </data>
   <data name="OrientedImageryViewerAnnounceTransientError" xml:space="preserve">
-    <value>Č_Error raised_____________ž</value>
+    <value>Došlo je do pogreške</value>
   </data>
   <data name="OrientedImageryViewerDismissError" xml:space="preserve">
-    <value>Č_Dismiss error______________ž</value>
+    <value>Odbaci pogrešku</value>
   </data>
   <data name="OrientedImageryViewerPreviousLabel" xml:space="preserve">
-    <value>Č_Prev_________ž</value>
+    <value>Preth.</value>
   </data>
   <data name="OrientedImageryViewerNextLabel" xml:space="preserve">
-    <value>Č_Next_________ž</value>
+    <value>Sljedeće</value>
   </data>
   <data name="OrientedImageryViewerSequenceStartReached" xml:space="preserve">
-    <value>Č_Start of image sequence reached_________________ž</value>
+    <value>Dosegnut je početak slijeda slika</value>
   </data>
   <data name="OrientedImageryViewerSequenceEndReached" xml:space="preserve">
-    <value>Č_End of image sequence reached______________________________ž</value>
+    <value>Dosegnut je završetak slijeda slika</value>
   </data>
   <data name="OrientedImageryViewerSequenceStartAndEndReached" xml:space="preserve">
-    <value>Č_Start and end of image sequence reached_____________________ž</value>
+    <value>Dosegnuti su početak i završetak slijeda slika</value>
   </data>
   <data name="OrientedImageryViewerClose" xml:space="preserve">
-    <value>Č_Close oriented imagery_______________________ž</value>
+    <value>Zatvori orijentirane slike</value>
   </data>
   <data name="OrientedImageryViewerClosePanel" xml:space="preserve">
-    <value>Č_Close panel____________ž</value>
+    <value>Zatvori ploču</value>
   </data>
   <data name="OrientedImageryViewerOverlays" xml:space="preserve">
-    <value>Č_Overlays_________________ž</value>
+    <value>Preklapanja</value>
   </data>
   <data name="OrientedImageryViewerMarkers" xml:space="preserve">
-    <value>Č_Markers_______________ž</value>
+    <value>Oznake</value>
   </data>
   <data name="OrientedImageryViewerMode" xml:space="preserve">
-    <value>Č_Mode_________ž</value>
+    <value>Način</value>
   </data>
   <data name="OrientedImageryViewerShowPreviousImageInSequence" xml:space="preserve">
-    <value>Č_Show previous image in sequence_________________ž</value>
+    <value>Prikaži prethodnu sliku u slijedu</value>
   </data>
   <data name="OrientedImageryViewerShowNextImageInSequence" xml:space="preserve">
-    <value>Č_Show next image in sequence____________________________ž</value>
+    <value>Prikaži sljedeću sliku u slijedu</value>
   </data>
   <data name="OrientedImageryViewerMore" xml:space="preserve">
-    <value>Č_More_________ž</value>
+    <value>Više</value>
   </data>
   <data name="OrientedImageryViewerPage" xml:space="preserve">
-    <value>Č_Image {0} of {1}_________________ž</value>
+    <value>Slika {0} od {1}</value>
   </data>
   <data name="OrientedImageryViewerSelectLayer" xml:space="preserve">
-    <value>Č_Select layer_____________ž</value>
+    <value>Odaberite sloj</value>
   </data>
   <data name="OrientedImagerySampleToggleView" xml:space="preserve">
     <value>2D/3D</value>
@@ -1071,78 +1063,78 @@
     <value>Prebacite se između 2D karte i 3D scene</value>
   </data>
   <data name="OrientedImageryViewerMarkerSelection" xml:space="preserve">
-    <value>Č_Marker selection_________________ž</value>
+    <value>Odabir oznaka</value>
   </data>
   <data name="OrientedImageryViewerMarkerOption" xml:space="preserve">
-    <value>Č_Marker {0}_____________________ž</value>
+    <value>Oznaka {0}</value>
   </data>
   <data name="OrientedImageryViewerMarkerCircle" xml:space="preserve">
-    <value>Č_Circle marker______________ž</value>
+    <value>Oznaka u obliku kruga</value>
   </data>
   <data name="OrientedImageryViewerMarkerSquare" xml:space="preserve">
-    <value>Č_Square marker______________ž</value>
+    <value>Oznaka u obliku kvadrata</value>
   </data>
   <data name="OrientedImageryViewerMarkerTriangle" xml:space="preserve">
-    <value>Č_Triangle marker________________ž</value>
+    <value>Oznaka u obliku trokuta</value>
   </data>
   <data name="OrientedImageryViewerMarkerDiamond" xml:space="preserve">
-    <value>Č_Diamond marker_______________ž</value>
+    <value>Oznaka u obliku romba</value>
   </data>
   <data name="OrientedImageryViewerMarkerX" xml:space="preserve">
-    <value>Č_Cross marker_____________ž</value>
+    <value>Oznaka u obliku križa</value>
   </data>
   <data name="OrientedImageryViewerMobileSequentialMode" xml:space="preserve">
-    <value>Č_Sequential_____________________ž</value>
+    <value>Sekvencijalno</value>
   </data>
   <data name="OrientedImageryViewerNavigation" xml:space="preserve">
-    <value>Č_Explore_______________ž</value>
+    <value>Istraži</value>
   </data>
   <data name="OrientedImageryViewerModeSelection" xml:space="preserve">
-    <value>Č_Mode Selection_______________ž</value>
+    <value>Odabir načina rada</value>
   </data>
   <data name="OrientedImageryViewerOverlaysSelection" xml:space="preserve">
-    <value>Č_Overlays Selection___________________ž</value>
+    <value>Odabir preklapanja</value>
   </data>
   <data name="OrientedImageryViewerMarkerTools" xml:space="preserve">
-    <value>Č_Marker Tools_____________ž</value>
+    <value>Alati za oznake</value>
   </data>
   <data name="OrientedImageryViewerOpen" xml:space="preserve">
-    <value>Č_Open oriented imagery______________________ž</value>
+    <value>Otvori orijentirane slike</value>
   </data>
   <data name="OrientedImageryViewerOn" xml:space="preserve">
-    <value>Č_On_____ž</value>
+    <value>Uključeno</value>
   </data>
   <data name="OrientedImageryViewerOff" xml:space="preserve">
-    <value>Č_Off_______ž</value>
+    <value>Isključeno</value>
   </data>
   <data name="OrientedImageryViewerSelected" xml:space="preserve">
-    <value>Č_Selected_________________ž</value>
+    <value>Odabrano</value>
   </data>
   <data name="OrientedImageryViewerNotSelected" xml:space="preserve">
-    <value>Č_Not selected_____________ž</value>
+    <value>Nije odabrano</value>
   </data>
   <data name="OrientedImageryViewerMobileBackToMarkers" xml:space="preserve">
-    <value>Č_Back to Marker Tools_____________________ž</value>
+    <value>Natrag na alate za oznake</value>
   </data>
   <data name="OrientedImageryViewerMobileSelectMarkerSymbol" xml:space="preserve">
-    <value>Č_Select Symbol______________ž</value>
+    <value>Odaberite simbol</value>
   </data>
   <data name="OrientedImageryViewerMobileCurrentFootprint" xml:space="preserve">
-    <value>Č_Show Current Footprint_______________________ž</value>
+    <value>Prikaži trenutačni otisak</value>
   </data>
   <data name="OrientedImageryViewerMobileAdditionalFootprints" xml:space="preserve">
-    <value>Č_Show Additional Footprints___________________________ž</value>
+    <value>Prikaži dodatne otiske</value>
   </data>
   <data name="OrientedImageryViewerMobileCameraLocations" xml:space="preserve">
-    <value>Č_Show Camera Locations______________________ž</value>
+    <value>Prikaži lokacije kamere</value>
   </data>
   <data name="OrientedImageryViewerImageNavigation" xml:space="preserve">
-    <value>Č_Image navigation_________________ž</value>
+    <value>Navigacija kroz slike</value>
   </data>
   <data name="OrientedImageryViewerImageNavigationHint" xml:space="preserve">
-    <value>Č_Use Left Arrow for the previous image or Right Arrow for the next image_____________________________________ž.</value>
+    <value>Upotrijebite lijevu strelicu za prethodnu sliku ili desnu strelicu za sljedeću sliku.</value>
   </data>
   <data name="OrientedImageryViewerSequenceNavigation" xml:space="preserve">
-    <value>Č_Sequential image navigation____________________________ž</value>
+    <value>Sekvencijalna navigacija kroz slike</value>
   </data>
 </root>

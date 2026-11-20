@@ -862,207 +862,199 @@
     <value>Orientuotas vaizdas</value>
   </data>
   <data name="OrientedImageryViewerAutomationTypeName" xml:space="preserve">
-    <value>Į_Oriented imagery view______________________š</value>
+    <value>Orientuotų vaizdų peržiūra</value>
   </data>
   <data name="OrientedImageryViewerSelectMarkerSymbol" xml:space="preserve">
-    <value>Į_Select marker symbol_____________________š</value>
+    <value>Pasirinkti žymeklio simbolį</value>
   </data>
   <data name="OrientedImageryViewerToggleAddMarkers" xml:space="preserve">
-    <value>Į_Toggle add markers___________________š</value>
+    <value>Perjungti žymeklių pridėjimą</value>
   </data>
   <data name="OrientedImageryViewerShowSelectedImageFootprint" xml:space="preserve">
-    <value>Į_Show current footprint_______________________š</value>
+    <value>Rodyti dabartinę aprėpiamą erdvę</value>
   </data>
   <data name="OrientedImageryViewerShowUnselectedImageFootprints" xml:space="preserve">
-    <value>Į_Show additional footprints___________________________š</value>
+    <value>Rodyti papildomas aprėpiamas erdves</value>
   </data>
   <data name="OrientedImageryViewerImageSearchMode" xml:space="preserve">
-    <value>Į_Image search mode__________________š</value>
+    <value>Vaizdų paieškos režimas</value>
   </data>
   <data name="OrientedImageryViewerCurrentFootprintLabel" xml:space="preserve">
-    <value>Į_Current Footprint__________________š</value>
+    <value>Dabartinė aprėpiama erdvė</value>
   </data>
   <data name="OrientedImageryViewerCurrentFootprintStackedLabel" xml:space="preserve">
-    <value>Į_Current_______________š
-Į_Footprint___________________š</value>
+    <value>Dabartinė aprėpiama erdvė</value>
   </data>
   <data name="OrientedImageryViewerAdditionalFootprintsLabel" xml:space="preserve">
-    <value>Į_Additional Footprints______________________š</value>
+    <value>Papildomos aprėpiamos erdvės</value>
   </data>
   <data name="OrientedImageryViewerAdditionalFootprintsStackedLabel" xml:space="preserve">
-    <value>Į_Additional_____________________š
-Į_Footprints_____________________š</value>
+    <value>Papildomos aprėpiamos erdvės</value>
   </data>
   <data name="OrientedImageryViewerCameraLocationsLabel" xml:space="preserve">
-    <value>Į_Camera Locations_________________š</value>
+    <value>Fotoaparatų vietos</value>
   </data>
   <data name="OrientedImageryViewerCameraLocationsStackedLabel" xml:space="preserve">
-    <value>Į_Camera_____________š
-Į_Locations___________________š</value>
+    <value>Fotoaparatų vietos</value>
   </data>
   <data name="OrientedImageryViewerAddMarkersLabel" xml:space="preserve">
-    <value>Į_Add Markers____________š</value>
+    <value>Pridėti žymeklius</value>
   </data>
   <data name="OrientedImageryViewerAddMarkersStackedLabel" xml:space="preserve">
-    <value>Į_Add_______š
-Į_Markers_______________š</value>
+    <value>Pridėti žymeklius</value>
   </data>
   <data name="OrientedImageryViewerClearMarkersLabel" xml:space="preserve">
-    <value>Į_Clear Markers______________š</value>
+    <value>Išvalyti žymeklius</value>
   </data>
   <data name="OrientedImageryViewerClearMarkersTooltip" xml:space="preserve">
-    <value>Į_Clear markers______________š</value>
+    <value>Išvalyti žymeklius</value>
   </data>
   <data name="OrientedImageryViewerClearMarkersStackedLabel" xml:space="preserve">
-    <value>Į_Clear___________š
-Į_Markers_______________š</value>
+    <value>Išvalyti žymeklius</value>
   </data>
   <data name="OrientedImageryViewerImageSearchModeFind" xml:space="preserve">
-    <value>Į_Find Images____________š</value>
+    <value>Rasti vaizdus</value>
   </data>
   <data name="OrientedImageryViewerImageSearchModeFindStackedLabel" xml:space="preserve">
-    <value>Į_Find_________š
-Į_Images_____________š</value>
+    <value>Rasti vaizdus</value>
   </data>
   <data name="OrientedImageryViewerImageSearchModeDisplay" xml:space="preserve">
-    <value>Į_Display Image______________š</value>
+    <value>Rodyti vaizdą</value>
   </data>
   <data name="OrientedImageryViewerImageSearchModeDisplayStackedLabel" xml:space="preserve">
-    <value>Į_Display_______________š
-Į_Image___________š</value>
+    <value>Rodyti vaizdą</value>
   </data>
   <data name="OrientedImageryViewerOpenSelectedImagePopup" xml:space="preserve">
-    <value>Į_Open details for selected image_________________š</value>
+    <value>Atidaryti pasirinkto vaizdo informaciją</value>
   </data>
   <data name="OrientedImageryViewerImageDetails" xml:space="preserve">
-    <value>Į_Image details______________š</value>
+    <value>Vaizdo informacija</value>
   </data>
   <data name="OrientedImageryViewerCloseSelectedImagePopup" xml:space="preserve">
-    <value>Į_Close details______________š</value>
+    <value>Uždaryti informaciją</value>
   </data>
   <data name="OrientedImageryViewerGoToPageFormat" xml:space="preserve">
-    <value>Į_Go to image {0} of {1}_______________________š</value>
+    <value>Eiti į vaizdą {0} iš {1}</value>
   </data>
   <data name="OrientedImageryViewerSelectedPageFormat" xml:space="preserve">
-    <value>Į_Image {0} of {1}, selected___________________________š</value>
+    <value>Vaizdas {0} iš {1}, pasirinktas</value>
   </data>
   <data name="OrientedImageryViewerToggleCameraMarkers" xml:space="preserve">
-    <value>Į_Show camera locations______________________š</value>
+    <value>Rodyti fotoaparatų vietas</value>
   </data>
   <data name="OrientedImageryViewerSequentialNavigationTooltip" xml:space="preserve">
-    <value>Į_Sequential navigation______________________š</value>
+    <value>Nuoseklioji navigacija</value>
   </data>
   <data name="OrientedImageryViewerSequentialNavigationLabel" xml:space="preserve">
-    <value>Į_Sequential Navigation______________________š</value>
+    <value>Nuoseklioji navigacija</value>
   </data>
   <data name="OrientedImageryViewerSequentialNavigationStackedLabel" xml:space="preserve">
-    <value>Į_Sequential_____________________š
-Į_Navigation_____________________š</value>
+    <value>Nuoseklioji navigacija</value>
   </data>
   <data name="OrientedImageryViewerPreviousImage" xml:space="preserve">
-    <value>Į_Previous image_______________š</value>
+    <value>Ankstesnis vaizdas</value>
   </data>
   <data name="OrientedImageryViewerNextImage" xml:space="preserve">
-    <value>Į_Next image_____________________š</value>
+    <value>Kitas vaizdas</value>
   </data>
   <data name="OrientedImageryViewerImageLoading" xml:space="preserve">
-    <value>Į_Image loading_________________š...</value>
+    <value>Vaizdas įkeliamas...</value>
   </data>
   <data name="OrientedImageryViewerImageLoaded" xml:space="preserve">
-    <value>Į_Image loaded_____________š</value>
+    <value>Vaizdas įkeltas</value>
   </data>
   <data name="OrientedImageryViewerNoImageToDisplay" xml:space="preserve">
-    <value>Į_No image to display____________________š</value>
+    <value>Nėra rodytino vaizdo</value>
   </data>
   <data name="OrientedImageryViewerNoImagesFound" xml:space="preserve">
-    <value>Į_No images found for the tapped location_____________________š</value>
+    <value>Bakstelėtoje vietoje vaizdų nerasta</value>
   </data>
   <data name="OrientedImageryViewerImageSelectionNoImagesNone" xml:space="preserve">
-    <value>Į_No image to display. Enable find images or display image mode to search for images__________________________________________š</value>
+    <value>Nėra rodytino vaizdo. Įjunkite vaizdų paieškos arba vaizdo rodymo režimą, kad ieškotumėte vaizdų.</value>
   </data>
   <data name="OrientedImageryViewerImageSelectionNoImagesFind" xml:space="preserve">
-    <value>Į_No image to display. Tap on the map to search for images or switch to display image mode______________________________________________š.</value>
+    <value>Nėra rodytino vaizdo. Bakstelėkite žemėlapyje, kad ieškotumėte vaizdų, arba perjunkite į vaizdo rodymo režimą.</value>
   </data>
   <data name="OrientedImageryViewerImageSelectionNoImagesDisplay" xml:space="preserve">
-    <value>Į_No image to display. Tap on a feature to view its image or switch to find images mode____________________________________________š.</value>
+    <value>Nėra rodytino vaizdo. Bakstelėkite elementą, kad peržiūrėtumėte jo vaizdą, arba perjunkite į vaizdų paieškos režimą.</value>
   </data>
   <data name="OrientedImageryViewerImageSelectionEnable" xml:space="preserve">
-    <value>Į_Enable_____________š</value>
+    <value>Įgalinti</value>
   </data>
   <data name="OrientedImageryViewerImageSelectionOr" xml:space="preserve">
-    <value>Į_or_____š</value>
+    <value>arba</value>
   </data>
   <data name="OrientedImageryViewerImageSelectionSearchMode" xml:space="preserve">
-    <value>Į_mode to search for images__________________________š</value>
+    <value>režimą, kad ieškotumėte vaizdų</value>
   </data>
   <data name="OrientedImageryViewerImageSelectionFindImages" xml:space="preserve">
-    <value>Į_Tap on the map to search for images___________________š</value>
+    <value>Bakstelėkite žemėlapyje, kad ieškotumėte vaizdų</value>
   </data>
   <data name="OrientedImageryViewerImageSelectionDisplayImage" xml:space="preserve">
-    <value>Į_Tap on a feature to view its image__________________š</value>
+    <value>Bakstelėkite elementą, kad peržiūrėtumėte jo vaizdą</value>
   </data>
   <data name="OrientedImageryViewerImageSelectionSwitchMode" xml:space="preserve">
-    <value>Į_or switch to_____________š</value>
+    <value>arba perjunkite į</value>
   </data>
   <data name="OrientedImageryViewerImageSelectionMode" xml:space="preserve">
-    <value>Į_mode_________š</value>
+    <value>režimą</value>
   </data>
   <data name="OrientedImageryViewerNoGeoView" xml:space="preserve">
-    <value>Į_Connect a GeoView to view oriented imagery_______________________š.</value>
+    <value>Prijunkite „GeoView“, kad peržiūrėtumėte orientuotus vaizdus.</value>
   </data>
   <data name="OrientedImageryViewerNoLayerSelected" xml:space="preserve">
-    <value>Į_No layer selected___________________š.</value>
+    <value>Nepasirinktas joks sluoksnis.</value>
   </data>
   <data name="OrientedImageryViewerAnnounceTransientError" xml:space="preserve">
-    <value>Į_Error raised_____________š</value>
+    <value>Užfiksuota klaida</value>
   </data>
   <data name="OrientedImageryViewerDismissError" xml:space="preserve">
-    <value>Į_Dismiss error______________š</value>
+    <value>Atmesti klaidą</value>
   </data>
   <data name="OrientedImageryViewerPreviousLabel" xml:space="preserve">
-    <value>Į_Prev_________š</value>
+    <value>Ankstesnis</value>
   </data>
   <data name="OrientedImageryViewerNextLabel" xml:space="preserve">
-    <value>Į_Next_________š</value>
+    <value>Kitas</value>
   </data>
   <data name="OrientedImageryViewerSequenceStartReached" xml:space="preserve">
-    <value>Į_Start of image sequence reached_________________š</value>
+    <value>Pasiekta vaizdų sekos pradžia</value>
   </data>
   <data name="OrientedImageryViewerSequenceEndReached" xml:space="preserve">
-    <value>Į_End of image sequence reached______________________________š</value>
+    <value>Pasiekta vaizdų sekos pabaiga</value>
   </data>
   <data name="OrientedImageryViewerSequenceStartAndEndReached" xml:space="preserve">
-    <value>Į_Start and end of image sequence reached_____________________š</value>
+    <value>Pasiekta vaizdų sekos pradžia ir pabaiga</value>
   </data>
   <data name="OrientedImageryViewerClose" xml:space="preserve">
-    <value>Į_Close oriented imagery_______________________š</value>
+    <value>Uždaryti orientuotus vaizdus</value>
   </data>
   <data name="OrientedImageryViewerClosePanel" xml:space="preserve">
-    <value>Į_Close panel____________š</value>
+    <value>Uždaryti skydelį</value>
   </data>
   <data name="OrientedImageryViewerOverlays" xml:space="preserve">
-    <value>Į_Overlays_________________š</value>
+    <value>Perdangos</value>
   </data>
   <data name="OrientedImageryViewerMarkers" xml:space="preserve">
-    <value>Į_Markers_______________š</value>
+    <value>Žymekliai</value>
   </data>
   <data name="OrientedImageryViewerMode" xml:space="preserve">
-    <value>Į_Mode_________š</value>
+    <value>Režimas</value>
   </data>
   <data name="OrientedImageryViewerShowPreviousImageInSequence" xml:space="preserve">
-    <value>Į_Show previous image in sequence_________________š</value>
+    <value>Rodyti ankstesnį sekos vaizdą</value>
   </data>
   <data name="OrientedImageryViewerShowNextImageInSequence" xml:space="preserve">
-    <value>Į_Show next image in sequence____________________________š</value>
+    <value>Rodyti kitą sekos vaizdą</value>
   </data>
   <data name="OrientedImageryViewerMore" xml:space="preserve">
-    <value>Į_More_________š</value>
+    <value>Daugiau</value>
   </data>
   <data name="OrientedImageryViewerPage" xml:space="preserve">
-    <value>Į_Image {0} of {1}_________________š</value>
+    <value>Vaizdas {0} iš {1}</value>
   </data>
   <data name="OrientedImageryViewerSelectLayer" xml:space="preserve">
-    <value>Į_Select layer_____________š</value>
+    <value>Pasirinkti sluoksnį</value>
   </data>
   <data name="OrientedImagerySampleToggleView" xml:space="preserve">
     <value>2D/3D</value>
@@ -1071,78 +1063,78 @@
     <value>Perjungti tarp 2D žemėlapio ir 3D scenos</value>
   </data>
   <data name="OrientedImageryViewerMarkerSelection" xml:space="preserve">
-    <value>Į_Marker selection_________________š</value>
+    <value>Žymeklio pasirinkimas</value>
   </data>
   <data name="OrientedImageryViewerMarkerOption" xml:space="preserve">
-    <value>Į_Marker {0}_____________________š</value>
+    <value>Žymeklis {0}</value>
   </data>
   <data name="OrientedImageryViewerMarkerCircle" xml:space="preserve">
-    <value>Į_Circle marker______________š</value>
+    <value>Apskritimo žymeklis</value>
   </data>
   <data name="OrientedImageryViewerMarkerSquare" xml:space="preserve">
-    <value>Į_Square marker______________š</value>
+    <value>Kvadrato žymeklis</value>
   </data>
   <data name="OrientedImageryViewerMarkerTriangle" xml:space="preserve">
-    <value>Į_Triangle marker________________š</value>
+    <value>Trikampio žymeklis</value>
   </data>
   <data name="OrientedImageryViewerMarkerDiamond" xml:space="preserve">
-    <value>Į_Diamond marker_______________š</value>
+    <value>Rombo žymeklis</value>
   </data>
   <data name="OrientedImageryViewerMarkerX" xml:space="preserve">
-    <value>Į_Cross marker_____________š</value>
+    <value>Kryželio žymeklis</value>
   </data>
   <data name="OrientedImageryViewerMobileSequentialMode" xml:space="preserve">
-    <value>Į_Sequential_____________________š</value>
+    <value>Nuoseklios</value>
   </data>
   <data name="OrientedImageryViewerNavigation" xml:space="preserve">
-    <value>Į_Explore_______________š</value>
+    <value>Naršyti</value>
   </data>
   <data name="OrientedImageryViewerModeSelection" xml:space="preserve">
-    <value>Į_Mode Selection_______________š</value>
+    <value>Režimo pasirinkimas</value>
   </data>
   <data name="OrientedImageryViewerOverlaysSelection" xml:space="preserve">
-    <value>Į_Overlays Selection___________________š</value>
+    <value>Perdangų pasirinkimas</value>
   </data>
   <data name="OrientedImageryViewerMarkerTools" xml:space="preserve">
-    <value>Į_Marker Tools_____________š</value>
+    <value>Žymeklio įrankiai</value>
   </data>
   <data name="OrientedImageryViewerOpen" xml:space="preserve">
-    <value>Į_Open oriented imagery______________________š</value>
+    <value>Atidaryti orientuotus vaizdus</value>
   </data>
   <data name="OrientedImageryViewerOn" xml:space="preserve">
-    <value>Į_On_____š</value>
+    <value>Įjungta</value>
   </data>
   <data name="OrientedImageryViewerOff" xml:space="preserve">
-    <value>Į_Off_______š</value>
+    <value>Išjungta</value>
   </data>
   <data name="OrientedImageryViewerSelected" xml:space="preserve">
-    <value>Į_Selected_________________š</value>
+    <value>Pažymėta</value>
   </data>
   <data name="OrientedImageryViewerNotSelected" xml:space="preserve">
-    <value>Į_Not selected_____________š</value>
+    <value>Nepasirinkta</value>
   </data>
   <data name="OrientedImageryViewerMobileBackToMarkers" xml:space="preserve">
-    <value>Į_Back to Marker Tools_____________________š</value>
+    <value>Grįžti į žymeklio įrankius</value>
   </data>
   <data name="OrientedImageryViewerMobileSelectMarkerSymbol" xml:space="preserve">
-    <value>Į_Select Symbol______________š</value>
+    <value>Pasirinkti simbolį</value>
   </data>
   <data name="OrientedImageryViewerMobileCurrentFootprint" xml:space="preserve">
-    <value>Į_Show Current Footprint_______________________š</value>
+    <value>Rodyti dabartinę aprėpiamą erdvę</value>
   </data>
   <data name="OrientedImageryViewerMobileAdditionalFootprints" xml:space="preserve">
-    <value>Į_Show Additional Footprints___________________________š</value>
+    <value>Rodyti papildomas aprėpiamas erdves</value>
   </data>
   <data name="OrientedImageryViewerMobileCameraLocations" xml:space="preserve">
-    <value>Į_Show Camera Locations______________________š</value>
+    <value>Rodyti fotoaparatų vietas</value>
   </data>
   <data name="OrientedImageryViewerImageNavigation" xml:space="preserve">
-    <value>Į_Image navigation_________________š</value>
+    <value>Vaizdų naršymas</value>
   </data>
   <data name="OrientedImageryViewerImageNavigationHint" xml:space="preserve">
-    <value>Į_Use Left Arrow for the previous image or Right Arrow for the next image_____________________________________š.</value>
+    <value>Naudokite rodyklę kairėn ankstesniam vaizdui arba rodyklę dešinėn kitam vaizdui.</value>
   </data>
   <data name="OrientedImageryViewerSequenceNavigation" xml:space="preserve">
-    <value>Į_Sequential image navigation____________________________š</value>
+    <value>Nuoseklioji vaizdų navigacija</value>
   </data>
 </root>

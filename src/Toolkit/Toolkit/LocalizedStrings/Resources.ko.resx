@@ -862,207 +862,199 @@
     <value>방향 이미지</value>
   </data>
   <data name="OrientedImageryViewerAutomationTypeName" xml:space="preserve">
-    <value>한_Oriented imagery view______________________빠</value>
+    <value>방향 영상 보기</value>
   </data>
   <data name="OrientedImageryViewerSelectMarkerSymbol" xml:space="preserve">
-    <value>한_Select marker symbol_____________________빠</value>
+    <value>마커 심볼 선택</value>
   </data>
   <data name="OrientedImageryViewerToggleAddMarkers" xml:space="preserve">
-    <value>한_Toggle add markers___________________빠</value>
+    <value>마커 추가 토글</value>
   </data>
   <data name="OrientedImageryViewerShowSelectedImageFootprint" xml:space="preserve">
-    <value>한_Show current footprint_______________________빠</value>
+    <value>현재 풋프린트 표시</value>
   </data>
   <data name="OrientedImageryViewerShowUnselectedImageFootprints" xml:space="preserve">
-    <value>한_Show additional footprints___________________________빠</value>
+    <value>추가 풋프린트 표시</value>
   </data>
   <data name="OrientedImageryViewerImageSearchMode" xml:space="preserve">
-    <value>한_Image search mode__________________빠</value>
+    <value>이미지 검색 모드</value>
   </data>
   <data name="OrientedImageryViewerCurrentFootprintLabel" xml:space="preserve">
-    <value>한_Current Footprint__________________빠</value>
+    <value>현재 풋프린트</value>
   </data>
   <data name="OrientedImageryViewerCurrentFootprintStackedLabel" xml:space="preserve">
-    <value>한_Current_______________빠
-한_Footprint___________________빠</value>
+    <value>현재 풋프린트</value>
   </data>
   <data name="OrientedImageryViewerAdditionalFootprintsLabel" xml:space="preserve">
-    <value>한_Additional Footprints______________________빠</value>
+    <value>추가 풋프린트</value>
   </data>
   <data name="OrientedImageryViewerAdditionalFootprintsStackedLabel" xml:space="preserve">
-    <value>한_Additional_____________________빠
-한_Footprints_____________________빠</value>
+    <value>추가 풋프린트</value>
   </data>
   <data name="OrientedImageryViewerCameraLocationsLabel" xml:space="preserve">
-    <value>한_Camera Locations_________________빠</value>
+    <value>카메라 위치</value>
   </data>
   <data name="OrientedImageryViewerCameraLocationsStackedLabel" xml:space="preserve">
-    <value>한_Camera_____________빠
-한_Locations___________________빠</value>
+    <value>카메라 위치</value>
   </data>
   <data name="OrientedImageryViewerAddMarkersLabel" xml:space="preserve">
-    <value>한_Add Markers____________빠</value>
+    <value>마커 추가</value>
   </data>
   <data name="OrientedImageryViewerAddMarkersStackedLabel" xml:space="preserve">
-    <value>한_Add_______빠
-한_Markers_______________빠</value>
+    <value>마커 추가</value>
   </data>
   <data name="OrientedImageryViewerClearMarkersLabel" xml:space="preserve">
-    <value>한_Clear Markers______________빠</value>
+    <value>마커 지우기</value>
   </data>
   <data name="OrientedImageryViewerClearMarkersTooltip" xml:space="preserve">
-    <value>한_Clear markers______________빠</value>
+    <value>마커 지우기</value>
   </data>
   <data name="OrientedImageryViewerClearMarkersStackedLabel" xml:space="preserve">
-    <value>한_Clear___________빠
-한_Markers_______________빠</value>
+    <value>마커 지우기</value>
   </data>
   <data name="OrientedImageryViewerImageSearchModeFind" xml:space="preserve">
-    <value>한_Find Images____________빠</value>
+    <value>이미지 찾기</value>
   </data>
   <data name="OrientedImageryViewerImageSearchModeFindStackedLabel" xml:space="preserve">
-    <value>한_Find_________빠
-한_Images_____________빠</value>
+    <value>이미지 찾기</value>
   </data>
   <data name="OrientedImageryViewerImageSearchModeDisplay" xml:space="preserve">
-    <value>한_Display Image______________빠</value>
+    <value>이미지 표시</value>
   </data>
   <data name="OrientedImageryViewerImageSearchModeDisplayStackedLabel" xml:space="preserve">
-    <value>한_Display_______________빠
-한_Image___________빠</value>
+    <value>이미지 표시</value>
   </data>
   <data name="OrientedImageryViewerOpenSelectedImagePopup" xml:space="preserve">
-    <value>한_Open details for selected image_________________빠</value>
+    <value>선택한 이미지의 세부정보 열기</value>
   </data>
   <data name="OrientedImageryViewerImageDetails" xml:space="preserve">
-    <value>한_Image details______________빠</value>
+    <value>이미지 세부정보</value>
   </data>
   <data name="OrientedImageryViewerCloseSelectedImagePopup" xml:space="preserve">
-    <value>한_Close details______________빠</value>
+    <value>세부정보 닫기</value>
   </data>
   <data name="OrientedImageryViewerGoToPageFormat" xml:space="preserve">
-    <value>한_Go to image {0} of {1}_______________________빠</value>
+    <value>이미지 {0} / {1}(으)로 이동</value>
   </data>
   <data name="OrientedImageryViewerSelectedPageFormat" xml:space="preserve">
-    <value>한_Image {0} of {1}, selected___________________________빠</value>
+    <value>이미지 {0} / {1}, 선택함</value>
   </data>
   <data name="OrientedImageryViewerToggleCameraMarkers" xml:space="preserve">
-    <value>한_Show camera locations______________________빠</value>
+    <value>카메라 위치 표시</value>
   </data>
   <data name="OrientedImageryViewerSequentialNavigationTooltip" xml:space="preserve">
-    <value>한_Sequential navigation______________________빠</value>
+    <value>순차적 탐색</value>
   </data>
   <data name="OrientedImageryViewerSequentialNavigationLabel" xml:space="preserve">
-    <value>한_Sequential Navigation______________________빠</value>
+    <value>순차적 탐색</value>
   </data>
   <data name="OrientedImageryViewerSequentialNavigationStackedLabel" xml:space="preserve">
-    <value>한_Sequential_____________________빠
-한_Navigation_____________________빠</value>
+    <value>순차적 탐색</value>
   </data>
   <data name="OrientedImageryViewerPreviousImage" xml:space="preserve">
-    <value>한_Previous image_______________빠</value>
+    <value>이전 이미지</value>
   </data>
   <data name="OrientedImageryViewerNextImage" xml:space="preserve">
-    <value>한_Next image_____________________빠</value>
+    <value>다음 이미지</value>
   </data>
   <data name="OrientedImageryViewerImageLoading" xml:space="preserve">
-    <value>한_Image loading_________________빠...</value>
+    <value>이미지를 불러오는 중...</value>
   </data>
   <data name="OrientedImageryViewerImageLoaded" xml:space="preserve">
-    <value>한_Image loaded_____________빠</value>
+    <value>이미지 불러옴</value>
   </data>
   <data name="OrientedImageryViewerNoImageToDisplay" xml:space="preserve">
-    <value>한_No image to display____________________빠</value>
+    <value>표시할 이미지 없음</value>
   </data>
   <data name="OrientedImageryViewerNoImagesFound" xml:space="preserve">
-    <value>한_No images found for the tapped location_____________________빠</value>
+    <value>누른 위치의 이미지를 찾을 수 없음</value>
   </data>
   <data name="OrientedImageryViewerImageSelectionNoImagesNone" xml:space="preserve">
-    <value>한_No image to display. Enable find images or display image mode to search for images__________________________________________빠</value>
+    <value>표시할 이미지가 없습니다. 이미지를 검색하려면 이미지 찾기 또는 이미지 표시 모드를 활성화하세요</value>
   </data>
   <data name="OrientedImageryViewerImageSelectionNoImagesFind" xml:space="preserve">
-    <value>한_No image to display. Tap on the map to search for images or switch to display image mode______________________________________________빠.</value>
+    <value>표시할 이미지가 없습니다. 맵을 눌러 이미지를 검색하거나 이미지 표시 모드로 전환하세요.</value>
   </data>
   <data name="OrientedImageryViewerImageSelectionNoImagesDisplay" xml:space="preserve">
-    <value>한_No image to display. Tap on a feature to view its image or switch to find images mode____________________________________________빠.</value>
+    <value>표시할 이미지가 없습니다. 피처를 눌러 해당 이미지를 보거나 이미지 찾기 모드로 전환하세요.</value>
   </data>
   <data name="OrientedImageryViewerImageSelectionEnable" xml:space="preserve">
-    <value>한_Enable_____________빠</value>
+    <value>활성화</value>
   </data>
   <data name="OrientedImageryViewerImageSelectionOr" xml:space="preserve">
-    <value>한_or_____빠</value>
+    <value>또는</value>
   </data>
   <data name="OrientedImageryViewerImageSelectionSearchMode" xml:space="preserve">
-    <value>한_mode to search for images__________________________빠</value>
+    <value>이미지 검색 모드</value>
   </data>
   <data name="OrientedImageryViewerImageSelectionFindImages" xml:space="preserve">
-    <value>한_Tap on the map to search for images___________________빠</value>
+    <value>맵을 눌러 이미지 검색</value>
   </data>
   <data name="OrientedImageryViewerImageSelectionDisplayImage" xml:space="preserve">
-    <value>한_Tap on a feature to view its image__________________빠</value>
+    <value>피처를 눌러 해당 이미지 보기</value>
   </data>
   <data name="OrientedImageryViewerImageSelectionSwitchMode" xml:space="preserve">
-    <value>한_or switch to_____________빠</value>
+    <value>또는 다음으로 전환</value>
   </data>
   <data name="OrientedImageryViewerImageSelectionMode" xml:space="preserve">
-    <value>한_mode_________빠</value>
+    <value>모드</value>
   </data>
   <data name="OrientedImageryViewerNoGeoView" xml:space="preserve">
-    <value>한_Connect a GeoView to view oriented imagery_______________________빠.</value>
+    <value>방향 영상을 보려면 GeoView를 연결하세요.</value>
   </data>
   <data name="OrientedImageryViewerNoLayerSelected" xml:space="preserve">
-    <value>한_No layer selected___________________빠.</value>
+    <value>선택한 레이어가 없습니다.</value>
   </data>
   <data name="OrientedImageryViewerAnnounceTransientError" xml:space="preserve">
-    <value>한_Error raised_____________빠</value>
+    <value>오류 발생</value>
   </data>
   <data name="OrientedImageryViewerDismissError" xml:space="preserve">
-    <value>한_Dismiss error______________빠</value>
+    <value>오류 닫기</value>
   </data>
   <data name="OrientedImageryViewerPreviousLabel" xml:space="preserve">
-    <value>한_Prev_________빠</value>
+    <value>이전</value>
   </data>
   <data name="OrientedImageryViewerNextLabel" xml:space="preserve">
-    <value>한_Next_________빠</value>
+    <value>다음</value>
   </data>
   <data name="OrientedImageryViewerSequenceStartReached" xml:space="preserve">
-    <value>한_Start of image sequence reached_________________빠</value>
+    <value>이미지 시퀀스 시작 지점에 도달함</value>
   </data>
   <data name="OrientedImageryViewerSequenceEndReached" xml:space="preserve">
-    <value>한_End of image sequence reached______________________________빠</value>
+    <value>이미지 시퀀스 종료 지점에 도달함</value>
   </data>
   <data name="OrientedImageryViewerSequenceStartAndEndReached" xml:space="preserve">
-    <value>한_Start and end of image sequence reached_____________________빠</value>
+    <value>이미지 시퀀스 시작 및 종료 지점에 도달함</value>
   </data>
   <data name="OrientedImageryViewerClose" xml:space="preserve">
-    <value>한_Close oriented imagery_______________________빠</value>
+    <value>방향 영상 닫기</value>
   </data>
   <data name="OrientedImageryViewerClosePanel" xml:space="preserve">
-    <value>한_Close panel____________빠</value>
+    <value>패널 닫기</value>
   </data>
   <data name="OrientedImageryViewerOverlays" xml:space="preserve">
-    <value>한_Overlays_________________빠</value>
+    <value>중첩</value>
   </data>
   <data name="OrientedImageryViewerMarkers" xml:space="preserve">
-    <value>한_Markers_______________빠</value>
+    <value>마커</value>
   </data>
   <data name="OrientedImageryViewerMode" xml:space="preserve">
-    <value>한_Mode_________빠</value>
+    <value>모드</value>
   </data>
   <data name="OrientedImageryViewerShowPreviousImageInSequence" xml:space="preserve">
-    <value>한_Show previous image in sequence_________________빠</value>
+    <value>이전 순서의 이미지 표시</value>
   </data>
   <data name="OrientedImageryViewerShowNextImageInSequence" xml:space="preserve">
-    <value>한_Show next image in sequence____________________________빠</value>
+    <value>다음 순서의 이미지 표시</value>
   </data>
   <data name="OrientedImageryViewerMore" xml:space="preserve">
-    <value>한_More_________빠</value>
+    <value>자세히</value>
   </data>
   <data name="OrientedImageryViewerPage" xml:space="preserve">
-    <value>한_Image {0} of {1}_________________빠</value>
+    <value>이미지 {0} / {1}</value>
   </data>
   <data name="OrientedImageryViewerSelectLayer" xml:space="preserve">
-    <value>한_Select layer_____________빠</value>
+    <value>레이어 선택</value>
   </data>
   <data name="OrientedImagerySampleToggleView" xml:space="preserve">
     <value>2D/3D</value>
@@ -1071,78 +1063,78 @@
     <value>2D 맵과 3D 씬 간에 전환</value>
   </data>
   <data name="OrientedImageryViewerMarkerSelection" xml:space="preserve">
-    <value>한_Marker selection_________________빠</value>
+    <value>마커 선택</value>
   </data>
   <data name="OrientedImageryViewerMarkerOption" xml:space="preserve">
-    <value>한_Marker {0}_____________________빠</value>
+    <value>마커 {0}</value>
   </data>
   <data name="OrientedImageryViewerMarkerCircle" xml:space="preserve">
-    <value>한_Circle marker______________빠</value>
+    <value>원형 마커</value>
   </data>
   <data name="OrientedImageryViewerMarkerSquare" xml:space="preserve">
-    <value>한_Square marker______________빠</value>
+    <value>사각형 마커</value>
   </data>
   <data name="OrientedImageryViewerMarkerTriangle" xml:space="preserve">
-    <value>한_Triangle marker________________빠</value>
+    <value>삼각형 마커</value>
   </data>
   <data name="OrientedImageryViewerMarkerDiamond" xml:space="preserve">
-    <value>한_Diamond marker_______________빠</value>
+    <value>마름모 마커</value>
   </data>
   <data name="OrientedImageryViewerMarkerX" xml:space="preserve">
-    <value>한_Cross marker_____________빠</value>
+    <value>십자 마커</value>
   </data>
   <data name="OrientedImageryViewerMobileSequentialMode" xml:space="preserve">
-    <value>한_Sequential_____________________빠</value>
+    <value>순차적</value>
   </data>
   <data name="OrientedImageryViewerNavigation" xml:space="preserve">
-    <value>한_Explore_______________빠</value>
+    <value>탐색</value>
   </data>
   <data name="OrientedImageryViewerModeSelection" xml:space="preserve">
-    <value>한_Mode Selection_______________빠</value>
+    <value>모드 선택</value>
   </data>
   <data name="OrientedImageryViewerOverlaysSelection" xml:space="preserve">
-    <value>한_Overlays Selection___________________빠</value>
+    <value>중첩 선택</value>
   </data>
   <data name="OrientedImageryViewerMarkerTools" xml:space="preserve">
-    <value>한_Marker Tools_____________빠</value>
+    <value>마커 도구</value>
   </data>
   <data name="OrientedImageryViewerOpen" xml:space="preserve">
-    <value>한_Open oriented imagery______________________빠</value>
+    <value>방향 영상 열기</value>
   </data>
   <data name="OrientedImageryViewerOn" xml:space="preserve">
-    <value>한_On_____빠</value>
+    <value>켜기</value>
   </data>
   <data name="OrientedImageryViewerOff" xml:space="preserve">
-    <value>한_Off_______빠</value>
+    <value>끄기</value>
   </data>
   <data name="OrientedImageryViewerSelected" xml:space="preserve">
-    <value>한_Selected_________________빠</value>
+    <value>선택됨</value>
   </data>
   <data name="OrientedImageryViewerNotSelected" xml:space="preserve">
-    <value>한_Not selected_____________빠</value>
+    <value>선택하지 않음</value>
   </data>
   <data name="OrientedImageryViewerMobileBackToMarkers" xml:space="preserve">
-    <value>한_Back to Marker Tools_____________________빠</value>
+    <value>마커 도구로 돌아가기</value>
   </data>
   <data name="OrientedImageryViewerMobileSelectMarkerSymbol" xml:space="preserve">
-    <value>한_Select Symbol______________빠</value>
+    <value>심볼 선택</value>
   </data>
   <data name="OrientedImageryViewerMobileCurrentFootprint" xml:space="preserve">
-    <value>한_Show Current Footprint_______________________빠</value>
+    <value>현재 풋프린트 표시</value>
   </data>
   <data name="OrientedImageryViewerMobileAdditionalFootprints" xml:space="preserve">
-    <value>한_Show Additional Footprints___________________________빠</value>
+    <value>추가 풋프린트 표시</value>
   </data>
   <data name="OrientedImageryViewerMobileCameraLocations" xml:space="preserve">
-    <value>한_Show Camera Locations______________________빠</value>
+    <value>카메라 위치 표시</value>
   </data>
   <data name="OrientedImageryViewerImageNavigation" xml:space="preserve">
-    <value>한_Image navigation_________________빠</value>
+    <value>이미지 탐색</value>
   </data>
   <data name="OrientedImageryViewerImageNavigationHint" xml:space="preserve">
-    <value>한_Use Left Arrow for the previous image or Right Arrow for the next image_____________________________________빠.</value>
+    <value>왼쪽 화살표를 누르면 이전 이미지, 오른쪽 화살표를 누르면 다음 이미지로 이동합니다.</value>
   </data>
   <data name="OrientedImageryViewerSequenceNavigation" xml:space="preserve">
-    <value>한_Sequential image navigation____________________________빠</value>
+    <value>순차적 이미지 탐색</value>
   </data>
 </root>

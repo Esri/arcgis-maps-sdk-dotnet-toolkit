@@ -862,207 +862,199 @@
     <value>Hình ảnh định hướng</value>
   </data>
   <data name="OrientedImageryViewerAutomationTypeName" xml:space="preserve">
-    <value>Đ_Oriented imagery view______________________ớ</value>
+    <value>Chế độ xem hình ảnh định hướng</value>
   </data>
   <data name="OrientedImageryViewerSelectMarkerSymbol" xml:space="preserve">
-    <value>Đ_Select marker symbol_____________________ớ</value>
+    <value>Chọn biểu tượng đánh dấu</value>
   </data>
   <data name="OrientedImageryViewerToggleAddMarkers" xml:space="preserve">
-    <value>Đ_Toggle add markers___________________ớ</value>
+    <value>Bật/tắt chức năng thêm đánh dấu</value>
   </data>
   <data name="OrientedImageryViewerShowSelectedImageFootprint" xml:space="preserve">
-    <value>Đ_Show current footprint_______________________ớ</value>
+    <value>Hiển thị footprint hiện tại</value>
   </data>
   <data name="OrientedImageryViewerShowUnselectedImageFootprints" xml:space="preserve">
-    <value>Đ_Show additional footprints___________________________ớ</value>
+    <value>Hiển thị footprint bổ sung</value>
   </data>
   <data name="OrientedImageryViewerImageSearchMode" xml:space="preserve">
-    <value>Đ_Image search mode__________________ớ</value>
+    <value>Chế độ tìm kiếm hình ảnh</value>
   </data>
   <data name="OrientedImageryViewerCurrentFootprintLabel" xml:space="preserve">
-    <value>Đ_Current Footprint__________________ớ</value>
+    <value>Footprint Hiện tại</value>
   </data>
   <data name="OrientedImageryViewerCurrentFootprintStackedLabel" xml:space="preserve">
-    <value>Đ_Current_______________ớ
-Đ_Footprint___________________ớ</value>
+    <value>Footprint Hiện tại</value>
   </data>
   <data name="OrientedImageryViewerAdditionalFootprintsLabel" xml:space="preserve">
-    <value>Đ_Additional Footprints______________________ớ</value>
+    <value>Footprint Bổ sung</value>
   </data>
   <data name="OrientedImageryViewerAdditionalFootprintsStackedLabel" xml:space="preserve">
-    <value>Đ_Additional_____________________ớ
-Đ_Footprints_____________________ớ</value>
+    <value>Footprint Bổ sung</value>
   </data>
   <data name="OrientedImageryViewerCameraLocationsLabel" xml:space="preserve">
-    <value>Đ_Camera Locations_________________ớ</value>
+    <value>Vị trí Máy ảnh</value>
   </data>
   <data name="OrientedImageryViewerCameraLocationsStackedLabel" xml:space="preserve">
-    <value>Đ_Camera_____________ớ
-Đ_Locations___________________ớ</value>
+    <value>Vị trí Máy ảnh</value>
   </data>
   <data name="OrientedImageryViewerAddMarkersLabel" xml:space="preserve">
-    <value>Đ_Add Markers____________ớ</value>
+    <value>Thêm đánh dấu</value>
   </data>
   <data name="OrientedImageryViewerAddMarkersStackedLabel" xml:space="preserve">
-    <value>Đ_Add_______ớ
-Đ_Markers_______________ớ</value>
+    <value>Thêm Đánh dấu</value>
   </data>
   <data name="OrientedImageryViewerClearMarkersLabel" xml:space="preserve">
-    <value>Đ_Clear Markers______________ớ</value>
+    <value>Xóa bỏ Đánh dấu</value>
   </data>
   <data name="OrientedImageryViewerClearMarkersTooltip" xml:space="preserve">
-    <value>Đ_Clear markers______________ớ</value>
+    <value>Xóa bỏ đánh dấu</value>
   </data>
   <data name="OrientedImageryViewerClearMarkersStackedLabel" xml:space="preserve">
-    <value>Đ_Clear___________ớ
-Đ_Markers_______________ớ</value>
+    <value>Xóa bỏ Đánh dấu</value>
   </data>
   <data name="OrientedImageryViewerImageSearchModeFind" xml:space="preserve">
-    <value>Đ_Find Images____________ớ</value>
+    <value>Tìm kiếm Hình ảnh</value>
   </data>
   <data name="OrientedImageryViewerImageSearchModeFindStackedLabel" xml:space="preserve">
-    <value>Đ_Find_________ớ
-Đ_Images_____________ớ</value>
+    <value>Tìm kiếm Hình ảnh</value>
   </data>
   <data name="OrientedImageryViewerImageSearchModeDisplay" xml:space="preserve">
-    <value>Đ_Display Image______________ớ</value>
+    <value>Hiển thị Hình ảnh</value>
   </data>
   <data name="OrientedImageryViewerImageSearchModeDisplayStackedLabel" xml:space="preserve">
-    <value>Đ_Display_______________ớ
-Đ_Image___________ớ</value>
+    <value>Hiển thị Hình ảnh</value>
   </data>
   <data name="OrientedImageryViewerOpenSelectedImagePopup" xml:space="preserve">
-    <value>Đ_Open details for selected image_________________ớ</value>
+    <value>Mở thông tin chi tiết về hình ảnh đã chọn</value>
   </data>
   <data name="OrientedImageryViewerImageDetails" xml:space="preserve">
-    <value>Đ_Image details______________ớ</value>
+    <value>Thông tin chi tiết về hình ảnh</value>
   </data>
   <data name="OrientedImageryViewerCloseSelectedImagePopup" xml:space="preserve">
-    <value>Đ_Close details______________ớ</value>
+    <value>Đóng thông tin chi tiết</value>
   </data>
   <data name="OrientedImageryViewerGoToPageFormat" xml:space="preserve">
-    <value>Đ_Go to image {0} of {1}_______________________ớ</value>
+    <value>Chuyển đến hình ảnh {0} / {1}</value>
   </data>
   <data name="OrientedImageryViewerSelectedPageFormat" xml:space="preserve">
-    <value>Đ_Image {0} of {1}, selected___________________________ớ</value>
+    <value>Hình ảnh {0} / {1}, đã chọn</value>
   </data>
   <data name="OrientedImageryViewerToggleCameraMarkers" xml:space="preserve">
-    <value>Đ_Show camera locations______________________ớ</value>
+    <value>Hiển thị vị trí máy ảnh</value>
   </data>
   <data name="OrientedImageryViewerSequentialNavigationTooltip" xml:space="preserve">
-    <value>Đ_Sequential navigation______________________ớ</value>
+    <value>Điều hướng tuần tự</value>
   </data>
   <data name="OrientedImageryViewerSequentialNavigationLabel" xml:space="preserve">
-    <value>Đ_Sequential Navigation______________________ớ</value>
+    <value>Điều hướng Tuần tự</value>
   </data>
   <data name="OrientedImageryViewerSequentialNavigationStackedLabel" xml:space="preserve">
-    <value>Đ_Sequential_____________________ớ
-Đ_Navigation_____________________ớ</value>
+    <value>Điều hướng Tuần tự</value>
   </data>
   <data name="OrientedImageryViewerPreviousImage" xml:space="preserve">
-    <value>Đ_Previous image_______________ớ</value>
+    <value>Hình ảnh trước</value>
   </data>
   <data name="OrientedImageryViewerNextImage" xml:space="preserve">
-    <value>Đ_Next image_____________________ớ</value>
+    <value>Hình ảnh tiếp</value>
   </data>
   <data name="OrientedImageryViewerImageLoading" xml:space="preserve">
-    <value>Đ_Image loading_________________ớ...</value>
+    <value>Đang tải hình ảnh...</value>
   </data>
   <data name="OrientedImageryViewerImageLoaded" xml:space="preserve">
-    <value>Đ_Image loaded_____________ớ</value>
+    <value>Đã tải hình ảnh</value>
   </data>
   <data name="OrientedImageryViewerNoImageToDisplay" xml:space="preserve">
-    <value>Đ_No image to display____________________ớ</value>
+    <value>Không có hình ảnh nào để hiển thị</value>
   </data>
   <data name="OrientedImageryViewerNoImagesFound" xml:space="preserve">
-    <value>Đ_No images found for the tapped location_____________________ớ</value>
+    <value>Không tìm thấy hình ảnh nào cho vị trí đã nhấn</value>
   </data>
   <data name="OrientedImageryViewerImageSelectionNoImagesNone" xml:space="preserve">
-    <value>Đ_No image to display. Enable find images or display image mode to search for images__________________________________________ớ</value>
+    <value>Không có hình ảnh nào để hiển thị. Bật chế độ tìm kiếm hình ảnh hoặc chế độ hiển thị hình ảnh để tìm hình ảnh</value>
   </data>
   <data name="OrientedImageryViewerImageSelectionNoImagesFind" xml:space="preserve">
-    <value>Đ_No image to display. Tap on the map to search for images or switch to display image mode______________________________________________ớ.</value>
+    <value>Không có hình ảnh nào để hiển thị. Nhấn vào bản đồ để tìm kiếm hình ảnh hoặc chuyển sang chế độ hiển thị hình ảnh.</value>
   </data>
   <data name="OrientedImageryViewerImageSelectionNoImagesDisplay" xml:space="preserve">
-    <value>Đ_No image to display. Tap on a feature to view its image or switch to find images mode____________________________________________ớ.</value>
+    <value>Không có hình ảnh nào để hiển thị. Nhấn vào một đối tượng để xem hình ảnh của đối tượng đó hoặc chuyển sang chế độ tìm kiếm hình ảnh.</value>
   </data>
   <data name="OrientedImageryViewerImageSelectionEnable" xml:space="preserve">
-    <value>Đ_Enable_____________ớ</value>
+    <value>Bật</value>
   </data>
   <data name="OrientedImageryViewerImageSelectionOr" xml:space="preserve">
-    <value>Đ_or_____ớ</value>
+    <value>hoặc</value>
   </data>
   <data name="OrientedImageryViewerImageSelectionSearchMode" xml:space="preserve">
-    <value>Đ_mode to search for images__________________________ớ</value>
+    <value>chế độ để tìm kiếm hình ảnh</value>
   </data>
   <data name="OrientedImageryViewerImageSelectionFindImages" xml:space="preserve">
-    <value>Đ_Tap on the map to search for images___________________ớ</value>
+    <value>Nhấn vào bản đồ để tìm kiếm hình ảnh</value>
   </data>
   <data name="OrientedImageryViewerImageSelectionDisplayImage" xml:space="preserve">
-    <value>Đ_Tap on a feature to view its image__________________ớ</value>
+    <value>Nhấn vào một đối tượng để xem hình ảnh của đối tượng đó</value>
   </data>
   <data name="OrientedImageryViewerImageSelectionSwitchMode" xml:space="preserve">
-    <value>Đ_or switch to_____________ớ</value>
+    <value>hoặc chuyển sang</value>
   </data>
   <data name="OrientedImageryViewerImageSelectionMode" xml:space="preserve">
-    <value>Đ_mode_________ớ</value>
+    <value>chế độ</value>
   </data>
   <data name="OrientedImageryViewerNoGeoView" xml:space="preserve">
-    <value>Đ_Connect a GeoView to view oriented imagery_______________________ớ.</value>
+    <value>Kết nối với GeoView để xem hình ảnh định hướng.</value>
   </data>
   <data name="OrientedImageryViewerNoLayerSelected" xml:space="preserve">
-    <value>Đ_No layer selected___________________ớ.</value>
+    <value>Không có lớp nào được chọn.</value>
   </data>
   <data name="OrientedImageryViewerAnnounceTransientError" xml:space="preserve">
-    <value>Đ_Error raised_____________ớ</value>
+    <value>Đã phát sinh lỗi</value>
   </data>
   <data name="OrientedImageryViewerDismissError" xml:space="preserve">
-    <value>Đ_Dismiss error______________ớ</value>
+    <value>Bỏ qua lỗi</value>
   </data>
   <data name="OrientedImageryViewerPreviousLabel" xml:space="preserve">
-    <value>Đ_Prev_________ớ</value>
+    <value>Trước</value>
   </data>
   <data name="OrientedImageryViewerNextLabel" xml:space="preserve">
-    <value>Đ_Next_________ớ</value>
+    <value>Tiếp</value>
   </data>
   <data name="OrientedImageryViewerSequenceStartReached" xml:space="preserve">
-    <value>Đ_Start of image sequence reached_________________ớ</value>
+    <value>Đã đến đầu trình tự hình ảnh</value>
   </data>
   <data name="OrientedImageryViewerSequenceEndReached" xml:space="preserve">
-    <value>Đ_End of image sequence reached______________________________ớ</value>
+    <value>Đã đến cuối trình tự hình ảnh</value>
   </data>
   <data name="OrientedImageryViewerSequenceStartAndEndReached" xml:space="preserve">
-    <value>Đ_Start and end of image sequence reached_____________________ớ</value>
+    <value>Đã đến đầu và cuối trình tự hình ảnh</value>
   </data>
   <data name="OrientedImageryViewerClose" xml:space="preserve">
-    <value>Đ_Close oriented imagery_______________________ớ</value>
+    <value>Đóng hình ảnh định hướng</value>
   </data>
   <data name="OrientedImageryViewerClosePanel" xml:space="preserve">
-    <value>Đ_Close panel____________ớ</value>
+    <value>Đóng bảng điều khiển</value>
   </data>
   <data name="OrientedImageryViewerOverlays" xml:space="preserve">
-    <value>Đ_Overlays_________________ớ</value>
+    <value>Lớp chồng lớp</value>
   </data>
   <data name="OrientedImageryViewerMarkers" xml:space="preserve">
-    <value>Đ_Markers_______________ớ</value>
+    <value>Đánh dấu</value>
   </data>
   <data name="OrientedImageryViewerMode" xml:space="preserve">
-    <value>Đ_Mode_________ớ</value>
+    <value>Chế độ</value>
   </data>
   <data name="OrientedImageryViewerShowPreviousImageInSequence" xml:space="preserve">
-    <value>Đ_Show previous image in sequence_________________ớ</value>
+    <value>Hiển thị hình ảnh trước đó theo trình tự</value>
   </data>
   <data name="OrientedImageryViewerShowNextImageInSequence" xml:space="preserve">
-    <value>Đ_Show next image in sequence____________________________ớ</value>
+    <value>Hiển thị hình ảnh kế tiếp theo trình tự</value>
   </data>
   <data name="OrientedImageryViewerMore" xml:space="preserve">
-    <value>Đ_More_________ớ</value>
+    <value>Khác</value>
   </data>
   <data name="OrientedImageryViewerPage" xml:space="preserve">
-    <value>Đ_Image {0} of {1}_________________ớ</value>
+    <value>Hình ảnh {0} / {1}</value>
   </data>
   <data name="OrientedImageryViewerSelectLayer" xml:space="preserve">
-    <value>Đ_Select layer_____________ớ</value>
+    <value>Chọn lớp</value>
   </data>
   <data name="OrientedImagerySampleToggleView" xml:space="preserve">
     <value>2D/3D</value>
@@ -1071,78 +1063,78 @@
     <value>Chuyển đổi giữa bản đồ 2D và scene 3D</value>
   </data>
   <data name="OrientedImageryViewerMarkerSelection" xml:space="preserve">
-    <value>Đ_Marker selection_________________ớ</value>
+    <value>Chọn đánh dấu</value>
   </data>
   <data name="OrientedImageryViewerMarkerOption" xml:space="preserve">
-    <value>Đ_Marker {0}_____________________ớ</value>
+    <value>Đánh dấu {0}</value>
   </data>
   <data name="OrientedImageryViewerMarkerCircle" xml:space="preserve">
-    <value>Đ_Circle marker______________ớ</value>
+    <value>Đánh dấu hình tròn</value>
   </data>
   <data name="OrientedImageryViewerMarkerSquare" xml:space="preserve">
-    <value>Đ_Square marker______________ớ</value>
+    <value>Đánh dấu hình vuông</value>
   </data>
   <data name="OrientedImageryViewerMarkerTriangle" xml:space="preserve">
-    <value>Đ_Triangle marker________________ớ</value>
+    <value>Đánh dấu hình tam giác</value>
   </data>
   <data name="OrientedImageryViewerMarkerDiamond" xml:space="preserve">
-    <value>Đ_Diamond marker_______________ớ</value>
+    <value>Đánh dấu hình thoi</value>
   </data>
   <data name="OrientedImageryViewerMarkerX" xml:space="preserve">
-    <value>Đ_Cross marker_____________ớ</value>
+    <value>Đánh dấu hình chữ thập</value>
   </data>
   <data name="OrientedImageryViewerMobileSequentialMode" xml:space="preserve">
-    <value>Đ_Sequential_____________________ớ</value>
+    <value>Tuần tự</value>
   </data>
   <data name="OrientedImageryViewerNavigation" xml:space="preserve">
-    <value>Đ_Explore_______________ớ</value>
+    <value>Khám phá</value>
   </data>
   <data name="OrientedImageryViewerModeSelection" xml:space="preserve">
-    <value>Đ_Mode Selection_______________ớ</value>
+    <value>Chọn Chế độ</value>
   </data>
   <data name="OrientedImageryViewerOverlaysSelection" xml:space="preserve">
-    <value>Đ_Overlays Selection___________________ớ</value>
+    <value>Chọn Lớp chồng</value>
   </data>
   <data name="OrientedImageryViewerMarkerTools" xml:space="preserve">
-    <value>Đ_Marker Tools_____________ớ</value>
+    <value>Công cụ Đánh dấu</value>
   </data>
   <data name="OrientedImageryViewerOpen" xml:space="preserve">
-    <value>Đ_Open oriented imagery______________________ớ</value>
+    <value>Mở hình ảnh định hướng</value>
   </data>
   <data name="OrientedImageryViewerOn" xml:space="preserve">
-    <value>Đ_On_____ớ</value>
+    <value>Bật</value>
   </data>
   <data name="OrientedImageryViewerOff" xml:space="preserve">
-    <value>Đ_Off_______ớ</value>
+    <value>Tắt</value>
   </data>
   <data name="OrientedImageryViewerSelected" xml:space="preserve">
-    <value>Đ_Selected_________________ớ</value>
+    <value>Đã chọn</value>
   </data>
   <data name="OrientedImageryViewerNotSelected" xml:space="preserve">
-    <value>Đ_Not selected_____________ớ</value>
+    <value>Chưa chọn</value>
   </data>
   <data name="OrientedImageryViewerMobileBackToMarkers" xml:space="preserve">
-    <value>Đ_Back to Marker Tools_____________________ớ</value>
+    <value>Quay về Công cụ Đánh dấu</value>
   </data>
   <data name="OrientedImageryViewerMobileSelectMarkerSymbol" xml:space="preserve">
-    <value>Đ_Select Symbol______________ớ</value>
+    <value>Chọn Ký hiệu</value>
   </data>
   <data name="OrientedImageryViewerMobileCurrentFootprint" xml:space="preserve">
-    <value>Đ_Show Current Footprint_______________________ớ</value>
+    <value>Hiển thị Footprint Hiện tại</value>
   </data>
   <data name="OrientedImageryViewerMobileAdditionalFootprints" xml:space="preserve">
-    <value>Đ_Show Additional Footprints___________________________ớ</value>
+    <value>Hiển thị Footprint Bổ sung</value>
   </data>
   <data name="OrientedImageryViewerMobileCameraLocations" xml:space="preserve">
-    <value>Đ_Show Camera Locations______________________ớ</value>
+    <value>Hiển thị Vị trí Máy ảnh</value>
   </data>
   <data name="OrientedImageryViewerImageNavigation" xml:space="preserve">
-    <value>Đ_Image navigation_________________ớ</value>
+    <value>Điều hướng hình ảnh</value>
   </data>
   <data name="OrientedImageryViewerImageNavigationHint" xml:space="preserve">
-    <value>Đ_Use Left Arrow for the previous image or Right Arrow for the next image_____________________________________ớ.</value>
+    <value>Sử dụng phím Mũi tên Trái để xem hình ảnh trước đó hoặc phím Mũi tên Phải để xem hình ảnh tiếp theo.</value>
   </data>
   <data name="OrientedImageryViewerSequenceNavigation" xml:space="preserve">
-    <value>Đ_Sequential image navigation____________________________ớ</value>
+    <value>Điều hướng hình ảnh tuần tự</value>
   </data>
 </root>

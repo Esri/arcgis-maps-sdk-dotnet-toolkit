@@ -862,207 +862,199 @@
     <value>Orientert bilde</value>
   </data>
   <data name="OrientedImageryViewerAutomationTypeName" xml:space="preserve">
-    <value>å_Oriented imagery view______________________ø</value>
+    <value>Orienterte bildevisning</value>
   </data>
   <data name="OrientedImageryViewerSelectMarkerSymbol" xml:space="preserve">
-    <value>å_Select marker symbol_____________________ø</value>
+    <value>Velg markørsymbol</value>
   </data>
   <data name="OrientedImageryViewerToggleAddMarkers" xml:space="preserve">
-    <value>å_Toggle add markers___________________ø</value>
+    <value>Slå på/av tillegging av markører</value>
   </data>
   <data name="OrientedImageryViewerShowSelectedImageFootprint" xml:space="preserve">
-    <value>å_Show current footprint_______________________ø</value>
+    <value>Vis gjeldende avtrykk</value>
   </data>
   <data name="OrientedImageryViewerShowUnselectedImageFootprints" xml:space="preserve">
-    <value>å_Show additional footprints___________________________ø</value>
+    <value>Vis flere avtrykk</value>
   </data>
   <data name="OrientedImageryViewerImageSearchMode" xml:space="preserve">
-    <value>å_Image search mode__________________ø</value>
+    <value>Bildesøkmodus</value>
   </data>
   <data name="OrientedImageryViewerCurrentFootprintLabel" xml:space="preserve">
-    <value>å_Current Footprint__________________ø</value>
+    <value>Gjeldende avtrykk</value>
   </data>
   <data name="OrientedImageryViewerCurrentFootprintStackedLabel" xml:space="preserve">
-    <value>å_Current_______________ø
-å_Footprint___________________ø</value>
+    <value>Gjeldende avtrykk</value>
   </data>
   <data name="OrientedImageryViewerAdditionalFootprintsLabel" xml:space="preserve">
-    <value>å_Additional Footprints______________________ø</value>
+    <value>Flere avtrykk</value>
   </data>
   <data name="OrientedImageryViewerAdditionalFootprintsStackedLabel" xml:space="preserve">
-    <value>å_Additional_____________________ø
-å_Footprints_____________________ø</value>
+    <value>Flere avtrykk</value>
   </data>
   <data name="OrientedImageryViewerCameraLocationsLabel" xml:space="preserve">
-    <value>å_Camera Locations_________________ø</value>
+    <value>Kameralokasjoner</value>
   </data>
   <data name="OrientedImageryViewerCameraLocationsStackedLabel" xml:space="preserve">
-    <value>å_Camera_____________ø
-å_Locations___________________ø</value>
+    <value>Kamera- lokasjoner</value>
   </data>
   <data name="OrientedImageryViewerAddMarkersLabel" xml:space="preserve">
-    <value>å_Add Markers____________ø</value>
+    <value>Legg til markører</value>
   </data>
   <data name="OrientedImageryViewerAddMarkersStackedLabel" xml:space="preserve">
-    <value>å_Add_______ø
-å_Markers_______________ø</value>
+    <value>Legg til markører</value>
   </data>
   <data name="OrientedImageryViewerClearMarkersLabel" xml:space="preserve">
-    <value>å_Clear Markers______________ø</value>
+    <value>Fjern markører</value>
   </data>
   <data name="OrientedImageryViewerClearMarkersTooltip" xml:space="preserve">
-    <value>å_Clear markers______________ø</value>
+    <value>Fjern markører</value>
   </data>
   <data name="OrientedImageryViewerClearMarkersStackedLabel" xml:space="preserve">
-    <value>å_Clear___________ø
-å_Markers_______________ø</value>
+    <value>Fjern markører</value>
   </data>
   <data name="OrientedImageryViewerImageSearchModeFind" xml:space="preserve">
-    <value>å_Find Images____________ø</value>
+    <value>Finn bilder</value>
   </data>
   <data name="OrientedImageryViewerImageSearchModeFindStackedLabel" xml:space="preserve">
-    <value>å_Find_________ø
-å_Images_____________ø</value>
+    <value>Finn bilder</value>
   </data>
   <data name="OrientedImageryViewerImageSearchModeDisplay" xml:space="preserve">
-    <value>å_Display Image______________ø</value>
+    <value>Vis bilde</value>
   </data>
   <data name="OrientedImageryViewerImageSearchModeDisplayStackedLabel" xml:space="preserve">
-    <value>å_Display_______________ø
-å_Image___________ø</value>
+    <value>Vis bilde</value>
   </data>
   <data name="OrientedImageryViewerOpenSelectedImagePopup" xml:space="preserve">
-    <value>å_Open details for selected image_________________ø</value>
+    <value>Åpne detaljer om det valgte bildet</value>
   </data>
   <data name="OrientedImageryViewerImageDetails" xml:space="preserve">
-    <value>å_Image details______________ø</value>
+    <value>Bildedetaljer</value>
   </data>
   <data name="OrientedImageryViewerCloseSelectedImagePopup" xml:space="preserve">
-    <value>å_Close details______________ø</value>
+    <value>Lukk detaljer</value>
   </data>
   <data name="OrientedImageryViewerGoToPageFormat" xml:space="preserve">
-    <value>å_Go to image {0} of {1}_______________________ø</value>
+    <value>Gå til bilde {0} av {1}</value>
   </data>
   <data name="OrientedImageryViewerSelectedPageFormat" xml:space="preserve">
-    <value>å_Image {0} of {1}, selected___________________________ø</value>
+    <value>Bilde {0} av {1}, valgt</value>
   </data>
   <data name="OrientedImageryViewerToggleCameraMarkers" xml:space="preserve">
-    <value>å_Show camera locations______________________ø</value>
+    <value>Vis kameralokasjoner</value>
   </data>
   <data name="OrientedImageryViewerSequentialNavigationTooltip" xml:space="preserve">
-    <value>å_Sequential navigation______________________ø</value>
+    <value>Sekvensnavigasjon</value>
   </data>
   <data name="OrientedImageryViewerSequentialNavigationLabel" xml:space="preserve">
-    <value>å_Sequential Navigation______________________ø</value>
+    <value>Sekvensnavigasjon</value>
   </data>
   <data name="OrientedImageryViewerSequentialNavigationStackedLabel" xml:space="preserve">
-    <value>å_Sequential_____________________ø
-å_Navigation_____________________ø</value>
+    <value>Sekvens- navigasjon</value>
   </data>
   <data name="OrientedImageryViewerPreviousImage" xml:space="preserve">
-    <value>å_Previous image_______________ø</value>
+    <value>Forrige bilde</value>
   </data>
   <data name="OrientedImageryViewerNextImage" xml:space="preserve">
-    <value>å_Next image_____________________ø</value>
+    <value>Neste bilde</value>
   </data>
   <data name="OrientedImageryViewerImageLoading" xml:space="preserve">
-    <value>å_Image loading_________________ø...</value>
+    <value>Bilde lastes inn …</value>
   </data>
   <data name="OrientedImageryViewerImageLoaded" xml:space="preserve">
-    <value>å_Image loaded_____________ø</value>
+    <value>Bilde lastet inn</value>
   </data>
   <data name="OrientedImageryViewerNoImageToDisplay" xml:space="preserve">
-    <value>å_No image to display____________________ø</value>
+    <value>Ingen bilder å vise</value>
   </data>
   <data name="OrientedImageryViewerNoImagesFound" xml:space="preserve">
-    <value>å_No images found for the tapped location_____________________ø</value>
+    <value>Finner ingen bilder der du trykket</value>
   </data>
   <data name="OrientedImageryViewerImageSelectionNoImagesNone" xml:space="preserve">
-    <value>å_No image to display. Enable find images or display image mode to search for images__________________________________________ø</value>
+    <value>Ingen bilder å vise. Aktiver modusen Finn bilder eller Vis bilde for å søke etter bilder</value>
   </data>
   <data name="OrientedImageryViewerImageSelectionNoImagesFind" xml:space="preserve">
-    <value>å_No image to display. Tap on the map to search for images or switch to display image mode______________________________________________ø.</value>
+    <value>Ingen bilder å vise. Trykk på kartet for å søke etter bilder eller bytt til modusen Vis bilde.</value>
   </data>
   <data name="OrientedImageryViewerImageSelectionNoImagesDisplay" xml:space="preserve">
-    <value>å_No image to display. Tap on a feature to view its image or switch to find images mode____________________________________________ø.</value>
+    <value>Ingen bilder å vise. Trykk på et geoobjekt for å vise bildet av det, eller bytt til modusen Finn bilder.</value>
   </data>
   <data name="OrientedImageryViewerImageSelectionEnable" xml:space="preserve">
-    <value>å_Enable_____________ø</value>
+    <value>Aktiver</value>
   </data>
   <data name="OrientedImageryViewerImageSelectionOr" xml:space="preserve">
-    <value>å_or_____ø</value>
+    <value>eller</value>
   </data>
   <data name="OrientedImageryViewerImageSelectionSearchMode" xml:space="preserve">
-    <value>å_mode to search for images__________________________ø</value>
+    <value>-modus for å søke etter bilder</value>
   </data>
   <data name="OrientedImageryViewerImageSelectionFindImages" xml:space="preserve">
-    <value>å_Tap on the map to search for images___________________ø</value>
+    <value>Trykk på kartet for å søke etter bilder</value>
   </data>
   <data name="OrientedImageryViewerImageSelectionDisplayImage" xml:space="preserve">
-    <value>å_Tap on a feature to view its image__________________ø</value>
+    <value>Trykk på et geoobjekt for å vise bildet av det</value>
   </data>
   <data name="OrientedImageryViewerImageSelectionSwitchMode" xml:space="preserve">
-    <value>å_or switch to_____________ø</value>
+    <value>eller bytt til</value>
   </data>
   <data name="OrientedImageryViewerImageSelectionMode" xml:space="preserve">
-    <value>å_mode_________ø</value>
+    <value>-modus</value>
   </data>
   <data name="OrientedImageryViewerNoGeoView" xml:space="preserve">
-    <value>å_Connect a GeoView to view oriented imagery_______________________ø.</value>
+    <value>Koble til en GeoView for å vise orienterte bilder.</value>
   </data>
   <data name="OrientedImageryViewerNoLayerSelected" xml:space="preserve">
-    <value>å_No layer selected___________________ø.</value>
+    <value>Ingen lag er valgt.</value>
   </data>
   <data name="OrientedImageryViewerAnnounceTransientError" xml:space="preserve">
-    <value>å_Error raised_____________ø</value>
+    <value>Feil oppstod</value>
   </data>
   <data name="OrientedImageryViewerDismissError" xml:space="preserve">
-    <value>å_Dismiss error______________ø</value>
+    <value>Lukk feil</value>
   </data>
   <data name="OrientedImageryViewerPreviousLabel" xml:space="preserve">
-    <value>å_Prev_________ø</value>
+    <value>Forrige</value>
   </data>
   <data name="OrientedImageryViewerNextLabel" xml:space="preserve">
-    <value>å_Next_________ø</value>
+    <value>Neste</value>
   </data>
   <data name="OrientedImageryViewerSequenceStartReached" xml:space="preserve">
-    <value>å_Start of image sequence reached_________________ø</value>
+    <value>Starten av bildesekvensen er nådd</value>
   </data>
   <data name="OrientedImageryViewerSequenceEndReached" xml:space="preserve">
-    <value>å_End of image sequence reached______________________________ø</value>
+    <value>Slutten av bildesekvensen er nådd</value>
   </data>
   <data name="OrientedImageryViewerSequenceStartAndEndReached" xml:space="preserve">
-    <value>å_Start and end of image sequence reached_____________________ø</value>
+    <value>Starten og slutten av bildesekvensen er nådd</value>
   </data>
   <data name="OrientedImageryViewerClose" xml:space="preserve">
-    <value>å_Close oriented imagery_______________________ø</value>
+    <value>Lukk orienterte bilder</value>
   </data>
   <data name="OrientedImageryViewerClosePanel" xml:space="preserve">
-    <value>å_Close panel____________ø</value>
+    <value>Lukk panel</value>
   </data>
   <data name="OrientedImageryViewerOverlays" xml:space="preserve">
-    <value>å_Overlays_________________ø</value>
+    <value>Overlegg</value>
   </data>
   <data name="OrientedImageryViewerMarkers" xml:space="preserve">
-    <value>å_Markers_______________ø</value>
+    <value>Markører</value>
   </data>
   <data name="OrientedImageryViewerMode" xml:space="preserve">
-    <value>å_Mode_________ø</value>
+    <value>Modus</value>
   </data>
   <data name="OrientedImageryViewerShowPreviousImageInSequence" xml:space="preserve">
-    <value>å_Show previous image in sequence_________________ø</value>
+    <value>Vis forrige bilde i sekvens</value>
   </data>
   <data name="OrientedImageryViewerShowNextImageInSequence" xml:space="preserve">
-    <value>å_Show next image in sequence____________________________ø</value>
+    <value>Vis neste bilde i sekvens</value>
   </data>
   <data name="OrientedImageryViewerMore" xml:space="preserve">
-    <value>å_More_________ø</value>
+    <value>Mer</value>
   </data>
   <data name="OrientedImageryViewerPage" xml:space="preserve">
-    <value>å_Image {0} of {1}_________________ø</value>
+    <value>Bilde {0} av {1}</value>
   </data>
   <data name="OrientedImageryViewerSelectLayer" xml:space="preserve">
-    <value>å_Select layer_____________ø</value>
+    <value>Velg lag</value>
   </data>
   <data name="OrientedImagerySampleToggleView" xml:space="preserve">
     <value>2D/3D</value>
@@ -1071,78 +1063,78 @@
     <value>Veksle mellom 2D-kart og 3D-scene</value>
   </data>
   <data name="OrientedImageryViewerMarkerSelection" xml:space="preserve">
-    <value>å_Marker selection_________________ø</value>
+    <value>Markørutvalg</value>
   </data>
   <data name="OrientedImageryViewerMarkerOption" xml:space="preserve">
-    <value>å_Marker {0}_____________________ø</value>
+    <value>Markør {0}</value>
   </data>
   <data name="OrientedImageryViewerMarkerCircle" xml:space="preserve">
-    <value>å_Circle marker______________ø</value>
+    <value>Sirkelmarkør</value>
   </data>
   <data name="OrientedImageryViewerMarkerSquare" xml:space="preserve">
-    <value>å_Square marker______________ø</value>
+    <value>Kvadratmarkør</value>
   </data>
   <data name="OrientedImageryViewerMarkerTriangle" xml:space="preserve">
-    <value>å_Triangle marker________________ø</value>
+    <value>Trekantmarkør</value>
   </data>
   <data name="OrientedImageryViewerMarkerDiamond" xml:space="preserve">
-    <value>å_Diamond marker_______________ø</value>
+    <value>Diamantmarkør</value>
   </data>
   <data name="OrientedImageryViewerMarkerX" xml:space="preserve">
-    <value>å_Cross marker_____________ø</value>
+    <value>Kryssmarkør</value>
   </data>
   <data name="OrientedImageryViewerMobileSequentialMode" xml:space="preserve">
-    <value>å_Sequential_____________________ø</value>
+    <value>Sekvensiell</value>
   </data>
   <data name="OrientedImageryViewerNavigation" xml:space="preserve">
-    <value>å_Explore_______________ø</value>
+    <value>Utforsk</value>
   </data>
   <data name="OrientedImageryViewerModeSelection" xml:space="preserve">
-    <value>å_Mode Selection_______________ø</value>
+    <value>Modusutvalg</value>
   </data>
   <data name="OrientedImageryViewerOverlaysSelection" xml:space="preserve">
-    <value>å_Overlays Selection___________________ø</value>
+    <value>Overleggutvalg</value>
   </data>
   <data name="OrientedImageryViewerMarkerTools" xml:space="preserve">
-    <value>å_Marker Tools_____________ø</value>
+    <value>Markørverktøy</value>
   </data>
   <data name="OrientedImageryViewerOpen" xml:space="preserve">
-    <value>å_Open oriented imagery______________________ø</value>
+    <value>Åpne orienterte bilder</value>
   </data>
   <data name="OrientedImageryViewerOn" xml:space="preserve">
-    <value>å_On_____ø</value>
+    <value>På</value>
   </data>
   <data name="OrientedImageryViewerOff" xml:space="preserve">
-    <value>å_Off_______ø</value>
+    <value>Av</value>
   </data>
   <data name="OrientedImageryViewerSelected" xml:space="preserve">
-    <value>å_Selected_________________ø</value>
+    <value>Valgt</value>
   </data>
   <data name="OrientedImageryViewerNotSelected" xml:space="preserve">
-    <value>å_Not selected_____________ø</value>
+    <value>Ikke valgt</value>
   </data>
   <data name="OrientedImageryViewerMobileBackToMarkers" xml:space="preserve">
-    <value>å_Back to Marker Tools_____________________ø</value>
+    <value>Tilbake til Markørverktøy</value>
   </data>
   <data name="OrientedImageryViewerMobileSelectMarkerSymbol" xml:space="preserve">
-    <value>å_Select Symbol______________ø</value>
+    <value>Velg symbol</value>
   </data>
   <data name="OrientedImageryViewerMobileCurrentFootprint" xml:space="preserve">
-    <value>å_Show Current Footprint_______________________ø</value>
+    <value>Vis gjeldende avtrykk</value>
   </data>
   <data name="OrientedImageryViewerMobileAdditionalFootprints" xml:space="preserve">
-    <value>å_Show Additional Footprints___________________________ø</value>
+    <value>Vis flere avtrykk</value>
   </data>
   <data name="OrientedImageryViewerMobileCameraLocations" xml:space="preserve">
-    <value>å_Show Camera Locations______________________ø</value>
+    <value>Vis kameralokasjoner</value>
   </data>
   <data name="OrientedImageryViewerImageNavigation" xml:space="preserve">
-    <value>å_Image navigation_________________ø</value>
+    <value>Bildenavigasjon</value>
   </data>
   <data name="OrientedImageryViewerImageNavigationHint" xml:space="preserve">
-    <value>å_Use Left Arrow for the previous image or Right Arrow for the next image_____________________________________ø.</value>
+    <value>Bruk venstre pil for forrige bilde eller høyre pil for neste bilde.</value>
   </data>
   <data name="OrientedImageryViewerSequenceNavigation" xml:space="preserve">
-    <value>å_Sequential image navigation____________________________ø</value>
+    <value>Sekvensiell bildenavigasjon</value>
   </data>
 </root>

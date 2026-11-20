@@ -862,207 +862,199 @@
     <value>Orienteeritud pilt</value>
   </data>
   <data name="OrientedImageryViewerAutomationTypeName" xml:space="preserve">
-    <value>Š_Oriented imagery view______________________ä</value>
+    <value>Orienteeritud pildi vaade</value>
   </data>
   <data name="OrientedImageryViewerSelectMarkerSymbol" xml:space="preserve">
-    <value>Š_Select marker symbol_____________________ä</value>
+    <value>Valige markeri sümbol</value>
   </data>
   <data name="OrientedImageryViewerToggleAddMarkers" xml:space="preserve">
-    <value>Š_Toggle add markers___________________ä</value>
+    <value>Lülitage markerite lisamine sisse/välja</value>
   </data>
   <data name="OrientedImageryViewerShowSelectedImageFootprint" xml:space="preserve">
-    <value>Š_Show current footprint_______________________ä</value>
+    <value>Kuva praegune kontuur</value>
   </data>
   <data name="OrientedImageryViewerShowUnselectedImageFootprints" xml:space="preserve">
-    <value>Š_Show additional footprints___________________________ä</value>
+    <value>Kuva täiendavad kontuurid</value>
   </data>
   <data name="OrientedImageryViewerImageSearchMode" xml:space="preserve">
-    <value>Š_Image search mode__________________ä</value>
+    <value>Pildiotsingu režiim</value>
   </data>
   <data name="OrientedImageryViewerCurrentFootprintLabel" xml:space="preserve">
-    <value>Š_Current Footprint__________________ä</value>
+    <value>Praegune kontuur</value>
   </data>
   <data name="OrientedImageryViewerCurrentFootprintStackedLabel" xml:space="preserve">
-    <value>Š_Current_______________ä
-Š_Footprint___________________ä</value>
+    <value>Praegune kontuur</value>
   </data>
   <data name="OrientedImageryViewerAdditionalFootprintsLabel" xml:space="preserve">
-    <value>Š_Additional Footprints______________________ä</value>
+    <value>Täiendavad kontuurid</value>
   </data>
   <data name="OrientedImageryViewerAdditionalFootprintsStackedLabel" xml:space="preserve">
-    <value>Š_Additional_____________________ä
-Š_Footprints_____________________ä</value>
+    <value>Täiendavad kontuurid</value>
   </data>
   <data name="OrientedImageryViewerCameraLocationsLabel" xml:space="preserve">
-    <value>Š_Camera Locations_________________ä</value>
+    <value>Kaamera asukohad</value>
   </data>
   <data name="OrientedImageryViewerCameraLocationsStackedLabel" xml:space="preserve">
-    <value>Š_Camera_____________ä
-Š_Locations___________________ä</value>
+    <value>Kaamera asukohad</value>
   </data>
   <data name="OrientedImageryViewerAddMarkersLabel" xml:space="preserve">
-    <value>Š_Add Markers____________ä</value>
+    <value>Lisa markerid</value>
   </data>
   <data name="OrientedImageryViewerAddMarkersStackedLabel" xml:space="preserve">
-    <value>Š_Add_______ä
-Š_Markers_______________ä</value>
+    <value>Lisa markerid</value>
   </data>
   <data name="OrientedImageryViewerClearMarkersLabel" xml:space="preserve">
-    <value>Š_Clear Markers______________ä</value>
+    <value>Kustuta markerid</value>
   </data>
   <data name="OrientedImageryViewerClearMarkersTooltip" xml:space="preserve">
-    <value>Š_Clear markers______________ä</value>
+    <value>Kustuta markerid</value>
   </data>
   <data name="OrientedImageryViewerClearMarkersStackedLabel" xml:space="preserve">
-    <value>Š_Clear___________ä
-Š_Markers_______________ä</value>
+    <value>Kustuta markerid</value>
   </data>
   <data name="OrientedImageryViewerImageSearchModeFind" xml:space="preserve">
-    <value>Š_Find Images____________ä</value>
+    <value>Otsi pilte</value>
   </data>
   <data name="OrientedImageryViewerImageSearchModeFindStackedLabel" xml:space="preserve">
-    <value>Š_Find_________ä
-Š_Images_____________ä</value>
+    <value>Otsi pilte</value>
   </data>
   <data name="OrientedImageryViewerImageSearchModeDisplay" xml:space="preserve">
-    <value>Š_Display Image______________ä</value>
+    <value>Kuva pilt</value>
   </data>
   <data name="OrientedImageryViewerImageSearchModeDisplayStackedLabel" xml:space="preserve">
-    <value>Š_Display_______________ä
-Š_Image___________ä</value>
+    <value>Kuva pilt</value>
   </data>
   <data name="OrientedImageryViewerOpenSelectedImagePopup" xml:space="preserve">
-    <value>Š_Open details for selected image_________________ä</value>
+    <value>Ava valitud pildi andmed</value>
   </data>
   <data name="OrientedImageryViewerImageDetails" xml:space="preserve">
-    <value>Š_Image details______________ä</value>
+    <value>Pildi andmed</value>
   </data>
   <data name="OrientedImageryViewerCloseSelectedImagePopup" xml:space="preserve">
-    <value>Š_Close details______________ä</value>
+    <value>Sulge andmed</value>
   </data>
   <data name="OrientedImageryViewerGoToPageFormat" xml:space="preserve">
-    <value>Š_Go to image {0} of {1}_______________________ä</value>
+    <value>Ava {0}. pilt {1}-st</value>
   </data>
   <data name="OrientedImageryViewerSelectedPageFormat" xml:space="preserve">
-    <value>Š_Image {0} of {1}, selected___________________________ä</value>
+    <value>Valitud {0}. pilt {1}-st</value>
   </data>
   <data name="OrientedImageryViewerToggleCameraMarkers" xml:space="preserve">
-    <value>Š_Show camera locations______________________ä</value>
+    <value>Kuva kaamera asukohad</value>
   </data>
   <data name="OrientedImageryViewerSequentialNavigationTooltip" xml:space="preserve">
-    <value>Š_Sequential navigation______________________ä</value>
+    <value>Järjendnavigeerimine</value>
   </data>
   <data name="OrientedImageryViewerSequentialNavigationLabel" xml:space="preserve">
-    <value>Š_Sequential Navigation______________________ä</value>
+    <value>Järjendnavigeerimine</value>
   </data>
   <data name="OrientedImageryViewerSequentialNavigationStackedLabel" xml:space="preserve">
-    <value>Š_Sequential_____________________ä
-Š_Navigation_____________________ä</value>
+    <value>Järjend navigeerimine</value>
   </data>
   <data name="OrientedImageryViewerPreviousImage" xml:space="preserve">
-    <value>Š_Previous image_______________ä</value>
+    <value>Eelmine pilt</value>
   </data>
   <data name="OrientedImageryViewerNextImage" xml:space="preserve">
-    <value>Š_Next image_____________________ä</value>
+    <value>Järgmine pilt</value>
   </data>
   <data name="OrientedImageryViewerImageLoading" xml:space="preserve">
-    <value>Š_Image loading_________________ä...</value>
+    <value>Pildi laadimine...</value>
   </data>
   <data name="OrientedImageryViewerImageLoaded" xml:space="preserve">
-    <value>Š_Image loaded_____________ä</value>
+    <value>Pilt laaditud</value>
   </data>
   <data name="OrientedImageryViewerNoImageToDisplay" xml:space="preserve">
-    <value>Š_No image to display____________________ä</value>
+    <value>Kuvatavaid pilte pole</value>
   </data>
   <data name="OrientedImageryViewerNoImagesFound" xml:space="preserve">
-    <value>Š_No images found for the tapped location_____________________ä</value>
+    <value>Puudutatud kohas pilte pole</value>
   </data>
   <data name="OrientedImageryViewerImageSelectionNoImagesNone" xml:space="preserve">
-    <value>Š_No image to display. Enable find images or display image mode to search for images__________________________________________ä</value>
+    <value>Kuvatavaid pilte pole. Piltide otsimiseks lubage nende leidmise või kuvamise režiim</value>
   </data>
   <data name="OrientedImageryViewerImageSelectionNoImagesFind" xml:space="preserve">
-    <value>Š_No image to display. Tap on the map to search for images or switch to display image mode______________________________________________ä.</value>
+    <value>Kuvatavaid pilte pole. Piltide otsimiseks puudutage kaarti või lülituge pildi kuvamise režiimile.</value>
   </data>
   <data name="OrientedImageryViewerImageSelectionNoImagesDisplay" xml:space="preserve">
-    <value>Š_No image to display. Tap on a feature to view its image or switch to find images mode____________________________________________ä.</value>
+    <value>Kuvatavaid pilte pole. Funktsiooni pildi kuvamiseks puudutage selle pilti või lülituge pildi otsimise režiimile.</value>
   </data>
   <data name="OrientedImageryViewerImageSelectionEnable" xml:space="preserve">
-    <value>Š_Enable_____________ä</value>
+    <value>Luba</value>
   </data>
   <data name="OrientedImageryViewerImageSelectionOr" xml:space="preserve">
-    <value>Š_or_____ä</value>
+    <value>või</value>
   </data>
   <data name="OrientedImageryViewerImageSelectionSearchMode" xml:space="preserve">
-    <value>Š_mode to search for images__________________________ä</value>
+    <value>režiim piltide otsimiseks</value>
   </data>
   <data name="OrientedImageryViewerImageSelectionFindImages" xml:space="preserve">
-    <value>Š_Tap on the map to search for images___________________ä</value>
+    <value>Puudutage kaarti, otsida pilte</value>
   </data>
   <data name="OrientedImageryViewerImageSelectionDisplayImage" xml:space="preserve">
-    <value>Š_Tap on a feature to view its image__________________ä</value>
+    <value>Funktsiooni pildi kuvamiseks puudutage selle pilti</value>
   </data>
   <data name="OrientedImageryViewerImageSelectionSwitchMode" xml:space="preserve">
-    <value>Š_or switch to_____________ä</value>
+    <value>või lülituge</value>
   </data>
   <data name="OrientedImageryViewerImageSelectionMode" xml:space="preserve">
-    <value>Š_mode_________ä</value>
+    <value>režiimile</value>
   </data>
   <data name="OrientedImageryViewerNoGeoView" xml:space="preserve">
-    <value>Š_Connect a GeoView to view oriented imagery_______________________ä.</value>
+    <value>Orienteeritud pildi kuvamiseks ühenduge GeoViewiga.</value>
   </data>
   <data name="OrientedImageryViewerNoLayerSelected" xml:space="preserve">
-    <value>Š_No layer selected___________________ä.</value>
+    <value>Ühtki kihti pole valitud.</value>
   </data>
   <data name="OrientedImageryViewerAnnounceTransientError" xml:space="preserve">
-    <value>Š_Error raised_____________ä</value>
+    <value>Ilmnes viga</value>
   </data>
   <data name="OrientedImageryViewerDismissError" xml:space="preserve">
-    <value>Š_Dismiss error______________ä</value>
+    <value>Unusta viga</value>
   </data>
   <data name="OrientedImageryViewerPreviousLabel" xml:space="preserve">
-    <value>Š_Prev_________ä</value>
+    <value>Eelm</value>
   </data>
   <data name="OrientedImageryViewerNextLabel" xml:space="preserve">
-    <value>Š_Next_________ä</value>
+    <value>Edasi</value>
   </data>
   <data name="OrientedImageryViewerSequenceStartReached" xml:space="preserve">
-    <value>Š_Start of image sequence reached_________________ä</value>
+    <value>Olete piltide järjekorra alguses</value>
   </data>
   <data name="OrientedImageryViewerSequenceEndReached" xml:space="preserve">
-    <value>Š_End of image sequence reached______________________________ä</value>
+    <value>Olete piltide järjekorra lõpus</value>
   </data>
   <data name="OrientedImageryViewerSequenceStartAndEndReached" xml:space="preserve">
-    <value>Š_Start and end of image sequence reached_____________________ä</value>
+    <value>Olete piltide järjekorra alguses ja lõpus</value>
   </data>
   <data name="OrientedImageryViewerClose" xml:space="preserve">
-    <value>Š_Close oriented imagery_______________________ä</value>
+    <value>Sule orienteeritud pilt</value>
   </data>
   <data name="OrientedImageryViewerClosePanel" xml:space="preserve">
-    <value>Š_Close panel____________ä</value>
+    <value>Sule paneel</value>
   </data>
   <data name="OrientedImageryViewerOverlays" xml:space="preserve">
-    <value>Š_Overlays_________________ä</value>
+    <value>Ülekatted</value>
   </data>
   <data name="OrientedImageryViewerMarkers" xml:space="preserve">
-    <value>Š_Markers_______________ä</value>
+    <value>Markerid</value>
   </data>
   <data name="OrientedImageryViewerMode" xml:space="preserve">
-    <value>Š_Mode_________ä</value>
+    <value>Režiim</value>
   </data>
   <data name="OrientedImageryViewerShowPreviousImageInSequence" xml:space="preserve">
-    <value>Š_Show previous image in sequence_________________ä</value>
+    <value>Kuva järjekorra eelmine pilt</value>
   </data>
   <data name="OrientedImageryViewerShowNextImageInSequence" xml:space="preserve">
-    <value>Š_Show next image in sequence____________________________ä</value>
+    <value>Kuva järjekorra järgmine pilt</value>
   </data>
   <data name="OrientedImageryViewerMore" xml:space="preserve">
-    <value>Š_More_________ä</value>
+    <value>Rohkem</value>
   </data>
   <data name="OrientedImageryViewerPage" xml:space="preserve">
-    <value>Š_Image {0} of {1}_________________ä</value>
+    <value>{0}. pilt {1}-st</value>
   </data>
   <data name="OrientedImageryViewerSelectLayer" xml:space="preserve">
-    <value>Š_Select layer_____________ä</value>
+    <value>Vali kiht</value>
   </data>
   <data name="OrientedImagerySampleToggleView" xml:space="preserve">
     <value>2D/3D</value>
@@ -1071,78 +1063,78 @@
     <value>Lülituge 2D kaardi ja 3D-stseeni vahel</value>
   </data>
   <data name="OrientedImageryViewerMarkerSelection" xml:space="preserve">
-    <value>Š_Marker selection_________________ä</value>
+    <value>Markeri valik</value>
   </data>
   <data name="OrientedImageryViewerMarkerOption" xml:space="preserve">
-    <value>Š_Marker {0}_____________________ä</value>
+    <value>Marker {0}</value>
   </data>
   <data name="OrientedImageryViewerMarkerCircle" xml:space="preserve">
-    <value>Š_Circle marker______________ä</value>
+    <value>Ringjas marker</value>
   </data>
   <data name="OrientedImageryViewerMarkerSquare" xml:space="preserve">
-    <value>Š_Square marker______________ä</value>
+    <value>Ruuduline marker</value>
   </data>
   <data name="OrientedImageryViewerMarkerTriangle" xml:space="preserve">
-    <value>Š_Triangle marker________________ä</value>
+    <value>Kolmnurkne marker</value>
   </data>
   <data name="OrientedImageryViewerMarkerDiamond" xml:space="preserve">
-    <value>Š_Diamond marker_______________ä</value>
+    <value>Teemantmarker</value>
   </data>
   <data name="OrientedImageryViewerMarkerX" xml:space="preserve">
-    <value>Š_Cross marker_____________ä</value>
+    <value>Ristikujuline marker</value>
   </data>
   <data name="OrientedImageryViewerMobileSequentialMode" xml:space="preserve">
-    <value>Š_Sequential_____________________ä</value>
+    <value>Järjestikune</value>
   </data>
   <data name="OrientedImageryViewerNavigation" xml:space="preserve">
-    <value>Š_Explore_______________ä</value>
+    <value>Uurimine</value>
   </data>
   <data name="OrientedImageryViewerModeSelection" xml:space="preserve">
-    <value>Š_Mode Selection_______________ä</value>
+    <value>Režiimi valik</value>
   </data>
   <data name="OrientedImageryViewerOverlaysSelection" xml:space="preserve">
-    <value>Š_Overlays Selection___________________ä</value>
+    <value>Ülekatete valik</value>
   </data>
   <data name="OrientedImageryViewerMarkerTools" xml:space="preserve">
-    <value>Š_Marker Tools_____________ä</value>
+    <value>Markeri vahendid</value>
   </data>
   <data name="OrientedImageryViewerOpen" xml:space="preserve">
-    <value>Š_Open oriented imagery______________________ä</value>
+    <value>Ava orienteeritud pilt</value>
   </data>
   <data name="OrientedImageryViewerOn" xml:space="preserve">
-    <value>Š_On_____ä</value>
+    <value>Sees</value>
   </data>
   <data name="OrientedImageryViewerOff" xml:space="preserve">
-    <value>Š_Off_______ä</value>
+    <value>Väljas</value>
   </data>
   <data name="OrientedImageryViewerSelected" xml:space="preserve">
-    <value>Š_Selected_________________ä</value>
+    <value>Valitud</value>
   </data>
   <data name="OrientedImageryViewerNotSelected" xml:space="preserve">
-    <value>Š_Not selected_____________ä</value>
+    <value>Pole valitud</value>
   </data>
   <data name="OrientedImageryViewerMobileBackToMarkers" xml:space="preserve">
-    <value>Š_Back to Marker Tools_____________________ä</value>
+    <value>Naase markeri vahendite vaatesse</value>
   </data>
   <data name="OrientedImageryViewerMobileSelectMarkerSymbol" xml:space="preserve">
-    <value>Š_Select Symbol______________ä</value>
+    <value>Vali sümbol</value>
   </data>
   <data name="OrientedImageryViewerMobileCurrentFootprint" xml:space="preserve">
-    <value>Š_Show Current Footprint_______________________ä</value>
+    <value>Kuva praegune kontuur</value>
   </data>
   <data name="OrientedImageryViewerMobileAdditionalFootprints" xml:space="preserve">
-    <value>Š_Show Additional Footprints___________________________ä</value>
+    <value>Kuva täiendavad kontuurid</value>
   </data>
   <data name="OrientedImageryViewerMobileCameraLocations" xml:space="preserve">
-    <value>Š_Show Camera Locations______________________ä</value>
+    <value>Kuva kaamera asukohad</value>
   </data>
   <data name="OrientedImageryViewerImageNavigation" xml:space="preserve">
-    <value>Š_Image navigation_________________ä</value>
+    <value>Piltide vahetamine</value>
   </data>
   <data name="OrientedImageryViewerImageNavigationHint" xml:space="preserve">
-    <value>Š_Use Left Arrow for the previous image or Right Arrow for the next image_____________________________________ä.</value>
+    <value>Eelmise pildi kuvamiseks kasutage vasakut noolt või järgmise pildi kuvamiseks parempoolset noolt.</value>
   </data>
   <data name="OrientedImageryViewerSequenceNavigation" xml:space="preserve">
-    <value>Š_Sequential image navigation____________________________ä</value>
+    <value>Piltide järjekorra sirvimine</value>
   </data>
 </root>
