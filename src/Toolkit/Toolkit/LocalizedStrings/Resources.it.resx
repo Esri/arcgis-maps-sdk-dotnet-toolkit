@@ -883,25 +883,29 @@
     <value>Footprint corrente</value>
   </data>
   <data name="OrientedImageryViewerCurrentFootprintStackedLabel" xml:space="preserve">
-    <value>Footprint corrente</value>
+    <value>Footprint
+corrente</value>
   </data>
   <data name="OrientedImageryViewerAdditionalFootprintsLabel" xml:space="preserve">
     <value>Footprint aggiuntive</value>
   </data>
   <data name="OrientedImageryViewerAdditionalFootprintsStackedLabel" xml:space="preserve">
-    <value>Footprint aggiuntive</value>
+    <value>Footprint
+aggiuntive</value>
   </data>
   <data name="OrientedImageryViewerCameraLocationsLabel" xml:space="preserve">
     <value>Posizioni fotocamera</value>
   </data>
   <data name="OrientedImageryViewerCameraLocationsStackedLabel" xml:space="preserve">
-    <value>Posizioni fotocamera</value>
+    <value>Posizioni
+fotocamera</value>
   </data>
   <data name="OrientedImageryViewerAddMarkersLabel" xml:space="preserve">
     <value>Aggiungi marcatori</value>
   </data>
   <data name="OrientedImageryViewerAddMarkersStackedLabel" xml:space="preserve">
-    <value>Aggiungi marcatori</value>
+    <value>Aggiungi
+marcatori</value>
   </data>
   <data name="OrientedImageryViewerClearMarkersLabel" xml:space="preserve">
     <value>Cancella Marcatori</value>
@@ -910,19 +914,22 @@
     <value>Cancella marcatori</value>
   </data>
   <data name="OrientedImageryViewerClearMarkersStackedLabel" xml:space="preserve">
-    <value>Cancella Marcatori</value>
+    <value>Cancella
+Marcatori</value>
   </data>
   <data name="OrientedImageryViewerImageSearchModeFind" xml:space="preserve">
     <value>Trova immagini</value>
   </data>
   <data name="OrientedImageryViewerImageSearchModeFindStackedLabel" xml:space="preserve">
-    <value>Trova immagini</value>
+    <value>Trova
+immagini</value>
   </data>
   <data name="OrientedImageryViewerImageSearchModeDisplay" xml:space="preserve">
     <value>Visualizza immagine</value>
   </data>
   <data name="OrientedImageryViewerImageSearchModeDisplayStackedLabel" xml:space="preserve">
-    <value>Visualizza immagine</value>
+    <value>Visualizza
+immagine</value>
   </data>
   <data name="OrientedImageryViewerOpenSelectedImagePopup" xml:space="preserve">
     <value>Apri dettagli per immagine selezionata</value>
@@ -949,7 +956,8 @@
     <value>Navigazione sequenziale</value>
   </data>
   <data name="OrientedImageryViewerSequentialNavigationStackedLabel" xml:space="preserve">
-    <value>Navigazione sequenziale</value>
+    <value>Navigazione
+sequenziale</value>
   </data>
   <data name="OrientedImageryViewerPreviousImage" xml:space="preserve">
     <value>Immagine precedente</value>

@@ -883,25 +883,29 @@
     <value>Nykyinen peittoalue</value>
   </data>
   <data name="OrientedImageryViewerCurrentFootprintStackedLabel" xml:space="preserve">
-    <value>Nykyinen peittoalue</value>
+    <value>Nykyinen
+peittoalue</value>
   </data>
   <data name="OrientedImageryViewerAdditionalFootprintsLabel" xml:space="preserve">
     <value>Muut peittoalueet</value>
   </data>
   <data name="OrientedImageryViewerAdditionalFootprintsStackedLabel" xml:space="preserve">
-    <value>Muut peittoalueet</value>
+    <value>Muut
+peittoalueet</value>
   </data>
   <data name="OrientedImageryViewerCameraLocationsLabel" xml:space="preserve">
     <value>Kameran sijainnit</value>
   </data>
   <data name="OrientedImageryViewerCameraLocationsStackedLabel" xml:space="preserve">
-    <value>Kameran sijainnit</value>
+    <value>Kameran
+sijainnit</value>
   </data>
   <data name="OrientedImageryViewerAddMarkersLabel" xml:space="preserve">
     <value>Lisää merkitsimiä</value>
   </data>
   <data name="OrientedImageryViewerAddMarkersStackedLabel" xml:space="preserve">
-    <value>Lisää merkitsimiä</value>
+    <value>Lisää
+merkitsimiä</value>
   </data>
   <data name="OrientedImageryViewerClearMarkersLabel" xml:space="preserve">
     <value>Poista merkitsimet</value>
@@ -910,19 +914,22 @@
     <value>Poista merkitsimet</value>
   </data>
   <data name="OrientedImageryViewerClearMarkersStackedLabel" xml:space="preserve">
-    <value>Poista merkitsimet</value>
+    <value>Poista
+merkitsimet</value>
   </data>
   <data name="OrientedImageryViewerImageSearchModeFind" xml:space="preserve">
     <value>Etsi kuvia</value>
   </data>
   <data name="OrientedImageryViewerImageSearchModeFindStackedLabel" xml:space="preserve">
-    <value>Etsi kuvia</value>
+    <value>Etsi
+kuvia</value>
   </data>
   <data name="OrientedImageryViewerImageSearchModeDisplay" xml:space="preserve">
     <value>Näytä kuva</value>
   </data>
   <data name="OrientedImageryViewerImageSearchModeDisplayStackedLabel" xml:space="preserve">
-    <value>Näytä kuva</value>
+    <value>Näytä
+kuva</value>
   </data>
   <data name="OrientedImageryViewerOpenSelectedImagePopup" xml:space="preserve">
     <value>Avaa valitun kuvan tiedot</value>
@@ -949,7 +956,8 @@
     <value>Järjestyksessä navigointi</value>
   </data>
   <data name="OrientedImageryViewerSequentialNavigationStackedLabel" xml:space="preserve">
-    <value>Järjestyksessä navigointi</value>
+    <value>Järjestyksessä
+navigointi</value>
   </data>
   <data name="OrientedImageryViewerPreviousImage" xml:space="preserve">
     <value>Edellinen kuva</value>

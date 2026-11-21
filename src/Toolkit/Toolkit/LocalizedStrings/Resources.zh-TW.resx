@@ -883,25 +883,29 @@
     <value>目前覆蓋區</value>
   </data>
   <data name="OrientedImageryViewerCurrentFootprintStackedLabel" xml:space="preserve">
-    <value>目前 覆蓋區</value>
+    <value>目前
+覆蓋區</value>
   </data>
   <data name="OrientedImageryViewerAdditionalFootprintsLabel" xml:space="preserve">
     <value>其他覆蓋區</value>
   </data>
   <data name="OrientedImageryViewerAdditionalFootprintsStackedLabel" xml:space="preserve">
-    <value>其他 覆蓋區</value>
+    <value>其他
+覆蓋區</value>
   </data>
   <data name="OrientedImageryViewerCameraLocationsLabel" xml:space="preserve">
     <value>相機位置</value>
   </data>
   <data name="OrientedImageryViewerCameraLocationsStackedLabel" xml:space="preserve">
-    <value>相機 位置</value>
+    <value>相機
+位置</value>
   </data>
   <data name="OrientedImageryViewerAddMarkersLabel" xml:space="preserve">
     <value>新增標記</value>
   </data>
   <data name="OrientedImageryViewerAddMarkersStackedLabel" xml:space="preserve">
-    <value>新增 標記</value>
+    <value>新增
+標記</value>
   </data>
   <data name="OrientedImageryViewerClearMarkersLabel" xml:space="preserve">
     <value>清除標記</value>
@@ -910,19 +914,22 @@
     <value>清除標記</value>
   </data>
   <data name="OrientedImageryViewerClearMarkersStackedLabel" xml:space="preserve">
-    <value>清除 標記</value>
+    <value>清除
+標記</value>
   </data>
   <data name="OrientedImageryViewerImageSearchModeFind" xml:space="preserve">
     <value>尋找影像</value>
   </data>
   <data name="OrientedImageryViewerImageSearchModeFindStackedLabel" xml:space="preserve">
-    <value>尋找 影像</value>
+    <value>尋找
+影像</value>
   </data>
   <data name="OrientedImageryViewerImageSearchModeDisplay" xml:space="preserve">
     <value>顯示影像</value>
   </data>
   <data name="OrientedImageryViewerImageSearchModeDisplayStackedLabel" xml:space="preserve">
-    <value>顯示 影像</value>
+    <value>顯示
+影像</value>
   </data>
   <data name="OrientedImageryViewerOpenSelectedImagePopup" xml:space="preserve">
     <value>開啟所選影像的詳細資訊</value>
@@ -949,7 +956,8 @@
     <value>循序導航</value>
   </data>
   <data name="OrientedImageryViewerSequentialNavigationStackedLabel" xml:space="preserve">
-    <value>循序 導航</value>
+    <value>循序
+導航</value>
   </data>
   <data name="OrientedImageryViewerPreviousImage" xml:space="preserve">
     <value>上一張影像</value>

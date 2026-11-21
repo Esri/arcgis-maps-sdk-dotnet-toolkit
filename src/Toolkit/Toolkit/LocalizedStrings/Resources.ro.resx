@@ -883,25 +883,29 @@
     <value>Amprentă curentă</value>
   </data>
   <data name="OrientedImageryViewerCurrentFootprintStackedLabel" xml:space="preserve">
-    <value>Amprentă curentă</value>
+    <value>Amprentă
+curentă</value>
   </data>
   <data name="OrientedImageryViewerAdditionalFootprintsLabel" xml:space="preserve">
     <value>Amprente suplimentare</value>
   </data>
   <data name="OrientedImageryViewerAdditionalFootprintsStackedLabel" xml:space="preserve">
-    <value>Amprente suplimentare</value>
+    <value>Amprente
+suplimentare</value>
   </data>
   <data name="OrientedImageryViewerCameraLocationsLabel" xml:space="preserve">
     <value>Locații cameră</value>
   </data>
   <data name="OrientedImageryViewerCameraLocationsStackedLabel" xml:space="preserve">
-    <value>Locații cameră</value>
+    <value>Locații
+cameră</value>
   </data>
   <data name="OrientedImageryViewerAddMarkersLabel" xml:space="preserve">
     <value>Adăugare marcatori</value>
   </data>
   <data name="OrientedImageryViewerAddMarkersStackedLabel" xml:space="preserve">
-    <value>Adăugare marcatori</value>
+    <value>Adăugare
+marcatori</value>
   </data>
   <data name="OrientedImageryViewerClearMarkersLabel" xml:space="preserve">
     <value>Eliminare marcatori</value>
@@ -910,19 +914,22 @@
     <value>Eliminare marcatori</value>
   </data>
   <data name="OrientedImageryViewerClearMarkersStackedLabel" xml:space="preserve">
-    <value>Eliminare marcatori</value>
+    <value>Eliminare
+marcatori</value>
   </data>
   <data name="OrientedImageryViewerImageSearchModeFind" xml:space="preserve">
     <value>Găsire imagini</value>
   </data>
   <data name="OrientedImageryViewerImageSearchModeFindStackedLabel" xml:space="preserve">
-    <value>Găsire imagini</value>
+    <value>Găsire
+imagini</value>
   </data>
   <data name="OrientedImageryViewerImageSearchModeDisplay" xml:space="preserve">
     <value>Afișare imagine</value>
   </data>
   <data name="OrientedImageryViewerImageSearchModeDisplayStackedLabel" xml:space="preserve">
-    <value>Afișare imagine</value>
+    <value>Afișare
+imagine</value>
   </data>
   <data name="OrientedImageryViewerOpenSelectedImagePopup" xml:space="preserve">
     <value>Deschidere detalii pentru imaginea selectată</value>
@@ -949,7 +956,8 @@
     <value>Navigare secvențială</value>
   </data>
   <data name="OrientedImageryViewerSequentialNavigationStackedLabel" xml:space="preserve">
-    <value>Navigare secvențială</value>
+    <value>Navigare
+secvențială</value>
   </data>
   <data name="OrientedImageryViewerPreviousImage" xml:space="preserve">
     <value>Imaginea precedentă</value>

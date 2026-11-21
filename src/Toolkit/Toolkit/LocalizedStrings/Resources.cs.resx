@@ -883,25 +883,29 @@
     <value>Aktuální obrys rastru</value>
   </data>
   <data name="OrientedImageryViewerCurrentFootprintStackedLabel" xml:space="preserve">
-    <value>Aktuální obrys rastru</value>
+    <value>Aktuální
+obrys rastru</value>
   </data>
   <data name="OrientedImageryViewerAdditionalFootprintsLabel" xml:space="preserve">
     <value>Další obrysy rastru</value>
   </data>
   <data name="OrientedImageryViewerAdditionalFootprintsStackedLabel" xml:space="preserve">
-    <value>Další obrysy rastru</value>
+    <value>Další
+obrysy rastru</value>
   </data>
   <data name="OrientedImageryViewerCameraLocationsLabel" xml:space="preserve">
     <value>Umístění kamer</value>
   </data>
   <data name="OrientedImageryViewerCameraLocationsStackedLabel" xml:space="preserve">
-    <value>Umístění kamer</value>
+    <value>Umístění
+kamer</value>
   </data>
   <data name="OrientedImageryViewerAddMarkersLabel" xml:space="preserve">
     <value>Přidat značky</value>
   </data>
   <data name="OrientedImageryViewerAddMarkersStackedLabel" xml:space="preserve">
-    <value>Přidat značky</value>
+    <value>Přidat
+značky</value>
   </data>
   <data name="OrientedImageryViewerClearMarkersLabel" xml:space="preserve">
     <value>Vymazat značky</value>
@@ -910,19 +914,22 @@
     <value>Vymazat značky</value>
   </data>
   <data name="OrientedImageryViewerClearMarkersStackedLabel" xml:space="preserve">
-    <value>Vymazat značky</value>
+    <value>Vymazat
+značky</value>
   </data>
   <data name="OrientedImageryViewerImageSearchModeFind" xml:space="preserve">
     <value>Najít snímky</value>
   </data>
   <data name="OrientedImageryViewerImageSearchModeFindStackedLabel" xml:space="preserve">
-    <value>Najít snímky</value>
+    <value>Najít
+snímky</value>
   </data>
   <data name="OrientedImageryViewerImageSearchModeDisplay" xml:space="preserve">
     <value>Zobrazit snímek</value>
   </data>
   <data name="OrientedImageryViewerImageSearchModeDisplayStackedLabel" xml:space="preserve">
-    <value>Zobrazit snímek</value>
+    <value>Zobrazit
+snímek</value>
   </data>
   <data name="OrientedImageryViewerOpenSelectedImagePopup" xml:space="preserve">
     <value>Otevřít podrobnosti vybraného snímku</value>
@@ -949,7 +956,8 @@
     <value>Sekvenční navigace</value>
   </data>
   <data name="OrientedImageryViewerSequentialNavigationStackedLabel" xml:space="preserve">
-    <value>Sekvenční navigace</value>
+    <value>Sekvenční
+navigace</value>
   </data>
   <data name="OrientedImageryViewerPreviousImage" xml:space="preserve">
     <value>Předchozí snímek</value>

@@ -883,25 +883,29 @@
     <value>Aktuális lenyomat</value>
   </data>
   <data name="OrientedImageryViewerCurrentFootprintStackedLabel" xml:space="preserve">
-    <value>Aktuális lenyomat</value>
+    <value>Aktuális
+lenyomat</value>
   </data>
   <data name="OrientedImageryViewerAdditionalFootprintsLabel" xml:space="preserve">
     <value>További lenyomatok</value>
   </data>
   <data name="OrientedImageryViewerAdditionalFootprintsStackedLabel" xml:space="preserve">
-    <value>További lenyomatok</value>
+    <value>További
+lenyomatok</value>
   </data>
   <data name="OrientedImageryViewerCameraLocationsLabel" xml:space="preserve">
     <value>Kamerahelyek</value>
   </data>
   <data name="OrientedImageryViewerCameraLocationsStackedLabel" xml:space="preserve">
-    <value>Kamera- helyek</value>
+    <value>Kamera-
+helyek</value>
   </data>
   <data name="OrientedImageryViewerAddMarkersLabel" xml:space="preserve">
     <value>Jelölők hozzáadása</value>
   </data>
   <data name="OrientedImageryViewerAddMarkersStackedLabel" xml:space="preserve">
-    <value>Jelölők hozzáadása</value>
+    <value>Jelölők
+hozzáadása</value>
   </data>
   <data name="OrientedImageryViewerClearMarkersLabel" xml:space="preserve">
     <value>Jelölők törlése</value>
@@ -910,19 +914,22 @@
     <value>Jelölők törlése</value>
   </data>
   <data name="OrientedImageryViewerClearMarkersStackedLabel" xml:space="preserve">
-    <value>Jelölők törlése</value>
+    <value>Jelölők
+törlése</value>
   </data>
   <data name="OrientedImageryViewerImageSearchModeFind" xml:space="preserve">
     <value>Képek keresése</value>
   </data>
   <data name="OrientedImageryViewerImageSearchModeFindStackedLabel" xml:space="preserve">
-    <value>Képek keresése</value>
+    <value>Képek
+keresése</value>
   </data>
   <data name="OrientedImageryViewerImageSearchModeDisplay" xml:space="preserve">
     <value>Kép megjelenítése</value>
   </data>
   <data name="OrientedImageryViewerImageSearchModeDisplayStackedLabel" xml:space="preserve">
-    <value>Kép megjelenítése</value>
+    <value>Kép
+megjelenítése</value>
   </data>
   <data name="OrientedImageryViewerOpenSelectedImagePopup" xml:space="preserve">
     <value>Kijelölt kép részleteinek megnyitása</value>
@@ -949,7 +956,8 @@
     <value>Szekvenciális navigáció</value>
   </data>
   <data name="OrientedImageryViewerSequentialNavigationStackedLabel" xml:space="preserve">
-    <value>Szekvenciális navigáció</value>
+    <value>Szekvenciális
+navigáció</value>
   </data>
   <data name="OrientedImageryViewerPreviousImage" xml:space="preserve">
     <value>Előző kép</value>

@@ -883,25 +883,29 @@
     <value>Geçerli Taban Alanı</value>
   </data>
   <data name="OrientedImageryViewerCurrentFootprintStackedLabel" xml:space="preserve">
-    <value>Geçerli Taban Alanı</value>
+    <value>Geçerli
+Taban Alanı</value>
   </data>
   <data name="OrientedImageryViewerAdditionalFootprintsLabel" xml:space="preserve">
     <value>Ek Taban Alanları</value>
   </data>
   <data name="OrientedImageryViewerAdditionalFootprintsStackedLabel" xml:space="preserve">
-    <value>Ek Taban Alanları</value>
+    <value>Ek
+Taban Alanları</value>
   </data>
   <data name="OrientedImageryViewerCameraLocationsLabel" xml:space="preserve">
     <value>Kamera Konumları</value>
   </data>
   <data name="OrientedImageryViewerCameraLocationsStackedLabel" xml:space="preserve">
-    <value>Kamera Konumları</value>
+    <value>Kamera
+Konumları</value>
   </data>
   <data name="OrientedImageryViewerAddMarkersLabel" xml:space="preserve">
     <value>İşaretçi Ekle</value>
   </data>
   <data name="OrientedImageryViewerAddMarkersStackedLabel" xml:space="preserve">
-    <value>İşaretçiEkle</value>
+    <value>İşaretçi
+Ekle</value>
   </data>
   <data name="OrientedImageryViewerClearMarkersLabel" xml:space="preserve">
     <value>İşaretçileri Temizle</value>
@@ -910,19 +914,22 @@
     <value>İşaretçileri temizle</value>
   </data>
   <data name="OrientedImageryViewerClearMarkersStackedLabel" xml:space="preserve">
-    <value>İşaretçileri Temizle</value>
+    <value>İşaretçileri
+Temizle</value>
   </data>
   <data name="OrientedImageryViewerImageSearchModeFind" xml:space="preserve">
     <value>Görüntüleri bul</value>
   </data>
   <data name="OrientedImageryViewerImageSearchModeFindStackedLabel" xml:space="preserve">
-    <value>Görüntüleri Bul</value>
+    <value>Görüntüleri
+Bul</value>
   </data>
   <data name="OrientedImageryViewerImageSearchModeDisplay" xml:space="preserve">
     <value>Görüntüyü Görüntüle</value>
   </data>
   <data name="OrientedImageryViewerImageSearchModeDisplayStackedLabel" xml:space="preserve">
-    <value>Görüntüyü Görüntüle</value>
+    <value>Görüntüyü
+Görüntüle</value>
   </data>
   <data name="OrientedImageryViewerOpenSelectedImagePopup" xml:space="preserve">
     <value>Seçili görüntü için ayrıntıları aç</value>
@@ -949,7 +956,8 @@
     <value>Sıralı Dolaşma</value>
   </data>
   <data name="OrientedImageryViewerSequentialNavigationStackedLabel" xml:space="preserve">
-    <value>Sıralı Dolaşma</value>
+    <value>Sıralı
+Dolaşma</value>
   </data>
   <data name="OrientedImageryViewerPreviousImage" xml:space="preserve">
     <value>Önceki görüntü</value>

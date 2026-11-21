@@ -883,25 +883,29 @@
     <value>現在のフットプリント</value>
   </data>
   <data name="OrientedImageryViewerCurrentFootprintStackedLabel" xml:space="preserve">
-    <value>現在の フットプリント</value>
+    <value>現在の
+フットプリント</value>
   </data>
   <data name="OrientedImageryViewerAdditionalFootprintsLabel" xml:space="preserve">
     <value>その他のフットプリント</value>
   </data>
   <data name="OrientedImageryViewerAdditionalFootprintsStackedLabel" xml:space="preserve">
-    <value>その他の フットプリント</value>
+    <value>その他の
+フットプリント</value>
   </data>
   <data name="OrientedImageryViewerCameraLocationsLabel" xml:space="preserve">
     <value>カメラの位置</value>
   </data>
   <data name="OrientedImageryViewerCameraLocationsStackedLabel" xml:space="preserve">
-    <value>カメラの 位置</value>
+    <value>カメラの
+位置</value>
   </data>
   <data name="OrientedImageryViewerAddMarkersLabel" xml:space="preserve">
     <value>マーカーの追加</value>
   </data>
   <data name="OrientedImageryViewerAddMarkersStackedLabel" xml:space="preserve">
-    <value>マーカーの 追加</value>
+    <value>マーカーの
+追加</value>
   </data>
   <data name="OrientedImageryViewerClearMarkersLabel" xml:space="preserve">
     <value>マーカーの消去</value>
@@ -910,19 +914,22 @@
     <value>マーカーの消去</value>
   </data>
   <data name="OrientedImageryViewerClearMarkersStackedLabel" xml:space="preserve">
-    <value>マーカーの 消去</value>
+    <value>マーカーの
+消去</value>
   </data>
   <data name="OrientedImageryViewerImageSearchModeFind" xml:space="preserve">
     <value>画像の検索</value>
   </data>
   <data name="OrientedImageryViewerImageSearchModeFindStackedLabel" xml:space="preserve">
-    <value>画像の 検索</value>
+    <value>画像の
+検索</value>
   </data>
   <data name="OrientedImageryViewerImageSearchModeDisplay" xml:space="preserve">
     <value>画像の表示</value>
   </data>
   <data name="OrientedImageryViewerImageSearchModeDisplayStackedLabel" xml:space="preserve">
-    <value>画像の 表示</value>
+    <value>画像の
+表示</value>
   </data>
   <data name="OrientedImageryViewerOpenSelectedImagePopup" xml:space="preserve">
     <value>選択した画像の詳細を開く</value>
@@ -949,7 +956,8 @@
     <value>シーケンシャル ナビゲーション</value>
   </data>
   <data name="OrientedImageryViewerSequentialNavigationStackedLabel" xml:space="preserve">
-    <value>シーケンシャル ナビゲーション</value>
+    <value>シーケンシャル
+ナビゲーション</value>
   </data>
   <data name="OrientedImageryViewerPreviousImage" xml:space="preserve">
     <value>前の画像</value>

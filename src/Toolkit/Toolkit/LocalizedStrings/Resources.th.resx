@@ -883,25 +883,29 @@
     <value>ฟุตปรินท์ปัจจุบัน</value>
   </data>
   <data name="OrientedImageryViewerCurrentFootprintStackedLabel" xml:space="preserve">
-    <value>ฟุตปรินท์ ปัจจุบัน</value>
+    <value>ฟุตปรินท์
+ปัจจุบัน</value>
   </data>
   <data name="OrientedImageryViewerAdditionalFootprintsLabel" xml:space="preserve">
     <value>ฟุตปรินท์เพิ่มเติม</value>
   </data>
   <data name="OrientedImageryViewerAdditionalFootprintsStackedLabel" xml:space="preserve">
-    <value>ฟุตปรินท์ เพิ่มเติม</value>
+    <value>ฟุตปรินท์
+เพิ่มเติม</value>
   </data>
   <data name="OrientedImageryViewerCameraLocationsLabel" xml:space="preserve">
     <value>ตำแหน่งกล้อง</value>
   </data>
   <data name="OrientedImageryViewerCameraLocationsStackedLabel" xml:space="preserve">
-    <value>ตำแหน่ง กล้อง</value>
+    <value>ตำแหน่ง
+กล้อง</value>
   </data>
   <data name="OrientedImageryViewerAddMarkersLabel" xml:space="preserve">
     <value>เพิ่มมาร์คเกอร์</value>
   </data>
   <data name="OrientedImageryViewerAddMarkersStackedLabel" xml:space="preserve">
-    <value>เพิ่ม มาร์คเกอร์</value>
+    <value>เพิ่ม
+มาร์คเกอร์</value>
   </data>
   <data name="OrientedImageryViewerClearMarkersLabel" xml:space="preserve">
     <value>ล้างมาร์คเกอร์</value>
@@ -910,19 +914,22 @@
     <value>ล้างมาร์คเกอร์</value>
   </data>
   <data name="OrientedImageryViewerClearMarkersStackedLabel" xml:space="preserve">
-    <value>ล้าง มาร์คเกอร์</value>
+    <value>ล้าง
+มาร์คเกอร์</value>
   </data>
   <data name="OrientedImageryViewerImageSearchModeFind" xml:space="preserve">
     <value>ค้นหารูปภาพ</value>
   </data>
   <data name="OrientedImageryViewerImageSearchModeFindStackedLabel" xml:space="preserve">
-    <value>ค้นหา รูปภาพ</value>
+    <value>ค้นหา
+รูปภาพ</value>
   </data>
   <data name="OrientedImageryViewerImageSearchModeDisplay" xml:space="preserve">
     <value>แสดงรูปภาพ</value>
   </data>
   <data name="OrientedImageryViewerImageSearchModeDisplayStackedLabel" xml:space="preserve">
-    <value>แสดง รูปภาพ</value>
+    <value>แสดง
+รูปภาพ</value>
   </data>
   <data name="OrientedImageryViewerOpenSelectedImagePopup" xml:space="preserve">
     <value>เปิดรายละเอียดของรูปภาพที่เลือก</value>
@@ -949,7 +956,8 @@
     <value>การนำทางเชิงเรียงลำดับ</value>
   </data>
   <data name="OrientedImageryViewerSequentialNavigationStackedLabel" xml:space="preserve">
-    <value>การนำทาง เชิงเรียงลำดับ</value>
+    <value>การนำทาง
+เชิงเรียงลำดับ</value>
   </data>
   <data name="OrientedImageryViewerPreviousImage" xml:space="preserve">
     <value>รูปภาพก่อนหน้า</value>

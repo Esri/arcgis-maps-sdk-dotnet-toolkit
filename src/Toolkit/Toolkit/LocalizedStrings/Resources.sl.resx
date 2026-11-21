@@ -883,25 +883,29 @@
     <value>Trenutni odtis</value>
   </data>
   <data name="OrientedImageryViewerCurrentFootprintStackedLabel" xml:space="preserve">
-    <value>Trenutni odtis</value>
+    <value>Trenutni
+odtis</value>
   </data>
   <data name="OrientedImageryViewerAdditionalFootprintsLabel" xml:space="preserve">
     <value>Dodatni odtisi</value>
   </data>
   <data name="OrientedImageryViewerAdditionalFootprintsStackedLabel" xml:space="preserve">
-    <value>Dodatni odtisi</value>
+    <value>Dodatni
+odtisi</value>
   </data>
   <data name="OrientedImageryViewerCameraLocationsLabel" xml:space="preserve">
     <value>Lokacije kamere</value>
   </data>
   <data name="OrientedImageryViewerCameraLocationsStackedLabel" xml:space="preserve">
-    <value>Lokacije kamere</value>
+    <value>Lokacije
+kamere</value>
   </data>
   <data name="OrientedImageryViewerAddMarkersLabel" xml:space="preserve">
     <value>Dodaj označbe</value>
   </data>
   <data name="OrientedImageryViewerAddMarkersStackedLabel" xml:space="preserve">
-    <value>Dodaj označbe</value>
+    <value>Dodaj
+označbe</value>
   </data>
   <data name="OrientedImageryViewerClearMarkersLabel" xml:space="preserve">
     <value>Počisti označbe</value>
@@ -910,19 +914,22 @@
     <value>Počisti označbe</value>
   </data>
   <data name="OrientedImageryViewerClearMarkersStackedLabel" xml:space="preserve">
-    <value>Počisti označbe</value>
+    <value>Počisti
+označbe</value>
   </data>
   <data name="OrientedImageryViewerImageSearchModeFind" xml:space="preserve">
     <value>Poišči slike</value>
   </data>
   <data name="OrientedImageryViewerImageSearchModeFindStackedLabel" xml:space="preserve">
-    <value>Poišči slike</value>
+    <value>Poišči
+slike</value>
   </data>
   <data name="OrientedImageryViewerImageSearchModeDisplay" xml:space="preserve">
     <value>Prikaži sliko</value>
   </data>
   <data name="OrientedImageryViewerImageSearchModeDisplayStackedLabel" xml:space="preserve">
-    <value>Prikaži sliko</value>
+    <value>Prikaži
+sliko</value>
   </data>
   <data name="OrientedImageryViewerOpenSelectedImagePopup" xml:space="preserve">
     <value>Odpri podrobnosti za izbrano sliko</value>
@@ -949,7 +956,8 @@
     <value>Sekvenčna navigacija</value>
   </data>
   <data name="OrientedImageryViewerSequentialNavigationStackedLabel" xml:space="preserve">
-    <value>Zaporedna navigacija</value>
+    <value>Zaporedna
+navigacija</value>
   </data>
   <data name="OrientedImageryViewerPreviousImage" xml:space="preserve">
     <value>Prejšnja slika</value>

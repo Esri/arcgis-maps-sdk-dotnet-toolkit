@@ -883,25 +883,29 @@
     <value>Pašreizējais pēdas nospiedums</value>
   </data>
   <data name="OrientedImageryViewerCurrentFootprintStackedLabel" xml:space="preserve">
-    <value>Pašreizējais pēdas nospiedums</value>
+    <value>Pašreizējais
+pēdas nospiedums</value>
   </data>
   <data name="OrientedImageryViewerAdditionalFootprintsLabel" xml:space="preserve">
     <value>Papildu pēdas nospiedumi</value>
   </data>
   <data name="OrientedImageryViewerAdditionalFootprintsStackedLabel" xml:space="preserve">
-    <value>Papildu pēdas nospiedumi</value>
+    <value>Papildu
+pēdas nospiedumi</value>
   </data>
   <data name="OrientedImageryViewerCameraLocationsLabel" xml:space="preserve">
     <value>Kameras atrašanās vietas</value>
   </data>
   <data name="OrientedImageryViewerCameraLocationsStackedLabel" xml:space="preserve">
-    <value>Kameras atrašanās vietas</value>
+    <value>Kameras
+atrašanās vietas</value>
   </data>
   <data name="OrientedImageryViewerAddMarkersLabel" xml:space="preserve">
     <value>Pievienot marķierus</value>
   </data>
   <data name="OrientedImageryViewerAddMarkersStackedLabel" xml:space="preserve">
-    <value>Pievienot marķierus</value>
+    <value>Pievienot
+marķierus</value>
   </data>
   <data name="OrientedImageryViewerClearMarkersLabel" xml:space="preserve">
     <value>Notīrīt marķierus</value>
@@ -910,19 +914,22 @@
     <value>Notīrīt marķierus</value>
   </data>
   <data name="OrientedImageryViewerClearMarkersStackedLabel" xml:space="preserve">
-    <value>Notīrīt marķierus</value>
+    <value>Notīrīt
+marķierus</value>
   </data>
   <data name="OrientedImageryViewerImageSearchModeFind" xml:space="preserve">
     <value>Atrast attēlus</value>
   </data>
   <data name="OrientedImageryViewerImageSearchModeFindStackedLabel" xml:space="preserve">
-    <value>Atrast attēlus</value>
+    <value>Atrast
+attēlus</value>
   </data>
   <data name="OrientedImageryViewerImageSearchModeDisplay" xml:space="preserve">
     <value>Parādīt attēlu</value>
   </data>
   <data name="OrientedImageryViewerImageSearchModeDisplayStackedLabel" xml:space="preserve">
-    <value>Parādīt attēlu</value>
+    <value>Parādīt
+attēlu</value>
   </data>
   <data name="OrientedImageryViewerOpenSelectedImagePopup" xml:space="preserve">
     <value>Atvērt datus atlasītajam attēlam</value>
@@ -949,7 +956,8 @@
     <value>Secīga navigācija</value>
   </data>
   <data name="OrientedImageryViewerSequentialNavigationStackedLabel" xml:space="preserve">
-    <value>Secīga navigācija</value>
+    <value>Secīga
+navigācija</value>
   </data>
   <data name="OrientedImageryViewerPreviousImage" xml:space="preserve">
     <value>Iepriekšējais attēls</value>

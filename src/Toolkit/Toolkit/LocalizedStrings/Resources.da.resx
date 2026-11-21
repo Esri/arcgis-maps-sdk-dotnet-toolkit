@@ -883,25 +883,29 @@
     <value>Aktuelt fodaftryk</value>
   </data>
   <data name="OrientedImageryViewerCurrentFootprintStackedLabel" xml:space="preserve">
-    <value>Aktuelt fodaftryk</value>
+    <value>Aktuelt
+fodaftryk</value>
   </data>
   <data name="OrientedImageryViewerAdditionalFootprintsLabel" xml:space="preserve">
     <value>Yderligere fodaftryk</value>
   </data>
   <data name="OrientedImageryViewerAdditionalFootprintsStackedLabel" xml:space="preserve">
-    <value>Yderligere fodaftryk</value>
+    <value>Yderligere
+fodaftryk</value>
   </data>
   <data name="OrientedImageryViewerCameraLocationsLabel" xml:space="preserve">
     <value>Kamerapositioner</value>
   </data>
   <data name="OrientedImageryViewerCameraLocationsStackedLabel" xml:space="preserve">
-    <value>Kamera- positioner</value>
+    <value>Kamera-
+positioner</value>
   </data>
   <data name="OrientedImageryViewerAddMarkersLabel" xml:space="preserve">
     <value>Tilføj markører</value>
   </data>
   <data name="OrientedImageryViewerAddMarkersStackedLabel" xml:space="preserve">
-    <value>Tilføj markører</value>
+    <value>Tilføj
+markører</value>
   </data>
   <data name="OrientedImageryViewerClearMarkersLabel" xml:space="preserve">
     <value>Ryd markører</value>
@@ -910,19 +914,22 @@
     <value>Ryd markører</value>
   </data>
   <data name="OrientedImageryViewerClearMarkersStackedLabel" xml:space="preserve">
-    <value>Ryd markører</value>
+    <value>Ryd
+markører</value>
   </data>
   <data name="OrientedImageryViewerImageSearchModeFind" xml:space="preserve">
     <value>Find billeder</value>
   </data>
   <data name="OrientedImageryViewerImageSearchModeFindStackedLabel" xml:space="preserve">
-    <value>Find billeder</value>
+    <value>Find
+billeder</value>
   </data>
   <data name="OrientedImageryViewerImageSearchModeDisplay" xml:space="preserve">
     <value>Vis billede</value>
   </data>
   <data name="OrientedImageryViewerImageSearchModeDisplayStackedLabel" xml:space="preserve">
-    <value>Vis billede</value>
+    <value>Vis
+billede</value>
   </data>
   <data name="OrientedImageryViewerOpenSelectedImagePopup" xml:space="preserve">
     <value>Åbn oplysningerne om det valgte billede</value>
@@ -949,7 +956,8 @@
     <value>Sekventiel navigation</value>
   </data>
   <data name="OrientedImageryViewerSequentialNavigationStackedLabel" xml:space="preserve">
-    <value>Sekventiel navigation</value>
+    <value>Sekventiel
+navigation</value>
   </data>
   <data name="OrientedImageryViewerPreviousImage" xml:space="preserve">
     <value>Forrige billede</value>
