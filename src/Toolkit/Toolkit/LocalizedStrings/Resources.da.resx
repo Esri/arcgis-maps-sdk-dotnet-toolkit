@@ -123,11 +123,32 @@
   <data name="BasemapGalleryAutomationHelpText" xml:space="preserve">
     <value>Viser en liste over tilgængelige baggrundskort. Vælg et baggrundskort for at bruge det i det aktuelle kort eller den aktuelle scene.</value>
   </data>
+  <data name="BookmarksViewAutomationName" xml:space="preserve">
+    <value>Bogmærker</value>
+  </data>
   <data name="FeatureFormAddAttachmentMenuFromFile" xml:space="preserve">
     <value>Tilføj vedhæftning</value>
   </data>
   <data name="FeatureFormAddAttachmentMenuWithCamera" xml:space="preserve">
     <value>Tag foto</value>
+  </data>
+  <data name="FeatureFormAttachmentTypeValidationError" xml:space="preserve">
+    <value>Denne filtype understøttes ikke. Tilladte typer: {0}</value>
+  </data>
+  <data name="FeatureFormAttachmentSizeValidationError" xml:space="preserve">
+    <value>Denne fil er for stor. Den maksimalt tilladte størrelse er {0} MB.</value>
+  </data>
+  <data name="FeatureFormAttachmentSizeValidationErrorFallback" xml:space="preserve">
+    <value>Denne fil er for stor.</value>
+  </data>
+  <data name="FeatureFormAttachmentDurationValidationError" xml:space="preserve">
+    <value>Dette medie er for langt. Den maksimalt tilladte varighed er {0} sekunder.</value>
+  </data>
+  <data name="FeatureFormAttachmentDurationValidationErrorFallback" xml:space="preserve">
+    <value>Dette medie er for langt.</value>
+  </data>
+  <data name="FeatureFormAttachmentValidationErrorTitle" xml:space="preserve">
+    <value>Upload af vedhæftning mislykkedes</value>
   </data>
   <data name="FeatureFormExceedsMaximumDateTime" xml:space="preserve">
     <value>Dato skal være på eller før {0}</value>
@@ -174,6 +195,18 @@
   <data name="FeatureFormLessThanNumericMinimum" xml:space="preserve">
     <value>Mindre en minimumværdien</value>
   </data>
+  <data name="FeatureFormMaximumAttachmentCountAllowed" xml:space="preserve">
+    <value>Det maksimal tilladte antal vedhæftninger er {0}.</value>
+  </data>
+  <data name="FeatureFormMaximumAttachmentCountLabel" xml:space="preserve">
+    <value>Maks.: {0}</value>
+  </data>
+  <data name="FeatureFormMinimumAttachmentCountLabel" xml:space="preserve">
+    <value>Min.: {0}</value>
+  </data>
+  <data name="FeatureFormMinimumAttachmentCountRequired" xml:space="preserve">
+    <value>Der kræves mindst {0} vedhæftning(er).</value>
+  </data>
   <data name="FeatureFormNoAttachments" xml:space="preserve">
     <value>Ingen vedhæftninger</value>
   </data>
@@ -206,6 +239,147 @@
   </data>
   <data name="FeatureFormSpecificLength" xml:space="preserve">
     <value>Antal påkrævede tegn: {0}</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsRemoveAssociation" xml:space="preserve">
+    <value>Fjern associering</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsShowOnMap" xml:space="preserve">
+    <value>Vis på kort</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsMoreInformation" xml:space="preserve">
+    <value>Flere oplysninger</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsPercentAlong" xml:space="preserve">
+    <value>Procent langs med</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationSettings" xml:space="preserve">
+    <value>Associeringsindstillinger</value>
+  </data>
+  <data name="FeatureFormDeleteAssociationConfirmationTitle" xml:space="preserve">
+    <value>Fjern associering?</value>
+  </data>
+  <data name="FeatureFormDeleteAssociationConfirmationMessage" xml:space="preserve">
+    <value>Dette fjerner kun associeringen. Objektet forbliver.</value>
+  </data>
+  <data name="FeatureFormDeleteAssociationConfirmationAccept" xml:space="preserve">
+    <value>Fjern</value>
+  </data>
+  <data name="FeatureFormDeleteAssociationConfirmationCancel" xml:space="preserve">
+    <value>Annuller</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsAddAssociation" xml:space="preserve">
+    <value>Tilføj tilknytning</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsAdd" xml:space="preserve">
+    <value>Tilføj</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsChooseAddMethod" xml:space="preserve">
+    <value>Vælg, hvordan du vil tilføje objektet</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsChooseToAdd" xml:space="preserve">
+    <value>Vælg at tilføje</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsFeaturesIdentified" xml:space="preserve">
+    <value>{0} objekter identificeret</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsAssociationType" xml:space="preserve">
+    <value>Associeringstype</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsAttachmentType" xml:space="preserve">
+    <value>Vedhæftning</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsCannotAddAssociation" xml:space="preserve">
+    <value>Denne associering kan ikke tilføjes.</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsConnectivityType" xml:space="preserve">
+    <value>Forbindelse</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsContainmentType" xml:space="preserve">
+    <value>Indeholdt</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsContentVisibility" xml:space="preserve">
+    <value>Synlighed af indhold</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsCurrentFeatureTerminal" xml:space="preserve">
+    <value>Aktuel objektforbindelsespunkt</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsFractionAlongEdgeError" xml:space="preserve">
+    <value>Indtast en procentdel fra 0 til 100.</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsFractionAlongEdgePercent" xml:space="preserve">
+    <value>Fraktion langs kant (%)</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsFromElement" xml:space="preserve">
+    <value>Fra element</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsNoCandidates" xml:space="preserve">
+    <value>Ingen matches fundet.</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsNoFeatureSources" xml:space="preserve">
+    <value>Ingen tilgængelige netværksdatakilder.</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsNewAssociation" xml:space="preserve">
+    <value>Ny associering</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsNotEditable" xml:space="preserve">
+    <value>Associeringerne kan ikke redigeres for dette objekt.</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsOtherFeatureTerminal" xml:space="preserve">
+    <value>Andet objektforbindelsespunkt</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsReviewAssociation" xml:space="preserve">
+    <value>Gennemgå associering</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsSearchFeatures" xml:space="preserve">
+    <value>Søgefunktioner</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsSearch" xml:space="preserve">
+    <value>Søg</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsNetworkDataSource" xml:space="preserve">
+    <value>Netværksdatakilde</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsResultCount" xml:space="preserve">
+    <value>{0} resultater</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsAvailableAssetTypes" xml:space="preserve">
+    <value>Tilgængelige aktivtyper</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsAvailableFeatures" xml:space="preserve">
+    <value>Tilgængelige objekter ({0})</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsLoading" xml:space="preserve">
+    <value>Indlæser...</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsNoAssetTypes" xml:space="preserve">
+    <value>Ingen tilgængelige aktivtyper.</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsLoadMore" xml:space="preserve">
+    <value>Indlæs flere</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsSelectFeatureSource" xml:space="preserve">
+    <value>Vælg en netværksdatatype.</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsSelectFromNetworkDataSource" xml:space="preserve">
+    <value>Fra netværksdatakilde</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsSelectOnMap" xml:space="preserve">
+    <value>På kort</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsSelectFeaturesOnMap" xml:space="preserve">
+    <value>Vælg objekter ved at trykke på kortet.</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsSelectTerminalError" xml:space="preserve">
+    <value>Vælg forbindelsespunkt</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsStructureAttachmentType" xml:space="preserve">
+    <value>Strukturvedhæftning</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsTapSelection" xml:space="preserve">
+    <value>Tryk på markering</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsToElement" xml:space="preserve">
+    <value>Til element</value>
   </data>
   <data name="FloorFilterAllFacilities" xml:space="preserve">
     <value>Alle sites</value>
@@ -245,6 +419,18 @@
   </data>
   <data name="PopupViewerViewHyperlinkText" xml:space="preserve">
     <value>Vis</value>
+  </data>
+  <data name="PopupViewerAttachmentDownloading" xml:space="preserve">
+    <value>Downloader vedhæftning</value>
+  </data>
+  <data name="PopupViewerPreviousMediaButtonText" xml:space="preserve">
+    <value>Forrige medie</value>
+  </data>
+  <data name="PopupViewerNextMediaButtonText" xml:space="preserve">
+    <value>Næste medie</value>
+  </data>
+  <data name="PopupViewerMediaPosition" xml:space="preserve">
+    <value>Medieelement {0} af {1}</value>
   </data>
   <data name="PopupViewerUtilityAssociationsDefaultTitle" xml:space="preserve">
     <value>Tilknytninger</value>
@@ -300,6 +486,9 @@
   <data name="SearchViewNoResults" xml:space="preserve">
     <value>Ingen resultater</value>
   </data>
+  <data name="SearchViewResultsAvailable" xml:space="preserve">
+    <value>Tilgængelige resultater</value>
+  </data>
   <data name="SearchViewRepeatSearch" xml:space="preserve">
     <value>Gentag søgning her</value>
   </data>
@@ -309,6 +498,36 @@
   <data name="SearchViewSearchTooltip" xml:space="preserve">
     <value>Søg</value>
   </data>
+  <data name="SearchViewSelectSearchSource" xml:space="preserve">
+    <value>Vælg søgekilde</value>
+  </data>
+  <data name="SearchViewCollapsedAutomationState" xml:space="preserve">
+    <value>skjult</value>
+  </data>
+  <data name="SearchViewExpandedAutomationState" xml:space="preserve">
+    <value>udvidet</value>
+  </data>
+  <data name="SearchViewSelectedAutomationName" xml:space="preserve">
+    <value>{0}, valgt</value>
+  </data>
+  <data name="SearchViewSearchSources" xml:space="preserve">
+    <value>Søg efter kilder</value>
+  </data>
+  <data name="SearchViewSourcesAvailable" xml:space="preserve">
+    <value>Tilgængelige ressourcer</value>
+  </data>
+  <data name="SearchViewSearchSuggestions" xml:space="preserve">
+    <value>Søg efter forslag</value>
+  </data>
+  <data name="SearchViewSuggestionsAvailable" xml:space="preserve">
+    <value>Tilgængelige forslag</value>
+  </data>
+  <data name="SearchViewSearchResults" xml:space="preserve">
+    <value>Søgeresultater</value>
+  </data>
+  <data name="UtilityNetworkTraceToolAddBarrier" xml:space="preserve">
+    <value>Tilføj barriere</value>
+  </data>
   <data name="UtilityNetworkTraceToolAddStartingPoint" xml:space="preserve">
     <value>Tilføj startpunkt</value>
   </data>
@@ -317,6 +536,9 @@
   </data>
   <data name="UtilityNetworkTraceToolAssetDetails" xml:space="preserve">
     <value>Aktivoplysninger</value>
+  </data>
+  <data name="UtilityNetworkTraceToolBarriers" xml:space="preserve">
+    <value>Barrierer</value>
   </data>
   <data name="UtilityNetworkTraceToolCancel" xml:space="preserve">
     <value>Annuller</value>
@@ -341,6 +563,9 @@
   </data>
   <data name="UtilityNetworkTraceToolFunctionResults" xml:space="preserve">
     <value>Funktionsresultater</value>
+  </data>
+  <data name="UtilityNetworkTraceToolIdentifyingBarriers" xml:space="preserve">
+    <value>Identificerer barrier...</value>
   </data>
   <data name="UtilityNetworkTraceToolIdentifyingStartingPoints" xml:space="preserve">
     <value>Identificerer startpunkter ...</value>
@@ -384,6 +609,9 @@
   <data name="UtilityNetworkTraceToolPrevious" xml:space="preserve">
     <value>Forrige</value>
   </data>
+  <data name="UtilityNetworkTraceToolRemoveAllBarriers" xml:space="preserve">
+    <value>Fjern alle</value>
+  </data>
   <data name="UtilityNetworkTraceToolRemoveAllStartingPoints" xml:space="preserve">
     <value>Fjern alle</value>
   </data>
@@ -414,6 +642,9 @@
   <data name="UtilityNetworkTraceToolStartingPoints" xml:space="preserve">
     <value>Startpunkter</value>
   </data>
+  <data name="UtilityNetworkTraceToolTapToIdentifyBarriers" xml:space="preserve">
+    <value>Tryk på kortet for at identificere barrierer.</value>
+  </data>
   <data name="UtilityNetworkTraceToolTapToIdentifyStartingPoints" xml:space="preserve">
     <value>Tryk på kortet for at identificere startpunkter.</value>
   </data>
@@ -437,6 +668,9 @@
   </data>
   <data name="UtilityNetworkTraceToolUtilityNetworks" xml:space="preserve">
     <value>Forsyningsnetværk</value>
+  </data>
+  <data name="UtilityNetworkTraceToolUseAsFilterBarrier" xml:space="preserve">
+    <value>Brug som filterbarriere</value>
   </data>
   <data name="UtilityNetworkTraceToolVisualizationOptions" xml:space="preserve">
     <value>Visualiseringsindstillinger</value>
@@ -482,5 +716,433 @@
   </data>
   <data name="Locator_DefaultName" xml:space="preserve">
     <value>Lokator</value>
+  </data>
+  <data name="OfflineMapAreasAdd" xml:space="preserve">
+    <value>Tilføj</value>
+  </data>
+  <data name="OfflineMapAreasAddMapArea" xml:space="preserve">
+    <value>Tilføj kortområde</value>
+  </data>
+  <data name="OfflineMapAreasAreaNamePlaceholder" xml:space="preserve">
+    <value>Navn</value>
+  </data>
+  <data name="OfflineMapAreasCancel" xml:space="preserve">
+    <value>Annuller</value>
+  </data>
+  <data name="OfflineMapAreasDownload" xml:space="preserve">
+    <value>Arkivér</value>
+  </data>
+  <data name="OfflineMapAreasDownloadSize" xml:space="preserve">
+    <value>Størrelse: {0}</value>
+  </data>
+  <data name="OfflineMapAreasDefaultAreaTitle" xml:space="preserve">
+    <value>Område {0}</value>
+  </data>
+  <data name="OfflineMapAreasDownloaded" xml:space="preserve">
+    <value>Downloadet</value>
+  </data>
+  <data name="OfflineMapAreasNoInternetConnectionMessage" xml:space="preserve">
+    <value>Kunne ikke hente kortområder for dette kort</value>
+  </data>
+  <data name="OfflineMapAreasNoInternetConnectionTitle" xml:space="preserve">
+    <value>Ingen internetforbindelse</value>
+  </data>
+  <data name="OfflineMapAreasNoMapAreasOnDemandMessage" xml:space="preserve">
+    <value>Der er ingen kortområder for dette kort. Tryk på knappen nedenfor for at komme i gang.</value>
+  </data>
+  <data name="OfflineMapAreasNoMapAreasPreplannedMessage" xml:space="preserve">
+    <value>Der er ingen kortområder for dette kort.</value>
+  </data>
+  <data name="OfflineMapAreasNoMapAreasTitle" xml:space="preserve">
+    <value>Ingen kortområder</value>
+  </data>
+  <data name="OfflineMapAreasOfflineDisabledMessage" xml:space="preserve">
+    <value>Kortet er ikke aktiveret til offlinebrug</value>
+  </data>
+  <data name="OfflineMapAreasOfflineDisabledTitle" xml:space="preserve">
+    <value>Offline deaktiveret</value>
+  </data>
+  <data name="OfflineMapAreasOpen" xml:space="preserve">
+    <value>Åben</value>
+  </data>
+  <data name="OfflineMapAreasRefresh" xml:space="preserve">
+    <value>Opdatér</value>
+  </data>
+  <data name="OfflineMapAreasRemove" xml:space="preserve">
+    <value>Fjern</value>
+  </data>
+  <data name="OfflineMapAreasSelectArea" xml:space="preserve">
+    <value>Vælg område</value>
+  </data>
+  <data name="OfflineMapAreasScaleLabel" xml:space="preserve">
+    <value>Målestok</value>
+  </data>
+  <data name="OfflineMapAreasScaleRoom" xml:space="preserve">
+    <value>Værelse</value>
+  </data>
+  <data name="OfflineMapAreasScaleRooms" xml:space="preserve">
+    <value>Værelser</value>
+  </data>
+  <data name="OfflineMapAreasScaleHouseProperty" xml:space="preserve">
+    <value>Husegenskab</value>
+  </data>
+  <data name="OfflineMapAreasScaleHouses" xml:space="preserve">
+    <value>Huse</value>
+  </data>
+  <data name="OfflineMapAreasScaleSmallBuilding" xml:space="preserve">
+    <value>Lille bygning</value>
+  </data>
+  <data name="OfflineMapAreasScaleBuilding" xml:space="preserve">
+    <value>Bygning</value>
+  </data>
+  <data name="OfflineMapAreasScaleBuildings" xml:space="preserve">
+    <value>Bygninger</value>
+  </data>
+  <data name="OfflineMapAreasScaleStreet" xml:space="preserve">
+    <value>Gade</value>
+  </data>
+  <data name="OfflineMapAreasScaleStreets" xml:space="preserve">
+    <value>Gader</value>
+  </data>
+  <data name="OfflineMapAreasScaleNeighborhood" xml:space="preserve">
+    <value>Kvarter</value>
+  </data>
+  <data name="OfflineMapAreasScaleTown" xml:space="preserve">
+    <value>By</value>
+  </data>
+  <data name="OfflineMapAreasScaleCity" xml:space="preserve">
+    <value>By</value>
+  </data>
+  <data name="OfflineMapAreasScaleCities" xml:space="preserve">
+    <value>Byer</value>
+  </data>
+  <data name="OfflineMapAreasScaleMetropolitanArea" xml:space="preserve">
+    <value>Storbyområde</value>
+  </data>
+  <data name="OfflineMapAreasScaleCounty" xml:space="preserve">
+    <value>Amt</value>
+  </data>
+  <data name="OfflineMapAreasScaleCounties" xml:space="preserve">
+    <value>Amter</value>
+  </data>
+  <data name="OfflineMapAreasScaleStateProvince" xml:space="preserve">
+    <value>Delstat/provins</value>
+  </data>
+  <data name="OfflineMapAreasScaleStatesProvinces" xml:space="preserve">
+    <value>Delstater/provinser</value>
+  </data>
+  <data name="OfflineMapAreasScaleCountriesSmall" xml:space="preserve">
+    <value>Lande (små)</value>
+  </data>
+  <data name="OfflineMapAreasScaleCountriesBig" xml:space="preserve">
+    <value>Lande (store)</value>
+  </data>
+  <data name="OfflineMapAreasScaleContinent" xml:space="preserve">
+    <value>Kontinent</value>
+  </data>
+  <data name="OfflineMapAreasScaleWorldSmall" xml:space="preserve">
+    <value>Verden (lille)</value>
+  </data>
+  <data name="OfflineMapAreasScaleWorldBig" xml:space="preserve">
+    <value>Verden (stor)</value>
+  </data>
+  <data name="OfflineMapAreasScaleWorld" xml:space="preserve">
+    <value>Verden</value>
+  </data>
+  <data name="OfflineMapAreasStop" xml:space="preserve">
+    <value>Stop</value>
+  </data>
+  <data name="OfflineMapAreasBackgroundTaskTitle" xml:space="preserve">
+    <value>Offlinekort</value>
+  </data>
+  <data name="OfflineMapAreasRemoveOnError" xml:space="preserve">
+    <value>Der opstod en fejl. Tryk for at fjerne.</value>
+  </data>
+  <data name="OrientedImageViewportAutomationName" xml:space="preserve">
+    <value>Orienteret billede</value>
+  </data>
+  <data name="OrientedImageryViewerAutomationTypeName" xml:space="preserve">
+    <value>Visning af orienteret billede</value>
+  </data>
+  <data name="OrientedImageryViewerSelectMarkerSymbol" xml:space="preserve">
+    <value>Vælg markørsymbol</value>
+  </data>
+  <data name="OrientedImageryViewerToggleAddMarkers" xml:space="preserve">
+    <value>Slå tilføj markører til/fra</value>
+  </data>
+  <data name="OrientedImageryViewerShowSelectedImageFootprint" xml:space="preserve">
+    <value>Vis aktuelt fodaftryk</value>
+  </data>
+  <data name="OrientedImageryViewerShowUnselectedImageFootprints" xml:space="preserve">
+    <value>Vis yderligere fodaftryk</value>
+  </data>
+  <data name="OrientedImageryViewerImageSearchMode" xml:space="preserve">
+    <value>Tilstand til billedsøgning</value>
+  </data>
+  <data name="OrientedImageryViewerCurrentFootprintLabel" xml:space="preserve">
+    <value>Aktuelt fodaftryk</value>
+  </data>
+  <data name="OrientedImageryViewerCurrentFootprintStackedLabel" xml:space="preserve">
+    <value>Aktuelt
+fodaftryk</value>
+  </data>
+  <data name="OrientedImageryViewerAdditionalFootprintsLabel" xml:space="preserve">
+    <value>Yderligere fodaftryk</value>
+  </data>
+  <data name="OrientedImageryViewerAdditionalFootprintsStackedLabel" xml:space="preserve">
+    <value>Yderligere
+fodaftryk</value>
+  </data>
+  <data name="OrientedImageryViewerCameraLocationsLabel" xml:space="preserve">
+    <value>Kamerapositioner</value>
+  </data>
+  <data name="OrientedImageryViewerCameraLocationsStackedLabel" xml:space="preserve">
+    <value>Kamera-
+positioner</value>
+  </data>
+  <data name="OrientedImageryViewerAddMarkersLabel" xml:space="preserve">
+    <value>Tilføj markører</value>
+  </data>
+  <data name="OrientedImageryViewerAddMarkersStackedLabel" xml:space="preserve">
+    <value>Tilføj
+markører</value>
+  </data>
+  <data name="OrientedImageryViewerClearMarkersLabel" xml:space="preserve">
+    <value>Ryd markører</value>
+  </data>
+  <data name="OrientedImageryViewerClearMarkersTooltip" xml:space="preserve">
+    <value>Ryd markører</value>
+  </data>
+  <data name="OrientedImageryViewerClearMarkersStackedLabel" xml:space="preserve">
+    <value>Ryd
+markører</value>
+  </data>
+  <data name="OrientedImageryViewerImageSearchModeFind" xml:space="preserve">
+    <value>Find billeder</value>
+  </data>
+  <data name="OrientedImageryViewerImageSearchModeFindStackedLabel" xml:space="preserve">
+    <value>Find
+billeder</value>
+  </data>
+  <data name="OrientedImageryViewerImageSearchModeDisplay" xml:space="preserve">
+    <value>Vis billede</value>
+  </data>
+  <data name="OrientedImageryViewerImageSearchModeDisplayStackedLabel" xml:space="preserve">
+    <value>Vis
+billede</value>
+  </data>
+  <data name="OrientedImageryViewerOpenSelectedImagePopup" xml:space="preserve">
+    <value>Åbn oplysningerne om det valgte billede</value>
+  </data>
+  <data name="OrientedImageryViewerImageDetails" xml:space="preserve">
+    <value>Billedoplysninger</value>
+  </data>
+  <data name="OrientedImageryViewerCloseSelectedImagePopup" xml:space="preserve">
+    <value>Luk oplysninger</value>
+  </data>
+  <data name="OrientedImageryViewerGoToPageFormat" xml:space="preserve">
+    <value>Gå til billede {0} af {1}</value>
+  </data>
+  <data name="OrientedImageryViewerSelectedPageFormat" xml:space="preserve">
+    <value>Billede {0} af {1}, valgt</value>
+  </data>
+  <data name="OrientedImageryViewerToggleCameraMarkers" xml:space="preserve">
+    <value>Vis kamerapositioner</value>
+  </data>
+  <data name="OrientedImageryViewerSequentialNavigationTooltip" xml:space="preserve">
+    <value>Sekventiel navigation</value>
+  </data>
+  <data name="OrientedImageryViewerSequentialNavigationLabel" xml:space="preserve">
+    <value>Sekventiel navigation</value>
+  </data>
+  <data name="OrientedImageryViewerSequentialNavigationStackedLabel" xml:space="preserve">
+    <value>Sekventiel
+navigation</value>
+  </data>
+  <data name="OrientedImageryViewerPreviousImage" xml:space="preserve">
+    <value>Forrige billede</value>
+  </data>
+  <data name="OrientedImageryViewerNextImage" xml:space="preserve">
+    <value>Næste billede</value>
+  </data>
+  <data name="OrientedImageryViewerImageLoading" xml:space="preserve">
+    <value>Billede indlæses...</value>
+  </data>
+  <data name="OrientedImageryViewerImageLoaded" xml:space="preserve">
+    <value>Billede er indlæst</value>
+  </data>
+  <data name="OrientedImageryViewerNoImageToDisplay" xml:space="preserve">
+    <value>Intet billede at vise.</value>
+  </data>
+  <data name="OrientedImageryViewerNoImagesFound" xml:space="preserve">
+    <value>Der blev ikke fundet nogen billeder for den position, der blev trykket på</value>
+  </data>
+  <data name="OrientedImageryViewerImageSelectionNoImagesNone" xml:space="preserve">
+    <value>Intet billede at vise Aktivér funktionen til at finde billeder eller tilstanden til visning af billeder for at søge efter billeder</value>
+  </data>
+  <data name="OrientedImageryViewerImageSelectionNoImagesFind" xml:space="preserve">
+    <value>Intet billede at vise Tryk på kortet for at søge efter billeder, eller skift til tilstanden til visning af billeder.</value>
+  </data>
+  <data name="OrientedImageryViewerImageSelectionNoImagesDisplay" xml:space="preserve">
+    <value>Intet billede at vise Tryk på et objekt for at vise dets billede, eller skift til tilstanden til at finde billeder.</value>
+  </data>
+  <data name="OrientedImageryViewerImageSelectionEnable" xml:space="preserve">
+    <value>Aktivér</value>
+  </data>
+  <data name="OrientedImageryViewerImageSelectionOr" xml:space="preserve">
+    <value>eller</value>
+  </data>
+  <data name="OrientedImageryViewerImageSelectionSearchMode" xml:space="preserve">
+    <value>tilstand til at søge efter billeder</value>
+  </data>
+  <data name="OrientedImageryViewerImageSelectionFindImages" xml:space="preserve">
+    <value>Tryk på kortet for at søge efter billeder</value>
+  </data>
+  <data name="OrientedImageryViewerImageSelectionDisplayImage" xml:space="preserve">
+    <value>Tryk på et objekt for at vise dets billede</value>
+  </data>
+  <data name="OrientedImageryViewerImageSelectionSwitchMode" xml:space="preserve">
+    <value>eller skift til</value>
+  </data>
+  <data name="OrientedImageryViewerImageSelectionMode" xml:space="preserve">
+    <value>tilstand</value>
+  </data>
+  <data name="OrientedImageryViewerNoGeoView" xml:space="preserve">
+    <value>Forbind et GeoView for at vise orienterede billeder.</value>
+  </data>
+  <data name="OrientedImageryViewerNoLayerSelected" xml:space="preserve">
+    <value>Der er ikke valgt noget lag.</value>
+  </data>
+  <data name="OrientedImageryViewerAnnounceTransientError" xml:space="preserve">
+    <value>Fejlens alvorlighedsgrad er øget</value>
+  </data>
+  <data name="OrientedImageryViewerDismissError" xml:space="preserve">
+    <value>Afvis fejlen</value>
+  </data>
+  <data name="OrientedImageryViewerPreviousLabel" xml:space="preserve">
+    <value>Forr.</value>
+  </data>
+  <data name="OrientedImageryViewerNextLabel" xml:space="preserve">
+    <value>Næste</value>
+  </data>
+  <data name="OrientedImageryViewerSequenceStartReached" xml:space="preserve">
+    <value>Start på billedsekvens er nået</value>
+  </data>
+  <data name="OrientedImageryViewerSequenceEndReached" xml:space="preserve">
+    <value>Slut på billedsekvens er nået</value>
+  </data>
+  <data name="OrientedImageryViewerSequenceStartAndEndReached" xml:space="preserve">
+    <value>Start og slut på billedsekvens er nået</value>
+  </data>
+  <data name="OrientedImageryViewerClose" xml:space="preserve">
+    <value>Luk orienterede billeder</value>
+  </data>
+  <data name="OrientedImageryViewerClosePanel" xml:space="preserve">
+    <value>Luk panel</value>
+  </data>
+  <data name="OrientedImageryViewerOverlays" xml:space="preserve">
+    <value>Overlays</value>
+  </data>
+  <data name="OrientedImageryViewerMarkers" xml:space="preserve">
+    <value>Markører</value>
+  </data>
+  <data name="OrientedImageryViewerMode" xml:space="preserve">
+    <value>Tilstand</value>
+  </data>
+  <data name="OrientedImageryViewerShowPreviousImageInSequence" xml:space="preserve">
+    <value>Vis forrige billede i sekvens</value>
+  </data>
+  <data name="OrientedImageryViewerShowNextImageInSequence" xml:space="preserve">
+    <value>Vis næste billede i sekvens</value>
+  </data>
+  <data name="OrientedImageryViewerMore" xml:space="preserve">
+    <value>Mere</value>
+  </data>
+  <data name="OrientedImageryViewerPage" xml:space="preserve">
+    <value>Billede {0} af {1}</value>
+  </data>
+  <data name="OrientedImageryViewerSelectLayer" xml:space="preserve">
+    <value>Vælg lag</value>
+  </data>
+  <data name="OrientedImagerySampleToggleView" xml:space="preserve">
+    <value>2D/3D</value>
+  </data>
+  <data name="OrientedImagerySampleToggleViewDescription" xml:space="preserve">
+    <value>Skift mellem 2D-kort og 3D-scene</value>
+  </data>
+  <data name="OrientedImageryViewerMarkerSelection" xml:space="preserve">
+    <value>Markørvalg</value>
+  </data>
+  <data name="OrientedImageryViewerMarkerOption" xml:space="preserve">
+    <value>Markør {0}</value>
+  </data>
+  <data name="OrientedImageryViewerMarkerCircle" xml:space="preserve">
+    <value>Cirkelformet markør</value>
+  </data>
+  <data name="OrientedImageryViewerMarkerSquare" xml:space="preserve">
+    <value>Firkantet markør</value>
+  </data>
+  <data name="OrientedImageryViewerMarkerTriangle" xml:space="preserve">
+    <value>Trekantet markør</value>
+  </data>
+  <data name="OrientedImageryViewerMarkerDiamond" xml:space="preserve">
+    <value>Rombeformet markør</value>
+  </data>
+  <data name="OrientedImageryViewerMarkerX" xml:space="preserve">
+    <value>Krydsmarkør</value>
+  </data>
+  <data name="OrientedImageryViewerMobileSequentialMode" xml:space="preserve">
+    <value>Sekventiel</value>
+  </data>
+  <data name="OrientedImageryViewerNavigation" xml:space="preserve">
+    <value>Udforsk</value>
+  </data>
+  <data name="OrientedImageryViewerModeSelection" xml:space="preserve">
+    <value>Valg af tilstand</value>
+  </data>
+  <data name="OrientedImageryViewerOverlaysSelection" xml:space="preserve">
+    <value>Valg af overlays</value>
+  </data>
+  <data name="OrientedImageryViewerMarkerTools" xml:space="preserve">
+    <value>Markørværktøjer</value>
+  </data>
+  <data name="OrientedImageryViewerOpen" xml:space="preserve">
+    <value>Åbn orienterede billeder</value>
+  </data>
+  <data name="OrientedImageryViewerOn" xml:space="preserve">
+    <value>Til</value>
+  </data>
+  <data name="OrientedImageryViewerOff" xml:space="preserve">
+    <value>Fra</value>
+  </data>
+  <data name="OrientedImageryViewerSelected" xml:space="preserve">
+    <value>Valgt</value>
+  </data>
+  <data name="OrientedImageryViewerNotSelected" xml:space="preserve">
+    <value>Ikke valgt</value>
+  </data>
+  <data name="OrientedImageryViewerMobileBackToMarkers" xml:space="preserve">
+    <value>Tilbage til markørværktøjer</value>
+  </data>
+  <data name="OrientedImageryViewerMobileSelectMarkerSymbol" xml:space="preserve">
+    <value>Vælg symbol</value>
+  </data>
+  <data name="OrientedImageryViewerMobileCurrentFootprint" xml:space="preserve">
+    <value>Vis aktuelt fodaftryk</value>
+  </data>
+  <data name="OrientedImageryViewerMobileAdditionalFootprints" xml:space="preserve">
+    <value>Vis yderligere fodaftryk</value>
+  </data>
+  <data name="OrientedImageryViewerMobileCameraLocations" xml:space="preserve">
+    <value>Vis kamerapositioner</value>
+  </data>
+  <data name="OrientedImageryViewerImageNavigation" xml:space="preserve">
+    <value>Billednavigation</value>
+  </data>
+  <data name="OrientedImageryViewerImageNavigationHint" xml:space="preserve">
+    <value>Brug venstre pil for det forrige billede eller højre pil for det næste billede.</value>
+  </data>
+  <data name="OrientedImageryViewerSequenceNavigation" xml:space="preserve">
+    <value>Sekventiel billednavigation</value>
   </data>
 </root>

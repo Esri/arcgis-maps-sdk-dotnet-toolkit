@@ -123,11 +123,32 @@
   <data name="BasemapGalleryAutomationHelpText" xml:space="preserve">
     <value>Pateikiamas pasiekiamų pagrindo žemėlapių sąrašas. Pasirinkite pagrindo žemėlapį, kad galėtumėte naudoti dabartiniam žemėlapiui ar scenai.</value>
   </data>
+  <data name="BookmarksViewAutomationName" xml:space="preserve">
+    <value>Žymos</value>
+  </data>
   <data name="FeatureFormAddAttachmentMenuFromFile" xml:space="preserve">
     <value>Pridėti priedą</value>
   </data>
   <data name="FeatureFormAddAttachmentMenuWithCamera" xml:space="preserve">
     <value>Fotografuoti</value>
+  </data>
+  <data name="FeatureFormAttachmentTypeValidationError" xml:space="preserve">
+    <value>Šis failo tipas nepalaikomas. Leidžiami tipai: {0}</value>
+  </data>
+  <data name="FeatureFormAttachmentSizeValidationError" xml:space="preserve">
+    <value>Šis failas per didelis. Didžiausias leistinas dydis yra {0} MB.</value>
+  </data>
+  <data name="FeatureFormAttachmentSizeValidationErrorFallback" xml:space="preserve">
+    <value>Šis failas per didelis.</value>
+  </data>
+  <data name="FeatureFormAttachmentDurationValidationError" xml:space="preserve">
+    <value>Ši medija per ilga. Didžiausia leistina trukmė yra {0} sek.</value>
+  </data>
+  <data name="FeatureFormAttachmentDurationValidationErrorFallback" xml:space="preserve">
+    <value>Ši medija per ilga.</value>
+  </data>
+  <data name="FeatureFormAttachmentValidationErrorTitle" xml:space="preserve">
+    <value>Priedo įkelti nepavyko</value>
   </data>
   <data name="FeatureFormExceedsMaximumDateTime" xml:space="preserve">
     <value>Data turi būti {0} arba ankstesnė</value>
@@ -174,6 +195,18 @@
   <data name="FeatureFormLessThanNumericMinimum" xml:space="preserve">
     <value>Mažiau negu minimali reikšmė</value>
   </data>
+  <data name="FeatureFormMaximumAttachmentCountAllowed" xml:space="preserve">
+    <value>Didžiausias leistinas priedų skaičius yra {0}.</value>
+  </data>
+  <data name="FeatureFormMaximumAttachmentCountLabel" xml:space="preserve">
+    <value>Daugiausia: {0}</value>
+  </data>
+  <data name="FeatureFormMinimumAttachmentCountLabel" xml:space="preserve">
+    <value>Mažiausia: {0}</value>
+  </data>
+  <data name="FeatureFormMinimumAttachmentCountRequired" xml:space="preserve">
+    <value>Būtinas priedų skaičius: {0}.</value>
+  </data>
   <data name="FeatureFormNoAttachments" xml:space="preserve">
     <value>Nėra priedų</value>
   </data>
@@ -206,6 +239,147 @@
   </data>
   <data name="FeatureFormSpecificLength" xml:space="preserve">
     <value>Būtinas simbolių skaičius: {0}</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsRemoveAssociation" xml:space="preserve">
+    <value>Pašalinti susiejimą</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsShowOnMap" xml:space="preserve">
+    <value>Rodyti žemėlapyje</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsMoreInformation" xml:space="preserve">
+    <value>Daugiau informacijos</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsPercentAlong" xml:space="preserve">
+    <value>Proc. palei</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationSettings" xml:space="preserve">
+    <value>Susiejimo nustatymai</value>
+  </data>
+  <data name="FeatureFormDeleteAssociationConfirmationTitle" xml:space="preserve">
+    <value>Pašalinti susiejimą?</value>
+  </data>
+  <data name="FeatureFormDeleteAssociationConfirmationMessage" xml:space="preserve">
+    <value>Atlikus šį veiksmą bus tik pašalintas susiejimas. Elementas išlieka.</value>
+  </data>
+  <data name="FeatureFormDeleteAssociationConfirmationAccept" xml:space="preserve">
+    <value>Pašalinti</value>
+  </data>
+  <data name="FeatureFormDeleteAssociationConfirmationCancel" xml:space="preserve">
+    <value>Atšaukti</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsAddAssociation" xml:space="preserve">
+    <value>Pridėti susiejimą</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsAdd" xml:space="preserve">
+    <value>Pridėti</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsChooseAddMethod" xml:space="preserve">
+    <value>Pasirinkite, kaip pradėti elementą</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsChooseToAdd" xml:space="preserve">
+    <value>Pasirinkti norint pridėti</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsFeaturesIdentified" xml:space="preserve">
+    <value>Rasta elementų: {0}</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsAssociationType" xml:space="preserve">
+    <value>Susiejimo tipas</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsAttachmentType" xml:space="preserve">
+    <value>Priedas</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsCannotAddAssociation" xml:space="preserve">
+    <value>Šio susiejimo nepavyksta pridėti.</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsConnectivityType" xml:space="preserve">
+    <value>Jungimas</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsContainmentType" xml:space="preserve">
+    <value>Apribojimas</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsContentVisibility" xml:space="preserve">
+    <value>Turinio matomumas</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsCurrentFeatureTerminal" xml:space="preserve">
+    <value>Dabartinio elemento terminalas</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsFractionAlongEdgeError" xml:space="preserve">
+    <value>Įveskite procentinę reikšmę nuo 0 iki 100.</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsFractionAlongEdgePercent" xml:space="preserve">
+    <value>Trupmena išilgai krašto (%)</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsFromElement" xml:space="preserve">
+    <value>Iš elemento</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsNoCandidates" xml:space="preserve">
+    <value>Jokių atitikimų nerasta.</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsNoFeatureSources" xml:space="preserve">
+    <value>Nėra jokių tinklo duomenų šaltinių.</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsNewAssociation" xml:space="preserve">
+    <value>Naujas susiejimas</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsNotEditable" xml:space="preserve">
+    <value>Šio elemento susiejimų negalima redaguoti.</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsOtherFeatureTerminal" xml:space="preserve">
+    <value>Kitas elemento terminalas</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsReviewAssociation" xml:space="preserve">
+    <value>Peržiūrėti susiejimą</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsSearchFeatures" xml:space="preserve">
+    <value>Ieškoti elementų</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsSearch" xml:space="preserve">
+    <value>Ieškoti</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsNetworkDataSource" xml:space="preserve">
+    <value>Tinklo duomenų šaltinis</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsResultCount" xml:space="preserve">
+    <value>Rezultatų: {0}</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsAvailableAssetTypes" xml:space="preserve">
+    <value>Prieinamų išteklių tipai</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsAvailableFeatures" xml:space="preserve">
+    <value>Galimi elementai ({0})</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsLoading" xml:space="preserve">
+    <value>Įkeliama...</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsNoAssetTypes" xml:space="preserve">
+    <value>Nėra prieinamų išteklių tipų.</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsLoadMore" xml:space="preserve">
+    <value>Įkelti daugiau</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsSelectFeatureSource" xml:space="preserve">
+    <value>Pasirinkite tinklo duomenų šaltinį</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsSelectFromNetworkDataSource" xml:space="preserve">
+    <value>Iš tinklo duomenų šaltinio</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsSelectOnMap" xml:space="preserve">
+    <value>Žemėlapyje</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsSelectFeaturesOnMap" xml:space="preserve">
+    <value>Pasirinkite elementus bakstelėdami žemėlapyje.</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsSelectTerminalError" xml:space="preserve">
+    <value>Pasirinkite terminalą.</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsStructureAttachmentType" xml:space="preserve">
+    <value>Struktūros priedas</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsTapSelection" xml:space="preserve">
+    <value>Bakstelėkite pasirinkimą</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsToElement" xml:space="preserve">
+    <value>Į elementą</value>
   </data>
   <data name="FloorFilterAllFacilities" xml:space="preserve">
     <value>Visos vietovės</value>
@@ -245,6 +419,18 @@
   </data>
   <data name="PopupViewerViewHyperlinkText" xml:space="preserve">
     <value>Peržiūrėkite</value>
+  </data>
+  <data name="PopupViewerAttachmentDownloading" xml:space="preserve">
+    <value>Atsisiunčiamas priedas</value>
+  </data>
+  <data name="PopupViewerPreviousMediaButtonText" xml:space="preserve">
+    <value>Ankstesnė medija</value>
+  </data>
+  <data name="PopupViewerNextMediaButtonText" xml:space="preserve">
+    <value>Kita medija</value>
+  </data>
+  <data name="PopupViewerMediaPosition" xml:space="preserve">
+    <value>Medijos elementas {0} iš {1}</value>
   </data>
   <data name="PopupViewerUtilityAssociationsDefaultTitle" xml:space="preserve">
     <value>Susiejimai</value>
@@ -300,6 +486,9 @@
   <data name="SearchViewNoResults" xml:space="preserve">
     <value>Rezultatų nėra</value>
   </data>
+  <data name="SearchViewResultsAvailable" xml:space="preserve">
+    <value>Galimi rezultatai</value>
+  </data>
   <data name="SearchViewRepeatSearch" xml:space="preserve">
     <value>Pakartoti paiešką čia</value>
   </data>
@@ -309,6 +498,36 @@
   <data name="SearchViewSearchTooltip" xml:space="preserve">
     <value>Ieškoti</value>
   </data>
+  <data name="SearchViewSelectSearchSource" xml:space="preserve">
+    <value>Pasirinkite paieškos šaltinį</value>
+  </data>
+  <data name="SearchViewCollapsedAutomationState" xml:space="preserve">
+    <value>suskleista</value>
+  </data>
+  <data name="SearchViewExpandedAutomationState" xml:space="preserve">
+    <value>išskleista</value>
+  </data>
+  <data name="SearchViewSelectedAutomationName" xml:space="preserve">
+    <value>{0}, pasirinkta</value>
+  </data>
+  <data name="SearchViewSearchSources" xml:space="preserve">
+    <value>Paieškos šaltiniai</value>
+  </data>
+  <data name="SearchViewSourcesAvailable" xml:space="preserve">
+    <value>Galimi šaltiniai</value>
+  </data>
+  <data name="SearchViewSearchSuggestions" xml:space="preserve">
+    <value>Paieškos pasiūlymai</value>
+  </data>
+  <data name="SearchViewSuggestionsAvailable" xml:space="preserve">
+    <value>Galimi pasiūlymai</value>
+  </data>
+  <data name="SearchViewSearchResults" xml:space="preserve">
+    <value>Paieškos rezultatai</value>
+  </data>
+  <data name="UtilityNetworkTraceToolAddBarrier" xml:space="preserve">
+    <value>Pridėti kliūtį</value>
+  </data>
   <data name="UtilityNetworkTraceToolAddStartingPoint" xml:space="preserve">
     <value>Pridėti pradžios tašką</value>
   </data>
@@ -317,6 +536,9 @@
   </data>
   <data name="UtilityNetworkTraceToolAssetDetails" xml:space="preserve">
     <value>Ištekliaus informacija</value>
+  </data>
+  <data name="UtilityNetworkTraceToolBarriers" xml:space="preserve">
+    <value>Kliūtys</value>
   </data>
   <data name="UtilityNetworkTraceToolCancel" xml:space="preserve">
     <value>Atšaukti</value>
@@ -341,6 +563,9 @@
   </data>
   <data name="UtilityNetworkTraceToolFunctionResults" xml:space="preserve">
     <value>Funkcijos rezultatai</value>
+  </data>
+  <data name="UtilityNetworkTraceToolIdentifyingBarriers" xml:space="preserve">
+    <value>Identifikuojamos kliūtys...</value>
   </data>
   <data name="UtilityNetworkTraceToolIdentifyingStartingPoints" xml:space="preserve">
     <value>Nustatomi pradžios taškai...</value>
@@ -384,6 +609,9 @@
   <data name="UtilityNetworkTraceToolPrevious" xml:space="preserve">
     <value>Atgal</value>
   </data>
+  <data name="UtilityNetworkTraceToolRemoveAllBarriers" xml:space="preserve">
+    <value>Šalinti viską</value>
+  </data>
   <data name="UtilityNetworkTraceToolRemoveAllStartingPoints" xml:space="preserve">
     <value>Šalinti viską</value>
   </data>
@@ -414,6 +642,9 @@
   <data name="UtilityNetworkTraceToolStartingPoints" xml:space="preserve">
     <value>Pradžios taškai</value>
   </data>
+  <data name="UtilityNetworkTraceToolTapToIdentifyBarriers" xml:space="preserve">
+    <value>Bakstelėkite žemėlapyje, kad identifikuotumėte kliūtis.</value>
+  </data>
   <data name="UtilityNetworkTraceToolTapToIdentifyStartingPoints" xml:space="preserve">
     <value>Norėdami nustatyti pradžios taškus, bakstelėkite žemėlapį.</value>
   </data>
@@ -437,6 +668,9 @@
   </data>
   <data name="UtilityNetworkTraceToolUtilityNetworks" xml:space="preserve">
     <value>Komunaliniai tinklai</value>
+  </data>
+  <data name="UtilityNetworkTraceToolUseAsFilterBarrier" xml:space="preserve">
+    <value>Naudoti kaip filtravimo kliūtį</value>
   </data>
   <data name="UtilityNetworkTraceToolVisualizationOptions" xml:space="preserve">
     <value>Vizualizacijos parinktys</value>
@@ -482,5 +716,433 @@
   </data>
   <data name="Locator_DefaultName" xml:space="preserve">
     <value>Lokatorius</value>
+  </data>
+  <data name="OfflineMapAreasAdd" xml:space="preserve">
+    <value>Pridėti</value>
+  </data>
+  <data name="OfflineMapAreasAddMapArea" xml:space="preserve">
+    <value>Pridėti žemėlapio teritoriją</value>
+  </data>
+  <data name="OfflineMapAreasAreaNamePlaceholder" xml:space="preserve">
+    <value>Pavadinimas</value>
+  </data>
+  <data name="OfflineMapAreasCancel" xml:space="preserve">
+    <value>Atšaukti</value>
+  </data>
+  <data name="OfflineMapAreasDownload" xml:space="preserve">
+    <value>Atsisiųsti</value>
+  </data>
+  <data name="OfflineMapAreasDownloadSize" xml:space="preserve">
+    <value>Dydis: {0}</value>
+  </data>
+  <data name="OfflineMapAreasDefaultAreaTitle" xml:space="preserve">
+    <value>Plotas {0}</value>
+  </data>
+  <data name="OfflineMapAreasDownloaded" xml:space="preserve">
+    <value>Atsisiųsta</value>
+  </data>
+  <data name="OfflineMapAreasNoInternetConnectionMessage" xml:space="preserve">
+    <value>Nepavyko gauti šio žemėlapio teritorijų</value>
+  </data>
+  <data name="OfflineMapAreasNoInternetConnectionTitle" xml:space="preserve">
+    <value>Nėra interneto ryšio</value>
+  </data>
+  <data name="OfflineMapAreasNoMapAreasOnDemandMessage" xml:space="preserve">
+    <value>Nėra šio žemėlapio teritorijų. Norėdami pradėti, bakstelėkite toliau esantį mygtuką.</value>
+  </data>
+  <data name="OfflineMapAreasNoMapAreasPreplannedMessage" xml:space="preserve">
+    <value>Nėra šio žemėlapio teritorijų.</value>
+  </data>
+  <data name="OfflineMapAreasNoMapAreasTitle" xml:space="preserve">
+    <value>Nėra žemėlapio teritorijų</value>
+  </data>
+  <data name="OfflineMapAreasOfflineDisabledMessage" xml:space="preserve">
+    <value>Žemėlapio negalima naudoti neprisijungus</value>
+  </data>
+  <data name="OfflineMapAreasOfflineDisabledTitle" xml:space="preserve">
+    <value>Darbo neprisijungus prie interneto režimas išjungtas</value>
+  </data>
+  <data name="OfflineMapAreasOpen" xml:space="preserve">
+    <value>Atverti</value>
+  </data>
+  <data name="OfflineMapAreasRefresh" xml:space="preserve">
+    <value>Atnaujinti</value>
+  </data>
+  <data name="OfflineMapAreasRemove" xml:space="preserve">
+    <value>Pašalinti</value>
+  </data>
+  <data name="OfflineMapAreasSelectArea" xml:space="preserve">
+    <value>Pasirinkite teritoriją</value>
+  </data>
+  <data name="OfflineMapAreasScaleLabel" xml:space="preserve">
+    <value>Mastelis</value>
+  </data>
+  <data name="OfflineMapAreasScaleRoom" xml:space="preserve">
+    <value>Kambarys</value>
+  </data>
+  <data name="OfflineMapAreasScaleRooms" xml:space="preserve">
+    <value>Kambariai</value>
+  </data>
+  <data name="OfflineMapAreasScaleHouseProperty" xml:space="preserve">
+    <value>Namų nuosavybė</value>
+  </data>
+  <data name="OfflineMapAreasScaleHouses" xml:space="preserve">
+    <value>Namai</value>
+  </data>
+  <data name="OfflineMapAreasScaleSmallBuilding" xml:space="preserve">
+    <value>Mažas pastatas</value>
+  </data>
+  <data name="OfflineMapAreasScaleBuilding" xml:space="preserve">
+    <value>Pastatas</value>
+  </data>
+  <data name="OfflineMapAreasScaleBuildings" xml:space="preserve">
+    <value>Pastatai</value>
+  </data>
+  <data name="OfflineMapAreasScaleStreet" xml:space="preserve">
+    <value>Gatvė</value>
+  </data>
+  <data name="OfflineMapAreasScaleStreets" xml:space="preserve">
+    <value>Gatvės</value>
+  </data>
+  <data name="OfflineMapAreasScaleNeighborhood" xml:space="preserve">
+    <value>Apylinkė</value>
+  </data>
+  <data name="OfflineMapAreasScaleTown" xml:space="preserve">
+    <value>Miestelis</value>
+  </data>
+  <data name="OfflineMapAreasScaleCity" xml:space="preserve">
+    <value>Miestas</value>
+  </data>
+  <data name="OfflineMapAreasScaleCities" xml:space="preserve">
+    <value>Miestai</value>
+  </data>
+  <data name="OfflineMapAreasScaleMetropolitanArea" xml:space="preserve">
+    <value>Didmiesčio sritis</value>
+  </data>
+  <data name="OfflineMapAreasScaleCounty" xml:space="preserve">
+    <value>Apygarda</value>
+  </data>
+  <data name="OfflineMapAreasScaleCounties" xml:space="preserve">
+    <value>Apygardos</value>
+  </data>
+  <data name="OfflineMapAreasScaleStateProvince" xml:space="preserve">
+    <value>Valstija / provincija</value>
+  </data>
+  <data name="OfflineMapAreasScaleStatesProvinces" xml:space="preserve">
+    <value>Valstijos / provincijos</value>
+  </data>
+  <data name="OfflineMapAreasScaleCountriesSmall" xml:space="preserve">
+    <value>Šalys (mažos)</value>
+  </data>
+  <data name="OfflineMapAreasScaleCountriesBig" xml:space="preserve">
+    <value>Šalys (didelės)</value>
+  </data>
+  <data name="OfflineMapAreasScaleContinent" xml:space="preserve">
+    <value>Žemynas</value>
+  </data>
+  <data name="OfflineMapAreasScaleWorldSmall" xml:space="preserve">
+    <value>Pasaulis (mažas)</value>
+  </data>
+  <data name="OfflineMapAreasScaleWorldBig" xml:space="preserve">
+    <value>Pasaulis (didelis)</value>
+  </data>
+  <data name="OfflineMapAreasScaleWorld" xml:space="preserve">
+    <value>Pasaulis</value>
+  </data>
+  <data name="OfflineMapAreasStop" xml:space="preserve">
+    <value>Stabdyti</value>
+  </data>
+  <data name="OfflineMapAreasBackgroundTaskTitle" xml:space="preserve">
+    <value>Neprisijungus prie interneto naudojamas žemėlapis</value>
+  </data>
+  <data name="OfflineMapAreasRemoveOnError" xml:space="preserve">
+    <value>Įvyko klaida. Bakstelėkite, kad galėtumėte pašalinti.</value>
+  </data>
+  <data name="OrientedImageViewportAutomationName" xml:space="preserve">
+    <value>Orientuotas vaizdas</value>
+  </data>
+  <data name="OrientedImageryViewerAutomationTypeName" xml:space="preserve">
+    <value>Orientuotų vaizdų peržiūra</value>
+  </data>
+  <data name="OrientedImageryViewerSelectMarkerSymbol" xml:space="preserve">
+    <value>Pasirinkti žymeklio simbolį</value>
+  </data>
+  <data name="OrientedImageryViewerToggleAddMarkers" xml:space="preserve">
+    <value>Perjungti žymeklių pridėjimą</value>
+  </data>
+  <data name="OrientedImageryViewerShowSelectedImageFootprint" xml:space="preserve">
+    <value>Rodyti dabartinę aprėpiamą erdvę</value>
+  </data>
+  <data name="OrientedImageryViewerShowUnselectedImageFootprints" xml:space="preserve">
+    <value>Rodyti papildomas aprėpiamas erdves</value>
+  </data>
+  <data name="OrientedImageryViewerImageSearchMode" xml:space="preserve">
+    <value>Vaizdų paieškos režimas</value>
+  </data>
+  <data name="OrientedImageryViewerCurrentFootprintLabel" xml:space="preserve">
+    <value>Dabartinė aprėpiama erdvė</value>
+  </data>
+  <data name="OrientedImageryViewerCurrentFootprintStackedLabel" xml:space="preserve">
+    <value>Dabartinė
+aprėpiama erdvė</value>
+  </data>
+  <data name="OrientedImageryViewerAdditionalFootprintsLabel" xml:space="preserve">
+    <value>Papildomos aprėpiamos erdvės</value>
+  </data>
+  <data name="OrientedImageryViewerAdditionalFootprintsStackedLabel" xml:space="preserve">
+    <value>Papildomos
+aprėpiamos erdvės</value>
+  </data>
+  <data name="OrientedImageryViewerCameraLocationsLabel" xml:space="preserve">
+    <value>Fotoaparatų vietos</value>
+  </data>
+  <data name="OrientedImageryViewerCameraLocationsStackedLabel" xml:space="preserve">
+    <value>Fotoaparatų
+vietos</value>
+  </data>
+  <data name="OrientedImageryViewerAddMarkersLabel" xml:space="preserve">
+    <value>Pridėti žymeklius</value>
+  </data>
+  <data name="OrientedImageryViewerAddMarkersStackedLabel" xml:space="preserve">
+    <value>Pridėti
+žymeklius</value>
+  </data>
+  <data name="OrientedImageryViewerClearMarkersLabel" xml:space="preserve">
+    <value>Išvalyti žymeklius</value>
+  </data>
+  <data name="OrientedImageryViewerClearMarkersTooltip" xml:space="preserve">
+    <value>Išvalyti žymeklius</value>
+  </data>
+  <data name="OrientedImageryViewerClearMarkersStackedLabel" xml:space="preserve">
+    <value>Išvalyti
+žymeklius</value>
+  </data>
+  <data name="OrientedImageryViewerImageSearchModeFind" xml:space="preserve">
+    <value>Rasti vaizdus</value>
+  </data>
+  <data name="OrientedImageryViewerImageSearchModeFindStackedLabel" xml:space="preserve">
+    <value>Rasti
+vaizdus</value>
+  </data>
+  <data name="OrientedImageryViewerImageSearchModeDisplay" xml:space="preserve">
+    <value>Rodyti vaizdą</value>
+  </data>
+  <data name="OrientedImageryViewerImageSearchModeDisplayStackedLabel" xml:space="preserve">
+    <value>Rodyti
+vaizdą</value>
+  </data>
+  <data name="OrientedImageryViewerOpenSelectedImagePopup" xml:space="preserve">
+    <value>Atidaryti pasirinkto vaizdo informaciją</value>
+  </data>
+  <data name="OrientedImageryViewerImageDetails" xml:space="preserve">
+    <value>Vaizdo informacija</value>
+  </data>
+  <data name="OrientedImageryViewerCloseSelectedImagePopup" xml:space="preserve">
+    <value>Uždaryti informaciją</value>
+  </data>
+  <data name="OrientedImageryViewerGoToPageFormat" xml:space="preserve">
+    <value>Eiti į vaizdą {0} iš {1}</value>
+  </data>
+  <data name="OrientedImageryViewerSelectedPageFormat" xml:space="preserve">
+    <value>Vaizdas {0} iš {1}, pasirinktas</value>
+  </data>
+  <data name="OrientedImageryViewerToggleCameraMarkers" xml:space="preserve">
+    <value>Rodyti fotoaparatų vietas</value>
+  </data>
+  <data name="OrientedImageryViewerSequentialNavigationTooltip" xml:space="preserve">
+    <value>Nuoseklioji navigacija</value>
+  </data>
+  <data name="OrientedImageryViewerSequentialNavigationLabel" xml:space="preserve">
+    <value>Nuoseklioji navigacija</value>
+  </data>
+  <data name="OrientedImageryViewerSequentialNavigationStackedLabel" xml:space="preserve">
+    <value>Nuoseklioji
+navigacija</value>
+  </data>
+  <data name="OrientedImageryViewerPreviousImage" xml:space="preserve">
+    <value>Ankstesnis vaizdas</value>
+  </data>
+  <data name="OrientedImageryViewerNextImage" xml:space="preserve">
+    <value>Kitas vaizdas</value>
+  </data>
+  <data name="OrientedImageryViewerImageLoading" xml:space="preserve">
+    <value>Vaizdas įkeliamas...</value>
+  </data>
+  <data name="OrientedImageryViewerImageLoaded" xml:space="preserve">
+    <value>Vaizdas įkeltas</value>
+  </data>
+  <data name="OrientedImageryViewerNoImageToDisplay" xml:space="preserve">
+    <value>Nėra rodytino vaizdo</value>
+  </data>
+  <data name="OrientedImageryViewerNoImagesFound" xml:space="preserve">
+    <value>Bakstelėtoje vietoje vaizdų nerasta</value>
+  </data>
+  <data name="OrientedImageryViewerImageSelectionNoImagesNone" xml:space="preserve">
+    <value>Nėra rodytino vaizdo. Įjunkite vaizdų paieškos arba vaizdo rodymo režimą, kad ieškotumėte vaizdų.</value>
+  </data>
+  <data name="OrientedImageryViewerImageSelectionNoImagesFind" xml:space="preserve">
+    <value>Nėra rodytino vaizdo. Bakstelėkite žemėlapyje, kad ieškotumėte vaizdų, arba perjunkite į vaizdo rodymo režimą.</value>
+  </data>
+  <data name="OrientedImageryViewerImageSelectionNoImagesDisplay" xml:space="preserve">
+    <value>Nėra rodytino vaizdo. Bakstelėkite elementą, kad peržiūrėtumėte jo vaizdą, arba perjunkite į vaizdų paieškos režimą.</value>
+  </data>
+  <data name="OrientedImageryViewerImageSelectionEnable" xml:space="preserve">
+    <value>Įgalinti</value>
+  </data>
+  <data name="OrientedImageryViewerImageSelectionOr" xml:space="preserve">
+    <value>arba</value>
+  </data>
+  <data name="OrientedImageryViewerImageSelectionSearchMode" xml:space="preserve">
+    <value>režimą, kad ieškotumėte vaizdų</value>
+  </data>
+  <data name="OrientedImageryViewerImageSelectionFindImages" xml:space="preserve">
+    <value>Bakstelėkite žemėlapyje, kad ieškotumėte vaizdų</value>
+  </data>
+  <data name="OrientedImageryViewerImageSelectionDisplayImage" xml:space="preserve">
+    <value>Bakstelėkite elementą, kad peržiūrėtumėte jo vaizdą</value>
+  </data>
+  <data name="OrientedImageryViewerImageSelectionSwitchMode" xml:space="preserve">
+    <value>arba perjunkite į</value>
+  </data>
+  <data name="OrientedImageryViewerImageSelectionMode" xml:space="preserve">
+    <value>režimą</value>
+  </data>
+  <data name="OrientedImageryViewerNoGeoView" xml:space="preserve">
+    <value>Prijunkite „GeoView“, kad peržiūrėtumėte orientuotus vaizdus.</value>
+  </data>
+  <data name="OrientedImageryViewerNoLayerSelected" xml:space="preserve">
+    <value>Nepasirinktas joks sluoksnis.</value>
+  </data>
+  <data name="OrientedImageryViewerAnnounceTransientError" xml:space="preserve">
+    <value>Užfiksuota klaida</value>
+  </data>
+  <data name="OrientedImageryViewerDismissError" xml:space="preserve">
+    <value>Atmesti klaidą</value>
+  </data>
+  <data name="OrientedImageryViewerPreviousLabel" xml:space="preserve">
+    <value>Ankstesnis</value>
+  </data>
+  <data name="OrientedImageryViewerNextLabel" xml:space="preserve">
+    <value>Kitas</value>
+  </data>
+  <data name="OrientedImageryViewerSequenceStartReached" xml:space="preserve">
+    <value>Pasiekta vaizdų sekos pradžia</value>
+  </data>
+  <data name="OrientedImageryViewerSequenceEndReached" xml:space="preserve">
+    <value>Pasiekta vaizdų sekos pabaiga</value>
+  </data>
+  <data name="OrientedImageryViewerSequenceStartAndEndReached" xml:space="preserve">
+    <value>Pasiekta vaizdų sekos pradžia ir pabaiga</value>
+  </data>
+  <data name="OrientedImageryViewerClose" xml:space="preserve">
+    <value>Uždaryti orientuotus vaizdus</value>
+  </data>
+  <data name="OrientedImageryViewerClosePanel" xml:space="preserve">
+    <value>Uždaryti skydelį</value>
+  </data>
+  <data name="OrientedImageryViewerOverlays" xml:space="preserve">
+    <value>Perdangos</value>
+  </data>
+  <data name="OrientedImageryViewerMarkers" xml:space="preserve">
+    <value>Žymekliai</value>
+  </data>
+  <data name="OrientedImageryViewerMode" xml:space="preserve">
+    <value>Režimas</value>
+  </data>
+  <data name="OrientedImageryViewerShowPreviousImageInSequence" xml:space="preserve">
+    <value>Rodyti ankstesnį sekos vaizdą</value>
+  </data>
+  <data name="OrientedImageryViewerShowNextImageInSequence" xml:space="preserve">
+    <value>Rodyti kitą sekos vaizdą</value>
+  </data>
+  <data name="OrientedImageryViewerMore" xml:space="preserve">
+    <value>Daugiau</value>
+  </data>
+  <data name="OrientedImageryViewerPage" xml:space="preserve">
+    <value>Vaizdas {0} iš {1}</value>
+  </data>
+  <data name="OrientedImageryViewerSelectLayer" xml:space="preserve">
+    <value>Pasirinkti sluoksnį</value>
+  </data>
+  <data name="OrientedImagerySampleToggleView" xml:space="preserve">
+    <value>2D/3D</value>
+  </data>
+  <data name="OrientedImagerySampleToggleViewDescription" xml:space="preserve">
+    <value>Perjungti tarp 2D žemėlapio ir 3D scenos</value>
+  </data>
+  <data name="OrientedImageryViewerMarkerSelection" xml:space="preserve">
+    <value>Žymeklio pasirinkimas</value>
+  </data>
+  <data name="OrientedImageryViewerMarkerOption" xml:space="preserve">
+    <value>Žymeklis {0}</value>
+  </data>
+  <data name="OrientedImageryViewerMarkerCircle" xml:space="preserve">
+    <value>Apskritimo žymeklis</value>
+  </data>
+  <data name="OrientedImageryViewerMarkerSquare" xml:space="preserve">
+    <value>Kvadrato žymeklis</value>
+  </data>
+  <data name="OrientedImageryViewerMarkerTriangle" xml:space="preserve">
+    <value>Trikampio žymeklis</value>
+  </data>
+  <data name="OrientedImageryViewerMarkerDiamond" xml:space="preserve">
+    <value>Rombo žymeklis</value>
+  </data>
+  <data name="OrientedImageryViewerMarkerX" xml:space="preserve">
+    <value>Kryželio žymeklis</value>
+  </data>
+  <data name="OrientedImageryViewerMobileSequentialMode" xml:space="preserve">
+    <value>Nuoseklios</value>
+  </data>
+  <data name="OrientedImageryViewerNavigation" xml:space="preserve">
+    <value>Naršyti</value>
+  </data>
+  <data name="OrientedImageryViewerModeSelection" xml:space="preserve">
+    <value>Režimo pasirinkimas</value>
+  </data>
+  <data name="OrientedImageryViewerOverlaysSelection" xml:space="preserve">
+    <value>Perdangų pasirinkimas</value>
+  </data>
+  <data name="OrientedImageryViewerMarkerTools" xml:space="preserve">
+    <value>Žymeklio įrankiai</value>
+  </data>
+  <data name="OrientedImageryViewerOpen" xml:space="preserve">
+    <value>Atidaryti orientuotus vaizdus</value>
+  </data>
+  <data name="OrientedImageryViewerOn" xml:space="preserve">
+    <value>Įjungta</value>
+  </data>
+  <data name="OrientedImageryViewerOff" xml:space="preserve">
+    <value>Išjungta</value>
+  </data>
+  <data name="OrientedImageryViewerSelected" xml:space="preserve">
+    <value>Pažymėta</value>
+  </data>
+  <data name="OrientedImageryViewerNotSelected" xml:space="preserve">
+    <value>Nepasirinkta</value>
+  </data>
+  <data name="OrientedImageryViewerMobileBackToMarkers" xml:space="preserve">
+    <value>Grįžti į žymeklio įrankius</value>
+  </data>
+  <data name="OrientedImageryViewerMobileSelectMarkerSymbol" xml:space="preserve">
+    <value>Pasirinkti simbolį</value>
+  </data>
+  <data name="OrientedImageryViewerMobileCurrentFootprint" xml:space="preserve">
+    <value>Rodyti dabartinę aprėpiamą erdvę</value>
+  </data>
+  <data name="OrientedImageryViewerMobileAdditionalFootprints" xml:space="preserve">
+    <value>Rodyti papildomas aprėpiamas erdves</value>
+  </data>
+  <data name="OrientedImageryViewerMobileCameraLocations" xml:space="preserve">
+    <value>Rodyti fotoaparatų vietas</value>
+  </data>
+  <data name="OrientedImageryViewerImageNavigation" xml:space="preserve">
+    <value>Vaizdų naršymas</value>
+  </data>
+  <data name="OrientedImageryViewerImageNavigationHint" xml:space="preserve">
+    <value>Naudokite rodyklę kairėn ankstesniam vaizdui arba rodyklę dešinėn kitam vaizdui.</value>
+  </data>
+  <data name="OrientedImageryViewerSequenceNavigation" xml:space="preserve">
+    <value>Nuoseklioji vaizdų navigacija</value>
   </data>
 </root>

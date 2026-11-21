@@ -123,11 +123,32 @@
   <data name="BasemapGalleryAutomationHelpText" xml:space="preserve">
     <value>Zeigt eine Liste der verfügbaren Grundkarten an. Grundkarte zur Verwendung für die aktuelle Karte oder Szene auswählen.</value>
   </data>
+  <data name="BookmarksViewAutomationName" xml:space="preserve">
+    <value>Lesezeichen</value>
+  </data>
   <data name="FeatureFormAddAttachmentMenuFromFile" xml:space="preserve">
     <value>Anlage hinzufügen</value>
   </data>
   <data name="FeatureFormAddAttachmentMenuWithCamera" xml:space="preserve">
     <value>Foto aufnehmen</value>
+  </data>
+  <data name="FeatureFormAttachmentTypeValidationError" xml:space="preserve">
+    <value>Dieser Dateityp wird nicht unterstützt. Zulässige Typen: {0}</value>
+  </data>
+  <data name="FeatureFormAttachmentSizeValidationError" xml:space="preserve">
+    <value>Diese Datei ist zu groß. Maximal zulässige Größe: {0} MB.</value>
+  </data>
+  <data name="FeatureFormAttachmentSizeValidationErrorFallback" xml:space="preserve">
+    <value>Diese Datei ist zu groß.</value>
+  </data>
+  <data name="FeatureFormAttachmentDurationValidationError" xml:space="preserve">
+    <value>Dieses Medienelement ist zu lang. Maximal zulässige Dauer: {0} Sekunden.</value>
+  </data>
+  <data name="FeatureFormAttachmentDurationValidationErrorFallback" xml:space="preserve">
+    <value>Dieses Medienelement ist zu lang.</value>
+  </data>
+  <data name="FeatureFormAttachmentValidationErrorTitle" xml:space="preserve">
+    <value>Fehler beim Hochladen der Anlage</value>
   </data>
   <data name="FeatureFormExceedsMaximumDateTime" xml:space="preserve">
     <value>Das Datum muss auf oder vor folgendem Datum liegen: {0}</value>
@@ -174,6 +195,18 @@
   <data name="FeatureFormLessThanNumericMinimum" xml:space="preserve">
     <value>Kleiner als Minimalwert</value>
   </data>
+  <data name="FeatureFormMaximumAttachmentCountAllowed" xml:space="preserve">
+    <value>Maximal zulässige Anzahl von Anlagen: {0}.</value>
+  </data>
+  <data name="FeatureFormMaximumAttachmentCountLabel" xml:space="preserve">
+    <value>Max: {0}</value>
+  </data>
+  <data name="FeatureFormMinimumAttachmentCountLabel" xml:space="preserve">
+    <value>Min: {0}</value>
+  </data>
+  <data name="FeatureFormMinimumAttachmentCountRequired" xml:space="preserve">
+    <value>Mindestens erforderlich: {0} Anlage(n)</value>
+  </data>
   <data name="FeatureFormNoAttachments" xml:space="preserve">
     <value>Keine Anlagen</value>
   </data>
@@ -206,6 +239,147 @@
   </data>
   <data name="FeatureFormSpecificLength" xml:space="preserve">
     <value>Erforderliche Anzahl von Zeichen: {0}</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsRemoveAssociation" xml:space="preserve">
+    <value>Zuordnung entfernen</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsShowOnMap" xml:space="preserve">
+    <value>Auf Karte anzeigen</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsMoreInformation" xml:space="preserve">
+    <value>Weitere Informationen</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsPercentAlong" xml:space="preserve">
+    <value>Prozent längs</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationSettings" xml:space="preserve">
+    <value>Zuordnungseinstellungen</value>
+  </data>
+  <data name="FeatureFormDeleteAssociationConfirmationTitle" xml:space="preserve">
+    <value>Zuordnung entfernen?</value>
+  </data>
+  <data name="FeatureFormDeleteAssociationConfirmationMessage" xml:space="preserve">
+    <value>Nur die Zuordnung wird entfernt. Das Feature bleibt erhalten.</value>
+  </data>
+  <data name="FeatureFormDeleteAssociationConfirmationAccept" xml:space="preserve">
+    <value>Entfernen</value>
+  </data>
+  <data name="FeatureFormDeleteAssociationConfirmationCancel" xml:space="preserve">
+    <value>Abbrechen</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsAddAssociation" xml:space="preserve">
+    <value>Zuordnung hinzufügen</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsAdd" xml:space="preserve">
+    <value>Hinzufügen</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsChooseAddMethod" xml:space="preserve">
+    <value>Auswählen, wie das Feature hinzugefügt werden soll</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsChooseToAdd" xml:space="preserve">
+    <value>Zum Hinzufügen auswählen</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsFeaturesIdentified" xml:space="preserve">
+    <value>{0} Features identifiziert</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsAssociationType" xml:space="preserve">
+    <value>Zuordnungstyp</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsAttachmentType" xml:space="preserve">
+    <value>Anlage</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsCannotAddAssociation" xml:space="preserve">
+    <value>Diese Zuordnung kann nicht hinzugefügt werden.</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsConnectivityType" xml:space="preserve">
+    <value>Konnektivität</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsContainmentType" xml:space="preserve">
+    <value>Containment</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsContentVisibility" xml:space="preserve">
+    <value>Sichtbarkeit von Inhalt</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsCurrentFeatureTerminal" xml:space="preserve">
+    <value>Aktueller Feature-Anschlusspunkt</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsFractionAlongEdgeError" xml:space="preserve">
+    <value>Geben Sie einen Prozentsatz zwischen 0 und 100 ein.</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsFractionAlongEdgePercent" xml:space="preserve">
+    <value>Bruch entlang der Kante (%)</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsFromElement" xml:space="preserve">
+    <value>Von Element</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsNoCandidates" xml:space="preserve">
+    <value>Keine Übereinstimmungen gefunden.</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsNoFeatureSources" xml:space="preserve">
+    <value>Keine Netzwerkdatenquellen verfügbar.</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsNewAssociation" xml:space="preserve">
+    <value>Neue Zuordnung</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsNotEditable" xml:space="preserve">
+    <value>Zuordnungen können für dieses Feature nicht bearbeitet werden.</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsOtherFeatureTerminal" xml:space="preserve">
+    <value>Anderer Feature-Anschlusspunkt</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsReviewAssociation" xml:space="preserve">
+    <value>Zuordnung überprüfen</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsSearchFeatures" xml:space="preserve">
+    <value>Features suchen</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsSearch" xml:space="preserve">
+    <value>Suchen</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsNetworkDataSource" xml:space="preserve">
+    <value>Netzwerkdatenquelle</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsResultCount" xml:space="preserve">
+    <value>{0} Ergebnisse</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsAvailableAssetTypes" xml:space="preserve">
+    <value>Verfügbare Objekttypen</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsAvailableFeatures" xml:space="preserve">
+    <value>Verfügbare Features ({0})</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsLoading" xml:space="preserve">
+    <value>Wird geladen...</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsNoAssetTypes" xml:space="preserve">
+    <value>Keine Objekttypen verfügbar</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsLoadMore" xml:space="preserve">
+    <value>Weitere laden</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsSelectFeatureSource" xml:space="preserve">
+    <value>Eine Netzwerkdatenquelle auswählen</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsSelectFromNetworkDataSource" xml:space="preserve">
+    <value>Von Netzwerkdatenquelle</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsSelectOnMap" xml:space="preserve">
+    <value>Auf Karte</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsSelectFeaturesOnMap" xml:space="preserve">
+    <value>Wählen Sie Features durch Tippen auf die Karte aus.</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsSelectTerminalError" xml:space="preserve">
+    <value>Wählen Sie einen Anschlusspunkt aus.</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsStructureAttachmentType" xml:space="preserve">
+    <value>Struktureller Anbau</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsTapSelection" xml:space="preserve">
+    <value>Auswahl durch Tippen</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsToElement" xml:space="preserve">
+    <value>Bis Element</value>
   </data>
   <data name="FloorFilterAllFacilities" xml:space="preserve">
     <value>Alle Standorte</value>
@@ -245,6 +419,18 @@
   </data>
   <data name="PopupViewerViewHyperlinkText" xml:space="preserve">
     <value>Anzeigen</value>
+  </data>
+  <data name="PopupViewerAttachmentDownloading" xml:space="preserve">
+    <value>Anlage wird heruntergeladen...</value>
+  </data>
+  <data name="PopupViewerPreviousMediaButtonText" xml:space="preserve">
+    <value>Vorheriges Medienelement</value>
+  </data>
+  <data name="PopupViewerNextMediaButtonText" xml:space="preserve">
+    <value>Nächstes Medienelement</value>
+  </data>
+  <data name="PopupViewerMediaPosition" xml:space="preserve">
+    <value>Medienelement {0} von {1}</value>
   </data>
   <data name="PopupViewerUtilityAssociationsDefaultTitle" xml:space="preserve">
     <value>Zuordnungen</value>
@@ -300,6 +486,9 @@
   <data name="SearchViewNoResults" xml:space="preserve">
     <value>Keine Ergebnisse</value>
   </data>
+  <data name="SearchViewResultsAvailable" xml:space="preserve">
+    <value>Ergebnisse verfügbar</value>
+  </data>
   <data name="SearchViewRepeatSearch" xml:space="preserve">
     <value>Suche hier wiederholen</value>
   </data>
@@ -309,6 +498,36 @@
   <data name="SearchViewSearchTooltip" xml:space="preserve">
     <value>Suchen</value>
   </data>
+  <data name="SearchViewSelectSearchSource" xml:space="preserve">
+    <value>Suchquelle auswählen</value>
+  </data>
+  <data name="SearchViewCollapsedAutomationState" xml:space="preserve">
+    <value>ausgeblendet</value>
+  </data>
+  <data name="SearchViewExpandedAutomationState" xml:space="preserve">
+    <value>eingeblendet</value>
+  </data>
+  <data name="SearchViewSelectedAutomationName" xml:space="preserve">
+    <value>{0}, ausgewählt</value>
+  </data>
+  <data name="SearchViewSearchSources" xml:space="preserve">
+    <value>Suchquellen</value>
+  </data>
+  <data name="SearchViewSourcesAvailable" xml:space="preserve">
+    <value>Quellen verfügbar</value>
+  </data>
+  <data name="SearchViewSearchSuggestions" xml:space="preserve">
+    <value>Suchvorschläge</value>
+  </data>
+  <data name="SearchViewSuggestionsAvailable" xml:space="preserve">
+    <value>Vorschläge verfügbar</value>
+  </data>
+  <data name="SearchViewSearchResults" xml:space="preserve">
+    <value>Suchergebnisse</value>
+  </data>
+  <data name="UtilityNetworkTraceToolAddBarrier" xml:space="preserve">
+    <value>Barriere hinzufügen</value>
+  </data>
   <data name="UtilityNetworkTraceToolAddStartingPoint" xml:space="preserve">
     <value>Startpunkt hinzufügen</value>
   </data>
@@ -317,6 +536,9 @@
   </data>
   <data name="UtilityNetworkTraceToolAssetDetails" xml:space="preserve">
     <value>Asset-Details</value>
+  </data>
+  <data name="UtilityNetworkTraceToolBarriers" xml:space="preserve">
+    <value>Barrieren</value>
   </data>
   <data name="UtilityNetworkTraceToolCancel" xml:space="preserve">
     <value>Abbrechen</value>
@@ -341,6 +563,9 @@
   </data>
   <data name="UtilityNetworkTraceToolFunctionResults" xml:space="preserve">
     <value>Funktionsergebnisse</value>
+  </data>
+  <data name="UtilityNetworkTraceToolIdentifyingBarriers" xml:space="preserve">
+    <value>Barrieren werden identifiziert...</value>
   </data>
   <data name="UtilityNetworkTraceToolIdentifyingStartingPoints" xml:space="preserve">
     <value>Startpunkte werden identifiziert...</value>
@@ -384,6 +609,9 @@
   <data name="UtilityNetworkTraceToolPrevious" xml:space="preserve">
     <value>Zurück</value>
   </data>
+  <data name="UtilityNetworkTraceToolRemoveAllBarriers" xml:space="preserve">
+    <value>Alle entfernen</value>
+  </data>
   <data name="UtilityNetworkTraceToolRemoveAllStartingPoints" xml:space="preserve">
     <value>Alle entfernen</value>
   </data>
@@ -414,6 +642,9 @@
   <data name="UtilityNetworkTraceToolStartingPoints" xml:space="preserve">
     <value>Startpunkte</value>
   </data>
+  <data name="UtilityNetworkTraceToolTapToIdentifyBarriers" xml:space="preserve">
+    <value>Tippen Sie auf die Karte, um Barrieren zu identifizieren.</value>
+  </data>
   <data name="UtilityNetworkTraceToolTapToIdentifyStartingPoints" xml:space="preserve">
     <value>Tippen Sie auf die Karte, um Startpunkte zu identifizieren.</value>
   </data>
@@ -437,6 +668,9 @@
   </data>
   <data name="UtilityNetworkTraceToolUtilityNetworks" xml:space="preserve">
     <value>Versorgungsnetze</value>
+  </data>
+  <data name="UtilityNetworkTraceToolUseAsFilterBarrier" xml:space="preserve">
+    <value>Als Filterbarriere verwenden</value>
   </data>
   <data name="UtilityNetworkTraceToolVisualizationOptions" xml:space="preserve">
     <value>Visualisierungsoptionen</value>
@@ -482,5 +716,433 @@
   </data>
   <data name="Locator_DefaultName" xml:space="preserve">
     <value>Locator</value>
+  </data>
+  <data name="OfflineMapAreasAdd" xml:space="preserve">
+    <value>Hinzufügen</value>
+  </data>
+  <data name="OfflineMapAreasAddMapArea" xml:space="preserve">
+    <value>Kartenbereich hinzufügen</value>
+  </data>
+  <data name="OfflineMapAreasAreaNamePlaceholder" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="OfflineMapAreasCancel" xml:space="preserve">
+    <value>Abbrechen</value>
+  </data>
+  <data name="OfflineMapAreasDownload" xml:space="preserve">
+    <value>Herunterladen</value>
+  </data>
+  <data name="OfflineMapAreasDownloadSize" xml:space="preserve">
+    <value>Größe: {0}</value>
+  </data>
+  <data name="OfflineMapAreasDefaultAreaTitle" xml:space="preserve">
+    <value>Fläche {0}</value>
+  </data>
+  <data name="OfflineMapAreasDownloaded" xml:space="preserve">
+    <value>Heruntergeladen</value>
+  </data>
+  <data name="OfflineMapAreasNoInternetConnectionMessage" xml:space="preserve">
+    <value>Für diese Karte konnten keine Kartenbereiche abgerufen werden.</value>
+  </data>
+  <data name="OfflineMapAreasNoInternetConnectionTitle" xml:space="preserve">
+    <value>Keine Internetverbindung</value>
+  </data>
+  <data name="OfflineMapAreasNoMapAreasOnDemandMessage" xml:space="preserve">
+    <value>Für diese Karte sind keine Kartenbereiche vorhanden. Tippen Sie auf die Schaltfläche unten, um zu beginnen.</value>
+  </data>
+  <data name="OfflineMapAreasNoMapAreasPreplannedMessage" xml:space="preserve">
+    <value>Für diese Karte sind keine Kartenbereiche vorhanden.</value>
+  </data>
+  <data name="OfflineMapAreasNoMapAreasTitle" xml:space="preserve">
+    <value>Keine Kartenbereiche</value>
+  </data>
+  <data name="OfflineMapAreasOfflineDisabledMessage" xml:space="preserve">
+    <value>Die Karte ist nicht für die Offline-Verwendung aktiviert.</value>
+  </data>
+  <data name="OfflineMapAreasOfflineDisabledTitle" xml:space="preserve">
+    <value>Offline deaktiviert</value>
+  </data>
+  <data name="OfflineMapAreasOpen" xml:space="preserve">
+    <value>Öffnen</value>
+  </data>
+  <data name="OfflineMapAreasRefresh" xml:space="preserve">
+    <value>Aktualisieren</value>
+  </data>
+  <data name="OfflineMapAreasRemove" xml:space="preserve">
+    <value>Entfernen</value>
+  </data>
+  <data name="OfflineMapAreasSelectArea" xml:space="preserve">
+    <value>Bereich auswählen</value>
+  </data>
+  <data name="OfflineMapAreasScaleLabel" xml:space="preserve">
+    <value>Maßstab</value>
+  </data>
+  <data name="OfflineMapAreasScaleRoom" xml:space="preserve">
+    <value>Raum</value>
+  </data>
+  <data name="OfflineMapAreasScaleRooms" xml:space="preserve">
+    <value>Räume</value>
+  </data>
+  <data name="OfflineMapAreasScaleHouseProperty" xml:space="preserve">
+    <value>Grundstück</value>
+  </data>
+  <data name="OfflineMapAreasScaleHouses" xml:space="preserve">
+    <value>Häuser</value>
+  </data>
+  <data name="OfflineMapAreasScaleSmallBuilding" xml:space="preserve">
+    <value>Kleines Gebäude</value>
+  </data>
+  <data name="OfflineMapAreasScaleBuilding" xml:space="preserve">
+    <value>Gebäude (Einzahl)</value>
+  </data>
+  <data name="OfflineMapAreasScaleBuildings" xml:space="preserve">
+    <value>Gebäude (Mehrzahl)</value>
+  </data>
+  <data name="OfflineMapAreasScaleStreet" xml:space="preserve">
+    <value>Straße</value>
+  </data>
+  <data name="OfflineMapAreasScaleStreets" xml:space="preserve">
+    <value>Straßen</value>
+  </data>
+  <data name="OfflineMapAreasScaleNeighborhood" xml:space="preserve">
+    <value>Stadtteil</value>
+  </data>
+  <data name="OfflineMapAreasScaleTown" xml:space="preserve">
+    <value>Ortschaft</value>
+  </data>
+  <data name="OfflineMapAreasScaleCity" xml:space="preserve">
+    <value>Stadt</value>
+  </data>
+  <data name="OfflineMapAreasScaleCities" xml:space="preserve">
+    <value>Städte</value>
+  </data>
+  <data name="OfflineMapAreasScaleMetropolitanArea" xml:space="preserve">
+    <value>Ballungsgebiet</value>
+  </data>
+  <data name="OfflineMapAreasScaleCounty" xml:space="preserve">
+    <value>Landkreis</value>
+  </data>
+  <data name="OfflineMapAreasScaleCounties" xml:space="preserve">
+    <value>Landkreise</value>
+  </data>
+  <data name="OfflineMapAreasScaleStateProvince" xml:space="preserve">
+    <value>Bundesland/Kanton</value>
+  </data>
+  <data name="OfflineMapAreasScaleStatesProvinces" xml:space="preserve">
+    <value>Bundesländer/Kantone</value>
+  </data>
+  <data name="OfflineMapAreasScaleCountriesSmall" xml:space="preserve">
+    <value>Länder (klein)</value>
+  </data>
+  <data name="OfflineMapAreasScaleCountriesBig" xml:space="preserve">
+    <value>Länder (groß)</value>
+  </data>
+  <data name="OfflineMapAreasScaleContinent" xml:space="preserve">
+    <value>Kontinent</value>
+  </data>
+  <data name="OfflineMapAreasScaleWorldSmall" xml:space="preserve">
+    <value>Welt (klein)</value>
+  </data>
+  <data name="OfflineMapAreasScaleWorldBig" xml:space="preserve">
+    <value>Welt (groß)</value>
+  </data>
+  <data name="OfflineMapAreasScaleWorld" xml:space="preserve">
+    <value>Welt</value>
+  </data>
+  <data name="OfflineMapAreasStop" xml:space="preserve">
+    <value>Stopp</value>
+  </data>
+  <data name="OfflineMapAreasBackgroundTaskTitle" xml:space="preserve">
+    <value>Offline-Karte</value>
+  </data>
+  <data name="OfflineMapAreasRemoveOnError" xml:space="preserve">
+    <value>Ein Fehler ist aufgetreten. Zum Entfernen tippen.</value>
+  </data>
+  <data name="OrientedImageViewportAutomationName" xml:space="preserve">
+    <value>Ausgerichtetes Bild</value>
+  </data>
+  <data name="OrientedImageryViewerAutomationTypeName" xml:space="preserve">
+    <value>Ansicht mit ausgerichteten Bilddaten</value>
+  </data>
+  <data name="OrientedImageryViewerSelectMarkerSymbol" xml:space="preserve">
+    <value>Markersymbol auswählen</value>
+  </data>
+  <data name="OrientedImageryViewerToggleAddMarkers" xml:space="preserve">
+    <value>'Marker hinzufügen' umschalten</value>
+  </data>
+  <data name="OrientedImageryViewerShowSelectedImageFootprint" xml:space="preserve">
+    <value>Aktuellen Footprint anzeigen</value>
+  </data>
+  <data name="OrientedImageryViewerShowUnselectedImageFootprints" xml:space="preserve">
+    <value>Zusätzliche Footprints anzeigen</value>
+  </data>
+  <data name="OrientedImageryViewerImageSearchMode" xml:space="preserve">
+    <value>Bildsuchmodus</value>
+  </data>
+  <data name="OrientedImageryViewerCurrentFootprintLabel" xml:space="preserve">
+    <value>Aktueller Footprint</value>
+  </data>
+  <data name="OrientedImageryViewerCurrentFootprintStackedLabel" xml:space="preserve">
+    <value>Aktueller
+Footprint</value>
+  </data>
+  <data name="OrientedImageryViewerAdditionalFootprintsLabel" xml:space="preserve">
+    <value>Zusätzliche Footprints</value>
+  </data>
+  <data name="OrientedImageryViewerAdditionalFootprintsStackedLabel" xml:space="preserve">
+    <value>Zusätzliche
+Footprints</value>
+  </data>
+  <data name="OrientedImageryViewerCameraLocationsLabel" xml:space="preserve">
+    <value>Kamerapositionen</value>
+  </data>
+  <data name="OrientedImageryViewerCameraLocationsStackedLabel" xml:space="preserve">
+    <value>Kamera-
+positionen</value>
+  </data>
+  <data name="OrientedImageryViewerAddMarkersLabel" xml:space="preserve">
+    <value>Marker hinzufügen</value>
+  </data>
+  <data name="OrientedImageryViewerAddMarkersStackedLabel" xml:space="preserve">
+    <value>Marker
+hinzufügen</value>
+  </data>
+  <data name="OrientedImageryViewerClearMarkersLabel" xml:space="preserve">
+    <value>Marker löschen</value>
+  </data>
+  <data name="OrientedImageryViewerClearMarkersTooltip" xml:space="preserve">
+    <value>Marker löschen</value>
+  </data>
+  <data name="OrientedImageryViewerClearMarkersStackedLabel" xml:space="preserve">
+    <value>Marker
+löschen</value>
+  </data>
+  <data name="OrientedImageryViewerImageSearchModeFind" xml:space="preserve">
+    <value>Bilder suchen</value>
+  </data>
+  <data name="OrientedImageryViewerImageSearchModeFindStackedLabel" xml:space="preserve">
+    <value>Bilder
+suchen</value>
+  </data>
+  <data name="OrientedImageryViewerImageSearchModeDisplay" xml:space="preserve">
+    <value>Bild anzeigen</value>
+  </data>
+  <data name="OrientedImageryViewerImageSearchModeDisplayStackedLabel" xml:space="preserve">
+    <value>Bild
+anzeigen</value>
+  </data>
+  <data name="OrientedImageryViewerOpenSelectedImagePopup" xml:space="preserve">
+    <value>Details zum ausgewählten Bild anzeigen</value>
+  </data>
+  <data name="OrientedImageryViewerImageDetails" xml:space="preserve">
+    <value>Bilddetails</value>
+  </data>
+  <data name="OrientedImageryViewerCloseSelectedImagePopup" xml:space="preserve">
+    <value>Details schließen</value>
+  </data>
+  <data name="OrientedImageryViewerGoToPageFormat" xml:space="preserve">
+    <value>Zu Bild {0} von {1} gehen</value>
+  </data>
+  <data name="OrientedImageryViewerSelectedPageFormat" xml:space="preserve">
+    <value>Bild {0} von {1}, ausgewählt</value>
+  </data>
+  <data name="OrientedImageryViewerToggleCameraMarkers" xml:space="preserve">
+    <value>Kamerapositionen anzeigen</value>
+  </data>
+  <data name="OrientedImageryViewerSequentialNavigationTooltip" xml:space="preserve">
+    <value>Sequenzielle Navigation</value>
+  </data>
+  <data name="OrientedImageryViewerSequentialNavigationLabel" xml:space="preserve">
+    <value>Sequenzielle Navigation</value>
+  </data>
+  <data name="OrientedImageryViewerSequentialNavigationStackedLabel" xml:space="preserve">
+    <value>Sequenzielle
+Navigation</value>
+  </data>
+  <data name="OrientedImageryViewerPreviousImage" xml:space="preserve">
+    <value>Vorheriges Bild</value>
+  </data>
+  <data name="OrientedImageryViewerNextImage" xml:space="preserve">
+    <value>Nächstes Bild</value>
+  </data>
+  <data name="OrientedImageryViewerImageLoading" xml:space="preserve">
+    <value>Bild wird geladen...</value>
+  </data>
+  <data name="OrientedImageryViewerImageLoaded" xml:space="preserve">
+    <value>Bild geladen</value>
+  </data>
+  <data name="OrientedImageryViewerNoImageToDisplay" xml:space="preserve">
+    <value>Kein Bild zum Anzeigen</value>
+  </data>
+  <data name="OrientedImageryViewerNoImagesFound" xml:space="preserve">
+    <value>Für die angetippte Position wurden keine Bilder gefunden</value>
+  </data>
+  <data name="OrientedImageryViewerImageSelectionNoImagesNone" xml:space="preserve">
+    <value>Kein Bild zum Anzeigen. Modus 'Bilder suchen' oder 'Bild anzeigen' für die Suche nach Bildern aktivieren</value>
+  </data>
+  <data name="OrientedImageryViewerImageSelectionNoImagesFind" xml:space="preserve">
+    <value>Kein Bild zum Anzeigen. Tippen Sie auf die Karte, um nach Bildern zu suchen oder in den Modus 'Bild anzeigen' zu wechseln.</value>
+  </data>
+  <data name="OrientedImageryViewerImageSelectionNoImagesDisplay" xml:space="preserve">
+    <value>Kein Bild zum Anzeigen. Tippen Sie auf ein Feature, um das zugehörige Bild anzuzeigen, oder wechseln Sie in den Modus 'Bilder suchen'.</value>
+  </data>
+  <data name="OrientedImageryViewerImageSelectionEnable" xml:space="preserve">
+    <value>Aktivieren Sie</value>
+  </data>
+  <data name="OrientedImageryViewerImageSelectionOr" xml:space="preserve">
+    <value>oder</value>
+  </data>
+  <data name="OrientedImageryViewerImageSelectionSearchMode" xml:space="preserve">
+    <value>Modus zur Bildsuche</value>
+  </data>
+  <data name="OrientedImageryViewerImageSelectionFindImages" xml:space="preserve">
+    <value>Auf die Karte tippen, um nach Bildern zu suchen</value>
+  </data>
+  <data name="OrientedImageryViewerImageSelectionDisplayImage" xml:space="preserve">
+    <value>Auf ein Feature tippen, um das zugehörige Bild anzuzeigen</value>
+  </data>
+  <data name="OrientedImageryViewerImageSelectionSwitchMode" xml:space="preserve">
+    <value>oder wechseln Sie in den</value>
+  </data>
+  <data name="OrientedImageryViewerImageSelectionMode" xml:space="preserve">
+    <value>Modus</value>
+  </data>
+  <data name="OrientedImageryViewerNoGeoView" xml:space="preserve">
+    <value>Verbinden Sie eine GeoView, um die ausgerichteten Bilddaten anzuzeigen.</value>
+  </data>
+  <data name="OrientedImageryViewerNoLayerSelected" xml:space="preserve">
+    <value>Kein Layer ausgewählt.</value>
+  </data>
+  <data name="OrientedImageryViewerAnnounceTransientError" xml:space="preserve">
+    <value>Fehler ausgelöst</value>
+  </data>
+  <data name="OrientedImageryViewerDismissError" xml:space="preserve">
+    <value>Fehler schließen</value>
+  </data>
+  <data name="OrientedImageryViewerPreviousLabel" xml:space="preserve">
+    <value>Zurück</value>
+  </data>
+  <data name="OrientedImageryViewerNextLabel" xml:space="preserve">
+    <value>Weiter</value>
+  </data>
+  <data name="OrientedImageryViewerSequenceStartReached" xml:space="preserve">
+    <value>Anfang der Bildsequenz erreicht</value>
+  </data>
+  <data name="OrientedImageryViewerSequenceEndReached" xml:space="preserve">
+    <value>Ende der Bildsequenz erreicht</value>
+  </data>
+  <data name="OrientedImageryViewerSequenceStartAndEndReached" xml:space="preserve">
+    <value>Anfang und Ende der Bildsequenz erreicht</value>
+  </data>
+  <data name="OrientedImageryViewerClose" xml:space="preserve">
+    <value>Ausgerichtete Bilddaten schließen</value>
+  </data>
+  <data name="OrientedImageryViewerClosePanel" xml:space="preserve">
+    <value>Fenster schließen</value>
+  </data>
+  <data name="OrientedImageryViewerOverlays" xml:space="preserve">
+    <value>Überlagerungen</value>
+  </data>
+  <data name="OrientedImageryViewerMarkers" xml:space="preserve">
+    <value>Marker</value>
+  </data>
+  <data name="OrientedImageryViewerMode" xml:space="preserve">
+    <value>Modalwert</value>
+  </data>
+  <data name="OrientedImageryViewerShowPreviousImageInSequence" xml:space="preserve">
+    <value>Vorheriges Bild in Sequenz anzeigen</value>
+  </data>
+  <data name="OrientedImageryViewerShowNextImageInSequence" xml:space="preserve">
+    <value>Nächstes Bild in Sequenz anzeigen</value>
+  </data>
+  <data name="OrientedImageryViewerMore" xml:space="preserve">
+    <value>Mehr</value>
+  </data>
+  <data name="OrientedImageryViewerPage" xml:space="preserve">
+    <value>Bild {0} von {1}</value>
+  </data>
+  <data name="OrientedImageryViewerSelectLayer" xml:space="preserve">
+    <value>Layer auswählen</value>
+  </data>
+  <data name="OrientedImagerySampleToggleView" xml:space="preserve">
+    <value>2D/3D</value>
+  </data>
+  <data name="OrientedImagerySampleToggleViewDescription" xml:space="preserve">
+    <value>Zwischen 2D-Karte und 3D-Szene wechseln</value>
+  </data>
+  <data name="OrientedImageryViewerMarkerSelection" xml:space="preserve">
+    <value>Markerauswahl</value>
+  </data>
+  <data name="OrientedImageryViewerMarkerOption" xml:space="preserve">
+    <value>Marker {0}</value>
+  </data>
+  <data name="OrientedImageryViewerMarkerCircle" xml:space="preserve">
+    <value>Kreismarker</value>
+  </data>
+  <data name="OrientedImageryViewerMarkerSquare" xml:space="preserve">
+    <value>Quadratischer Marker</value>
+  </data>
+  <data name="OrientedImageryViewerMarkerTriangle" xml:space="preserve">
+    <value>Dreieckiger Marker</value>
+  </data>
+  <data name="OrientedImageryViewerMarkerDiamond" xml:space="preserve">
+    <value>Rautenmarker</value>
+  </data>
+  <data name="OrientedImageryViewerMarkerX" xml:space="preserve">
+    <value>Kreuzmarker</value>
+  </data>
+  <data name="OrientedImageryViewerMobileSequentialMode" xml:space="preserve">
+    <value>Sequenziell</value>
+  </data>
+  <data name="OrientedImageryViewerNavigation" xml:space="preserve">
+    <value>Erkunden</value>
+  </data>
+  <data name="OrientedImageryViewerModeSelection" xml:space="preserve">
+    <value>Modusauswahl</value>
+  </data>
+  <data name="OrientedImageryViewerOverlaysSelection" xml:space="preserve">
+    <value>Überlagerungsauswahl</value>
+  </data>
+  <data name="OrientedImageryViewerMarkerTools" xml:space="preserve">
+    <value>Markerwerkzeuge</value>
+  </data>
+  <data name="OrientedImageryViewerOpen" xml:space="preserve">
+    <value>Ausgerichtete Bilddaten öffnen</value>
+  </data>
+  <data name="OrientedImageryViewerOn" xml:space="preserve">
+    <value>Ein</value>
+  </data>
+  <data name="OrientedImageryViewerOff" xml:space="preserve">
+    <value>Aus</value>
+  </data>
+  <data name="OrientedImageryViewerSelected" xml:space="preserve">
+    <value>Ausgewählt</value>
+  </data>
+  <data name="OrientedImageryViewerNotSelected" xml:space="preserve">
+    <value>Nicht ausgewählt</value>
+  </data>
+  <data name="OrientedImageryViewerMobileBackToMarkers" xml:space="preserve">
+    <value>Zurück zu den Markerwerkzeugen</value>
+  </data>
+  <data name="OrientedImageryViewerMobileSelectMarkerSymbol" xml:space="preserve">
+    <value>Symbol auswählen</value>
+  </data>
+  <data name="OrientedImageryViewerMobileCurrentFootprint" xml:space="preserve">
+    <value>Aktuellen Footprint anzeigen</value>
+  </data>
+  <data name="OrientedImageryViewerMobileAdditionalFootprints" xml:space="preserve">
+    <value>Zusätzliche Footprints anzeigen</value>
+  </data>
+  <data name="OrientedImageryViewerMobileCameraLocations" xml:space="preserve">
+    <value>Kamerapositionen anzeigen</value>
+  </data>
+  <data name="OrientedImageryViewerImageNavigation" xml:space="preserve">
+    <value>Bildnavigation</value>
+  </data>
+  <data name="OrientedImageryViewerImageNavigationHint" xml:space="preserve">
+    <value>Verwenden Sie die Pfeiltaste nach links, um zum vorherigen Bild zu gelangen, oder die Pfeiltaste nach rechts, um zum nächsten Bild zu gelangen.</value>
+  </data>
+  <data name="OrientedImageryViewerSequenceNavigation" xml:space="preserve">
+    <value>Sequenzielle Bildnavigation</value>
   </data>
 </root>

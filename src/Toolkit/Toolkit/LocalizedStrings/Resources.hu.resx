@@ -123,11 +123,32 @@
   <data name="BasemapGalleryAutomationHelpText" xml:space="preserve">
     <value>Megjeleníti az elérhető alaptérképek listáját. Válasszon ki egy alaptérképet, hogy azt a jelenlegi térképhez vagy 3D térképhez használhassa.</value>
   </data>
+  <data name="BookmarksViewAutomationName" xml:space="preserve">
+    <value>Könyvjelzők</value>
+  </data>
   <data name="FeatureFormAddAttachmentMenuFromFile" xml:space="preserve">
     <value>Csatolmány hozzáadása</value>
   </data>
   <data name="FeatureFormAddAttachmentMenuWithCamera" xml:space="preserve">
     <value>Fénykép készítése</value>
+  </data>
+  <data name="FeatureFormAttachmentTypeValidationError" xml:space="preserve">
+    <value>Ez a fájltípus nem támogatott. Megengedett típusok: {0}</value>
+  </data>
+  <data name="FeatureFormAttachmentSizeValidationError" xml:space="preserve">
+    <value>Ez a fájl túl nagy. A maximális megengedett méret {0} MB.</value>
+  </data>
+  <data name="FeatureFormAttachmentSizeValidationErrorFallback" xml:space="preserve">
+    <value>Ez a fájl túl nagy.</value>
+  </data>
+  <data name="FeatureFormAttachmentDurationValidationError" xml:space="preserve">
+    <value>Ez a média túl hosszú. A maximális engedélyezett időtartam {0} másodperc.</value>
+  </data>
+  <data name="FeatureFormAttachmentDurationValidationErrorFallback" xml:space="preserve">
+    <value>Ez a média túl hosszú.</value>
+  </data>
+  <data name="FeatureFormAttachmentValidationErrorTitle" xml:space="preserve">
+    <value>Sikertelen csatolmányfeltöltés</value>
   </data>
   <data name="FeatureFormExceedsMaximumDateTime" xml:space="preserve">
     <value>A dátumnak a következő időpontra vagy azelőttre kell esnie: {0}</value>
@@ -174,6 +195,18 @@
   <data name="FeatureFormLessThanNumericMinimum" xml:space="preserve">
     <value>Kisebb, mint a minimális érték</value>
   </data>
+  <data name="FeatureFormMaximumAttachmentCountAllowed" xml:space="preserve">
+    <value>Az engedélyezett csatolmányok maximális száma {0}.</value>
+  </data>
+  <data name="FeatureFormMaximumAttachmentCountLabel" xml:space="preserve">
+    <value>Max: {0}</value>
+  </data>
+  <data name="FeatureFormMinimumAttachmentCountLabel" xml:space="preserve">
+    <value>Min: {0}</value>
+  </data>
+  <data name="FeatureFormMinimumAttachmentCountRequired" xml:space="preserve">
+    <value>Legalább {0} csatolmány szükséges.</value>
+  </data>
   <data name="FeatureFormNoAttachments" xml:space="preserve">
     <value>Nincsenek csatolmányok</value>
   </data>
@@ -206,6 +239,147 @@
   </data>
   <data name="FeatureFormSpecificLength" xml:space="preserve">
     <value>Szükséges karakterek száma: {0}</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsRemoveAssociation" xml:space="preserve">
+    <value>Társítás eltávolítása</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsShowOnMap" xml:space="preserve">
+    <value>Megjelenítés a térképen</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsMoreInformation" xml:space="preserve">
+    <value>További információ</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsPercentAlong" xml:space="preserve">
+    <value>Százalékos távolság</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationSettings" xml:space="preserve">
+    <value>Társítási beállítások</value>
+  </data>
+  <data name="FeatureFormDeleteAssociationConfirmationTitle" xml:space="preserve">
+    <value>Eltávolítja a társítást?</value>
+  </data>
+  <data name="FeatureFormDeleteAssociationConfirmationMessage" xml:space="preserve">
+    <value>Ezzel csak a társítást távolítja el. A vektoros elem megmarad.</value>
+  </data>
+  <data name="FeatureFormDeleteAssociationConfirmationAccept" xml:space="preserve">
+    <value>Eltávolítás</value>
+  </data>
+  <data name="FeatureFormDeleteAssociationConfirmationCancel" xml:space="preserve">
+    <value>Mégse</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsAddAssociation" xml:space="preserve">
+    <value>Társítás hozzáadása</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsAdd" xml:space="preserve">
+    <value>Hozzáadás</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsChooseAddMethod" xml:space="preserve">
+    <value>Válassza ki a vektoros elem hozzáadási módját</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsChooseToAdd" xml:space="preserve">
+    <value>Kiválasztás a hozzáadáshoz</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsFeaturesIdentified" xml:space="preserve">
+    <value>{0} azonosított vektoros elem</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsAssociationType" xml:space="preserve">
+    <value>Társítás típusa</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsAttachmentType" xml:space="preserve">
+    <value>Csatolmány</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsCannotAddAssociation" xml:space="preserve">
+    <value>Ez a társítás nem adható hozzá.</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsConnectivityType" xml:space="preserve">
+    <value>Összekapcsolhatóság</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsContainmentType" xml:space="preserve">
+    <value>Befoglalás</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsContentVisibility" xml:space="preserve">
+    <value>Tartalom láthatósága</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsCurrentFeatureTerminal" xml:space="preserve">
+    <value>Az aktuális vektoros elem terminálja</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsFractionAlongEdgeError" xml:space="preserve">
+    <value>Adjon meg egy százalékértéket 0 és 100 között.</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsFractionAlongEdgePercent" xml:space="preserve">
+    <value>Részarány az él mentén (%)</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsFromElement" xml:space="preserve">
+    <value>Az elemtől</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsNoCandidates" xml:space="preserve">
+    <value>Nincs találat.</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsNoFeatureSources" xml:space="preserve">
+    <value>Nincsenek elérhető hálózati adatforrások.</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsNewAssociation" xml:space="preserve">
+    <value>Új társítás</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsNotEditable" xml:space="preserve">
+    <value>Az ehhez a vektoros elemhez tartozó társítások nem szerkeszthetők.</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsOtherFeatureTerminal" xml:space="preserve">
+    <value>Másik vektoros elem terminálja</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsReviewAssociation" xml:space="preserve">
+    <value>Társítás áttekintése</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsSearchFeatures" xml:space="preserve">
+    <value>Vektoros elemek keresése</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsSearch" xml:space="preserve">
+    <value>Keresés</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsNetworkDataSource" xml:space="preserve">
+    <value>Hálózati adatforrás</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsResultCount" xml:space="preserve">
+    <value>{0} találat</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsAvailableAssetTypes" xml:space="preserve">
+    <value>Elérhető eszköztípusok</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsAvailableFeatures" xml:space="preserve">
+    <value>Rendelkezésre álló vektoros elemek ({0})</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsLoading" xml:space="preserve">
+    <value>Betöltés…</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsNoAssetTypes" xml:space="preserve">
+    <value>Nem állnak rendelkezésre eszköztípusok.</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsLoadMore" xml:space="preserve">
+    <value>Továbbiak betöltése</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsSelectFeatureSource" xml:space="preserve">
+    <value>Válasszon ki egy hálózati adatforrást</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsSelectFromNetworkDataSource" xml:space="preserve">
+    <value>A hálózati adatforrásból</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsSelectOnMap" xml:space="preserve">
+    <value>A térképen</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsSelectFeaturesOnMap" xml:space="preserve">
+    <value>Válassza ki a vektoros elemeket a térképre történő koppintással.</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsSelectTerminalError" xml:space="preserve">
+    <value>Válasszon ki egy terminált.</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsStructureAttachmentType" xml:space="preserve">
+    <value>Szerkezeti csatolmány</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsTapSelection" xml:space="preserve">
+    <value>Koppintson a Kiválasztás elemre</value>
+  </data>
+  <data name="FeatureFormUtilityAssociationsToElement" xml:space="preserve">
+    <value>Az elemhez</value>
   </data>
   <data name="FloorFilterAllFacilities" xml:space="preserve">
     <value>Összes hely</value>
@@ -245,6 +419,18 @@
   </data>
   <data name="PopupViewerViewHyperlinkText" xml:space="preserve">
     <value>Megtekintés</value>
+  </data>
+  <data name="PopupViewerAttachmentDownloading" xml:space="preserve">
+    <value>Csatolmány letöltése</value>
+  </data>
+  <data name="PopupViewerPreviousMediaButtonText" xml:space="preserve">
+    <value>Előző média</value>
+  </data>
+  <data name="PopupViewerNextMediaButtonText" xml:space="preserve">
+    <value>Következő média</value>
+  </data>
+  <data name="PopupViewerMediaPosition" xml:space="preserve">
+    <value>{0}./{1} médiaelem</value>
   </data>
   <data name="PopupViewerUtilityAssociationsDefaultTitle" xml:space="preserve">
     <value>Társítások</value>
@@ -300,6 +486,9 @@
   <data name="SearchViewNoResults" xml:space="preserve">
     <value>Nincs találat</value>
   </data>
+  <data name="SearchViewResultsAvailable" xml:space="preserve">
+    <value>Eredmények állnak rendelkezésre</value>
+  </data>
   <data name="SearchViewRepeatSearch" xml:space="preserve">
     <value>Ismételje meg a keresést itt</value>
   </data>
@@ -309,6 +498,36 @@
   <data name="SearchViewSearchTooltip" xml:space="preserve">
     <value>Keresés</value>
   </data>
+  <data name="SearchViewSelectSearchSource" xml:space="preserve">
+    <value>Keresési források kiválasztása</value>
+  </data>
+  <data name="SearchViewCollapsedAutomationState" xml:space="preserve">
+    <value>összecsukva</value>
+  </data>
+  <data name="SearchViewExpandedAutomationState" xml:space="preserve">
+    <value>kibontva</value>
+  </data>
+  <data name="SearchViewSelectedAutomationName" xml:space="preserve">
+    <value>{0}, kiválasztva</value>
+  </data>
+  <data name="SearchViewSearchSources" xml:space="preserve">
+    <value>Keresési források</value>
+  </data>
+  <data name="SearchViewSourcesAvailable" xml:space="preserve">
+    <value>Források állnak rendelkezésre</value>
+  </data>
+  <data name="SearchViewSearchSuggestions" xml:space="preserve">
+    <value>Keresési javaslatok</value>
+  </data>
+  <data name="SearchViewSuggestionsAvailable" xml:space="preserve">
+    <value>Javaslatok állnak rendelkezésre</value>
+  </data>
+  <data name="SearchViewSearchResults" xml:space="preserve">
+    <value>Keresési eredmények</value>
+  </data>
+  <data name="UtilityNetworkTraceToolAddBarrier" xml:space="preserve">
+    <value>Akadály hozzáadása</value>
+  </data>
   <data name="UtilityNetworkTraceToolAddStartingPoint" xml:space="preserve">
     <value>Kiindulási pont hozzáadása</value>
   </data>
@@ -317,6 +536,9 @@
   </data>
   <data name="UtilityNetworkTraceToolAssetDetails" xml:space="preserve">
     <value>Eszköz részletei</value>
+  </data>
+  <data name="UtilityNetworkTraceToolBarriers" xml:space="preserve">
+    <value>Akadályok</value>
   </data>
   <data name="UtilityNetworkTraceToolCancel" xml:space="preserve">
     <value>Mégse</value>
@@ -341,6 +563,9 @@
   </data>
   <data name="UtilityNetworkTraceToolFunctionResults" xml:space="preserve">
     <value>Funkció eredményei</value>
+  </data>
+  <data name="UtilityNetworkTraceToolIdentifyingBarriers" xml:space="preserve">
+    <value>Akadályok azonosítása...</value>
   </data>
   <data name="UtilityNetworkTraceToolIdentifyingStartingPoints" xml:space="preserve">
     <value>Kiindulási pontok azonosítása...</value>
@@ -384,6 +609,9 @@
   <data name="UtilityNetworkTraceToolPrevious" xml:space="preserve">
     <value>Előző</value>
   </data>
+  <data name="UtilityNetworkTraceToolRemoveAllBarriers" xml:space="preserve">
+    <value>Összes eltávolítása</value>
+  </data>
   <data name="UtilityNetworkTraceToolRemoveAllStartingPoints" xml:space="preserve">
     <value>Összes eltávolítása</value>
   </data>
@@ -414,6 +642,9 @@
   <data name="UtilityNetworkTraceToolStartingPoints" xml:space="preserve">
     <value>Kiindulási pontok</value>
   </data>
+  <data name="UtilityNetworkTraceToolTapToIdentifyBarriers" xml:space="preserve">
+    <value>Érintse meg a térképet az akadályok azonosításához.</value>
+  </data>
   <data name="UtilityNetworkTraceToolTapToIdentifyStartingPoints" xml:space="preserve">
     <value>Érintse meg a térképet a kiindulási pontok azonosításához.</value>
   </data>
@@ -437,6 +668,9 @@
   </data>
   <data name="UtilityNetworkTraceToolUtilityNetworks" xml:space="preserve">
     <value>Közüzemi hálózatok</value>
+  </data>
+  <data name="UtilityNetworkTraceToolUseAsFilterBarrier" xml:space="preserve">
+    <value>Használat akadályszűrőként</value>
   </data>
   <data name="UtilityNetworkTraceToolVisualizationOptions" xml:space="preserve">
     <value>Megjelenítési opciók</value>
@@ -482,5 +716,433 @@
   </data>
   <data name="Locator_DefaultName" xml:space="preserve">
     <value>Locator</value>
+  </data>
+  <data name="OfflineMapAreasAdd" xml:space="preserve">
+    <value>Hozzáadás</value>
+  </data>
+  <data name="OfflineMapAreasAddMapArea" xml:space="preserve">
+    <value>Térképterület hozzáadása</value>
+  </data>
+  <data name="OfflineMapAreasAreaNamePlaceholder" xml:space="preserve">
+    <value>Név</value>
+  </data>
+  <data name="OfflineMapAreasCancel" xml:space="preserve">
+    <value>Mégse</value>
+  </data>
+  <data name="OfflineMapAreasDownload" xml:space="preserve">
+    <value>Letöltés</value>
+  </data>
+  <data name="OfflineMapAreasDownloadSize" xml:space="preserve">
+    <value>Méret: {0}</value>
+  </data>
+  <data name="OfflineMapAreasDefaultAreaTitle" xml:space="preserve">
+    <value>Terület {0}</value>
+  </data>
+  <data name="OfflineMapAreasDownloaded" xml:space="preserve">
+    <value>Letöltve</value>
+  </data>
+  <data name="OfflineMapAreasNoInternetConnectionMessage" xml:space="preserve">
+    <value>Ehhez a térképhez nem sikerült lekérni a térképterületeket</value>
+  </data>
+  <data name="OfflineMapAreasNoInternetConnectionTitle" xml:space="preserve">
+    <value>Nincs internetkapcsolat</value>
+  </data>
+  <data name="OfflineMapAreasNoMapAreasOnDemandMessage" xml:space="preserve">
+    <value>Ehhez a térképhez nincsenek térképterületek. A kezdéshez koppintson az alábbi gombra.</value>
+  </data>
+  <data name="OfflineMapAreasNoMapAreasPreplannedMessage" xml:space="preserve">
+    <value>Ehhez a térképhez nincsenek térképterületek.</value>
+  </data>
+  <data name="OfflineMapAreasNoMapAreasTitle" xml:space="preserve">
+    <value>Nincsenek térképterületek</value>
+  </data>
+  <data name="OfflineMapAreasOfflineDisabledMessage" xml:space="preserve">
+    <value>A térkép nincs engedélyezve kapcsolat nélküli használatra</value>
+  </data>
+  <data name="OfflineMapAreasOfflineDisabledTitle" xml:space="preserve">
+    <value>Kapcsolat nélküli állapot letiltva</value>
+  </data>
+  <data name="OfflineMapAreasOpen" xml:space="preserve">
+    <value>Megnyitva</value>
+  </data>
+  <data name="OfflineMapAreasRefresh" xml:space="preserve">
+    <value>Frissítés</value>
+  </data>
+  <data name="OfflineMapAreasRemove" xml:space="preserve">
+    <value>Eltávolítás</value>
+  </data>
+  <data name="OfflineMapAreasSelectArea" xml:space="preserve">
+    <value>Terület kiválasztása</value>
+  </data>
+  <data name="OfflineMapAreasScaleLabel" xml:space="preserve">
+    <value>Méretarány</value>
+  </data>
+  <data name="OfflineMapAreasScaleRoom" xml:space="preserve">
+    <value>Szoba</value>
+  </data>
+  <data name="OfflineMapAreasScaleRooms" xml:space="preserve">
+    <value>Szobák</value>
+  </data>
+  <data name="OfflineMapAreasScaleHouseProperty" xml:space="preserve">
+    <value>Háztulajdonság</value>
+  </data>
+  <data name="OfflineMapAreasScaleHouses" xml:space="preserve">
+    <value>Házak</value>
+  </data>
+  <data name="OfflineMapAreasScaleSmallBuilding" xml:space="preserve">
+    <value>Kis épület</value>
+  </data>
+  <data name="OfflineMapAreasScaleBuilding" xml:space="preserve">
+    <value>Épület</value>
+  </data>
+  <data name="OfflineMapAreasScaleBuildings" xml:space="preserve">
+    <value>Épületek</value>
+  </data>
+  <data name="OfflineMapAreasScaleStreet" xml:space="preserve">
+    <value>Utca</value>
+  </data>
+  <data name="OfflineMapAreasScaleStreets" xml:space="preserve">
+    <value>Utcák</value>
+  </data>
+  <data name="OfflineMapAreasScaleNeighborhood" xml:space="preserve">
+    <value>Kerület</value>
+  </data>
+  <data name="OfflineMapAreasScaleTown" xml:space="preserve">
+    <value>Kisváros</value>
+  </data>
+  <data name="OfflineMapAreasScaleCity" xml:space="preserve">
+    <value>Nagyváros</value>
+  </data>
+  <data name="OfflineMapAreasScaleCities" xml:space="preserve">
+    <value>Városok</value>
+  </data>
+  <data name="OfflineMapAreasScaleMetropolitanArea" xml:space="preserve">
+    <value>Világváros</value>
+  </data>
+  <data name="OfflineMapAreasScaleCounty" xml:space="preserve">
+    <value>Megyeigazgatás</value>
+  </data>
+  <data name="OfflineMapAreasScaleCounties" xml:space="preserve">
+    <value>Megyék</value>
+  </data>
+  <data name="OfflineMapAreasScaleStateProvince" xml:space="preserve">
+    <value>Állam/tartomány</value>
+  </data>
+  <data name="OfflineMapAreasScaleStatesProvinces" xml:space="preserve">
+    <value>Államok/tartományok</value>
+  </data>
+  <data name="OfflineMapAreasScaleCountriesSmall" xml:space="preserve">
+    <value>Országok (kicsi)</value>
+  </data>
+  <data name="OfflineMapAreasScaleCountriesBig" xml:space="preserve">
+    <value>Országok (nagy)</value>
+  </data>
+  <data name="OfflineMapAreasScaleContinent" xml:space="preserve">
+    <value>Földrész</value>
+  </data>
+  <data name="OfflineMapAreasScaleWorldSmall" xml:space="preserve">
+    <value>Világ (kicsi)</value>
+  </data>
+  <data name="OfflineMapAreasScaleWorldBig" xml:space="preserve">
+    <value>Világ (nagy)</value>
+  </data>
+  <data name="OfflineMapAreasScaleWorld" xml:space="preserve">
+    <value>Világ</value>
+  </data>
+  <data name="OfflineMapAreasStop" xml:space="preserve">
+    <value>Megálló</value>
+  </data>
+  <data name="OfflineMapAreasBackgroundTaskTitle" xml:space="preserve">
+    <value>Kapcsolat nélküli térkép</value>
+  </data>
+  <data name="OfflineMapAreasRemoveOnError" xml:space="preserve">
+    <value>Hiba történt. Koppintson az eltávolításhoz.</value>
+  </data>
+  <data name="OrientedImageViewportAutomationName" xml:space="preserve">
+    <value>Tájolt távérzékelt felvétel</value>
+  </data>
+  <data name="OrientedImageryViewerAutomationTypeName" xml:space="preserve">
+    <value>Tájolt távérzékelt felvétel megtekintése</value>
+  </data>
+  <data name="OrientedImageryViewerSelectMarkerSymbol" xml:space="preserve">
+    <value>Jelölő szimbólum választása</value>
+  </data>
+  <data name="OrientedImageryViewerToggleAddMarkers" xml:space="preserve">
+    <value>Jelölő-hozzáadás be-/kikapcsolása</value>
+  </data>
+  <data name="OrientedImageryViewerShowSelectedImageFootprint" xml:space="preserve">
+    <value>Aktuális lenyomat megjelenítése</value>
+  </data>
+  <data name="OrientedImageryViewerShowUnselectedImageFootprints" xml:space="preserve">
+    <value>További lenyomatok megjelenítése</value>
+  </data>
+  <data name="OrientedImageryViewerImageSearchMode" xml:space="preserve">
+    <value>Képkeresési mód</value>
+  </data>
+  <data name="OrientedImageryViewerCurrentFootprintLabel" xml:space="preserve">
+    <value>Aktuális lenyomat</value>
+  </data>
+  <data name="OrientedImageryViewerCurrentFootprintStackedLabel" xml:space="preserve">
+    <value>Aktuális
+lenyomat</value>
+  </data>
+  <data name="OrientedImageryViewerAdditionalFootprintsLabel" xml:space="preserve">
+    <value>További lenyomatok</value>
+  </data>
+  <data name="OrientedImageryViewerAdditionalFootprintsStackedLabel" xml:space="preserve">
+    <value>További
+lenyomatok</value>
+  </data>
+  <data name="OrientedImageryViewerCameraLocationsLabel" xml:space="preserve">
+    <value>Kamerahelyek</value>
+  </data>
+  <data name="OrientedImageryViewerCameraLocationsStackedLabel" xml:space="preserve">
+    <value>Kamera-
+helyek</value>
+  </data>
+  <data name="OrientedImageryViewerAddMarkersLabel" xml:space="preserve">
+    <value>Jelölők hozzáadása</value>
+  </data>
+  <data name="OrientedImageryViewerAddMarkersStackedLabel" xml:space="preserve">
+    <value>Jelölők
+hozzáadása</value>
+  </data>
+  <data name="OrientedImageryViewerClearMarkersLabel" xml:space="preserve">
+    <value>Jelölők törlése</value>
+  </data>
+  <data name="OrientedImageryViewerClearMarkersTooltip" xml:space="preserve">
+    <value>Jelölők törlése</value>
+  </data>
+  <data name="OrientedImageryViewerClearMarkersStackedLabel" xml:space="preserve">
+    <value>Jelölők
+törlése</value>
+  </data>
+  <data name="OrientedImageryViewerImageSearchModeFind" xml:space="preserve">
+    <value>Képek keresése</value>
+  </data>
+  <data name="OrientedImageryViewerImageSearchModeFindStackedLabel" xml:space="preserve">
+    <value>Képek
+keresése</value>
+  </data>
+  <data name="OrientedImageryViewerImageSearchModeDisplay" xml:space="preserve">
+    <value>Kép megjelenítése</value>
+  </data>
+  <data name="OrientedImageryViewerImageSearchModeDisplayStackedLabel" xml:space="preserve">
+    <value>Kép
+megjelenítése</value>
+  </data>
+  <data name="OrientedImageryViewerOpenSelectedImagePopup" xml:space="preserve">
+    <value>Kijelölt kép részleteinek megnyitása</value>
+  </data>
+  <data name="OrientedImageryViewerImageDetails" xml:space="preserve">
+    <value>Kép részletei</value>
+  </data>
+  <data name="OrientedImageryViewerCloseSelectedImagePopup" xml:space="preserve">
+    <value>Részletek bezárása</value>
+  </data>
+  <data name="OrientedImageryViewerGoToPageFormat" xml:space="preserve">
+    <value>Ugrás {0}/{1} képhez</value>
+  </data>
+  <data name="OrientedImageryViewerSelectedPageFormat" xml:space="preserve">
+    <value>{0}/{1} kép, kijelölve</value>
+  </data>
+  <data name="OrientedImageryViewerToggleCameraMarkers" xml:space="preserve">
+    <value>Kamerahelyek megjelenítése</value>
+  </data>
+  <data name="OrientedImageryViewerSequentialNavigationTooltip" xml:space="preserve">
+    <value>Szekvenciális navigáció</value>
+  </data>
+  <data name="OrientedImageryViewerSequentialNavigationLabel" xml:space="preserve">
+    <value>Szekvenciális navigáció</value>
+  </data>
+  <data name="OrientedImageryViewerSequentialNavigationStackedLabel" xml:space="preserve">
+    <value>Szekvenciális
+navigáció</value>
+  </data>
+  <data name="OrientedImageryViewerPreviousImage" xml:space="preserve">
+    <value>Előző kép</value>
+  </data>
+  <data name="OrientedImageryViewerNextImage" xml:space="preserve">
+    <value>Következő kép</value>
+  </data>
+  <data name="OrientedImageryViewerImageLoading" xml:space="preserve">
+    <value>Kép betöltése...</value>
+  </data>
+  <data name="OrientedImageryViewerImageLoaded" xml:space="preserve">
+    <value>Kép betöltve</value>
+  </data>
+  <data name="OrientedImageryViewerNoImageToDisplay" xml:space="preserve">
+    <value>Nincs megjeleníthető kép</value>
+  </data>
+  <data name="OrientedImageryViewerNoImagesFound" xml:space="preserve">
+    <value>A megérintett helyhez nem találhatók képek</value>
+  </data>
+  <data name="OrientedImageryViewerImageSelectionNoImagesNone" xml:space="preserve">
+    <value>Nincs megjeleníthető kép. Kép kereséséhez engedélyezze a képkeresést vagy a képmegjelenítési módot</value>
+  </data>
+  <data name="OrientedImageryViewerImageSelectionNoImagesFind" xml:space="preserve">
+    <value>Nincs megjeleníthető kép. Képek kereséséhez vagy képmegjelenítési módra váltáshoz koppintson a térképre.</value>
+  </data>
+  <data name="OrientedImageryViewerImageSelectionNoImagesDisplay" xml:space="preserve">
+    <value>Nincs megjeleníthető kép. A képe megtekintéséhez vagy képmegjelenítési módra váltáshoz koppintson a kívánt vektoros elemre.</value>
+  </data>
+  <data name="OrientedImageryViewerImageSelectionEnable" xml:space="preserve">
+    <value>Engedélyezés</value>
+  </data>
+  <data name="OrientedImageryViewerImageSelectionOr" xml:space="preserve">
+    <value>vagy</value>
+  </data>
+  <data name="OrientedImageryViewerImageSelectionSearchMode" xml:space="preserve">
+    <value>módot képek kereséséhez</value>
+  </data>
+  <data name="OrientedImageryViewerImageSelectionFindImages" xml:space="preserve">
+    <value>Képek kereséséhez koppintson a térképre</value>
+  </data>
+  <data name="OrientedImageryViewerImageSelectionDisplayImage" xml:space="preserve">
+    <value>Koppintson a kívánt vektoros elemre a képe megtekintéséhez</value>
+  </data>
+  <data name="OrientedImageryViewerImageSelectionSwitchMode" xml:space="preserve">
+    <value>vagy</value>
+  </data>
+  <data name="OrientedImageryViewerImageSelectionMode" xml:space="preserve">
+    <value>módra váltáshoz</value>
+  </data>
+  <data name="OrientedImageryViewerNoGeoView" xml:space="preserve">
+    <value>Orientált felvételek megtekintéséhez kapcsolódjon GeoView-hoz</value>
+  </data>
+  <data name="OrientedImageryViewerNoLayerSelected" xml:space="preserve">
+    <value>Nincs kiválasztott réteg.</value>
+  </data>
+  <data name="OrientedImageryViewerAnnounceTransientError" xml:space="preserve">
+    <value>Hiba lépett fel</value>
+  </data>
+  <data name="OrientedImageryViewerDismissError" xml:space="preserve">
+    <value>Hiba elvetése</value>
+  </data>
+  <data name="OrientedImageryViewerPreviousLabel" xml:space="preserve">
+    <value>Előző</value>
+  </data>
+  <data name="OrientedImageryViewerNextLabel" xml:space="preserve">
+    <value>Tovább</value>
+  </data>
+  <data name="OrientedImageryViewerSequenceStartReached" xml:space="preserve">
+    <value>Képsorozat eleje elérve</value>
+  </data>
+  <data name="OrientedImageryViewerSequenceEndReached" xml:space="preserve">
+    <value>Képsorozat vége elérve</value>
+  </data>
+  <data name="OrientedImageryViewerSequenceStartAndEndReached" xml:space="preserve">
+    <value>Képsorozat eleje és vége elérve</value>
+  </data>
+  <data name="OrientedImageryViewerClose" xml:space="preserve">
+    <value>Tájolt távérzékelt felvétel bezárása</value>
+  </data>
+  <data name="OrientedImageryViewerClosePanel" xml:space="preserve">
+    <value>Panel bezárása</value>
+  </data>
+  <data name="OrientedImageryViewerOverlays" xml:space="preserve">
+    <value>Fedvényműveletek</value>
+  </data>
+  <data name="OrientedImageryViewerMarkers" xml:space="preserve">
+    <value>Jelölők</value>
+  </data>
+  <data name="OrientedImageryViewerMode" xml:space="preserve">
+    <value>Mód</value>
+  </data>
+  <data name="OrientedImageryViewerShowPreviousImageInSequence" xml:space="preserve">
+    <value>Előző kép megjelenítése a sorozatban</value>
+  </data>
+  <data name="OrientedImageryViewerShowNextImageInSequence" xml:space="preserve">
+    <value>Következő kép megjelenítése a sorozatban</value>
+  </data>
+  <data name="OrientedImageryViewerMore" xml:space="preserve">
+    <value>Továbbiak</value>
+  </data>
+  <data name="OrientedImageryViewerPage" xml:space="preserve">
+    <value>{0}/{1} kép</value>
+  </data>
+  <data name="OrientedImageryViewerSelectLayer" xml:space="preserve">
+    <value>Réteg kiválasztása</value>
+  </data>
+  <data name="OrientedImagerySampleToggleView" xml:space="preserve">
+    <value>2D/3D</value>
+  </data>
+  <data name="OrientedImagerySampleToggleViewDescription" xml:space="preserve">
+    <value>2D térkép és 3D térkép közötti váltás</value>
+  </data>
+  <data name="OrientedImageryViewerMarkerSelection" xml:space="preserve">
+    <value>Jelölő kiválasztása</value>
+  </data>
+  <data name="OrientedImageryViewerMarkerOption" xml:space="preserve">
+    <value>„{0}” jelölő</value>
+  </data>
+  <data name="OrientedImageryViewerMarkerCircle" xml:space="preserve">
+    <value>Kör alakú jelölő</value>
+  </data>
+  <data name="OrientedImageryViewerMarkerSquare" xml:space="preserve">
+    <value>Négyzet alakú jelölő</value>
+  </data>
+  <data name="OrientedImageryViewerMarkerTriangle" xml:space="preserve">
+    <value>Háromszög alakú jelölő</value>
+  </data>
+  <data name="OrientedImageryViewerMarkerDiamond" xml:space="preserve">
+    <value>Rombusz alakú jelölő</value>
+  </data>
+  <data name="OrientedImageryViewerMarkerX" xml:space="preserve">
+    <value>Kereszt jelölő</value>
+  </data>
+  <data name="OrientedImageryViewerMobileSequentialMode" xml:space="preserve">
+    <value>Szekvenciális</value>
+  </data>
+  <data name="OrientedImageryViewerNavigation" xml:space="preserve">
+    <value>Böngészés</value>
+  </data>
+  <data name="OrientedImageryViewerModeSelection" xml:space="preserve">
+    <value>Módválasztás</value>
+  </data>
+  <data name="OrientedImageryViewerOverlaysSelection" xml:space="preserve">
+    <value>Fedvényválasztás</value>
+  </data>
+  <data name="OrientedImageryViewerMarkerTools" xml:space="preserve">
+    <value>Jelölőeszközök</value>
+  </data>
+  <data name="OrientedImageryViewerOpen" xml:space="preserve">
+    <value>Tájolt felvételek megnyitása</value>
+  </data>
+  <data name="OrientedImageryViewerOn" xml:space="preserve">
+    <value>Be</value>
+  </data>
+  <data name="OrientedImageryViewerOff" xml:space="preserve">
+    <value>Ki</value>
+  </data>
+  <data name="OrientedImageryViewerSelected" xml:space="preserve">
+    <value>Kijelölve</value>
+  </data>
+  <data name="OrientedImageryViewerNotSelected" xml:space="preserve">
+    <value>Nincs kijelölve</value>
+  </data>
+  <data name="OrientedImageryViewerMobileBackToMarkers" xml:space="preserve">
+    <value>Vissza a jelölőeszközökhöz</value>
+  </data>
+  <data name="OrientedImageryViewerMobileSelectMarkerSymbol" xml:space="preserve">
+    <value>Szimbólum választása</value>
+  </data>
+  <data name="OrientedImageryViewerMobileCurrentFootprint" xml:space="preserve">
+    <value>Aktuális lenyomat megjelenítése</value>
+  </data>
+  <data name="OrientedImageryViewerMobileAdditionalFootprints" xml:space="preserve">
+    <value>További lenyomatok megjelenítése</value>
+  </data>
+  <data name="OrientedImageryViewerMobileCameraLocations" xml:space="preserve">
+    <value>Kamerahelyek megjelenítése</value>
+  </data>
+  <data name="OrientedImageryViewerImageNavigation" xml:space="preserve">
+    <value>Képnavigáció</value>
+  </data>
+  <data name="OrientedImageryViewerImageNavigationHint" xml:space="preserve">
+    <value>Használja a balra nyilat az előző képhez vagy a jobbra nyilat a következő képhez.</value>
+  </data>
+  <data name="OrientedImageryViewerSequenceNavigation" xml:space="preserve">
+    <value>Szekvenciális képnavigáció</value>
   </data>
 </root>
