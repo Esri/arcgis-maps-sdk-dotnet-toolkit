@@ -9,6 +9,9 @@ updates:
     ignore:
       - dependency-name: "*"
         update-types: ["version-update:semver-major"]
+      # The MAUI analyzers ship in the package and stay on the Roslyn version of the oldest .NET 10 SDK.
+      - dependency-name: "Microsoft.CodeAnalysis.CSharp"
+      - dependency-name: "Microsoft.CodeAnalysis.CSharp.Workspaces"
     cooldown:
       default-days: 2
     schedule:
