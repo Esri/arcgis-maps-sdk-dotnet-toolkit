@@ -131,7 +131,16 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             {
                 content.ContentTemplate = new FieldTemplateSelector(this);
             }
+            
+            // JH: If UpdateErrorMessages is called before the FieldFormElementView is Loaded it fails
+            Loaded += OnLoaded;
             UpdateErrorMessages();
+        }
+
+        private void OnLoaded(object? sender, EventArgs e)
+        {
+            UpdateErrorMessages();
+            Loaded -= OnLoaded;
         }
     }
 }
