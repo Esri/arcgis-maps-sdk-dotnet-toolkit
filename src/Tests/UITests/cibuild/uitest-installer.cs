@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.IO.Compression;
 using System.Text;
 using System.Text.Json;
+using System.Text.Json.Nodes;
 using System.Text.Json.Serialization;
 using System.Text.RegularExpressions;
 using System.Xml;
@@ -26,14 +27,34 @@ internal class Program
             if (!OperatingSystem.IsWindows())
                 throw new PlatformNotSupportedException("These installation workloads require Windows.");
 
-            var appEnv = new AppiumEnvironment(Helpers.GetRequiredEnvironmentPath("WORKSPACE"));
+            using var appEnv = new AppiumEnvironment(Helpers.GetRequiredEnvironmentPath("WORKSPACE"));
 
             if (args.Length < 1)
-                throw new ArgumentException($"Must pass at least one argument");
-            else if (args[0] == "clean")
+                throw new ArgumentException($"Must pass at least one argument (clean, run, install)");
+
+            if (args[0] == "clean")
+            {
                 appEnv.Clean();
+            }
+            else if (args[0] == "run")
+            {
+                if (args.Length < 2)
+                    throw new ArgumentException($"Must pass workload id after run");
+
+                await appEnv.Install(args[1]);
+                await appEnv.RunAppium(args[1]);
+            }
+            else if (args[0] == "install")
+            {
+                if (args.Length < 2)
+                    throw new ArgumentException($"Must pass workload id after install");
+
+                await appEnv.Install(args[1]);
+            }
             else
-                await appEnv.Install(args[0]);
+            {
+                throw new ArgumentException($"Unknown first argument");
+            }
 
             return 0;
         }
@@ -46,10 +67,18 @@ internal class Program
 }
 
 #region AppiumEnvironment
-internal class AppiumEnvironment
+internal class AppiumEnvironment : IDisposable
 {
-    private const string DependenciesInstallDir = ".uitest";
-    private const string StateFileName = "installed.json";
+    private const string _dependenciesInstallDir = ".uitest";
+    private const string _stateFileName = "installed.json";
+
+    // Variables for killing appium afterwards
+    private Dictionary<string, InstalledDependency> _installed = new();
+    private readonly List<string> _appiumStandardOutput = new();
+    private readonly List<string> _appiumStandardError = new();
+    private Process? _appiumProcess;
+    private bool _disposed;
+
     public readonly string Workspace;
     public string DotnetExe = string.Empty;
     public string ToolkitSrc = string.Empty;
@@ -57,7 +86,36 @@ internal class AppiumEnvironment
 
     public AppiumEnvironment(string workspace)
     {
-        Workspace = Path.GetFullPath(Path.Join(workspace, DependenciesInstallDir));
+        Workspace = Path.GetFullPath(Path.Join(workspace, _dependenciesInstallDir));
+        AppDomain.CurrentDomain.ProcessExit += OnProcessExit;
+        Console.CancelKeyPress += OnCancelKeyPress;
+    }
+
+    public async Task RunAppium(string workloadId)
+    {
+        ObjectDisposedException.ThrowIf(_disposed, this);
+        if (_appiumProcess != null)
+            throw new InvalidOperationException("Appium has already been started.");
+
+        var nodeExe = GetRequiredInfo(_installed, "node", "node-exe");
+        var appiumEntry = GetRequiredInfo(_installed, "appium", "appium-entry");
+        Console.WriteLine("\nStarting appium...");
+        _appiumProcess = Helpers.RunBinaryBackground(
+            nodeExe,
+            $"\"{appiumEntry}\"",
+            _appiumStandardOutput,
+            _appiumStandardError
+        );
+
+        try
+        {
+            await WaitForAppiumReadyAsync("http://127.0.0.1:4724/status", TimeSpan.FromSeconds(30));
+        }
+        catch
+        {
+            Dispose();
+            throw;
+        }
     }
 
     public async Task Install(string workloadId)
@@ -67,21 +125,20 @@ internal class AppiumEnvironment
                 throw new ArgumentException($"Workload \"{workloadId}\" not recognized");
 
             Directory.CreateDirectory(Workspace);
-            var stateFile = Path.Join(Workspace, StateFileName);
-            Dictionary<string, InstalledDependency> installed;
+            var stateFile = Path.Join(Workspace, _stateFileName);
             if (File.Exists(stateFile))
-                installed = JsonSerializer.Deserialize(
+                _installed = JsonSerializer.Deserialize(
                         File.ReadAllText(stateFile),
                         DependencySerializationContext.Default.DictionaryStringInstalledDependency
                     ) ?? new Dictionary<string, InstalledDependency>();
             else
-                installed = new();
+                _installed = new();
 
             foreach (var dependency in workloads[workloadId])
             {
-                if (installed.TryGetValue(dependency.Name, out var existing))
+                if (_installed.TryGetValue(dependency.Name, out var existing))
                 {
-                    AssertVersion(dependency, existing, installed);
+                    AssertVersion(dependency, existing, _installed);
 
                     Console.WriteLine($"\nRestoring dependency \"{dependency.Name}\"...");
                     dependency.Restore(existing);
@@ -91,11 +148,11 @@ internal class AppiumEnvironment
                 try
                 {
                     Console.WriteLine($"\nInstalling dependency \"{dependency.Name}\"...");
-                    var newInstalled = await dependency.Install(installed);
-                    installed[dependency.Name] = newInstalled;
+                    var newInstalled = await dependency.Install(_installed);
+                    _installed[dependency.Name] = newInstalled;
 
                     // Save state after each successful install so it can be cleaned if a latter install breaks
-                    var persistent = installed.Where(pair => pair.Value.Serialize).ToDictionary();
+                    var persistent = _installed.Where(pair => pair.Value.Serialize).ToDictionary();
                     var json = JsonSerializer.Serialize(persistent, DependencySerializationContext.Default.DictionaryStringInstalledDependency);
                     File.WriteAllText(stateFile + ".tmp", json);
                     File.Move(stateFile + ".tmp", stateFile, overwrite: true);
@@ -113,7 +170,7 @@ internal class AppiumEnvironment
     public void Clean()
     {
         var workload = GetWorkloads()["all"];
-        var stateFile = Path.Join(Workspace, StateFileName);
+        var stateFile = Path.Join(Workspace, _stateFileName);
         if (File.Exists(stateFile))
         {
             var installed = JsonSerializer.Deserialize(File.ReadAllText(stateFile), DependencySerializationContext.Default.DictionaryStringInstalledDependency)
@@ -316,17 +373,17 @@ internal class AppiumEnvironment
     /// <summary>Sets the nuget source to point to the folder where the ArcGIS nugets are stored (if provided)</summary>
     class NugetDependency(AppiumEnvironment environment) : TestDependency(environment)
     {
-        private const string NugetRepoEnvVar = "NUGET_REPO";
-        private const string UnconfiguredVersion = "unconfigured";
+        private const string _nugetRepoEnvVar = "NUGET_REPO";
+        private const string _unconfiguredVersion = "unconfigured";
 
         public override string Name => "nuget";
 
         public override Task<InstalledDependency> Install(IReadOnlyDictionary<string, InstalledDependency> installed)
         {
             // Only set up custom nuget config if path to specific SDK nugets is set
-            var nugetRepo = Environment.GetEnvironmentVariable(NugetRepoEnvVar);
+            var nugetRepo = Environment.GetEnvironmentVariable(_nugetRepoEnvVar);
             if (string.IsNullOrWhiteSpace(nugetRepo))
-                return Task.FromResult(new InstalledDependency(version: UnconfiguredVersion));
+                return Task.FromResult(new InstalledDependency(version: _unconfiguredVersion));
 
             Helpers.RunBinary(AppEnvironment.DotnetExe, ["new", "nugetconfig", "--force", "-o", AppEnvironment.ToolkitSrc]);
 
@@ -387,11 +444,11 @@ internal class AppiumEnvironment
         public override bool TryGetVersion(IReadOnlyDictionary<string, InstalledDependency> installed, out string? version)
         {
             // If the nuget repo was previously set to a different version, we probably want to do a full clean
-            var nugetRepo = Environment.GetEnvironmentVariable(NugetRepoEnvVar);
+            var nugetRepo = Environment.GetEnvironmentVariable(_nugetRepoEnvVar);
             if (!string.IsNullOrWhiteSpace(nugetRepo))
                 version = nugetRepo;
             else
-                version = UnconfiguredVersion;
+                version = _unconfiguredVersion;
             return true;
         }
     }
@@ -440,6 +497,74 @@ internal class AppiumEnvironment
         }
     }
     #endregion Dependencies
+
+    #region Appium
+    public static void KillAppium(Process appiumProcess, List<string> appiumStandardOutput, List<string> appiumStandardError)
+    {
+        Console.WriteLine("\nKilling appium...");
+
+        appiumProcess.Kill(entireProcessTree: true);
+        appiumProcess.WaitForExit();
+
+        if (Environment.GetEnvironmentVariable("PRINT_APPIUM_LOGS")?.ToLower() == "true") {
+            Console.WriteLine("Appium standard output logs:");
+            foreach (var line in appiumStandardOutput) {
+                Console.WriteLine(line);
+            }
+            Console.WriteLine("End appium standard output logs\n");
+        }
+
+        if (appiumStandardError.Count > 0) {
+            Console.WriteLine("Appium standard error logs:");
+            foreach (var line in appiumStandardError) {
+                Console.WriteLine(line);
+            }
+            Console.WriteLine("End appium standard error logs");
+        }
+    }
+
+    public static async Task WaitForAppiumReadyAsync(string statusUrl, TimeSpan timeout)
+    {
+        using var http = new HttpClient { Timeout = TimeSpan.FromSeconds(2) };
+        var sw = Stopwatch.StartNew();
+        while (sw.Elapsed < timeout)
+        {
+            try
+            {
+                var body = await http.GetStringAsync(statusUrl);
+                if (JsonNode.Parse(body)?["value"]?["ready"]?.GetValue<bool>() == true)
+                    return;
+            }
+            catch { /* not up / not ready yet */ }
+            await Task.Delay(500);
+        }
+        throw new Exception($"Appium did not become ready within {timeout.TotalSeconds:0}s.");
+    }
+
+    private void OnProcessExit(object? sender, EventArgs args) => Dispose();
+
+    private void OnCancelKeyPress(object? sender, ConsoleCancelEventArgs args) => Dispose();
+
+    public void Dispose()
+    {
+        if (_disposed)
+            return;
+        _disposed = true;
+        AppDomain.CurrentDomain.ProcessExit -= OnProcessExit;
+        Console.CancelKeyPress -= OnCancelKeyPress;
+        if (_appiumProcess != null)
+        {
+            try
+            {
+                KillAppium(_appiumProcess, _appiumStandardOutput, _appiumStandardError);
+            }
+            finally
+            {
+                _appiumProcess.Dispose();
+            }
+        }
+    }
+    #endregion Appium
 }
 #endregion AppiumEnvironment
 
@@ -475,6 +600,37 @@ public class Helpers
             }
         }
         throw new Exception($"Could not find variable {name} in {yamlFile}");
+    }
+
+    public static Process RunBinaryBackground(string binary, string arguments, List<string> standardOutput, List<string> standardError) {
+        Console.WriteLine($"Running \"{binary} {arguments}\" in background");
+
+        var startInfo = new ProcessStartInfo
+        {
+            FileName = binary,
+            Arguments = arguments,
+            RedirectStandardOutput = true,
+            RedirectStandardError = true,
+            UseShellExecute = false
+        };
+
+        var process = new Process();
+        process.OutputDataReceived += (sender, e) => {
+            if (!string.IsNullOrEmpty(e.Data)) {
+                standardOutput.Add(e.Data);
+            }
+        };
+        process.ErrorDataReceived += (sender, e) => {
+            if (!string.IsNullOrEmpty(e.Data)) {
+                standardError.Add(e.Data);
+            }
+        };
+        process.StartInfo = startInfo;
+        process.Start();
+        process.BeginOutputReadLine();
+        process.BeginErrorReadLine();
+
+        return process;
     }
 
     public static BinaryOutput? RunBinary(string binary, Collection<string> arguments, bool captureStdOut = false, bool throwOnError = true) {
