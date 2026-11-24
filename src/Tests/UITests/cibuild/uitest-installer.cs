@@ -16,31 +16,58 @@ nd throws an error if it's not present
  * There will be a clean command that deletes the entire dependencies workspace
  */
 
+
 internal class Program
 {
-    private const string DependenciesInstallDir = ".uitest";
-    private const string StateFileName = "installed.json";
-
     static async Task<int> Main(string[] args)
     {
         try
         {
-            var workloads = GetWorkloads();
-            if (args.Length != 1 || (args[0] != "clean" && !workloads.ContainsKey(args[0])))
-                throw new ArgumentException("Pass one command: windows, maui-windows, all, or clean.");
             if (!OperatingSystem.IsWindows())
                 throw new PlatformNotSupportedException("These installation workloads require Windows.");
 
-            Paths.WorkspacePath = Path.Join(GetRequiredEnvironmentPath("WORKSPACE"), DependenciesInstallDir);
+            var appEnv = new AppiumEnvironment(Helpers.GetRequiredEnvironmentPath("WORKSPACE"));
 
-            if (args[0] == "clean")
-            {
-                Clean(workloads["all"]);
-                return 0;
-            }
+            if (args.Length < 1)
+                throw new ArgumentException($"Must pass at least one argument");
+            else if (args[0] == "clean")
+                appEnv.Clean();
+            else
+                await appEnv.Install(args[0]);
 
-            Directory.CreateDirectory(Paths.WorkspacePath);
-            var stateFile = Path.Join(Paths.WorkspacePath, StateFileName);
+            return 0;
+        }
+        catch (Exception ex)
+        {
+            Console.Error.WriteLine(ex);
+            return 1;
+        }
+    }
+}
+
+#region AppiumEnvironment
+internal class AppiumEnvironment
+{
+    private const string DependenciesInstallDir = ".uitest";
+    private const string StateFileName = "installed.json";
+    public readonly string Workspace;
+    public string DotnetExe = string.Empty;
+    public string ToolkitSrc = string.Empty;
+    public string YamlFilePath = string.Empty;
+
+    public AppiumEnvironment(string workspace)
+    {
+        Workspace = Path.GetFullPath(Path.Join(workspace, DependenciesInstallDir));
+    }
+
+    public async Task Install(string workloadId)
+    {
+            var workloads = GetWorkloads();
+            if (!workloads.ContainsKey(workloadId))
+                throw new ArgumentException($"Workload \"{workloadId}\" not recognized");
+
+            Directory.CreateDirectory(Workspace);
+            var stateFile = Path.Join(Workspace, StateFileName);
             Dictionary<string, InstalledDependency> installed;
             if (File.Exists(stateFile))
                 installed = JsonSerializer.Deserialize(
@@ -50,7 +77,7 @@ internal class Program
             else
                 installed = new();
 
-            foreach (var dependency in workloads[args[0]])
+            foreach (var dependency in workloads[workloadId])
             {
                 if (installed.TryGetValue(dependency.Name, out var existing))
                 {
@@ -80,18 +107,13 @@ internal class Program
             }
 
             Console.WriteLine($"\nDependencies installed. Install state recorded in {stateFile}.");
-            return 0;
-        }
-        catch (Exception ex)
-        {
-            Console.Error.WriteLine(ex);
-            return 1;
-        }
+            return;
     }
 
-    static void Clean(IReadOnlyList<ITestDependency> workload)
+    public void Clean()
     {
-        var stateFile = Path.Join(Paths.WorkspacePath, StateFileName);
+        var workload = GetWorkloads()["all"];
+        var stateFile = Path.Join(Workspace, StateFileName);
         if (File.Exists(stateFile))
         {
             var installed = JsonSerializer.Deserialize(File.ReadAllText(stateFile), DependencySerializationContext.Default.DictionaryStringInstalledDependency)
@@ -111,19 +133,19 @@ internal class Program
             }
         }
 
-        if (Directory.Exists(Paths.WorkspacePath))
-            Directory.Delete(Paths.WorkspacePath, true);
+        if (Directory.Exists(Workspace))
+            Directory.Delete(Workspace, true);
     }
 
-    static IReadOnlyDictionary<string, IReadOnlyList<ITestDependency>> GetWorkloads()
+    public IReadOnlyDictionary<string, IReadOnlyList<TestDependency>> GetWorkloads()
     {
-        var paths = new RequiredPathsDependency();
-        var node = new NodeDependency();
-        var appium = new AppiumDependency();
-        var driver = new WinCoreDriverDependency();
-        var nuget = new NugetDependency();
-        var maui = new MauiDependency();
-        var workloads = new Dictionary<string, IReadOnlyList<ITestDependency>>
+        var paths = new RequiredPathsDependency(this);
+        var node = new NodeDependency(this);
+        var appium = new AppiumDependency(this);
+        var driver = new WinCoreDriverDependency(this);
+        var nuget = new NugetDependency(this);
+        var maui = new MauiDependency(this);
+        var workloads = new Dictionary<string, IReadOnlyList<TestDependency>>
         {
             ["windows"] = [paths, nuget, node, appium, driver],
             ["maui-windows"] = [paths, nuget, maui, node, appium, driver],
@@ -132,57 +154,26 @@ internal class Program
         return workloads.AsReadOnly();
     }
 
-    static void AssertVersion(ITestDependency dependency, InstalledDependency existing, Dictionary<string, InstalledDependency> installed)
-    {
-        if (!dependency.TryGetVersion(installed, out var desiredVersion))
-            throw new InvalidOperationException($"Could not determine expected version for dependency '{dependency.Name}'. Current version: '{existing.Version ?? "<untracked>"}'. See above logs.");
-
-        if (desiredVersion != null && existing.Version != desiredVersion)
-            throw new InvalidOperationException($"Version mismatch for dependency '{dependency.Name}': expected '{desiredVersion}', current '{existing.Version ?? "<untracked>"}'. Run clean before reinstalling.");
-    }
-
-    static string GetRequiredInfo(IReadOnlyDictionary<string, InstalledDependency> installed, string dependency, string key)
-    {
-        if (!installed.TryGetValue(dependency, out var value) || value.Info == null || !value.Info.TryGetValue(key, out var info))
-            throw new InvalidOperationException($"Dependency '{dependency}' must be installed before using '{key}'.");
-        return info;
-    }
-
-    static bool TryReadYamlVersion(string name, out string? version)
-    {
-        try
-        {
-            version = ReadYamlValue(Paths.YamlFilePath, name);
-            return true;
-        }
-        catch (Exception ex)
-        {
-            Console.Error.WriteLine(ex);
-            version = null;
-            return false;
-        }
-    }
-
     #region Dependencies
-    class RequiredPathsDependency : ITestDependency
+    class RequiredPathsDependency(AppiumEnvironment environment) : TestDependency(environment)
     {
-        public string Name => "required-paths";
+        public override string Name => "required-paths";
 
-        public Task<InstalledDependency> Install(IReadOnlyDictionary<string, InstalledDependency> installed)
+        public override Task<InstalledDependency> Install(IReadOnlyDictionary<string, InstalledDependency> installed)
         {
             var dependency = new InstalledDependency(serialize: false);
             Restore(dependency);
             return Task.FromResult(dependency);
         }
 
-        public void Restore(InstalledDependency installed)
+        public override void Restore(InstalledDependency installed)
         {
-            Paths.DotnetExe = GetRequiredEnvironmentPath("DOTNET_PATH");
-            Paths.ToolkitSrc = GetRequiredEnvironmentPath("TOOLKIT_SRC");
-            Paths.YamlFilePath = Path.Join(Paths.ToolkitSrc, "Tests", "UITests", "cibuild", "variables.yml");
+            AppEnvironment.DotnetExe = Path.GetFullPath(Helpers.GetRequiredEnvironmentPath("DOTNET_PATH"));
+            AppEnvironment.ToolkitSrc = Path.GetFullPath(Helpers.GetRequiredEnvironmentPath("TOOLKIT_SRC"));
+            AppEnvironment.YamlFilePath = Path.Join(AppEnvironment.ToolkitSrc, "Tests", "UITests", "cibuild", "variables.yml");
         }
 
-        public bool TryGetVersion(IReadOnlyDictionary<string, InstalledDependency> installed, out string? version)
+        public override bool TryGetVersion(IReadOnlyDictionary<string, InstalledDependency> installed, out string? version)
         {
             version = null;
             return true;
@@ -190,16 +181,16 @@ internal class Program
     }
 
     // Install Node.js
-    class NodeDependency : ITestDependency
+    class NodeDependency(AppiumEnvironment environment) : TestDependency(environment)
     {
-        public string Name => "node";
+        public override string Name => "node";
 
-        public async Task<InstalledDependency> Install(IReadOnlyDictionary<string, InstalledDependency> installed)
+        public override async Task<InstalledDependency> Install(IReadOnlyDictionary<string, InstalledDependency> installed)
         {
             if (!TryGetVersion(installed, out var version) || string.IsNullOrWhiteSpace(version))
                 throw new Exception("Could not get desired node.js version to install");
 
-            var workspace = Path.Join(Paths.WorkspacePath, ".node");
+            var workspace = Path.Join(AppEnvironment.Workspace, ".node");
             var nodeDir = Path.Join(workspace, $"node-v{version}-win-x64");
             var nodeExe = Path.Join(nodeDir, "node.exe");
             var npmExe = Path.Join(nodeDir, "npm.cmd");
@@ -228,7 +219,7 @@ internal class Program
             return dependency;
         }
 
-        public void Restore(InstalledDependency installed)
+        public override void Restore(InstalledDependency installed)
         {
             var nodeExe = installed.Info!["node-exe"];
             var npmExe = installed.Info["npm-exe"];
@@ -242,21 +233,21 @@ internal class Program
             Environment.SetEnvironmentVariable("PATH", $"{nodeDir}{Path.PathSeparator}{Environment.GetEnvironmentVariable("PATH")}");
         }
 
-        public bool TryGetVersion(IReadOnlyDictionary<string, InstalledDependency> installed, out string? version)
-            => TryReadYamlVersion("node-version", out version);
+        public override bool TryGetVersion(IReadOnlyDictionary<string, InstalledDependency> installed, out string? version)
+            => AppEnvironment.TryReadYamlVersion("node-version", out version);
     }
 
     // Install appium and driver
-    class AppiumDependency : ITestDependency
+    class AppiumDependency(AppiumEnvironment environment) : TestDependency(environment)
     {
-        public string Name => "appium";
+        public override string Name => "appium";
 
-        public Task<InstalledDependency> Install(IReadOnlyDictionary<string, InstalledDependency> installed)
+        public override Task<InstalledDependency> Install(IReadOnlyDictionary<string, InstalledDependency> installed)
         {
-            var npmExe = GetRequiredInfo(installed, "node", "npm-exe");
-            var workspace = Path.Join(Paths.WorkspacePath, ".node");
-            var appiumHome = Path.Join(Paths.WorkspacePath, ".appium");
-            RunBinary(npmExe, ["install", "appium", "--prefix", workspace]);
+            var npmExe = AppiumEnvironment.GetRequiredInfo(installed, "node", "npm-exe");
+            var workspace = Path.Join(AppEnvironment.Workspace, ".node");
+            var appiumHome = Path.Join(AppEnvironment.Workspace, ".appium");
+            Helpers.RunBinary(npmExe, ["install", "appium", "--prefix", workspace]);
             var dependency = new InstalledDependency(info: new()
             {
                 ["appium-entry"] = Path.Join(workspace, "node_modules", "appium", "index.js"),
@@ -266,7 +257,7 @@ internal class Program
             return Task.FromResult(dependency);
         }
 
-        public void Restore(InstalledDependency installed)
+        public override void Restore(InstalledDependency installed)
         {
             var appiumEntry = installed.Info!["appium-entry"];
             if (!File.Exists(appiumEntry))
@@ -274,28 +265,28 @@ internal class Program
             Environment.SetEnvironmentVariable("APPIUM_HOME", installed.Info["appium-home"]);
         }
 
-        public bool TryGetVersion(IReadOnlyDictionary<string, InstalledDependency> installed, out string? version)
+        public override bool TryGetVersion(IReadOnlyDictionary<string, InstalledDependency> installed, out string? version)
         {
             version = null;
             return true;
         }
     }
 
-    class WinCoreDriverDependency : ITestDependency
+    class WinCoreDriverDependency(AppiumEnvironment environment) : TestDependency(environment)
     {
-        public string Name => "appium-driver-wincore";
+        public override string Name => "appium-driver-wincore";
 
-        public Task<InstalledDependency> Install(IReadOnlyDictionary<string, InstalledDependency> installed)
+        public override Task<InstalledDependency> Install(IReadOnlyDictionary<string, InstalledDependency> installed)
         {
-            var nodeExe = GetRequiredInfo(installed, "node", "node-exe");
-            var appiumEntry = GetRequiredInfo(installed, "appium", "appium-entry");
+            var nodeExe = AppiumEnvironment.GetRequiredInfo(installed, "node", "node-exe");
+            var appiumEntry = AppiumEnvironment.GetRequiredInfo(installed, "appium", "appium-entry");
             InstallAppiumDriver(nodeExe, appiumEntry, "wincore", "appium-wincore-driver");
             return Task.FromResult(new InstalledDependency());
         }
 
-        public void Restore(InstalledDependency installed) { }
+        public override void Restore(InstalledDependency installed) { }
 
-        public bool TryGetVersion(IReadOnlyDictionary<string, InstalledDependency> installed, out string? version)
+        public override bool TryGetVersion(IReadOnlyDictionary<string, InstalledDependency> installed, out string? version)
         {
             version = null;
             return true;
@@ -303,19 +294,19 @@ internal class Program
     }
 
     // Install maui workload if required
-    class MauiDependency : ITestDependency
+    class MauiDependency(AppiumEnvironment environment) : TestDependency(environment)
     {
-        public string Name => "maui";
+        public override string Name => "maui";
 
-        public Task<InstalledDependency> Install(IReadOnlyDictionary<string, InstalledDependency> installed)
+        public override Task<InstalledDependency> Install(IReadOnlyDictionary<string, InstalledDependency> installed)
         {
-            RunBinary(Paths.DotnetExe, ["workload", "install", "maui"]);
+            Helpers.RunBinary(AppEnvironment.DotnetExe, ["workload", "install", "maui"]);
             return Task.FromResult(new InstalledDependency());
         }
 
-        public void Restore(InstalledDependency installed) { }
+        public override void Restore(InstalledDependency installed) { }
 
-        public bool TryGetVersion(IReadOnlyDictionary<string, InstalledDependency> installed, out string? version)
+        public override bool TryGetVersion(IReadOnlyDictionary<string, InstalledDependency> installed, out string? version)
         {
             version = null;
             return true;
@@ -323,24 +314,24 @@ internal class Program
     }
 
     /// <summary>Sets the nuget source to point to the folder where the ArcGIS nugets are stored (if provided)</summary>
-    class NugetDependency : ITestDependency
+    class NugetDependency(AppiumEnvironment environment) : TestDependency(environment)
     {
         private const string NugetRepoEnvVar = "NUGET_REPO";
         private const string UnconfiguredVersion = "unconfigured";
 
-        public string Name => "nuget";
+        public override string Name => "nuget";
 
-        public Task<InstalledDependency> Install(IReadOnlyDictionary<string, InstalledDependency> installed)
+        public override Task<InstalledDependency> Install(IReadOnlyDictionary<string, InstalledDependency> installed)
         {
             // Only set up custom nuget config if path to specific SDK nugets is set
             var nugetRepo = Environment.GetEnvironmentVariable(NugetRepoEnvVar);
             if (string.IsNullOrWhiteSpace(nugetRepo))
                 return Task.FromResult(new InstalledDependency(version: UnconfiguredVersion));
 
-            RunBinary(Paths.DotnetExe, ["new", "nugetconfig", "--force", "-o", Paths.ToolkitSrc]);
+            Helpers.RunBinary(AppEnvironment.DotnetExe, ["new", "nugetconfig", "--force", "-o", AppEnvironment.ToolkitSrc]);
 
-            var configFile = Path.Join(Paths.ToolkitSrc, "nuget.config");
-            RunBinary(Paths.DotnetExe, ["nuget", "add", "source", nugetRepo, "--configfile", configFile]);
+            var configFile = Path.Join(AppEnvironment.ToolkitSrc, "nuget.config");
+            Helpers.RunBinary(AppEnvironment.DotnetExe, ["nuget", "add", "source", nugetRepo, "--configfile", configFile]);
 
             // Workaround for the build machine package mapping changes as applied in samples repo
             var config = new XmlDocument();
@@ -349,7 +340,7 @@ internal class Program
             mappings!.AppendChild(config.CreateElement("clear"));
             config.Save(configFile);
 
-            var nugetDir = Path.Join(Paths.ToolkitSrc, ".nuget");
+            var nugetDir = Path.Join(AppEnvironment.ToolkitSrc, ".nuget");
             _ = TryGetVersion(installed, out var version);
             var dependency = new InstalledDependency(
                 version: version,
@@ -366,7 +357,7 @@ internal class Program
             return Task.FromResult(dependency);
         }
 
-        public void Restore(InstalledDependency installed)
+        public override void Restore(InstalledDependency installed)
         {
             if (installed.Info == null)
                 return;
@@ -377,7 +368,7 @@ internal class Program
             Environment.SetEnvironmentVariable("NUGET_HTTP_CACHE_PATH", installed.Info["nuget-http-cache-path"]);
         }
 
-        public void Clean(InstalledDependency installed)
+        public override void Clean(InstalledDependency installed)
         {
             if (installed.Info == null)
                 return;
@@ -393,7 +384,7 @@ internal class Program
             }
         }
 
-        public bool TryGetVersion(IReadOnlyDictionary<string, InstalledDependency> installed, out string? version)
+        public override bool TryGetVersion(IReadOnlyDictionary<string, InstalledDependency> installed, out string? version)
         {
             // If the nuget repo was previously set to a different version, we probably want to do a full clean
             var nugetRepo = Environment.GetEnvironmentVariable(NugetRepoEnvVar);
@@ -404,23 +395,58 @@ internal class Program
             return true;
         }
     }
-    #endregion
 
-    #region Helpers
     private static void InstallAppiumDriver(string nodeExe, string appiumEntry, string driverName, string? npmPackage = null)
     {
         Console.WriteLine($"\nInstalling appium {driverName} driver...");
-        var installCheck = RunBinary(nodeExe, [appiumEntry, "driver", "list", "--installed"], true);
+        var installCheck = Helpers.RunBinary(nodeExe, [appiumEntry, "driver", "list", "--installed"], true);
         var driverInstalled = Regex.IsMatch(installCheck!.StandardError, Regex.Escape(driverName));
         if (driverInstalled)
-            RunBinary(nodeExe, [appiumEntry, "driver", "update", driverName]);
+            Helpers.RunBinary(nodeExe, [appiumEntry, "driver", "update", driverName]);
         else if (npmPackage != null)
-            RunBinary(nodeExe, [appiumEntry, "driver", "install", "--source=npm", npmPackage]);
+            Helpers.RunBinary(nodeExe, [appiumEntry, "driver", "install", "--source=npm", npmPackage]);
         else
-            RunBinary(nodeExe, [appiumEntry, "driver", "install", driverName]);
+            Helpers.RunBinary(nodeExe, [appiumEntry, "driver", "install", driverName]);
     }
 
-    private static string GetRequiredEnvironmentVariable(string variableName)
+    private static void AssertVersion(TestDependency dependency, InstalledDependency existing, Dictionary<string, InstalledDependency> installed)
+    {
+        if (!dependency.TryGetVersion(installed, out var desiredVersion))
+            throw new InvalidOperationException($"Could not determine expected version for dependency '{dependency.Name}'. Current version: '{existing.Version ?? "<untracked>"}'. See above logs.");
+
+        if (desiredVersion != null && existing.Version != desiredVersion)
+            throw new InvalidOperationException($"Version mismatch for dependency '{dependency.Name}': expected '{desiredVersion}', current '{existing.Version ?? "<untracked>"}'. Run clean before reinstalling.");
+    }
+
+    private static string GetRequiredInfo(IReadOnlyDictionary<string, InstalledDependency> installed, string dependency, string key)
+    {
+        if (!installed.TryGetValue(dependency, out var value) || value.Info == null || !value.Info.TryGetValue(key, out var info))
+            throw new InvalidOperationException($"Dependency '{dependency}' must be installed before using '{key}'.");
+        return info;
+    }
+
+    private bool TryReadYamlVersion(string name, out string? version)
+    {
+        try
+        {
+            version = Helpers.ReadYamlValue(YamlFilePath, name);
+            return true;
+        }
+        catch (Exception ex)
+        {
+            Console.Error.WriteLine(ex);
+            version = null;
+            return false;
+        }
+    }
+    #endregion Dependencies
+}
+#endregion AppiumEnvironment
+
+#region Helpers
+public class Helpers
+{
+    public static string GetRequiredEnvironmentVariable(string variableName)
     {
         var value = Environment.GetEnvironmentVariable(variableName);
         if (string.IsNullOrWhiteSpace(value))
@@ -429,16 +455,16 @@ internal class Program
         return value;
     }
 
-    private static string GetRequiredEnvironmentPath(string variableName)
+    public static string GetRequiredEnvironmentPath(string variableName)
     {
-        var path = GetRequiredEnvironmentVariable(variableName);
+        var path = Helpers.GetRequiredEnvironmentVariable(variableName);
         if (!Path.Exists(path))
             throw new ArgumentException($"Environment variable '{variableName}' must point to an existing path. Current value: '{path}'.");
 
         return path;
     }
 
-    private static string ReadYamlValue(string yamlFile, string name) {
+    public static string ReadYamlValue(string yamlFile, string name) {
         using (StreamReader sr = File.OpenText(yamlFile)) {
             string? s;
             while ((s = sr.ReadLine()) != null) {
@@ -451,21 +477,21 @@ internal class Program
         throw new Exception($"Could not find variable {name} in {yamlFile}");
     }
 
-    private static BinaryOutput? RunBinary(string binary, Collection<string> arguments, bool captureStdOut = false, bool throwOnError = true) {
+    public static BinaryOutput? RunBinary(string binary, Collection<string> arguments, bool captureStdOut = false, bool throwOnError = true) {
         Console.WriteLine($"Running {binary} {string.Join(" ", arguments)}");
 
         var startInfo = new ProcessStartInfo(binary, arguments);
-        return RunBinary(startInfo, captureStdOut, throwOnError);
+        return Helpers.RunBinary(startInfo, captureStdOut, throwOnError);
     }
 
-    private static BinaryOutput? RunBinary(string binary, string arguments, bool captureStdOut = false, bool throwOnError = true) {
+    public static BinaryOutput? RunBinary(string binary, string arguments, bool captureStdOut = false, bool throwOnError = true) {
         Console.WriteLine($"Running {binary} {arguments}");
 
         var startInfo = new ProcessStartInfo(binary, arguments);
-        return RunBinary(startInfo, captureStdOut, throwOnError);
+        return Helpers.RunBinary(startInfo, captureStdOut, throwOnError);
     }
 
-    private static BinaryOutput? RunBinary(ProcessStartInfo startInfo, bool captureOutput = false, bool throwOnError = true) {
+    public static BinaryOutput? RunBinary(ProcessStartInfo startInfo, bool captureOutput = false, bool throwOnError = true) {
         startInfo.RedirectStandardOutput = true;
         startInfo.RedirectStandardError = true;
         startInfo.UseShellExecute = false;
@@ -501,35 +527,28 @@ internal class Program
         return captureOutput ? new BinaryOutput(stdOut.ToString(), stdErr.ToString()) : null;
     }
 
-    private class BinaryOutput
+}
+
+public class BinaryOutput
+{
+    public string StandardOutput;
+    public string StandardError;
+
+    public BinaryOutput(string standardOut, string standardErr)
     {
-        public string StandardOutput;
-        public string StandardError;
-
-        public BinaryOutput(string standardOut, string standardErr)
-        {
-            StandardOutput = standardOut;
-            StandardError = standardErr;
-        }
+        StandardOutput = standardOut;
+        StandardError = standardErr;
     }
-    #endregion
 }
 
-public class Paths
+abstract class TestDependency(AppiumEnvironment environment)
 {
-    public static string WorkspacePath = string.Empty;
-    public static string DotnetExe = string.Empty;
-    public static string ToolkitSrc = string.Empty;
-    public static string YamlFilePath = string.Empty;
-}
-
-interface ITestDependency
-{
-    public string Name { get; }
-    public Task<InstalledDependency> Install(IReadOnlyDictionary<string, InstalledDependency> installed);
-    public void Restore(InstalledDependency installed);
-    public void Clean(InstalledDependency installed) {}
-    public bool TryGetVersion(IReadOnlyDictionary<string, InstalledDependency> installed, out string? version);
+    protected readonly AppiumEnvironment AppEnvironment = environment;
+    public abstract string Name { get; }
+    abstract public Task<InstalledDependency> Install(IReadOnlyDictionary<string, InstalledDependency> installed);
+    abstract public void Restore(InstalledDependency installed);
+    abstract public bool TryGetVersion(IReadOnlyDictionary<string, InstalledDependency> installed, out string? version);
+    public virtual void Clean(InstalledDependency installed) {}
 }
 
 class InstalledDependency(string? version = null, Dictionary<string, string>? info = null, bool serialize = true)
@@ -543,3 +562,5 @@ class InstalledDependency(string? version = null, Dictionary<string, string>? in
 [JsonSourceGenerationOptions(WriteIndented = true)]
 [JsonSerializable(typeof(Dictionary<string, InstalledDependency>))]
 partial class DependencySerializationContext : JsonSerializerContext {}
+#endregion Helpers
+
