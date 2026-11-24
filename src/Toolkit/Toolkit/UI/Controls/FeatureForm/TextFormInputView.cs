@@ -368,7 +368,12 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         private void UpdateValidationState()
         {
             var err = Element?.ValidationErrors;
-            if (err != null && err.Any() && Element?.IsEditable == true && _hadFocus)
+
+            // Honor the form-level error visibility policy, consistent with
+            // FieldFormElementView.UpdateErrorMessages().
+            bool shouldShowError = _hadFocus || FeatureFormView.GetFeatureFormViewParent(this)?.ShouldShowError() == true;
+
+            if (err != null && err.Any() && Element?.IsEditable == true && shouldShowError)
             {
 #if MAUI
                 if (GetTemplateChild("ErrorBorder") is Border border)
