@@ -8,16 +8,6 @@ using System.Text.Json.Serialization;
 using System.Text.RegularExpressions;
 using System.Xml;
 
-/* General Idea:
- * Workloads are just lists defining required dependencies
- * When installing a workload, dependencies are installed in order they appear in the workloads list
- * Dependencies can rely on other dependencies for installation. The script keeps track of what is installed a
-nd throws an error if it's not present
- * Each workload has an install function
- * There will be a clean command that deletes the entire dependencies workspace
- */
-
-
 internal class Program
 {
     static async Task<int> Main(string[] args)
@@ -27,7 +17,8 @@ internal class Program
             if (!OperatingSystem.IsWindows())
                 throw new PlatformNotSupportedException("These installation workloads require Windows.");
 
-            using var appEnv = new AppiumEnvironment(Helpers.GetRequiredEnvironmentPath("WORKSPACE"));
+            var workspace = Path.GetFullPath(Helpers.GetRequiredEnvironmentPath("WORKSPACE"));
+            using var appEnv = new AppiumEnvironment(workspace);
 
             if (args.Length < 1)
                 throw new ArgumentException($"Must pass at least one argument (clean, run, install)");
@@ -39,10 +30,9 @@ internal class Program
             else if (args[0] == "run")
             {
                 if (args.Length < 2)
-                    throw new ArgumentException($"Must pass workload id after run");
+                    throw new ArgumentException("Must pass a test platform after run (Wpf, WinUI, MauiWinUI).");
 
-                await appEnv.Install(args[1]);
-                await appEnv.RunAppium(args[1]);
+                await RunTests(appEnv, workspace, args[1].Trim().ToLowerInvariant(), args);
             }
             else if (args[0] == "install")
             {
@@ -64,6 +54,175 @@ internal class Program
             return 1;
         }
     }
+
+    private static async Task RunTests(AppiumEnvironment appEnv, string workspace, string testPlatform, string[] consoleArgs)
+    {
+        var workloadId = testPlatform switch
+        {
+            "wpf" or "winui" => "windows",
+            "mauiwinui" => "maui-windows",
+            _ => throw new ArgumentException($"The test platform '{testPlatform}' was not recognized. Supported platforms are [Wpf, WinUI, MauiWinUI].")
+        };
+        var apiKey = Helpers.GetRequiredEnvironmentVariable("ARCGIS_API_KEY");
+        await appEnv.Install(workloadId);
+
+        var buildSettings = SetupWindows(testPlatform, appEnv.YamlFilePath);
+        AppendPlatformIndependentBuildSettings(buildSettings, workspace, apiKey, consoleArgs);
+
+        var startedCleanup = false;
+        void ShutdownBuildServer(object? sender, EventArgs args)
+        {
+            if (startedCleanup)
+                return;
+            startedCleanup = true;
+            Helpers.RunBinary(appEnv.DotnetExe, "build-server shutdown");
+        }
+
+        Console.CancelKeyPress += ShutdownBuildServer;
+        AppDomain.CurrentDomain.ProcessExit += ShutdownBuildServer;
+        try
+        {
+            // Build app and runner
+            Console.WriteLine("\nBuilding test app...");
+            var uiTestsPath = Path.Join(appEnv.ToolkitSrc, "Tests", "UITests");
+            var appPath = Path.Join(uiTestsPath, buildSettings.AppName, $"{buildSettings.AppName}.csproj");
+            Helpers.RunBinary(appEnv.DotnetExe, ["build", appPath, .. buildSettings.BuildParamsCommon, .. buildSettings.BuildParamsApp]);
+
+            Console.WriteLine("\nBuilding test runner...");
+            var runnerPath = Path.Join(uiTestsPath, buildSettings.RunnerName, $"{buildSettings.RunnerName}.csproj");
+            Helpers.RunBinary(appEnv.DotnetExe, ["build", runnerPath, .. buildSettings.BuildParamsCommon]);
+
+            await appEnv.RunAppium(workloadId);
+
+            // Run tests
+            Console.WriteLine("\nRunning tests...");
+            var artifactsPath = Path.Join(uiTestsPath, "artifacts", "bin");
+            var runnerExe = Path.Join(artifactsPath, buildSettings.RunnerName, "TestBuild", $"{buildSettings.RunnerName}.exe");
+            var appExe = Path.Join(artifactsPath, buildSettings.AppName, "TestBuild", $"{buildSettings.BinaryName}.exe");
+            Environment.SetEnvironmentVariable("TKUITEST_APP", appExe);
+            var startInfo = new ProcessStartInfo(runnerExe, buildSettings.TestParams)
+            {
+                // The tests seem to need to be run from the toolkit source root.
+                WorkingDirectory = appEnv.ToolkitSrc
+            };
+            Helpers.RunBinary(startInfo);
+        }
+        finally
+        {
+            Console.CancelKeyPress -= ShutdownBuildServer;
+            AppDomain.CurrentDomain.ProcessExit -= ShutdownBuildServer;
+            ShutdownBuildServer(null, EventArgs.Empty);
+        }
+    }
+
+    #region BuildSettings
+    private static BuildSettings SetupWindows(string testPlatform, string yamlConfig)
+    {
+        var buildSettings = testPlatform switch
+        {
+            "wpf" => new BuildSettings("Toolkit.UITests.Wpf.App", "Toolkit.UITests.Wpf"),
+            "winui" => new BuildSettings("Toolkit.UITests.WinUI.App", "Toolkit.UITests.WinUI"),
+            "mauiwinui" => new BuildSettings("Toolkit.UITests.Maui.App", "Toolkit.UITests.MauiWinUI"),
+            _ => throw new ArgumentException($"The test platform '{testPlatform}' was not recognized.")
+        };
+
+        if (testPlatform == "wpf")
+        {
+            buildSettings.BuildParamsCommon.Add("-p:BuildApp=false");
+        }
+        else if (testPlatform == "winui")
+        {
+            buildSettings.BuildParamsCommon.AddRange([
+                "-r", "win-x64",
+                "-p:SelfContained=true",
+                "-p:PublishProfile=win-x64.pubxml",
+                "-p:WindowsAppSDKSelfContained=true"
+            ]);
+        }
+        else if (testPlatform == "mauiwinui")
+        {
+            buildSettings.BuildParamsCommon.AddRange([
+                "-r", "win-x64", "-p:UseMonoRuntime=false", "-p:BuildApp=false"
+            ]);
+            var dotnetVersion = Helpers.ReadYamlValue(yamlConfig, "dotnet-version");
+            var dotnetMajorVersion = Regex.Match(dotnetVersion, @"\d+\.\d+(?=\.)").Value;
+            var windowsSdkVersion = Helpers.ReadYamlValue(yamlConfig, "windows-sdk-version");
+            buildSettings.BuildParamsApp.AddRange([
+                $"-p:MauiVersion={dotnetMajorVersion}*",
+                "-f", $"net{dotnetMajorVersion}-windows{windowsSdkVersion}"
+            ]);
+        }
+
+        return buildSettings;
+    }
+
+    private static void AppendPlatformIndependentBuildSettings(BuildSettings settings, string workspace, string apiKey, string[] consoleArgs)
+    {
+        // Universal build parameters for the ci builds
+        settings.BuildParamsCommon.AddRange([
+            "-c", "Release",
+            "-p:ArtifactsPivots=TestBuild",
+            "-p:UseArtifactsOutput=true"
+        ]);
+
+        // Release version config
+        var releaseVersion = Environment.GetEnvironmentVariable("RELEASE_VERSION");
+        if (!string.IsNullOrWhiteSpace(releaseVersion)) {
+            settings.BuildParamsApp.Add($"-p:UseNugetPackage={releaseVersion}");
+        }
+
+        // Configure the trx output for ci jobs
+        var testResultsDir = Path.Join(workspace, "TestResults");
+        settings.TestParams.AddRange([
+            "--report-trx",
+            "--results-directory", testResultsDir
+        ]);
+        var trxFilename = Environment.GetEnvironmentVariable("TRX_FILENAME");
+        if (!string.IsNullOrWhiteSpace(trxFilename)) {
+            settings.TestParams.AddRange(["--report-trx-filename", trxFilename]);
+        }
+
+        // Ignore exit code 2 in test results since it just means that one or more tests failed
+        // https://learn.microsoft.com/en-us/dotnet/core/testing/microsoft-testing-platform-troubleshooting
+        settings.TestParams.AddRange(["--ignore-exit-code", "2"]);
+
+        // Append filter from console arguments if it exists
+        var filterArgIndex = consoleArgs.IndexOf("--filter");
+        if (filterArgIndex > -1)
+        {
+            if (filterArgIndex + 1 >= consoleArgs.Length)
+                throw new ArgumentException("Recieved '--filter' flag, but no argument was provided.");
+            settings.TestParams.AddRange(["--filter", consoleArgs[filterArgIndex+1]]);
+        }
+
+        // API key
+        settings.BuildParamsApp.Add($"-p:TestAppApiKey={apiKey}");
+    }
+
+    private class BuildSettings
+    {
+        private string? _binaryName;
+
+        public List<string> BuildParamsCommon = new();
+        public List<string> BuildParamsApp = new();
+        public List<string> TestParams = new();
+        public string AppName;
+        public string RunnerName;
+
+        /// <summary> Defaults to AppName if not explicitly set. </summary>
+        public string BinaryName
+        {
+            get => _binaryName ?? AppName;
+            set => _binaryName = value;
+        }
+
+        public BuildSettings(string appName, string runnerName)
+        {
+            AppName = appName;
+            RunnerName = runnerName;
+        }
+    }
+    #endregion BuildSettings
 }
 
 #region AppiumEnvironment
@@ -109,7 +268,7 @@ internal class AppiumEnvironment : IDisposable
 
         try
         {
-            await WaitForAppiumReadyAsync("http://127.0.0.1:4724/status", TimeSpan.FromSeconds(30));
+            await WaitForAppiumReadyAsync("http://127.0.0.1:4723/status", TimeSpan.FromSeconds(30));
         }
         catch
         {
@@ -169,6 +328,7 @@ internal class AppiumEnvironment : IDisposable
 
     public void Clean()
     {
+        Console.WriteLine("Cleaning test environment...");
         var workload = GetWorkloads()["all"];
         var stateFile = Path.Join(Workspace, _stateFileName);
         if (File.Exists(stateFile))
@@ -192,6 +352,8 @@ internal class AppiumEnvironment : IDisposable
 
         if (Directory.Exists(Workspace))
             Directory.Delete(Workspace, true);
+
+        Console.WriteLine("Clean completed");
     }
 
     public IReadOnlyDictionary<string, IReadOnlyList<TestDependency>> GetWorkloads()
@@ -225,9 +387,25 @@ internal class AppiumEnvironment : IDisposable
 
         public override void Restore(InstalledDependency installed)
         {
-            AppEnvironment.DotnetExe = Path.GetFullPath(Helpers.GetRequiredEnvironmentPath("DOTNET_PATH"));
-            AppEnvironment.ToolkitSrc = Path.GetFullPath(Helpers.GetRequiredEnvironmentPath("TOOLKIT_SRC"));
-            AppEnvironment.YamlFilePath = Path.Join(AppEnvironment.ToolkitSrc, "Tests", "UITests", "cibuild", "variables.yml");
+            string? directoryPath = AppContext.GetData("EntryPointFileDirectoryPath") as string;
+            if (string.IsNullOrWhiteSpace(directoryPath))
+                throw new InvalidOperationException("The entry-point file directory is unavailable. Run this script as a file-based app.");
+
+            // By default use dotnet name unless provided a specific path
+            AppEnvironment.DotnetExe = Environment.GetEnvironmentVariable("DOTNET_PATH") ?? string.Empty;
+            if (string.IsNullOrEmpty(AppEnvironment.DotnetExe))
+                AppEnvironment.DotnetExe = "dotnet";
+            else if (!File.Exists(AppEnvironment.DotnetExe))
+                throw new FileNotFoundException("The required dotnet exe path was not found.", AppEnvironment.DotnetExe);
+            else
+                AppEnvironment.DotnetExe = Path.GetFullPath(AppEnvironment.DotnetExe);
+
+            Console.WriteLine(AppEnvironment.DotnetExe);
+
+            AppEnvironment.ToolkitSrc = Path.GetFullPath(Path.Join(directoryPath, "..", "..", ".."));
+            AppEnvironment.YamlFilePath = Path.Join(directoryPath, "variables.yml");
+            if (!File.Exists(AppEnvironment.YamlFilePath))
+                throw new FileNotFoundException("The required variables.yml configuration file was not found.", AppEnvironment.YamlFilePath);
         }
 
         public override bool TryGetVersion(IReadOnlyDictionary<string, InstalledDependency> installed, out string? version)
@@ -374,7 +552,8 @@ internal class AppiumEnvironment : IDisposable
     class NugetDependency(AppiumEnvironment environment) : TestDependency(environment)
     {
         private const string _nugetRepoEnvVar = "NUGET_REPO";
-        private const string _unconfiguredVersion = "unconfigured";
+        private const string _unconfiguredVersion = "unconfigured-nuget-repo";
+        private const string _configuredVersionPrefix = "configure-nuget-repo:";
 
         public override string Name => "nuget";
 
@@ -446,7 +625,7 @@ internal class AppiumEnvironment : IDisposable
             // If the nuget repo was previously set to a different version, we probably want to do a full clean
             var nugetRepo = Environment.GetEnvironmentVariable(_nugetRepoEnvVar);
             if (!string.IsNullOrWhiteSpace(nugetRepo))
-                version = nugetRepo;
+                version = $"{_configuredVersionPrefix}{nugetRepo}";
             else
                 version = _unconfiguredVersion;
             return true;
