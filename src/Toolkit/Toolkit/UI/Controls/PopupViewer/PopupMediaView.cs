@@ -126,7 +126,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                             System.Windows.Automation.AutomationProperties.SetName(img, GetAltText());
 #endif
 #if WINUI
-                            img.Name = "FlipViewImage";
+                            Microsoft.UI.Xaml.Automation.AutomationProperties.SetAutomationId(img, "FlipViewImage");
                             Microsoft.UI.Xaml.Automation.AutomationProperties.SetName(img, GetAltText());
 #endif
                             img.Source = source;
@@ -265,7 +265,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 #if WPF
                 System.Windows.Automation.AutomationProperties.SetName(img, GetAltText());
 #elif WINUI
-                img.Name = "FlipViewChartImage";
+                Microsoft.UI.Xaml.Automation.AutomationProperties.SetAutomationId(img, "FlipViewChartImage");
                 Microsoft.UI.Xaml.Automation.AutomationProperties.SetName(img, GetAltText());
 #endif
                 return img;
