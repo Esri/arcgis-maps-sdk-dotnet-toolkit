@@ -1,3 +1,4 @@
-dotnet-version: "10.0.403"
-node-version: "24.16.0"
+dotnet-version: "10.0.404"
+node-version: "26.13.1"
 windows-sdk-version: "10.0.19041.0"
+wda-github-tag: "v16.15.3"

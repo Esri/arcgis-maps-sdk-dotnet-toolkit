@@ -30,7 +30,7 @@ public static partial class AppiumSetup
         var serverUri = new Uri(Environment.GetEnvironmentVariable("APPIUM_HOST") ?? "http://127.0.0.1:" + port);
         var driverOptions = new AppiumOptions()
         {
-            AutomationName = "Windows",
+            AutomationName = "Wincore",
             PlatformName = "Windows",
             DeviceName = "WindowsPC",
             App = app
