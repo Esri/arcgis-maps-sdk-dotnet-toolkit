@@ -139,20 +139,22 @@ public class PopupViewerTests : AppiumTestBase
         const int VK_SPACE = 0x20;
         await TabToMediaPagerAsync();
         var mediaPagerPips = FindMediaPagerPips();
-        var mediaFlipView = FindElement("FlipView", DefaultTimeout);
+        
+        var imageView = FindElement("FlipViewImage", DefaultTimeout);
         Assert.AreEqual("True", await WaitForAttributeAsync(mediaPagerPips[0], "HasKeyboardFocus", "True"), "Expected tab navigation to focus the initially selected media pager pip.");
         Assert.AreEqual("False", await WaitForAttributeAsync(mediaPagerPips[0], "IsOffscreen", "False"), "Expected focusing the media pager to scroll it into view.");
-        Assert.AreEqual(ImageMediaAlternativeText, await WaitForAttributeAsync(mediaFlipView, "Name", ImageMediaAlternativeText), "Expected the first media item to be shown initially.");
+        Assert.AreEqual(ImageMediaAlternativeText, await WaitForAttributeAsync(imageView, "Name", ImageMediaAlternativeText), "Expected the first media item to be shown initially.");
 
         PressKey(VK_RIGHT);
         Assert.AreEqual("True", await WaitForAttributeAsync(mediaPagerPips[1], "HasKeyboardFocus", "True"), "Expected Right arrow to move keyboard focus to the next media pager pip.");
         PressKey(VK_SPACE);
-        Assert.AreEqual(ChartMediaTitle, await WaitForAttributeAsync(mediaFlipView, "Name", ChartMediaTitle), "Expected Right arrow + Space to navigate to the next media item.");
+        var imageChartView = FindElement("FlipViewChartImage", DefaultTimeout);
+        Assert.AreEqual(ChartMediaTitle, await WaitForAttributeAsync(imageChartView, "Name", ChartMediaTitle), "Expected Right arrow + Space to navigate to the next media item.");
 
         PressKey(VK_LEFT);
         Assert.AreEqual("True", await WaitForAttributeAsync(mediaPagerPips[0], "HasKeyboardFocus", "True"), "Expected Left arrow to move keyboard focus to the previous media pager pip.");
         PressKey(VK_RETURN);
-        Assert.AreEqual(ImageMediaAlternativeText, await WaitForAttributeAsync(mediaFlipView, "Name", ImageMediaAlternativeText), "Expected Left arrow + Enter to navigate to the previous media item.");
+        Assert.AreEqual(ImageMediaAlternativeText, await WaitForAttributeAsync(imageView, "Name", ImageMediaAlternativeText), "Expected Left arrow + Enter to navigate to the previous media item.");
 #endif
     }
 
