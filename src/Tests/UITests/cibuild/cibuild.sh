@@ -14,7 +14,7 @@ function main {
   install_dotnet "${WORKSPACE}" "${dotnet_version}" "${DOTNET_CACHE_FOLDER}"
 
   export TOOLKIT_SRC=$(realpath "${script_dir}/../../../")
-  "${DOTNET_PATH}" run "${script_dir}/cibuild.cs" -- $@
+  "${DOTNET_PATH}" "${script_dir}/uitest-installer.cs" $@
 }
 
 function install_dotnet {
